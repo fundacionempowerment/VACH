@@ -8,9 +8,9 @@ use yii\codeception\BasePage;
  * Represents login page
  * @property \AcceptanceTester|\FunctionalTester $actor
  */
-class LoginPage extends BasePage
+class HomePage extends BasePage
 {
-    public $route = 'site/login';
+    public $route = 'site/index';
 
     /**
      * @param string $username
