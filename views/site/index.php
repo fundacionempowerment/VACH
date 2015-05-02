@@ -1,51 +1,33 @@
 <?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
+
 /* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+$this->title = 'VACH';
 ?>
 <div class="site-index">
-
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
     </div>
-
     <div class="body-content">
-
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-md-push-4 col-md-4">
+                <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
+                <?= $form->field($model, 'username') ?>
+                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                <div class="form-group">
+                    <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::a(Yii::t('app', 'Sign up'), Url::to(['register']), ['class' => 'btn btn-success']) ?>
+                </div>
+                <div style="color:#999;margin:1em 0">
+                    <?= \Yii::t('user', 'If you forgot your password you can ') ?>
+                    <?= Html::a(\Yii::t('user', 'reset it'), ['site/request-password-reset']) ?>.
+                </div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
-
     </div>
 </div>
