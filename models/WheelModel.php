@@ -17,6 +17,7 @@ class WheelModel extends Model {
     const OPTIMAL_TO_WORST = 100;
     const ALWAYS_TO_NEVER = 101;
     const ALL_TO_NONE = 102;
+    const NUMBERS_0_TO_4 = 200;
 
     public $id;
     public $coacheeId;
@@ -140,6 +141,7 @@ class WheelModel extends Model {
             case WheelModel::OPTIMAL_TO_WORST: return array_reverse(WheelModel::getAnswers(WheelModel::WORST_TO_OPTIMAL));
             case WheelModel::ALL_TO_NONE: return array_reverse(WheelModel::getAnswers(WheelModel::NONE_TO_ALL));
             case WheelModel::ALWAYS_TO_NEVER: return array_reverse(WheelModel::getAnswers(WheelModel::NEVER_TO_ALWAYS));
+            case WheelModel::NUMBERS_0_TO_4: return ['0', '1', '2', '3', '4'];
         }
     }
 
