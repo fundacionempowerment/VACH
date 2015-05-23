@@ -38,93 +38,93 @@ class WheelController extends Controller {
     ];
     public $questions = [
         // Tiempo libre
-        '¿Me divierto y participo del ocio?',
-        '¿Tengo claro cuáles son mis momentos de ocio?',
-        '¿Logro separar mi familia del ocio?',
-        '¿Logro separar mi trabajo del ocio?',
-        '¿Desarrollo personal?',
-        '¿Identifico un hobby en especial?',
-        '¿Tengo actividades de ocio programadas?',
-        '¿Tengo actividades de ocio compartidas?',
-        '¿Me estimula el juntarme con amigos?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Me divierto y participo del ocio?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Tengo claro cuáles son mis momentos de ocio?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Logro separar mi familia del ocio?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Logro separar mi trabajo del ocio?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Desarrollo personal?', WheelModel::NONE_TO_ALL],
+        ['¿Identifico un hobby en especial?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo actividades de ocio programadas?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Tengo actividades de ocio compartidas?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Me estimula el juntarme con amigos?', WheelModel::NEVER_TO_ALWAYS],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Trabajo
-        '¿Ambiente y entorno de trabajo?',
-        '¿Se valoran mis capacidades?',
-        '¿Mi trabajo es acorde a mi vocación?',
-        '¿Tengo un trabajo estimulante?',
-        '¿Tengo posibilidad de crecimiento?',
-        '¿Tengo claridad con mis Proyectos de trabajo?',
-        '¿Controlo el estrés?',
-        '¿Tengo un presupuesto estable?',
-        '¿Estado de satisfacción en gral con mi trabajo?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Ambiente y entorno de trabajo?', WheelModel::NONE_TO_ALL],
+        ['¿Se valoran mis capacidades?', WheelModel::NONE_TO_ALL],
+        ['¿Mi trabajo es acorde a mi vocación?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo un trabajo estimulante?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo posibilidad de crecimiento?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo claridad con mis Proyectos de trabajo?', WheelModel::NONE_TO_ALL],
+        ['¿Controlo el estrés?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo un presupuesto estable?', WheelModel::NONE_TO_ALL],
+        ['¿Estado de satisfacción en gral con mi trabajo?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Familia
-        '¿Disponibilidad para la familia?',
-        '¿Relación con los padres?',
-        '¿Relación de pareja?',
-        '¿Relación con los hijos?',
-        '¿Relación con otros miembros de la familia?',
-        '¿Actividades recreativas en conjunto?',
-        '¿Comodidades familiares?',
-        '¿Proyecto en común?',
-        '¿Nivel de satisfacción en general?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Disponibilidad para la familia?', WheelModel::NONE_TO_ALL],
+        ['¿Relación con los padres?', WheelModel::NONE_TO_ALL],
+        ['¿Relación de pareja?', WheelModel::NONE_TO_ALL],
+        ['¿Relación con los hijos?', WheelModel::NONE_TO_ALL],
+        ['¿Relación con otros miembros de la familia?', WheelModel::NONE_TO_ALL],
+        ['¿Actividades recreativas en conjunto?', WheelModel::NONE_TO_ALL],
+        ['¿Comodidades familiares?', WheelModel::NONE_TO_ALL],
+        ['¿Proyecto en común?', WheelModel::NONE_TO_ALL],
+        ['¿Nivel de satisfacción en general?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Dimensión Fisica
-        '¿Apariencia?',
-        '¿Energía?',
-        '¿Actividad física?',
-        '¿Dieta equilibrada?',
-        '¿Estimulación de sentidos?',
-        '¿Ambiente y Entorno en general?',
-        '¿Nivel de materialización de los Proyectos?',
-        '¿Hábitos que no me gustan?',
-        '¿Estado de salud en general?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Apariencia?', WheelModel::NONE_TO_ALL],
+        ['¿Energía?', WheelModel::NONE_TO_ALL],
+        ['¿Actividad física?', WheelModel::NONE_TO_ALL],
+        ['¿Dieta equilibrada?', WheelModel::NONE_TO_ALL],
+        ['¿Estimulación de sentidos?', WheelModel::NONE_TO_ALL],
+        ['¿Ambiente y Entorno en general?', WheelModel::NONE_TO_ALL],
+        ['¿Nivel de materialización de los Proyectos?', WheelModel::NONE_TO_ALL],
+        ['¿Hábitos que no me gustan?', WheelModel::NONE_TO_ALL],
+        ['¿Estado de salud en general?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Dimensión Emocional
-        ' ¿Mis estados de ánimo son estables?',
-        '¿Me conecto con mi pasión?',
-        '¿Me conecto con mi voluntad?',
-        '¿Mi actitud emocional es positiva?',
-        '¿Tengo una vida estimulante?',
-        '¿Cómo es mi autoestima?',
-        '¿Ansiedad?',
-        '¿Nostalgia?',
-        '¿Miedos?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Mis estados de ánimo son estables?', WheelModel::NONE_TO_ALL],
+        ['¿Me conecto con mi pasión?', WheelModel::NONE_TO_ALL],
+        ['¿Me conecto con mi voluntad?', WheelModel::NONE_TO_ALL],
+        ['¿Mi actitud emocional es positiva?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo una vida estimulante?', WheelModel::NONE_TO_ALL],
+        ['¿Cómo es mi autoestima?', WheelModel::NONE_TO_ALL],
+        ['¿Ansiedad?', WheelModel::ALL_TO_NONE],
+        ['¿Nostalgia?', WheelModel::ALL_TO_NONE],
+        ['¿Miedos?', WheelModel::ALL_TO_NONE],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Dimensión Mental
-        '¿Qué grado de felicidad tengo?',
-        '¿Hay alguna situación que no me deja ser feliz?',
-        '¿Qué tan seguido me encuentro juzgando las situaciones?',
-        '¿Qué tan seguido me descubro tejiendo fantasías?',
-        '¿Estoy esperando algo de alguien?',
-        '¿Espero que las personas adivinen lo que necesito?',
-        '¿Soy racional?',
-        '¿Mi actitud mental es positiva?',
-        '¿Tengo una mentalidad abierta?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Qué grado de felicidad tengo?', WheelModel::NONE_TO_ALL],
+        ['¿Hay alguna situación que no me deja ser feliz?', WheelModel::NONE_TO_ALL],
+        ['¿Qué tan seguido me encuentro juzgando las situaciones?', WheelModel::ALL_TO_NONE],
+        ['¿Qué tan seguido me descubro tejiendo fantasías?', WheelModel::ALL_TO_NONE],
+        ['¿Estoy esperando algo de alguien?', WheelModel::ALL_TO_NONE],
+        ['¿Espero que las personas adivinen lo que necesito?', WheelModel::ALL_TO_NONE],
+        ['¿Soy racional?', WheelModel::NONE_TO_ALL],
+        ['¿Mi actitud mental es positiva?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo una mentalidad abierta?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Dimensión Existencial
-        '¿Me considero una persona de mucha consciencia?',
-        '¿Me preocupo por el crecimiento de los demás?',
-        '¿Tengo claridad con mi vocación?',
-        '¿Tengo claridad en cuál es mi servicio diferencial?',
-        '¿Qué nivel de Escucha tengo?',
-        '¿Qué nivel de Comunicación tengo?',
-        '¿Las relaciones con mis Vínculos son sanas?',
-        '¿Participo en Comunidades y trabajos sociales?',
-        '¿Existe satisfacción con la Comunidad en que vivo?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Me considero una persona de mucha consciencia?', WheelModel::NONE_TO_ALL],
+        ['¿Me preocupo por el crecimiento de los demás?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo claridad con mi vocación?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo claridad en cuál es mi servicio diferencial?', WheelModel::NONE_TO_ALL],
+        ['¿Qué nivel de Escucha tengo?', WheelModel::NONE_TO_ALL],
+        ['¿Qué nivel de Comunicación tengo?', WheelModel::NONE_TO_ALL],
+        ['¿Las relaciones con mis Vínculos son sanas?', WheelModel::NONE_TO_ALL],
+        ['¿Participo en Comunidades y trabajos sociales?', WheelModel::NONE_TO_ALL],
+        ['¿Existe satisfacción con la Comunidad en que vivo?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
         //Dimensión Espiritual
-        '¿Creo en algún tipo de configuración superior?',
-        '¿Soy congruente con ese tipo de configuración?',
-        '¿Tengo claridad con mi propósito de trascendencia?',
-        '¿Soy congruente en mi vida con mis Valores?',
-        '¿Me mantengo en un continuo con el Amor?',
-        '¿Me mantengo en un continuo con la Verdad?',
-        '¿Doy sin esperar recibir?',
-        '¿Me mantengo en un continuo con la Paciencia?',
-        '¿Tengo una rutina espiritual?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
+        ['¿Creo en algún tipo de configuración superior?', WheelModel::NONE_TO_ALL],
+        ['¿Soy congruente con ese tipo de configuración?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo claridad con mi propósito de trascendencia?', WheelModel::NONE_TO_ALL],
+        ['¿Soy congruente en mi vida con mis Valores?', WheelModel::NONE_TO_ALL],
+        ['¿Me mantengo en un continuo con el Amor?', WheelModel::NONE_TO_ALL],
+        ['¿Me mantengo en un continuo con la Verdad?', WheelModel::NONE_TO_ALL],
+        ['¿Doy sin esperar recibir?', WheelModel::NONE_TO_ALL],
+        ['¿Me mantengo en un continuo con la Paciencia?', WheelModel::NONE_TO_ALL],
+        ['¿Tengo una rutina espiritual?', WheelModel::NONE_TO_ALL],
+        ['¿Qué interés tenés en trabajar esta dimensión?', WheelModel::NONE_TO_ALL],
     ];
 
     public function actionIndex() {
@@ -184,8 +184,11 @@ class WheelController extends Controller {
     }
 
     public function actionForm() {
+        $showMissingAnswers = false;
+
         $model = new WheelModel();
         if (Yii::$app->request->isPost) {
+            $showMissingAnswers = true;
 
             $model->coacheeId = $userId = Yii::$app->session->get('clientid');
             $model->date = date(DATE_ATOM);
@@ -212,13 +215,13 @@ class WheelController extends Controller {
         if (defined('YII_DEBUG')) {
             if (!is_array($model->answers)) {
                 for ($i = 0; $i < 80; $i++)
-                    $model->answers[] = rand(0, 9);
+                    $model->answers[] = rand(0, 4);
             } else {
                 for ($i = 0; $i < 80; $i++)
                     if (!isset($answer[$i]))
-                        $answer[$i] = rand(0, 9);
-                    else if ($answer[$i] < 0 || $answer[$i] > 9)
-                        $answer[$i] = rand(0, 9);
+                        $answer[$i] = rand(0, 4);
+                    else if ($answer[$i] < 0 || $answer[$i] > 4)
+                        $answer[$i] = rand(0, 4);
             }
         }
 
@@ -226,6 +229,7 @@ class WheelController extends Controller {
                     'model' => $model,
                     'questions' => $this->questions,
                     'dimensions' => $this->dimensions,
+                    'showMissingAnswers' => $showMissingAnswers,
         ]);
     }
 
