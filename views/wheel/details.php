@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     for ($i = 0; $i < 80; $i++) {
       $dimension = $i / 10;
       ?>
-      <?= $i % 10 == 0 ? '<div class="col-sm-6 col-lg-4"><h3>' . $dimensions[$dimension] . '</h3>' : '' ?>
+      <?= $i % 10 == 0 ? '<div class="col-md-6"><h3>' . $dimensions[$dimension] . '</h3>' : '' ?>
       <label class="control-label" for="loginmodel-email"><?= $questions[$i][0] ?></label>
 
       <?=
