@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -30,7 +31,7 @@ return [
     'never' => 'nunca',
     'none' => 'ninguno',
     'often' => 'a menudo',
-    'optimal' => 'optimo',
+    'optimal' => 'óptimo',
     'some' => 'algo',
     'sometimes' => 'a veces',
     'usually' => 'seguido',
