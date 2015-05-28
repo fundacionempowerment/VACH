@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script src="<?= yii\helpers\Url::to('@web/js/Chart.min.js') ?>"></script>
 <div class="wheel-view">
-    <h2><?= Html::encode($this->title) ?></h2>
+    <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Yii::t('user', 'Coach') ?>: <?= Html::label($model->coachName) ?><br />
         <?= Yii::t('user', 'Client') ?>: <?= Html::label($model->coacheeName) ?>
