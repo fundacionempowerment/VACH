@@ -17,16 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="wheel-view">
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($model->coachName) ?><br />
-        <?= Yii::t('user', 'Client') ?>: <?= Html::label($model->coacheeName) ?>
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($model->coach->fullname) ?><br />
+        <?= Yii::t('user', 'Client') ?>: <?= Html::label($model->coachee->fullname) ?>
     </p>
     <div class="col-md-2 col-xs-4">
         <?php
-        foreach ($wheels as $wheelId => $wheelDate) {
-            if ($wheelId == $id)
-                echo $wheelDate . ' &LT;';
+        foreach ($wheels as $wheel) {
+            if ($wheel['id'] == $model->id)
+                echo $wheel['date'] . ' &LT;';
             else
-                echo Html::a($wheelDate, Url::to(['index', 'wheelid' => $wheelId]));
+                echo Html::a($wheel['date'], Url::to(['index', 'wheelid' => $wheel['id']]));
             echo '<br />';
         }
         ?>
@@ -34,15 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-md-2 col-md-push-8 " style="text-align: right; color: red">
         <?php
-        if ($compareId == -1)
+        if (!isset($compare))
             echo '&GT; ';
         echo Html::a('Ninguno', Url::to(['index', 'compareid' => -1]));
         echo '<br />';
-        foreach ($wheels as $wheelId => $wheelDate) {
-            if ($wheelId == $compareId)
-                echo '> ' . $wheelDate;
+        foreach ($wheels as $wheel) {
+            if ($wheel['id'] == $compare->id)
+                echo '> ' . $wheel['date'];
             else
-                echo Html::a($wheelDate, Url::to(['index', 'compareid' => $wheelId]), ['style' => 'color: red']);
+                echo Html::a($wheel['date'], Url::to(['index', 'compareid' => $wheel['id']]), ['style' => 'color: red']);
             echo '<br />';
         }
         ?>
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         var radarChartData = {
         labels: [<?= '"' . implode('", "', $dimensions) . '"' ?>],
                 datasets: [
-<?php if ($compareId > 0) { ?>
+<?php if (isset($compare)) { ?>
             {
             label: "Actual",
                     fillColor: "rgba(255,0,0,0.2)",
@@ -89,8 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </script>
     <div class="clearfix"></div>
     <div class="col-sm-12 " style ="text-align: center;">
-        <?= Html::a('Ver respuestas', Url::to(['wheel/form', 'Id' => $wheelId]), ['class' => 'btn btn-primary']) ?>
-        <?= $compareId < 0 ? '' : Html::a('Ver respuestas', Url::to(['wheel/form', 'Id' => $compareId]), ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('Ver respuestas', Url::to(['wheel/form', 'Id' => $model->id]), ['class' => 'btn btn-primary']) ?>
+        <?= isset($compare) ? Html::a('Ver respuestas', Url::to(['wheel/form', 'Id' => $compare->id]), ['class' => 'btn btn-danger']) : '' ?>
     </div>
     <br />
     <div class="col-sm-12 " style ="text-align: center;">

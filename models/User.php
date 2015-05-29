@@ -13,6 +13,8 @@ class User extends ActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    public $fullname;
+
     /**
      * @inheritdoc
      */
@@ -78,6 +80,11 @@ class User extends ActiveRecord implements IdentityInterface {
                     'password_reset_token' => $token,
                     'status' => self::STATUS_ACTIVE,
         ]);
+    }
+
+    public function afterFind() {
+        $this->fullname = $this->name . ' ' . $this->surname;
+        parent::afterFind();
     }
 
     /**

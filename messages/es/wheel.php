@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -18,7 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Answer type' => 'Tipo de respuesta',
+    'Dimension' => 'Dimensión',
     'New wheel' => 'Nueva rueda',
+    'Order' => 'Orden',
+    'Question' => 'Pregunta',
+    'Some answers missed' => 'Alguna respuestas faltan',
     'Some answers left.' => 'Faltan alguna respuestas',
     'Wheels' => 'Ruedas',
     'all' => 'todo',

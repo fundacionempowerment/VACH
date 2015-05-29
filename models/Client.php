@@ -11,7 +11,6 @@ use yii\db\ActiveRecord;
  */
 class Client extends ActiveRecord {
 
-//    public $id;
     public $fullname;
 
     /**

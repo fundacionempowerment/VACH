@@ -11,7 +11,7 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\WheelModel;
+use app\models\Wheel;
 use app\models\WheelQuestion;
 
 class WheelController extends Controller {
@@ -53,33 +53,25 @@ class WheelController extends Controller {
             Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
         }
 
-        $userId = Yii::$app->session->get('clientid');
+        $coachee_id = Yii::$app->session->get('clientid');
         $wheelid = Yii::$app->session->get('wheelid');
         $compareId = Yii::$app->session->get('compareid');
 
-        $model = new WheelModel();
-        $model->coacheeId = $userId;
-
-        if ($wheelid == 0) {
-            $model->populateLast();
-            $wheelid = $model->id;
+        if ($wheelid > 0) {
+            $model = Wheel::find()->where(['id' => $wheelid])->one();
         } else {
-            $model->id = $wheelid;
-            $model->populate();
+            $model = Wheel::find()->where(['coachee_id' => $coachee_id])->orderBy('id desc')->one();
         }
 
-        $compareModel = new WheelModel();
+        if (!isset($model))
+            $model = new Wheel();
+
+        $compareModel = new Wheel();
         if ($compareId > 0) {
-            $compareModel->id = $compareId;
-            $compareModel->populate();
+            $compareModel = Wheel::findOne(['id' => $compareId]);
         }
 
-
-        $wheels = $model->browse();
-        $wheelArray = [];
-        foreach ($wheels as $wheel) {
-            $wheelArray[$wheel['id']] = $wheel['date'];
-        }
+        $wheels = Wheel::browse($coachee_id);
 
         if ($model->id == 0)
             return $this->redirect(['form', 'id' => 0]);
@@ -87,9 +79,7 @@ class WheelController extends Controller {
             return $this->render('view', [
                         'model' => $model,
                         'compare' => $compareModel,
-                        'wheels' => $wheelArray,
-                        'id' => $wheelid,
-                        'compareId' => $compareId,
+                        'wheels' => $wheels,
                         'dimensions' => $this->shortDimensions,
             ]);
     }
@@ -97,12 +87,9 @@ class WheelController extends Controller {
     public function actionForm() {
         $showMissingAnswers = false;
 
-        $model = new WheelModel();
+        $model = new Wheel();
         if (Yii::$app->request->isPost) {
             $showMissingAnswers = true;
-
-            $model->coacheeId = $userId = Yii::$app->session->get('clientid');
-            $model->date = date(DATE_ATOM);
 
             for ($i = 0; $i < 80; $i++) {
                 $answer = Yii::$app->request->post('answer' . $i);
@@ -111,16 +98,14 @@ class WheelController extends Controller {
             }
 
             if ($model->validate()) {
-                $model->save();
+                $model->date = date(DATE_ATOM);
+                $model->coachee_id = Yii::$app->session->get('clientid');
+                $model->customSave();
                 return $this->redirect(['index']);
             }
-        } else {
+        } else if (Yii::$app->request->get('Id') != null) {
             $id = Yii::$app->request->get('Id');
-
-            if ($id > 0) {
-                $model->id = $id;
-                $model->populate();
-            }
+            $model = Wheel::findOne(['id' => $id]);
         }
 
         if (defined('YII_DEBUG')) {
@@ -137,7 +122,7 @@ class WheelController extends Controller {
         }
 
         if ($model->hasErrors()) {
-            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answer missed'));
+            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
         }
 
         $questions = WheelQuestion::find()->asArray()->all();
