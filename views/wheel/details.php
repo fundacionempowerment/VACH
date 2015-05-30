@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use app\models\WheelQuestion;
+use app\models\WheelAnswer;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\ContactForm */
+/* @var $wheel app\models\ContactForm */
 
-$this->title = $model->id == 0 ? Yii::t('wheel', 'New wheel') : Yii::t('user', 'Answers');
+$this->title = $wheel->id == 0 ? Yii::t('wheel', 'New wheel') : Yii::t('user', 'Answers');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Wheels'), 'url' => ['/wheel']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,14 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?=
             Html::radioList(
-                    'answer' . $i, isset($model->answers[$i]) ? $model->answers[$i] : null, WheelQuestion::getAnswers($questions[$i]['answer_type']), ['itemOptions' => ['labelOptions' => ['style' => 'font-weight: unset;',
-                        'class' => isset($model->answers[$i]) ? '' : 'alert-danger']]]
+                    'answer' . $i, isset($answers[$i]) ? $answers[$i]->answer_value : null, WheelAnswer::getAnswerLabels($questions[$i]['answer_type']), ['itemOptions' => ['labelOptions' => ['style' => 'font-weight: unset;',
+                        'class' => isset($answers[$i]) && isset($answers[$i]->answer_value) ? '' : 'alert-danger']]]
             )
             ?><br/>
             <?= $i % 10 == 9 ? '</div>' : '' ?>
         <?php } ?>
 
-        <?php if ($model->id == 0) { ?>
+        <?php if ($wheel->id == 0) { ?>
 
             <div class="form-group">
                 <div class="clearfix"></div>

@@ -12,17 +12,14 @@ use \yii\db\ActiveRecord;
  */
 class Wheel extends ActiveRecord {
 
-    public $answers;
-    public $dimensionAnswers;
+    public $dimensionAnswers = [0, 0, 0, 0, 0, 0, 0, 0];
 
     /**
      * @return array the validation rules.
      */
     public function rules() {
         return [
-            // username and password are both required
-            [['userId', 'date', 'answers'], 'required'],
-            [['date', 'coachName', 'coacheeName', 'coachId', 'coacheeId'], 'safe'],
+            [['coachee_id', 'date',], 'required'],
         ];
     }
 
@@ -34,53 +31,52 @@ class Wheel extends ActiveRecord {
         return User::findOne(['id' => $this->coachee->coach_id]);
     }
 
+    public function getAnswers() {
+        return $this->hasMany(WheelAnswer::className(), ['wheel_id' => 'id']);
+    }
+
     public function afterFind() {
         parent::afterFind();
 
-        $this->answers = (new Query())->select('answer_value')
-                ->from('wheel_answer')
-                ->where(['wheel_id' => $this->id])
-                ->orderBy('answer_order')
-                ->column();
-
-        $sum = 0;
-        $this->dimensionAnswers = [];
-        if (count($this->answers) == 80)
-            for ($i = 0; $i < 80; $i++) {
-                $sum += $this->answers[$i];
-                if (($i + 1) % 10 == 0) {
-                    $this->dimensionAnswers[] = $sum / 10 + 1;
-                    $sum = 0;
-                }
-            }
-    }
-
-    public function customSave() {
-        $command = yii::$app->db->createCommand();
-
-        $command->insert('wheel', [
-            'coachee_id' => $this->coachee->id,
-            'date' => $this->date,
-        ])->execute();
-
-        $this->id = yii::$app->db->getLastInsertID();
-
-        for ($i = 0; $i < 80; $i++) {
-            $command = yii::$app->db->createCommand();
-
-            $command->insert('wheel_answer', [
-                'wheel_id' => $this->id,
-                'answer_order' => $i,
-                'answer_value' => $this->answers[$i],
-            ])->execute();
+        foreach ($this->answers as $answer) {
+            $this->dimensionAnswers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
+        }
+        for ($i = 0; $i < count($this->dimensionAnswers); $i++) {
+            $this->dimensionAnswers[$i] = 1 + ($this->dimensionAnswers[$i] / 10);
         }
     }
 
-    public function validate($attributeNames = null, $clearErrors = true) {
-        if (count($this->answers) < 80)
+    public function customSave($answers) {
+        if (count($answers) < 80) {
             $this->addError('answers', Yii::t('wheel', 'Some answers left.'));
+            return false;
+        }
 
-        return !$this->hasErrors();
+        $transaction = Yii::$app->db->beginTransaction();
+        if (!$this->validate()) {
+            $transaction->rollBack();
+            return false;
+        }
+        if (!$this->save()) {
+            $transaction->rollBack();
+            return false;
+        }
+
+        foreach ($answers as $answer) {
+            if (!$answer->validate()) {
+                $transaction->rollBack();
+                return false;
+            }
+            $this->link('answers', $answer, ['wheel_id', 'id']);
+        }
+
+        if (!$this->save()) {
+            $transaction->rollBack();
+            return false;
+        }
+
+        $transaction->commit();
+        return true;
     }
 
     public static function browse($coacheeId) {

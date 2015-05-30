@@ -12,6 +12,7 @@ use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
 use app\models\Wheel;
+use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 
 class WheelController extends Controller {
@@ -86,53 +87,55 @@ class WheelController extends Controller {
 
     public function actionForm() {
         $showMissingAnswers = false;
+        $answers = [];
 
-        $model = new Wheel();
+        $wheel = new Wheel();
         if (Yii::$app->request->isPost) {
             $showMissingAnswers = true;
 
             for ($i = 0; $i < 80; $i++) {
                 $answer = Yii::$app->request->post('answer' . $i);
-                if (isset($answer))
-                    $model->answers[$i] = $answer;
+                if (isset($answer)) {
+                    $answers[$i] = new WheelAnswer();
+                    $answers[$i]->answer_order = $i;
+                    $answers[$i]->answer_value = $answer;
+                }
             }
 
-            if ($model->validate()) {
-                $model->date = date(DATE_ATOM);
-                $model->coachee_id = Yii::$app->session->get('clientid');
-                $model->customSave();
+            $wheel->date = date(DATE_ATOM);
+            $wheel->coachee_id = Yii::$app->session->get('clientid');
+
+            if ($wheel->customSave($answers)) {
                 return $this->redirect(['index']);
             }
         } else if (Yii::$app->request->get('Id') != null) {
             $id = Yii::$app->request->get('Id');
-            $model = Wheel::findOne(['id' => $id]);
+            $wheel = Wheel::findOne(['id' => $id]);
+            $answers = $wheel->answers;
         }
 
         if (defined('YII_DEBUG')) {
-            if (!is_array($model->answers)) {
-                for ($i = 0; $i < 80; $i++)
-                    $model->answers[] = rand(0, 4);
-            } else {
-                for ($i = 0; $i < 80; $i++)
-                    if (!isset($answer[$i]))
-                        $answer[$i] = rand(0, 4);
-                    else if ($answer[$i] < 0 || $answer[$i] > 4)
-                        $answer[$i] = rand(0, 4);
-            }
+            for ($i = 0; $i < 80; $i++)
+                if (!isset($answers[$i])) {
+                    $answers[$i] = new \app\models\WheelAnswer();
+                    $answers[$i]->answer_value = rand(0, 4);
+                }
         }
 
-        if ($model->hasErrors()) {
+        if ($wheel->hasErrors()) {
             \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
         }
 
         $questions = WheelQuestion::find()->asArray()->all();
 
         return $this->render('details', [
-                    'model' => $model,
-                    'questions' => $questions,
+                    'wheel' => $wheel,
                     'dimensions' => $this->dimensions,
+                    'questions' => $questions,
+                    'answers' => $answers,
                     'showMissingAnswers' => $showMissingAnswers,
         ]);
     }
 
 }
+
