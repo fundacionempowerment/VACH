@@ -20,6 +20,7 @@ class CoacheeController extends Controller {
 
     public function actionView($id) {
         $coachee = Coachee::findOne(['id' => $id]);
+        Yii::$app->session->set('coachee_id', $id);
         return $this->render('view', [
                     'coachee' => $coachee,
         ]);

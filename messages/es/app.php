@@ -21,6 +21,7 @@ return [
     'Home' => 'Inicio',
     'Logout' => 'Salir',
     'Powered by' => 'Potenciado por',
+    'Printable' => 'Imprimible',
     'Save' => 'Salvar',
     'Sign in' => 'Ingresar',
     'Sign up' => 'Registrese',

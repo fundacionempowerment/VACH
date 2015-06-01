@@ -28,10 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3><?= Yii::t('wheel', 'Wheels') ?></h3>
         <?php foreach ($coachee->wheels as $wheel) : ?>
             <?= Html::a($wheel->date, Url::to(['/wheel', 'wheelid' => $wheel['id']])) ?>
+            <?= count($wheel->answers) == 80 ? '' : Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $coachee->id, 'id' => $wheel['id']]), ['class' => 'btn btn-success']) ?>
             <br />
         <?php endforeach; ?>
         <br />
-        <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/form']), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
 
     </div>
 </div>

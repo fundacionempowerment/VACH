@@ -25,7 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Yii::t('wheel', 'Date') ?>: <?= Html::label($model->date) ?><br />
         </p>
         <p>
-            <?= Html::a('Ver respuestas', Url::to(['wheel/form', 'Id' => $model->id]), ['class' => 'btn btn-primary']) ?>
+            <?=
+            count($model->answers) == 80 ?
+                    Html::a('Ver respuestas', Url::to(['wheel/answers', 'id' => $model->id]), ['class' => 'btn btn-primary']) :
+                    Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $model->coachee->id, 'id' => $model->id]), ['class' => 'btn btn-success'])
+            ?>
         </p>
         <p>
             <?= Yii::t('wheel', 'Compare to') ?>:<br />
@@ -47,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <p>
             <br /><br />
-            <?= Html::a('Nueva rueda', Url::to(['wheel/form']), ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Nueva rueda', Url::to(['wheel/new', 'coachee_id' => $model->coachee->id]), ['class' => 'btn btn-success']) ?>
         </p>    </div>
 
     <div class="col-md-push-1 col-md-4" >

@@ -40,8 +40,8 @@ class WheelController extends Controller {
     ];
 
     public function actionIndex() {
-        if (Yii::$app->request->get('clientid')) {
-            Yii::$app->session->set('clientid', Yii::$app->request->get('clientid'));
+        if (Yii::$app->request->get('coachee_id')) {
+            Yii::$app->session->set('coachee_id', Yii::$app->request->get('coachee_id'));
             Yii::$app->session->set('wheelid', null);
             Yii::$app->session->set('compareid', -1);
         }
@@ -54,7 +54,7 @@ class WheelController extends Controller {
             Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
         }
 
-        $coachee_id = Yii::$app->session->get('clientid');
+        $coachee_id = Yii::$app->session->get('coachee_id');
         $wheelid = Yii::$app->session->get('wheelid');
         $compareId = Yii::$app->session->get('compareid');
 
@@ -65,14 +65,14 @@ class WheelController extends Controller {
         }
 
         if (!isset($model))
-            $model = new Wheel();
+            $this->redirect(['/site']);
 
         $compareModel = new Wheel();
         if ($compareId > 0) {
             $compareModel = Wheel::findOne(['id' => $compareId]);
         }
 
-        $wheels = Wheel::browse($coachee_id);
+        $wheels = Wheel::browse($model->coachee->id);
 
         if ($model->id == 0)
             return $this->redirect(['form', 'id' => 0]);
@@ -85,55 +85,90 @@ class WheelController extends Controller {
             ]);
     }
 
-    public function actionForm() {
+    public function actionRun($coachee_id) {
         $showMissingAnswers = false;
-        $answers = [];
+        $current_dimension = 0;
 
-        $wheel = new Wheel();
-        if (Yii::$app->request->isPost) {
-            $showMissingAnswers = true;
+        if (Yii::$app->request->isGet) {
+            if (Yii::$app->request->get('id') != null) {
+                $id = Yii::$app->request->get('id');
+                $wheel = Wheel::findOne(['id' => $id]);
+            } else {
+                $wheel = new Wheel();
+                $wheel->date = date(DATE_ATOM);
+                $wheel->coachee_id = $coachee_id;
+                if ($wheel->validate()) {
+                    $wheel->save();
+                }
+            }
+        } else if (Yii::$app->request->isPost) {
+            $current_dimension = Yii::$app->request->post('current_dimension');
+            $id = Yii::$app->request->post('id');
+            $wheel = Wheel::findOne(['id' => $id]);
+
+            $count = 0;
 
             for ($i = 0; $i < 80; $i++) {
-                $answer = Yii::$app->request->post('answer' . $i);
-                if (isset($answer)) {
-                    $answers[$i] = new WheelAnswer();
-                    $answers[$i]->answer_order = $i;
-                    $answers[$i]->answer_value = $answer;
+                $new_answer_value = Yii::$app->request->post('answer' . $i);
+
+                if (isset($new_answer_value)) {
+                    $count += 1;
+                    $answer = null;
+                    foreach ($wheel->answers as $lookup_answer)
+                        if ($lookup_answer->answer_order == $i) {
+                            $answer = $lookup_answer;
+                            break;
+                        }
+
+                    if (isset($answer)) {
+                        $answer->answer_order = $i;
+                        $answer->answer_value = $new_answer_value;
+                    } else {
+                        $new_answer = new WheelAnswer();
+                        $new_answer->answer_order = $i;
+                        $new_answer->answer_value = $new_answer_value;
+                        $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                    }
                 }
             }
 
-            $wheel->date = date(DATE_ATOM);
-            $wheel->coachee_id = Yii::$app->session->get('clientid');
-
-            if ($wheel->customSave($answers)) {
-                return $this->redirect(['index']);
+            if ($count == 10)
+                $current_dimension += 1;
+            else {
+                \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
+                $showMissingAnswers = true;
             }
-        } else if (Yii::$app->request->get('Id') != null) {
-            $id = Yii::$app->request->get('Id');
-            $wheel = Wheel::findOne(['id' => $id]);
-            $answers = $wheel->answers;
+
+            if ($wheel->validate()) {
+                $wheel->save();
+                if (count($wheel->answers) == 80)
+                    return $this->redirect(['/wheel', 'wheelid' => $wheel->id]);
+            }
         }
 
-        if (defined('YII_DEBUG')) {
-            for ($i = 0; $i < 80; $i++)
-                if (!isset($answers[$i])) {
-                    $answers[$i] = new \app\models\WheelAnswer();
-                    $answers[$i]->answer_value = rand(0, 4);
-                }
-        }
-
-        if ($wheel->hasErrors()) {
-            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
-        }
 
         $questions = WheelQuestion::find()->asArray()->all();
 
-        return $this->render('details', [
+        return $this->render('form', [
+                    'wheel' => $wheel,
+                    'current_dimension' => $current_dimension,
+                    'dimensions' => $this->dimensions,
+                    'questions' => $questions,
+                    'showMissingAnswers' => $showMissingAnswers,
+        ]);
+    }
+
+    public function actionAnswers($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+        $questions = WheelQuestion::find()->asArray()->all();
+
+        if (Yii::$app->request->get('printable') != null)
+            $this->layout = 'printable';
+
+        return $this->render('answers', [
                     'wheel' => $wheel,
                     'dimensions' => $this->dimensions,
                     'questions' => $questions,
-                    'answers' => $answers,
-                    'showMissingAnswers' => $showMissingAnswers,
         ]);
     }
 
