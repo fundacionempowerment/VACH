@@ -24,7 +24,7 @@ class Wheel extends ActiveRecord {
     }
 
     public function getCoachee() {
-        return $this->hasOne(Client::className(), ['id' => 'coachee_id']);
+        return $this->hasOne(Coachee::className(), ['id' => 'coachee_id']);
     }
 
     public function getCoach() {

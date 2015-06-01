@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * LoginForm is the model behind the login form.
  */
-class Client extends ActiveRecord {
+class Coachee extends ActiveRecord {
 
     public $fullname;
 
@@ -66,6 +66,14 @@ class Client extends ActiveRecord {
             $this->coach_id = Yii::$app->user->id;
 
         return parent::beforeValidate();
+    }
+
+    public function getCoach() {
+        return $this->hasOne(CoachModel::className(), ['id' => 'coach_id']);
+    }
+
+    public function getWheels() {
+        return $this->hasMany(Wheel::className(), ['coachee_id' => 'id']);
     }
 
 }

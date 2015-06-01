@@ -15,7 +15,7 @@ $isCoach = Yii::$app->user->identity->is_coach;
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 if ($isCoach)
-    $items[] = ['label' => Yii::t('user', 'Clients'), 'url' => ['/coach/clients']];
+    $items[] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/account']];
 $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
     'url' => ['/site/logout'],
