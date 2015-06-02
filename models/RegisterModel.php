@@ -40,7 +40,7 @@ class RegisterModel extends Model {
             'name' => Yii::t('user', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
             'email' => Yii::t('user', 'Email'),
-            'username' => Yii::t('user', 'username'),
+            'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'confirm' => Yii::t('user', 'Re-enter password'),
             'isCoach' => Yii::t('user', 'I\'m coach'),

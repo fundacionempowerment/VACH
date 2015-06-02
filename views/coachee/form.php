@@ -8,7 +8,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $model app\models\LoginForm */
 
 $this->title = $coachee->id == 0 ? Yii::t('user', 'New coachee') : Yii::t('user', 'Editing coachee');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachees']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -27,9 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($coachee, 'email') ?>
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
-        <?= Html::a(\Yii::t('app', 'Cancel'), ['/coachee/view', 'id' => $coachee->id], ['class' => 'btn', 'name' => 'cancel-button']) ?>
+        <?=
+        $coachee->id == 0 ?
+                Html::a(\Yii::t('app', 'Cancel'), ['/coachee'], ['class' => 'btn', 'name' => 'cancel-button']) :
+                Html::a(\Yii::t('app', 'Cancel'), ['/coachee/view', 'id' => $coachee->id], ['class' => 'btn', 'name' => 'cancel-button'])
+        ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 </div>

@@ -23,7 +23,7 @@ $this->title = 'Registro';
     <?= $form->field($model, 'confirm')->passwordInput() ?>
     <?= $form->field($model, 'isCoach')->checkbox([], false) ?>
     <div class="form-group">
-        <?= Html::submitButton('Enviar datos', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Register'), ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
