@@ -69,7 +69,7 @@ class Coachee extends ActiveRecord {
     }
 
     public function getCoach() {
-        return $this->hasOne(CoachModel::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }
 
     public function getWheels() {

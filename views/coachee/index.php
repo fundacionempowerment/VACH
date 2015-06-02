@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
+                'options' => ['width' => '60px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
                     switch ($action) {
                         case 'update' : return Url::to(['coachee/edit', 'id' => $model['id']]);

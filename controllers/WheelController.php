@@ -158,6 +158,17 @@ class WheelController extends Controller {
         ]);
     }
 
+    public function actionDelete($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+        if ($wheel->delete()) {
+            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel deleted.'));
+        } else {
+            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
+                    . $wheel->getErrors());
+        }
+        return $this->redirect(['/coachee/view', 'id' => $wheel->coachee->id]);
+    }
+
     public function actionAnswers($id) {
         $wheel = Wheel::findOne(['id' => $id]);
         $questions = WheelQuestion::find()->asArray()->all();

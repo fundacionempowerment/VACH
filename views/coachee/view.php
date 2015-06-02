@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -18,21 +20,67 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <h3><?= Yii::t('user', 'Personal data') ?></h3>
         <p>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($coachee->name) ?> <?= Html::label($coachee->surname) ?><br />
-            <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($coachee->name) ?> <?= Html::label($coachee->surname) ?><br />
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($coachee->coach->fullname) ?><br />
+            <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($coachee->fullname) ?><br />
             <?= Yii::t('user', 'Email') ?>: <?= Html::label($coachee->email) ?>
         </p>
         <?= Html::a(Yii::t('user', 'Edit coachee'), Url::to(['coachee/edit', 'id' => $coachee->id]), ['class' => 'btn btn-default']) ?>
     </div>
     <div class="row col-md-12">
         <h3><?= Yii::t('wheel', 'Wheels') ?></h3>
-        <?php foreach ($coachee->wheels as $wheel) : ?>
-            <?= Html::a($wheel->date, Url::to(['/wheel', 'wheelid' => $wheel['id']])) ?>
-            <?= count($wheel->answers) == 80 ? '' : Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $coachee->id, 'id' => $wheel['id']]), ['class' => 'btn btn-success']) ?>
-            <br />
-        <?php endforeach; ?>
-        <br />
+        <?php
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $coachee->wheels,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'summary' => '',
+            'options' => ['style' => 'width: 360px;'],
+            'columns' => [
+                [
+                    'attribute' => 'id',
+                    'format' => 'html',
+                    'options' => ['width' => '60px'],
+                    'value' => function ($data) {
+                        return Html::a($data['id'], Url::to(['/wheel', 'wheelid' => $data['id'],]));
+                    },
+                ],
+                [
+                    'attribute' => 'date',
+                    'format' => 'html',
+                    'options' => ['width' => '60px'],
+                    'value' => function ($data) {
+                        return Html::a($data['date'], Url::to(['/wheel', 'wheelid' => $data['id'],]));
+                    },
+                ],
+                [
+                    'attribute' => Yii::t('wheel', 'answers'),
+                    'format' => 'html',
+                    'options' => ['width' => '60px'],
+                    'value' => function ($data) {
+                        return Html::a(count($data->answers), Url::to(['/wheel', 'wheelid' => $data['id'],]));
+                    },
+                ],
+                ['class' => 'yii\grid\ActionColumn',
+                    'template' => '{continue} {delete}',
+                    'options' => ['width' => '120px'],
+                    'buttons' => [
+                        'continue' => function ($url, $data, $key) {
+                            return count($data->answers) == 80 ? '' : Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $data->coachee->id, 'id' => $data->id]), ['class' => 'btn btn-success btn-xs']);
+                        }
+                    ],
+                    'urlCreator' => function( $action, $model, $key, $index ) {
+                        switch ($action) {
+                            case 'delete' : return Url::to(['wheel/delete', 'id' => $model['id']]);
+                        };
+                    }
+                ]
+            ],
+        ]);
+        ?>
         <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
-
     </div>
 </div>

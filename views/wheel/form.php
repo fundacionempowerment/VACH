@@ -18,7 +18,7 @@ foreach ($wheel->answers as $answer)
 $this->title = Yii::t('wheel', 'Running wheel');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
 $this->params['breadcrumbs'][] = ['label' => $wheel->coachee->fullname, 'url' => ['/coachee/view', 'id' => $wheel->coachee->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel', 'wheelid' => $wheel->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-wheel">
@@ -44,17 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php } ?>
 
 
-        <div class="form-group">
-            <div class="clearfix"></div>
-            <div class="col-md-12">
-                <?php
-                if ($current_dimension < 7)
-                    echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-primary']);
-                else
-                    echo Html::submitButton(Yii::t('wheel', 'Save and finish'), ['class' => 'btn btn-success']);
-                ?>
-            </div>
-        </div>
+        <?php
+        if ($current_dimension < 7)
+            echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-primary']);
+        else
+            echo Html::submitButton(Yii::t('wheel', 'Save and finish'), ['class' => 'btn btn-success']);
+        ?>
         <?php ActiveForm::end(); ?>
     </div>
 </div>

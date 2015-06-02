@@ -28,7 +28,7 @@ class RegisterModel extends Model {
             // email has to be a valid email address
             ['email', 'email'],
             ['isCoach', 'boolean'],
-            ['confirm', 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user', 'Password don\'t match.')],
+            ['confirm', 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user', 'Passwords don\'t match.')],
         ];
     }
 

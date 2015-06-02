@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>
             <?=
             count($model->answers) == 80 ?
-                    Html::a('Ver respuestas', Url::to(['wheel/answers', 'id' => $model->id]), ['class' => 'btn btn-primary']) :
+                    Html::a(Yii::t('wheel', 'View answers'), Url::to(['wheel/answers', 'id' => $model->id]), ['class' => 'btn btn-primary']) :
                     Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $model->coachee->id, 'id' => $model->id]), ['class' => 'btn btn-success'])
             ?>
         </p>
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo '> ' . $wheel['date'];
                     echo '<br />';
                 } else if ($wheel['id'] != $model->id) {
-                    echo Html::a($wheel['date'], Url::to(['index', 'compareid' => $wheel['id']]), ['style' => 'color: red']);
+                    echo Html::a($wheel['date'], Url::to(['index', 'compareid' => $wheel['id']]));
                     echo '<br />';
                 }
             }
@@ -51,11 +51,23 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <p>
             <br /><br />
-            <?= Html::a('Nueva rueda', Url::to(['wheel/new', 'coachee_id' => $model->coachee->id]), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $model->coachee->id]), ['class' => 'btn btn-success']) ?>
         </p>    </div>
 
-    <div class="col-md-push-1 col-md-4" >
+    <div class="col-md-4" >
         <canvas id="canvas" height="350" width="350" class="img-responsive"></canvas>
+    </div>
+    <div class="col-md-push-1 col-md-3" style="text-align: right;">
+        <br /><br />
+        <?php
+        foreach ($dimensions as $key => $text) {
+            echo $text . ': ' . '<span style="color: blue;">' . $model->dimensionAnswers[$key] . '</span>';
+            if ($compare->id > 0) {
+                echo ' - <span style="color: red;">' . $compare->dimensionAnswers[$key] . '</span>' . ' = ' . ($model->dimensionAnswers[$key] - $compare->dimensionAnswers[$key]);
+            }
+            echo '<br />';
+        }
+        ?>
     </div>
 
     <script>
