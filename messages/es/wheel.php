@@ -35,7 +35,7 @@ return [
     'Wheel deleted.' => 'Rueda eliminada.',
     'Wheel not delete:' => 'Rueda no eliminada:',
     'Wheels' => 'Ruedas',
-    'absolutly' => '',
+    'absolutly' => 'absolutamente',
     'all' => 'todo',
     'always' => 'siempre',
     'answers' => 'respuestas',

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\Query;
 use \yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * LoginForm is the model behind the login form.
@@ -20,6 +21,21 @@ class Wheel extends ActiveRecord {
     public function rules() {
         return [
             [['coachee_id', 'date',], 'required'],
+        ];
+    }
+
+    public function attributeLabels() {
+        return [
+            'date' => Yii::t('app', 'Date'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors() {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 

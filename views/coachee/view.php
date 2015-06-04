@@ -29,14 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <h3><?= Yii::t('wheel', 'Wheels') ?></h3>
         <?php
-        $dataProvider = new ArrayDataProvider([
+        $wheelDataProvider = new ArrayDataProvider([
             'allModels' => $coachee->wheels,
             'pagination' => [
                 'pageSize' => 20,
             ],
         ]);
         echo GridView::widget([
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $wheelDataProvider,
             'summary' => '',
             'options' => ['style' => 'width: 360px;'],
             'columns' => [
@@ -82,5 +82,49 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
         <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <div class="row col-md-12">
+        <h3><?= Yii::t('goal', 'Goals') ?></h3>
+        <?php
+        $goalDataProvider = new ArrayDataProvider([
+            'allModels' => $coachee->goals,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        echo GridView::widget([
+            'dataProvider' => $goalDataProvider,
+            'summary' => '',
+            'columns' => [
+                [
+                    'attribute' => 'id',
+                    'format' => 'html',
+                    'options' => ['width' => '60px'],
+                    'value' => function ($data) {
+                        return Html::a($data['id'], Url::to(['/goal', 'id' => $data['id'],]));
+                    },
+                ],
+                [
+                    'attribute' => 'name',
+                    'format' => 'html',
+                    'value' => function ($data) {
+                        return Html::a($data['name'], Url::to(['/goal', 'id' => $data['id'],]));
+                    },
+                ],
+                ['class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'options' => ['width' => '120px'],
+                    'urlCreator' => function( $action, $model, $key, $index ) {
+                        switch ($action) {
+                            case 'delete' : return Url::to(['goal/delete', 'id' => $model['id']]);
+                        };
+                    }
+                ]
+            ],
+        ]);
+        ?>
+        <?= Html::a(Yii::t('goal', 'New goal'), Url::to(['goal/new', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('goal', 'View action plan'), Url::to(['goal/plan', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-primary']) ?>
     </div>
 </div>

@@ -38,9 +38,9 @@ class AccountModel extends Model {
      */
     public function attributeLabels() {
         return [
-            'name' => Yii::t('user', 'Name'),
+            'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
-            'email' => Yii::t('user', 'Email'),
+            'email' => Yii::t('app', 'Email'),
             'oldPassword' => Yii::t('user', 'Old password'),
             'password' => Yii::t('user', 'New password'),
             'confirm' => Yii::t('user', 'Re-enter password'),

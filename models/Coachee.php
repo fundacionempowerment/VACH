@@ -42,10 +42,10 @@ class Coachee extends ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'name' => Yii::t('user', 'Name'),
+            'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
-            'email' => Yii::t('user', 'Email'),
-            'fullname' => Yii::t('user', 'Name'),
+            'email' => Yii::t('app', 'Email'),
+            'fullname' => Yii::t('app', 'Name'),
         ];
     }
 
@@ -74,6 +74,10 @@ class Coachee extends ActiveRecord {
 
     public function getWheels() {
         return $this->hasMany(Wheel::className(), ['coachee_id' => 'id']);
+    }
+
+    public function getGoals() {
+        return $this->hasMany(Goal::className(), ['coachee_id' => 'id']);
     }
 
 }

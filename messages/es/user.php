@@ -32,7 +32,6 @@ return [
     'I\'m coach' => 'Soy coach',
     'If you forgot your password you can ' => 'Si olvidó su contraseña puede ',
     'My account' => 'Mi cuenta',
-    'Name' => 'Nombre',
     'New coachee' => 'Nuevo coachee',
     'New password' => 'Nueva contraseña',
     'Old password' => 'Antigua contraseña',
@@ -47,5 +46,4 @@ return [
     'View coachee' => 'Ver coachee',
     'Wrong old password.' => 'Antigua contraseña incorrecta',
     'reset it' => 'resetearlo',
-    'username' => 'Nombre de usuario',
 ];

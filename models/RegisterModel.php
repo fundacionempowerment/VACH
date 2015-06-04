@@ -37,9 +37,9 @@ class RegisterModel extends Model {
      */
     public function attributeLabels() {
         return [
-            'name' => Yii::t('user', 'Name'),
+            'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
-            'email' => Yii::t('user', 'Email'),
+            'email' => Yii::t('app', 'Email'),
             'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'confirm' => Yii::t('user', 'Re-enter password'),
