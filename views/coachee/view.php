@@ -10,8 +10,8 @@ use yii\grid\GridView;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = Yii::t('user', 'View coachee');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
+$this->title = $coachee->fullname;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3><?= Yii::t('user', 'Personal data') ?></h3>
         <p>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($coachee->coach->fullname) ?><br />
-            <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($coachee->fullname) ?><br />
             <?= Yii::t('user', 'Email') ?>: <?= Html::label($coachee->email) ?>
         </p>
         <?= Html::a(Yii::t('user', 'Edit coachee'), Url::to(['coachee/edit', 'id' => $coachee->id]), ['class' => 'btn btn-default']) ?>

@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Access denied' => 'Acceso denegado',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
     'Description' => 'Descripción',
@@ -30,9 +31,11 @@ return [
     'Name' => 'Nombre',
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
+    'Problem while saving: ' => 'Problemas al guardar',
     'Register' => 'Registrar',
     'Save' => 'Salvar',
     'Sign in' => 'Ingresar',
     'Sign up' => 'Registrese',
     'Type' => 'Tipo',
+    'Users' => 'Usuarios',
 ];

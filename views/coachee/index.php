@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 
 /* @var $this yii\web\View */
-$this->title = Yii::t('user', 'Coachees');
+$this->title = Yii::t('user', 'My Coachees');
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>

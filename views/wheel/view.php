@@ -9,7 +9,7 @@ use sibilino\y2dygraphs\DygraphsWidget;
 /* @var $model app\models\ContactForm */
 
 $this->title = Yii::t('wheel', 'Wheel');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
 $this->params['breadcrumbs'][] = ['label' => $model->coachee->fullname, 'url' => ['/coachee/view', 'id' => $model->coachee->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

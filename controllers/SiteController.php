@@ -127,6 +127,15 @@ class SiteController extends Controller {
         return $this->goHome();
     }
 
+    public static function FlashErrors($record) {
+        if (!isset($record))
+            return;
+
+        foreach ($record->getErrors() as $attribute => $messages)
+            foreach ($messages as $message)
+                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ' . $message));
+    }
+
     public function actionMigrateUp() {
         // https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
