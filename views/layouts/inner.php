@@ -15,8 +15,11 @@ $isCoach = Yii::$app->user->identity->is_coach;
 $isAdministrator = Yii::$app->user->identity->is_administrator;
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
-if ($isAdministrator)
-    $items[] = ['label' => Yii::t('app', 'Users'), 'url' => ['/user']];
+if ($isAdministrator) {
+    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
+    $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
+    $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
+}
 if ($isCoach) {
     $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
     $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];

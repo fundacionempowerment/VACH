@@ -95,7 +95,7 @@ class WheelController extends Controller {
                 $wheel = Wheel::findOne(['id' => $id]);
             } else {
                 $wheel = new Wheel();
-                $wheel->date = date(DATE_ATOM);
+                $wheel->date = date("Y-m-d");
                 $wheel->coachee_id = $coachee_id;
                 if ($wheel->validate()) {
                     $wheel->save();
@@ -178,6 +178,32 @@ class WheelController extends Controller {
 
         return $this->render('answers', [
                     'wheel' => $wheel,
+                    'dimensions' => $this->dimensions,
+                    'questions' => $questions,
+        ]);
+    }
+
+    public function actionQuestions() {
+        $questions = WheelQuestion::find()->asArray()->all();
+
+        if (Yii::$app->request->isPost) {
+
+            $update_questions = WheelQuestion::find()->all();
+            foreach ($update_questions as $update_question) {
+                $new_question_text = Yii::$app->request->post('question' . ($update_question->order - 1));
+                $new_answer_type = Yii::$app->request->post('answer' . ($update_question->order - 1));
+
+                $update_question->question = $new_question_text;
+                $update_question->answer_type = $new_answer_type;
+                $update_question->save();
+            }
+
+            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+
+            return $this->redirect(['/site']);
+        }
+
+        return $this->render('questions', [
                     'dimensions' => $this->dimensions,
                     'questions' => $questions,
         ]);

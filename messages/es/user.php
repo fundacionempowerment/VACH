@@ -51,6 +51,7 @@ return [
     'User has been succesfully deleted.' => 'Usuario ha sido borrado con éxito.',
     'User has been succesfully edited.' => 'Uuario ha sido editado con éxito.',
     'Username' => 'Nombre usuario',
+    'Users' => 'Usuarios',
     'Wrong old password.' => 'Antigua contraseña incorrecta',
     'Your personal data has been succesfully saved.' => 'Sus datos personales han sido salvado con éxito.',
     'reset it' => 'resetearlo',

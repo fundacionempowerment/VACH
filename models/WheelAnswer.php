@@ -54,6 +54,20 @@ class WheelAnswer extends ActiveRecord {
         ];
     }
 
+    public static function getAnswerTypes() {
+        return[
+            self::ANSWER_NUMBERS_0_TO_4 => implode(', ', self::getAnswerLabels(self::ANSWER_NUMBERS_0_TO_4)),
+            self::ANSWER_WORST_TO_OPTIMAL => implode(', ', self::getAnswerLabels(self::ANSWER_WORST_TO_OPTIMAL)),
+            self::ANSWER_NEVER_TO_ALWAYS => implode(', ', self::getAnswerLabels(self::ANSWER_NEVER_TO_ALWAYS)),
+            self::ANSWER_NONE_TO_ALL => implode(', ', self::getAnswerLabels(self::ANSWER_NONE_TO_ALL)),
+            self::ANSWER_NONE_TO_ABSOLUTLY => implode(', ', self::getAnswerLabels(self::ANSWER_NONE_TO_ABSOLUTLY)),
+            self::ANSWER_OPTIMAL_TO_WORST => implode(', ', self::getAnswerLabels(self::ANSWER_OPTIMAL_TO_WORST)),
+            self::ANSWER_ALWAYS_TO_NEVER => implode(', ', self::getAnswerLabels(self::ANSWER_ALWAYS_TO_NEVER)),
+            self::ANSWER_ALL_TO_NONE => implode(', ', self::getAnswerLabels(self::ANSWER_ALL_TO_NONE)),
+            self::ANSWER_ABSOLUTLY_TO_NONE => implode(', ', self::getAnswerLabels(self::ANSWER_ABSOLUTLY_TO_NONE)),
+        ];
+    }
+
     public static function getAnswerLabels($setName) {
         switch ($setName) {
             case WheelAnswer::ANSWER_NUMBERS_0_TO_4:

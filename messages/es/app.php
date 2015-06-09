@@ -18,6 +18,7 @@
  */
 return [
     'Access denied' => 'Acceso denegado',
+    'Admin' => 'Admin',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
     'Description' => 'Descripción',
