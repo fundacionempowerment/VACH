@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($company, 'name') ?>
     <?= $form->field($company, 'email') ?>
+    <?= $form->field($company, 'phone') ?>
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
     </div>

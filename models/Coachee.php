@@ -27,6 +27,8 @@ class Coachee extends ActiveRecord {
         return [
             // username and password are both required
             [['name', 'surname', 'email', 'username', 'password_hash', 'coach_id'], 'required'],
+            [['phone'], 'safe'],
+            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
         ];
     }

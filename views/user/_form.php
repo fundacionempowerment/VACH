@@ -26,6 +26,7 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
             <?= $form->field($user, 'name') ?>
             <?= $form->field($user, 'surname') ?>
             <?= $form->field($user, 'email') ?>
+            <?= $form->field($user, 'phone') ?>
             <?= $form->field($user, 'password')->passwordInput() ?>
             <?= $form->field($user, 'password_confirm')->passwordInput() ?>
             <?= $isAdministrator ? $form->field($user, 'is_administrator')->checkbox() : '' ?>

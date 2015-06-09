@@ -22,6 +22,8 @@ class Company extends ActiveRecord {
         return [
             // username and password are both required
             [['name', 'email', 'username', 'password_hash', 'coach_id'], 'required'],
+            [['phone'], 'safe'],
+            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
         ];
     }

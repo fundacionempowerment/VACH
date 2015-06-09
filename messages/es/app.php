@@ -29,6 +29,7 @@ return [
     'Low' => 'Bajo',
     'Medium' => 'Medio',
     'Name' => 'Nombre',
+    'Phone' => 'Teléfono',
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
     'Problem while saving: ' => 'Problemas al guardar',

@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3><?= Yii::t('company', 'Company data') ?></h3>
         <p>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($company->coach->fullname) ?><br />
-            <?= Yii::t('app', 'Email') ?>: <?= Html::label($company->email) ?>
+            <?= Yii::t('app', 'Email') ?>: <?= Html::label($company->email) ?><br />
+            <?= Yii::t('app', 'Phone') ?>: <?= Html::label($company->phone) ?>
         </p>
         <?= Html::a(Yii::t('company', 'Edit company'), Url::to(['company/edit', 'id' => $company->id]), ['class' => 'btn btn-default']) ?>
     </div>

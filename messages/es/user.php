@@ -26,7 +26,6 @@ return [
     'Coachee not saved: ' => 'Coachee no salvado: ',
     'Coachees' => 'Coachees',
     'Edit coachee' => 'Editar coachee',
-    'Email' => 'Correo electrónico',
     'Email already used.' => 'Correo electrónico ya usado.',
     'I\'m coach' => 'Soy coach',
     'If you forgot your password you can ' => 'Si olvidó su contraseña puede ',

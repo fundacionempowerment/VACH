@@ -25,15 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($coachee, 'name') ?>
     <?= $form->field($coachee, 'surname') ?>
     <?= $form->field($coachee, 'email') ?>
+    <?= $form->field($coachee, 'phone') ?>
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
-        <?=
-        $coachee->id == 0 ?
-                Html::a(\Yii::t('app', 'Cancel'), ['/coachee'], ['class' => 'btn', 'name' => 'cancel-button']) :
-                Html::a(\Yii::t('app', 'Cancel'), ['/coachee/view', 'id' => $coachee->id], ['class' => 'btn', 'name' => 'cancel-button'])
-        ?>
     </div>
 
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>

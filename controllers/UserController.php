@@ -103,7 +103,7 @@ class UserController extends Controller {
 
         if ($user->load(Yii::$app->request->post()) && ($user->save())) {
             \Yii::$app->session->addFlash('success', \Yii::t('user', 'Your personal data has been succesfully saved.'));
-            return $this->redirect(['/dashboard']);
+            return $this->redirect(['/site']);
         } else {
             SiteController::FlashErrors($user);
         }
