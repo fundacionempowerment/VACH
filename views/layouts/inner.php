@@ -16,10 +16,11 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 if ($isAdministrator)
-    $items[] = ['label' => Yii::t('app', 'Users'),
-        'url' => ['/user']];
-if ($isCoach)
+    $items[] = ['label' => Yii::t('app', 'Users'), 'url' => ['/user']];
+if ($isCoach) {
+    $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
     $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
+}
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];
 $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
     'url' => ['/site/logout'],
