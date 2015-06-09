@@ -28,19 +28,23 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `surname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8_unicode_ci NULL,
   `is_coach` tinyint(1) NOT NULL DEFAULT '0',
+  `is_administrator` tinyint(1) NOT NULL DEFAULT '0',
+  `is_company` tinyint(1) NOT NULL DEFAULT '0',
+  `company_id` int(11) NULL,
   `coach_id` int(11) DEFAULT NULL,
   `status` smallint(6) NOT NULL DEFAULT '10',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `is_coach`, `coach_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$YUfy9ndmBLQ0POZZS8c.uuj/SnPwyVe06MnhH6P1G3zMZVtJc2LLm', NULL, 'test@marcelobriones.com.ar', 'Marcelo', 'Briones', 1, NULL, 10, 1429313351, 1429313351),
-(2, 'ana.puebla', '', '$2y$13$XBU4zVyRYShcj0E31Yz1EOITVTlI9rhQtIHCJ/rszdWPP1ZlLCrYm', NULL, 'ana@trota.com', 'Ana', 'Trota', 0, 1, 10, 1430528713, 1433210035),
-(3, 'eve.smith', '', '$2y$13$8ET0fsIJ6Vp9n./ebVOfs.VRXMqJf7vjtsW/XEWppUTDDI9lnHBX.', NULL, 'evangelina@soria.com', 'Evangelina', 'Soria', 0, 1, 10, 1430540056, 1433210055),
-(4, 'juan', '', '$2y$13$NXv47NHK7GNlFCc.3yKejeZkciJipQyvv2FvFIuOPJHKlN/UXEirK', NULL, 'j@j.com', 'Juan', 'Peres', 0, NULL, 10, 0, 0),
-(7, 'hilda.trita', '', '$2y$13$UCCeXcnNcfBgveI6Wsixb.kZ9lqPcLFRCgsvpb.H.TZgulrJc0Yqm', NULL, 'homonima@hotcorreo.com', 'Hilda', 'Homonima', 0, 1, 10, 1430579863, 1433210083);
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `is_coach`, `is_administrator`, `coach_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$YUfy9ndmBLQ0POZZS8c.uuj/SnPwyVe06MnhH6P1G3zMZVtJc2LLm', NULL, 'test@marcelobriones.com.ar', 'Marcelo', 'Briones', 1, 1, NULL, 10, 1429313351, 1429313351),
+(2, 'ana.puebla', '', '$2y$13$XBU4zVyRYShcj0E31Yz1EOITVTlI9rhQtIHCJ/rszdWPP1ZlLCrYm', NULL, 'ana@trota.com', 'Ana', 'Trota', 0, 0, 1, 10, 1430528713, 1433210035),
+(3, 'eve.smith', '', '$2y$13$8ET0fsIJ6Vp9n./ebVOfs.VRXMqJf7vjtsW/XEWppUTDDI9lnHBX.', NULL, 'evangelina@soria.com', 'Evangelina', 'Soria', 0, 0, 1, 10, 1430540056, 1433210055),
+(4, 'juan', '', '$2y$13$NXv47NHK7GNlFCc.3yKejeZkciJipQyvv2FvFIuOPJHKlN/UXEirK', NULL, 'j@j.com', 'Juan', 'Peres', 0, 0, NULL, 10, 0, 0),
+(7, 'hilda.trita', '', '$2y$13$UCCeXcnNcfBgveI6Wsixb.kZ9lqPcLFRCgsvpb.H.TZgulrJc0Yqm', NULL, 'homonima@hotcorreo.com', 'Hilda', 'Homonima', 0, 0, 1, 10, 1430579863, 1433210083);
 
 CREATE TABLE IF NOT EXISTS `wheel` (
 `id` int(11) NOT NULL,
@@ -680,6 +684,53 @@ INSERT INTO `wheel_question` (`id`, `dimension`, `order`, `question`, `answer_ty
 (78, 7, 78, '¿Me mantengo en un continuo con la Paciencia?', 2, 0, 0),
 (79, 7, 79, '¿Tengo una rutina espiritual?', 2, 0, 0),
 (80, 7, 80, '¿Qué interés tenés en trabajar esta dimensión?', 3, 0, 0);
+
+CREATE TABLE IF NOT EXISTS `goal` (
+`id` int(11) NOT NULL,
+  `coachee_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `goal_milestone` (
+`id` int(11) NOT NULL,
+  `goal_id` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `evidence` text COLLATE utf8_unicode_ci NOT NULL,
+  `date` datetime NOT NULL,
+  `celebration` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `goal_resource` (
+`id` int(11) NOT NULL,
+  `goal_id` int(11) NOT NULL,
+  `is_desired` tinyint(1) DEFAULT NULL,
+  `is_had` tinyint(1) DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `goal`
+ ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `goal_milestone`
+ ADD PRIMARY KEY (`id`);
+ALTER TABLE `goal_resource`
+ ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `goal`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `goal_milestone`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `goal_resource`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `migration`
  ADD PRIMARY KEY (`version`);

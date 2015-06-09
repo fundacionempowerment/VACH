@@ -15,9 +15,6 @@ $I->see('Evangelina Soria');
 $I->see('Hilda Homonima');
 
 $I->click('New coachee');
-$I->click('Cancel');
-$I->see('New coachee');
-$I->click('New coachee');
 
 $I->fillField('input[name="Coachee[name]"]', 'Mike');
 $I->fillField('input[name="Coachee[surname]"]', 'Will');
