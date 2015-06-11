@@ -60,4 +60,8 @@ class Team extends ActiveRecord {
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
+    public function getAssessments() {
+        return $this->hasMany(Assessment::className(), ['team_id' => 'id']);
+    }
+
 }

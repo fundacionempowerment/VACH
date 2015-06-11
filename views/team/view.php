@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="row col-md-6">
         <h3><?= Yii::t('team', 'Team data') ?> </h3>
         <p>
@@ -75,5 +74,39 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'display: inline;']) ?>
         <?php ActiveForm::end(); ?>
+    </div>
+    <div class="row col-md-6">
+        <h3><?= Yii::t('team', 'Assessments') ?></h3>
+        <?php
+        $assessmentsDataProvider = new ArrayDataProvider([
+            'allModels' => $team->assessments,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        echo GridView::widget([
+            'dataProvider' => $assessmentsDataProvider,
+            'summary' => '',
+            'columns' => [
+                [
+                    'attribute' => 'name',
+                    'format' => 'html',
+                    'value' => function ($data) {
+                        return Html::a($data->name, Url::to(['dashboard/assessment', 'id' => $data['id']]));
+                    },
+                ],
+                ['class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'options' => ['width' => '60px'],
+                    'urlCreator' => function( $action, $model, $key, $index ) {
+                        switch ($action) {
+                            case 'delete' : return Url::to(['team/delete-assessment', 'id' => $model['id']]);
+                        };
+                    }
+                ]
+            ],
+        ]);
+        ?>
+        <?= Html::a(Yii::t('team', 'New assessment'), Url::to(['team/new-assessment', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
     </div>
 </div>

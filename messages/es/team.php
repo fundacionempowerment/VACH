@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,11 +18,15 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Assessment has been succesfully created.' => 'Evaluación ha sido creado exitosamente.',
+    'Assessment has been succesfully deleted.' => 'Evaluación ha sido eliminada exitasamente.',
+    'Assessments' => 'Evaluaciones',
     'Coach' => 'Coach',
     'Company' => 'Empresa',
     'Member' => 'Miembro',
     'Members' => 'Miembros',
     'My Teams' => 'Mi equipos',
+    'New assessment' => 'Nueva evaluación',
     'New member' => 'Nuevo miembro',
     'New team' => 'Nuevo equipo',
     'Please fill out the following fields with team data:' => 'Por favor, complete los campos con los datos del equipo',
