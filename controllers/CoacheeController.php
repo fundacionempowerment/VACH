@@ -12,7 +12,7 @@ class CoacheeController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $coachees = Coachee::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => false]);
+        $coachees = Coachee::browse();
         return $this->render('index', [
                     'coachees' => $coachees,
         ]);

@@ -63,6 +63,10 @@ class Company extends ActiveRecord {
         return parent::beforeValidate();
     }
 
+    public static function browse() {
+        return Company::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => true]);
+    }
+
     public function getCoach() {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }

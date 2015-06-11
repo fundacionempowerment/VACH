@@ -70,6 +70,10 @@ class Coachee extends ActiveRecord {
         return parent::beforeValidate();
     }
 
+    public static function browse() {
+        return Coachee::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => false]);
+    }
+
     public function getCoach() {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }

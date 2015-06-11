@@ -11,7 +11,7 @@ class CompanyController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $companies = Company::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => true]);
+        $companies = Company::browse();
         return $this->render('index', [
                     'companies' => $companies,
         ]);
