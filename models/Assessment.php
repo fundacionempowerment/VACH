@@ -10,6 +10,10 @@ use yii\behaviors\TimestampBehavior;
 
 class Assessment extends ActiveRecord {
 
+    const STATUS_PENDING = 0;
+    const STATUS_SENT = 1;
+    const STATUS_FINISHED = 2;
+
     public $name;
 
     /**
@@ -42,6 +46,16 @@ class Assessment extends ActiveRecord {
 
     public function getTeam() {
         return $this->hasOne(Team::className(), ['id' => 'team_id']);
+    }
+
+    public function wheelStatus($type) {
+        return (new Query)->select('wheel.observer_id, wheel.token, user.name, user.surname, count(wheel_answer.id) as count')
+                        ->from('wheel')
+                        ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+                        ->where(['assessment_id' => $this->id, 'type' => $type])
+                        ->innerJoin('user', 'user.id = wheel.observer_id')
+                        ->groupBy('wheel.observer_id, wheel.token, user.name, user.surname')
+                        ->all();
     }
 
 }

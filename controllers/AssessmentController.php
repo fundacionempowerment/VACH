@@ -1,0 +1,131 @@
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\models\LoginModel;
+use app\models\RegisterModel;
+use app\models\User;
+use app\models\CoachModel;
+use app\models\ClientModel;
+use app\models\Assessment;
+use app\models\AssessmentAnswer;
+use app\models\AssessmentQuestion;
+use app\models\Wheel;
+
+class AssessmentController extends Controller {
+
+    public $layout = 'inner';
+
+    public function actionIndex() {
+        $assessments = Assessment::find();
+
+        return $this->render('index', [
+        ]);
+    }
+
+    public function actionView($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        return $this->render('view', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
+    public function actionDelete($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+        $teamId = $assessment->team->id;
+        if ($assessment->delete()) {
+            \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Assessment deleted.'));
+        } else {
+            SiteController::FlashErrors($assessment);
+        }
+        return $this->redirect(['/team/view', 'id' => $teamId]);
+    }
+
+    public function actionSendIndividual($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        foreach ($assessment->team->members as $teamMember) {
+            $newWheel = new Wheel();
+
+            $newWheel->observer_id = $teamMember->member->id;
+            $newWheel->observed_id = $teamMember->member->id;
+            $newWheel->type = Wheel::TYPE_INDIVIDUAL;
+            $newWheel->token = $this->newToken();
+            $newWheel->assessment_id = $assessment->id;
+
+            $newWheel->save();
+        }
+
+        $assessment->individual_status = Assessment::STATUS_SENT;
+        $assessment->save();
+
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+    }
+
+    public function actionSendGroup($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        foreach ($assessment->team->members as $observerMember) {
+            $token = $this->newToken();
+
+            foreach ($assessment->team->members as $observedMember) {
+                $newWheel = new Wheel();
+
+                $newWheel->observer_id = $observerMember->member->id;
+                $newWheel->observed_id = $observedMember->member->id;
+                $newWheel->type = Wheel::TYPE_GROUP;
+                $newWheel->token = $token;
+                $newWheel->assessment_id = $assessment->id;
+
+                $newWheel->save();
+            }
+        }
+
+        $assessment->group_status = Assessment::STATUS_SENT;
+        $assessment->save();
+
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+    }
+
+    public function actionSendOrganizational($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        foreach ($assessment->team->members as $observerMember) {
+            $token = $this->newToken();
+
+            foreach ($assessment->team->members as $observedMember) {
+                $newWheel = new Wheel();
+
+                $newWheel->observer_id = $observerMember->member->id;
+                $newWheel->observed_id = $observedMember->member->id;
+                $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
+                $newWheel->token = $token;
+                $newWheel->assessment_id = $assessment->id;
+
+                $newWheel->save();
+            }
+        }
+
+        $assessment->organizational_status = Assessment::STATUS_SENT;
+        $assessment->save();
+
+
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+    }
+
+    private static function newToken() {
+        $number = rand(1000000000, 1999999999);
+        $string = (string) $number;
+
+        return $string[1] . $string[2] . $string[3] . '-' .
+                $string[4] . $string[5] . $string[6] . '-' .
+                $string[7] . $string[8] . $string[9];
+    }
+
+}
+

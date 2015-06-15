@@ -85,21 +85,16 @@ class WheelController extends Controller {
             ]);
     }
 
-    public function actionRun($coachee_id) {
+    public function actionRun() {
         $showMissingAnswers = false;
         $current_dimension = 0;
 
         if (Yii::$app->request->isGet) {
-            if (Yii::$app->request->get('id') != null) {
-                $id = Yii::$app->request->get('id');
-                $wheel = Wheel::findOne(['id' => $id]);
+            if (Yii::$app->request->get('token') != null) {
+                $token = Yii::$app->request->get('token');
+                $wheel = Wheel::findOne(['token' => $token]);
             } else {
-                $wheel = new Wheel();
-                $wheel->date = date("Y-m-d");
-                $wheel->coachee_id = $coachee_id;
-                if ($wheel->validate()) {
-                    $wheel->save();
-                }
+                $this->redirect(['/site']);
             }
         } else if (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
@@ -145,7 +140,6 @@ class WheelController extends Controller {
                     return $this->redirect(['/wheel', 'wheelid' => $wheel->id]);
             }
         }
-
 
         $questions = WheelQuestion::find()->asArray()->all();
 

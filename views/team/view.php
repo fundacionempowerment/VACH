@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ])
         ?>
 
-        <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'display: inline;']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
         <?php ActiveForm::end(); ?>
     </div>
     <div class="row col-md-6">
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'name',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return Html::a($data->name, Url::to(['dashboard/assessment', 'id' => $data['id']]));
+                        return Html::a($data->name, Url::to(['assessment/view', 'id' => $data['id']]));
                     },
                 ],
                 ['class' => 'yii\grid\ActionColumn',

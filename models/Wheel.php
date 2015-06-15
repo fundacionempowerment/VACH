@@ -13,14 +13,23 @@ use yii\behaviors\TimestampBehavior;
  */
 class Wheel extends ActiveRecord {
 
+    const TYPE_INDIVIDUAL = 0;
+    const TYPE_GROUP = 1;
+    const TYPE_ORGANIZATIONAL = 2;
+
     public $dimensionAnswers = [0, 0, 0, 0, 0, 0, 0, 0];
+    private $_answers_status = null;
+
+    public function __construct() {
+        $this->date = date("Y-m-d");
+    }
 
     /**
      * @return array the validation rules.
      */
     public function rules() {
         return [
-            [['coachee_id', 'date',], 'required'],
+            [['observer_id', 'observed_id', 'date',], 'required'],
         ];
     }
 
@@ -39,8 +48,19 @@ class Wheel extends ActiveRecord {
         ];
     }
 
-    public function getCoachee() {
-        return $this->hasOne(Coachee::className(), ['id' => 'coachee_id']);
+    public function getAnswerStatus() {
+        $count = WheelAnswer::findByCondition(['wheel_id' => $this->id])
+                ->count();
+
+        return ($count * 100 / 80) . ' %';
+    }
+
+    public function getObserver() {
+        return $this->hasOne(Coachee::className(), ['id' => 'observer_id']);
+    }
+
+    public function getObserved() {
+        return $this->hasOne(Coachee::className(), ['id' => 'observed_id']);
     }
 
     public function getCoach() {
