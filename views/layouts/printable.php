@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\widgets\Alert;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -22,6 +23,7 @@ AppAsset::register($this);
     <body>
         <?php $this->beginBody() ?>
         <div class="container">
+            <?= Alert::widget() ?>
             <?= $content ?>
         </div>
         <?php $this->endBody() ?>

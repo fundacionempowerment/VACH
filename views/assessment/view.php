@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $individualWheel['name'] . ' ' . $individualWheel['surname'] ?>:&nbsp;
-                    <?= ($individualWheel['count'] / 80 * 100) . '%' ?>                
+                    <?= ($individualWheel['count'] / 80 * 100) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($individualWheel['token'], ['wheel/run', 'token' => $individualWheel['token']]) ?>
                 </li>
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] / 80 * 100) . '%' ?>                
+                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / 80 ) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::a(\Yii::t('assessment', 'Send organizational wheels'), Url::to(['assessment/send-organizational', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
             } else {
                 echo Html::a(\Yii::t('assessment', 'Organizational wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to('assessment/send-group', ['id' => $assessment->id]), ['class' => 'btn btn-primary']);
+                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/view-organizational', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
             }
             ?>
         <ul>
@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] / 80 * 100) . '%' ?>                
+                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / 80) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>

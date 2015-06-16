@@ -64,7 +64,7 @@ class Wheel extends ActiveRecord {
     }
 
     public function getCoach() {
-        return User::findOne(['id' => $this->coachee->coach_id]);
+        return User::findOne(['id' => $this->observer->coach_id]);
     }
 
     public function getAnswers() {

@@ -56,5 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::submitButton(Yii::t('wheel', 'Save and finish'), ['class' => 'btn btn-success']);
         ?>
         <?php ActiveForm::end(); ?>
+        <br />
     </div>
 </div>

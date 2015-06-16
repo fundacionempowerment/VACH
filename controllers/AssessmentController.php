@@ -118,6 +118,22 @@ class AssessmentController extends Controller {
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
+    public function actionViewGroup($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        return $this->render('view_group', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
+    public function actionViewOrganizational($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        return $this->render('view_organizational', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
     private static function newToken() {
         $number = rand(1000000000, 1999999999);
         $string = (string) $number;

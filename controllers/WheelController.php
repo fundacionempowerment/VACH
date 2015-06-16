@@ -86,20 +86,36 @@ class WheelController extends Controller {
     }
 
     public function actionRun() {
+        $this->layout = 'printable';
         $showMissingAnswers = false;
         $current_dimension = 0;
+        $token = Yii::$app->request->get('token');
 
         if (Yii::$app->request->isGet) {
-            if (Yii::$app->request->get('token') != null) {
-                $token = Yii::$app->request->get('token');
-                $wheel = Wheel::findOne(['token' => $token]);
+            if ($token != null) {
+                $wheels = Wheel::findAll(['token' => $token]);
+
+                if (count($wheels) == 0)
+                    $this->redirect(['/site']);
+
+                $current_wheel = null;
+                foreach ($wheels as $wheel)
+                    if ($wheel->AnswerStatus == '0 %') {
+                        $current_dimension = -1;
+                        $current_wheel = $wheel;
+                        break;
+                    } else if ($wheel->AnswerStatus != '100 %') {
+                        $current_dimension = intval(count($wheel->answers) / 10);
+                        $current_wheel = $wheel;
+                        break;
+                    }
             } else {
                 $this->redirect(['/site']);
             }
         } else if (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
-            $wheel = Wheel::findOne(['id' => $id]);
+            $current_wheel = Wheel::findOne(['id' => $id]);
 
             $count = 0;
 
@@ -109,7 +125,7 @@ class WheelController extends Controller {
                 if (isset($new_answer_value)) {
                     $count += 1;
                     $answer = null;
-                    foreach ($wheel->answers as $lookup_answer)
+                    foreach ($current_wheel->answers as $lookup_answer)
                         if ($lookup_answer->answer_order == $i) {
                             $answer = $lookup_answer;
                             break;
@@ -122,34 +138,42 @@ class WheelController extends Controller {
                         $new_answer = new WheelAnswer();
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
-                        $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                        $current_wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }
                 }
             }
 
-            if ($count == 10)
+            if ($current_dimension == -1 || $count == 10)
                 $current_dimension += 1;
             else {
                 \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
                 $showMissingAnswers = true;
             }
 
-            if ($wheel->validate()) {
-                $wheel->save();
-                if (count($wheel->answers) == 80)
-                    return $this->redirect(['/wheel', 'wheelid' => $wheel->id]);
+            if ($current_wheel->validate()) {
+                $current_wheel->save();
+                if (count($current_wheel->answers) == 80)
+                    return $this->redirect(['/wheel/run', 'token' => $token]);
             }
         }
 
         $questions = WheelQuestion::find()->asArray()->all();
 
-        return $this->render('form', [
-                    'wheel' => $wheel,
-                    'current_dimension' => $current_dimension,
-                    'dimensions' => $this->dimensions,
-                    'questions' => $questions,
-                    'showMissingAnswers' => $showMissingAnswers,
-        ]);
+        if (!isset($current_wheel))
+            return $this->render('thanks');
+        else if ($current_dimension == -1)
+            return $this->render('intro', [
+                        'wheel' => $current_wheel,
+                        'current_dimension' => $current_dimension,
+            ]);
+        else
+            return $this->render('form', [
+                        'wheel' => $current_wheel,
+                        'current_dimension' => $current_dimension,
+                        'dimensions' => $this->dimensions,
+                        'questions' => $questions,
+                        'showMissingAnswers' => $showMissingAnswers,
+            ]);
     }
 
     public function actionDelete($id) {

@@ -58,4 +58,16 @@ class Assessment extends ActiveRecord {
                         ->all();
     }
 
+    public function getIndividualWheels() {
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL]);
+    }
+
+    public function getGroupWheels() {
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP]);
+    }
+
+    public function getOrganizationalWheels() {
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL]);
+    }
+
 }
