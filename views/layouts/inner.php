@@ -21,6 +21,7 @@ if ($isAdministrator) {
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 if ($isCoach) {
+    $items[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
     $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
     $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
     $items[] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];

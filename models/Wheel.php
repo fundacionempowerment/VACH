@@ -123,4 +123,66 @@ class Wheel extends ActiveRecord {
                         ->all();
     }
 
+    public static function getWheelTypes() {
+        return[
+            self::TYPE_INDIVIDUAL => Yii::t('wheel', 'Individual Wheel'),
+            self::TYPE_GROUP => Yii::t('wheel', 'Group Wheel'),
+            self::TYPE_ORGANIZATIONAL => Yii::t('wheel', 'Organizational Wheel '),
+        ];
+    }
+
+    public static function getIndividualWheel($assessmentId, $memberId) {
+        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_INDIVIDUAL)
+                ->all();
+
+        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
+        foreach ($rawAnswers as $answer) {
+            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
+        }
+        for ($i = 0; $i < count($answers); $i++) {
+            $answers[$i] = ($answers[$i] / 10);
+        }
+        return $answers;
+    }
+
+    public static function getProjectedGroupWheel($assessmentId, $memberId) {
+        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_GROUP)
+                ->all();
+
+        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
+        foreach ($rawAnswers as $answer) {
+            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
+        }
+        for ($i = 0; $i < count($answers); $i++) {
+            $answers[$i] = ($answers[$i] / 10);
+        }
+        return $answers;
+    }
+
+    public static function getProjectedOrganizationalWheel($assessmentId, $memberId) {
+        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_ORGANIZATIONAL)
+                ->all();
+
+        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
+        foreach ($rawAnswers as $answer) {
+            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
+        }
+        for ($i = 0; $i < count($answers); $i++) {
+            $answers[$i] = ($answers[$i] / 10);
+        }
+        return $answers;
+    }
+
 }
