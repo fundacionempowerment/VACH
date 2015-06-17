@@ -18,4 +18,7 @@ $this->title = Yii::t('wheel', 'Thanks!');
     <h1>
         <?= Html::encode($this->title) ?>
     </h1>
+    <p>
+        <?= Html::a(Yii::t('app', 'Home'), ['/site'], ['class' => 'btn btn-default']) ?>
+    </p>
 </div>

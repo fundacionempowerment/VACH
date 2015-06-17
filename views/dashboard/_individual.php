@@ -2,21 +2,16 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\Wheel;
+use app\models\WheelQuestion;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-$dimensions = [
-    'Tiempo libre',
-    'Trabajo',
-    'Familia',
-    'Dimensión física',
-    'Dimensión emocional',
-    'Dimensión mental',
-    'Dimensión existencial',
-    'Dimensión espiritual',
-];
+$individualDimensions = WheelQuestion::getDimensionNames(Wheel::TYPE_INDIVIDUAL);
+$groupDimensions = WheelQuestion::getDimensionNames(Wheel::TYPE_GROUP);
+$organizationalDimensions = WheelQuestion::getDimensionNames(Wheel::TYPE_ORGANIZATIONAL);
 ?>
 
 <script src="<?= yii\helpers\Url::to('@web/js/Chart.min.js') ?>"></script>
@@ -26,18 +21,18 @@ $dimensions = [
         <canvas id="IndividualCanvas" height="350" width="350" class="img-responsive"></canvas>
     </div>
     <div class="clearfix"></div>
-    <h3><?= Yii::t('wheel', 'Individual Group Projection Wheel') ?></h3>
+    <h3><?= Yii::t('wheel', 'Individual projection toward the group') ?></h3>
     <div class="col-xs-push-2 col-xs-8 col-md-push-4 col-md-4" >
         <canvas id="IndividualGroupProjectionCanvas" height="350" width="350" class="img-responsive"></canvas>
     </div>
     <div class="clearfix"></div>
-    <h3><?= Yii::t('wheel', 'Individual Organizational Projection Wheel') ?></h3>
+    <h3><?= Yii::t('wheel', 'Individual projection toward the organization') ?></h3>
     <div class="col-xs-push-2 col-xs-8 col-md-push-4 col-md-4" >
         <canvas id="IndividualOrganizationalProjectionCanvas" height="350" width="350" class="img-responsive"></canvas>
     </div>
     <script>
         var individualData = {
-            labels: [<?= '"' . implode('", "', $dimensions) . '"' ?>],
+            labels: [<?= '"' . implode('", "', $individualDimensions) . '"' ?>],
             datasets: [
                 {
                     label: "Individual",
@@ -52,7 +47,7 @@ $dimensions = [
             ]
         };
         var individualGroupProjectionData = {
-            labels: [<?= '"' . implode('", "', $dimensions) . '"' ?>],
+            labels: [<?= '"' . implode('", "', $groupDimensions) . '"' ?>],
             datasets: [
                 {
                     label: "Group",
@@ -77,7 +72,7 @@ $dimensions = [
             ]
         };
         var individualOrganizationalProjectionData = {
-            labels: [<?= '"' . implode('", "', $dimensions) . '"' ?>],
+            labels: [<?= '"' . implode('", "', $organizationalDimensions) . '"' ?>],
             datasets: [
                 {
                     label: "Group",

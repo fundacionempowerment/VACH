@@ -17,12 +17,5 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Companies' => 'Empresas',
-    'Company data' => 'Datos de la empresa',
-    'Company has been succesfully created.' => 'Empresa ha sido creada con éxito.',
-    'Company has been succesfully deleted.' => 'Empresa ha sido eliminada con éxito.',
-    'Edit company' => 'Editar empresa',
-    'My Companies' => 'Mis empresas',
-    'New company' => 'Nueva empresa',
-    'Please fill out the following fields with company data:' => 'Por favor llene los siguiente campos con los datos de la empresa:',
+    'Dashboard' => 'Tablero',
 ];

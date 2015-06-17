@@ -45,7 +45,7 @@ class DashboardController extends Controller {
 
         $individualWheel = [];
         if ($memberId > 0 && $wheelType == Wheel::TYPE_INDIVIDUAL) {
-            $individualWheel = Wheel::getIndividualWheel($assessmentId, $memberId);
+            $individualWheel = Wheel::getProjectedIndividualWheel($assessmentId, $memberId);
         }
 
         $projectedGroupWheel = [];

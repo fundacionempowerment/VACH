@@ -7,10 +7,15 @@ use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
 use app\models\Assessment;
 use app\models\Wheel;
+use app\models\WheelQuestion;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
+
+$individualQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_INDIVIDUAL));
+$groupQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_GROUP));
+$organizationalQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_ORGANIZATIONAL));
 
 $this->title = $assessment->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
@@ -40,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $individualWheel['name'] . ' ' . $individualWheel['surname'] ?>:&nbsp;
-                    <?= ($individualWheel['count'] / 80 * 100) . '%' ?>
+                    <?= ($individualWheel['count'] / $individualQuestionCount * 100) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($individualWheel['token'], ['wheel/run', 'token' => $individualWheel['token']]) ?>
                 </li>
@@ -64,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / 80 ) . '%' ?>
+                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / $groupQuestionCount ) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>
@@ -88,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / 80) . '%' ?>
+                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / $organizationalQuestionCount) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>

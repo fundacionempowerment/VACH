@@ -3,13 +3,19 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use app\models\WheelAnswer;
+use app\models\Wheel;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('wheel', 'Answering');
+if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
+    $this->title = Yii::t('wheel', 'Running individual wheel');
+} else if ($wheel->type == Wheel::TYPE_GROUP) {
+    $this->title = Yii::t('wheel', 'Running group wheel');
+} else {
+    $this->title = Yii::t('wheel', 'Running organizational wheel');
+}
 ?>
 <div class="site-wheel">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -24,6 +30,5 @@ $this->title = Yii::t('wheel', 'Answering');
         <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
         <?= Html::submitButton(Yii::t('app', 'Begin'), ['class' => 'btn btn-primary']); ?>
         <?php ActiveForm::end(); ?>
-
     </div>
 </div>

@@ -51,8 +51,8 @@ class Wheel extends ActiveRecord {
     public function getAnswerStatus() {
         $count = WheelAnswer::findByCondition(['wheel_id' => $this->id])
                 ->count();
-
-        return ($count * 100 / 80) . ' %';
+        $questionCount = count(WheelQuestion::getQuestions($this->type));
+        return ($count * 100 / $questionCount) . ' %';
     }
 
     public function getObserver() {
@@ -131,58 +131,30 @@ class Wheel extends ActiveRecord {
         ];
     }
 
-    public static function getIndividualWheel($assessmentId, $memberId) {
-        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
+    private static function getProjectedWheel($assessmentId, $memberId, $type) {
+        $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_INDIVIDUAL)
+                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->groupBy('wheel_answer.dimension')
                 ->all();
 
-        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
-        foreach ($rawAnswers as $answer) {
-            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
-        }
-        for ($i = 0; $i < count($answers); $i++) {
-            $answers[$i] = ($answers[$i] / 10);
-        }
+        foreach ($rawAnswers as $rawAnswer)
+            $answers[] = $rawAnswer['value'];
         return $answers;
+    }
+
+    public static function getProjectedIndividualWheel($assessmentId, $memberId) {
+        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_INDIVIDUAL);
     }
 
     public static function getProjectedGroupWheel($assessmentId, $memberId) {
-        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
-                ->from('wheel_answer')
-                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_GROUP)
-                ->all();
-
-        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
-        foreach ($rawAnswers as $answer) {
-            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
-        }
-        for ($i = 0; $i < count($answers); $i++) {
-            $answers[$i] = ($answers[$i] / 10);
-        }
-        return $answers;
+        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
     }
 
     public static function getProjectedOrganizationalWheel($assessmentId, $memberId) {
-        $rawAnswers = (new Query())->select('wheel_answer.answer_order, wheel_answer.answer_value')
-                ->from('wheel_answer')
-                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . Wheel::TYPE_ORGANIZATIONAL)
-                ->all();
-
-        $answers = [0, 0, 0, 0, 0, 0, 0, 0];
-        foreach ($rawAnswers as $answer) {
-            $answers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
-        }
-        for ($i = 0; $i < count($answers); $i++) {
-            $answers[$i] = ($answers[$i] / 10);
-        }
-        return $answers;
+        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
 }

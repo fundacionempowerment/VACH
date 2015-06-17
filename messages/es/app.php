@@ -20,6 +20,8 @@ return [
     'Access denied' => 'Acceso denegado',
     'Add' => 'Agregar',
     'Admin' => 'Admin',
+    'All' => 'Todos',
+    'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
     'Description' => 'Descripción',
@@ -41,4 +43,5 @@ return [
     'Sign up' => 'Registrese',
     'Type' => 'Tipo',
     'Users' => 'Usuarios',
+    'done' => 'listo',
 ];

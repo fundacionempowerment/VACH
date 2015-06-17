@@ -18,26 +18,6 @@ use app\models\WheelQuestion;
 class WheelController extends Controller {
 
     public $layout = 'inner';
-    public $dimensions = [
-        'Tiempo libre',
-        'Trabajo',
-        'Familia',
-        'Dimensión física',
-        'Dimensión emocional',
-        'Dimensión mental',
-        'Dimensión existencial',
-        'Dimensión espiritual',
-    ];
-    public $shortDimensions = [
-        'Tiempo libre',
-        'Trabajo',
-        'Familia',
-        'D. física',
-        'D. emocional',
-        'D. mental',
-        'D. existencial',
-        'D. espiritual',
-    ];
 
     public function actionIndex() {
         if (Yii::$app->request->get('coachee_id')) {
@@ -81,7 +61,6 @@ class WheelController extends Controller {
                         'model' => $model,
                         'compare' => $compareModel,
                         'wheels' => $wheels,
-                        'dimensions' => $this->shortDimensions,
             ]);
     }
 
@@ -105,7 +84,9 @@ class WheelController extends Controller {
                         $current_wheel = $wheel;
                         break;
                     } else if ($wheel->AnswerStatus != '100 %') {
-                        $current_dimension = intval(count($wheel->answers) / 10);
+                        $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+                        $setSize = $questionCount / 8;
+                        $current_dimension = intval(count($wheel->answers) / $setSize);
                         $current_wheel = $wheel;
                         break;
                     }
@@ -116,10 +97,12 @@ class WheelController extends Controller {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
             $current_wheel = Wheel::findOne(['id' => $id]);
+            $questionCount = count(WheelQuestion::getQuestions($current_wheel->type));
+            $setSize = $questionCount / 8;
 
             $count = 0;
 
-            for ($i = 0; $i < 80; $i++) {
+            for ($i = 0; $i < $questionCount; $i++) {
                 $new_answer_value = Yii::$app->request->post('answer' . $i);
 
                 if (isset($new_answer_value)) {
@@ -134,16 +117,19 @@ class WheelController extends Controller {
                     if (isset($answer)) {
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
+                        $answer->dimension = $current_dimension;
+                        $answer->save();
                     } else {
                         $new_answer = new WheelAnswer();
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
+                        $new_answer->dimension = $current_dimension;
                         $current_wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }
                 }
             }
 
-            if ($current_dimension == -1 || $count == 10)
+            if ($current_dimension == -1 || $count == $setSize)
                 $current_dimension += 1;
             else {
                 \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
@@ -152,12 +138,10 @@ class WheelController extends Controller {
 
             if ($current_wheel->validate()) {
                 $current_wheel->save();
-                if (count($current_wheel->answers) == 80)
+                if (count($current_wheel->answers) == $questionCount)
                     return $this->redirect(['/wheel/run', 'token' => $token]);
             }
         }
-
-        $questions = WheelQuestion::find()->asArray()->all();
 
         if (!isset($current_wheel))
             return $this->render('thanks');
@@ -170,8 +154,6 @@ class WheelController extends Controller {
             return $this->render('form', [
                         'wheel' => $current_wheel,
                         'current_dimension' => $current_dimension,
-                        'dimensions' => $this->dimensions,
-                        'questions' => $questions,
                         'showMissingAnswers' => $showMissingAnswers,
             ]);
     }
@@ -196,14 +178,10 @@ class WheelController extends Controller {
 
         return $this->render('answers', [
                     'wheel' => $wheel,
-                    'dimensions' => $this->dimensions,
-                    'questions' => $questions,
         ]);
     }
 
     public function actionQuestions() {
-        $questions = WheelQuestion::find()->asArray()->all();
-
         if (Yii::$app->request->isPost) {
 
             $update_questions = WheelQuestion::find()->all();
@@ -222,8 +200,6 @@ class WheelController extends Controller {
         }
 
         return $this->render('questions', [
-                    'dimensions' => $this->dimensions,
-                    'questions' => $questions,
         ]);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,12 +18,16 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Companies' => 'Empresas',
-    'Company data' => 'Datos de la empresa',
-    'Company has been succesfully created.' => 'Empresa ha sido creada con éxito.',
-    'Company has been succesfully deleted.' => 'Empresa ha sido eliminada con éxito.',
-    'Edit company' => 'Editar empresa',
-    'My Companies' => 'Mis empresas',
-    'New company' => 'Nueva empresa',
-    'Please fill out the following fields with company data:' => 'Por favor llene los siguiente campos con los datos de la empresa:',
+    'Assessment deleted.' => 'Relevamiento eliminadA',
+    'Assessments' => 'Relevamientos',
+    'Group wheels' => 'Ruedas grupales',
+    'Group wheels sent' => 'Ruedas grupales enviadas',
+    'Individual wheels' => 'Ruedas individuales',
+    'Individual wheels sent' => 'Ruedas individuales enviadas',
+    'Organizational wheels' => 'Ruedas organizacionales',
+    'Organizational wheels sent' => 'Ruedas organizacionales enviadas',
+    'Send group wheels' => 'Enviar ruedas grupales',
+    'Send individual wheels' => 'Enviar ruedas individuales',
+    'Send organizational wheels' => 'Enviar ruedas organizacionales',
+    'View detailed status' => 'Ver estado detallado',
 ];

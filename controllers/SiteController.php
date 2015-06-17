@@ -77,7 +77,7 @@ class SiteController extends Controller {
         Yii::$app->session->set('is_coach', $isCoach);
 
         if ($isCoach)
-            return $this->redirect(['/coachee']);
+            return $this->redirect(['/team']);
         else {
             Yii::$app->session->set('coachee_id', Yii::$app->user->id);
             return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);

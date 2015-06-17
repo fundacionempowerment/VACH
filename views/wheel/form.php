@@ -4,16 +4,24 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
 use app\models\Wheel;
+use app\models\WheelQuestion;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-for ($i = $current_dimension * 10; $i < $current_dimension * 10 + 10; $i++)
-    $answers[$i] = null;
+$dimensions = WheelQuestion::getDimensionNames($wheel->type);
+$questions = WheelQuestion::getQuestions($wheel->type);
+$setQuantity = count($questions) / 8;
+
+for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)
+    if (YII_DEBUG)
+        $answers[$i] = rand(0, 4);
+    else
+        $answers[$i] = null;
 
 foreach ($wheel->answers as $answer)
-    if ($answer->answer_order >= $current_dimension * 10 && $answer->answer_order < $current_dimension * 10 + 10)
+    if ($answer->answer_order >= $current_dimension * $setQuantity && $answer->answer_order < ($current_dimension + 1) * $setQuantity)
         $answers[$answer->answer_order] = $answer->answer_value;
 
 if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
@@ -37,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
         <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
         <?php
-        for ($i = $current_dimension * 10; $i < $current_dimension * 10 + 10; $i++) {
+        for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++) {
             ?>
             <label class="control-label" for="loginmodel-email"><?= $questions[$i]['question'] ?></label>
             <?=
