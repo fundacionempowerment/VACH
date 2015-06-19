@@ -160,7 +160,7 @@ class TeamController extends Controller {
         } else {
             SiteController::FlashErrors($assessment);
         }
-        return $this->redirect(['/team/view', 'id' => $id]);
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
     public function actionDeleteAssessment($id) {

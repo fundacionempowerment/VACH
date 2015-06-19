@@ -157,4 +157,26 @@ class Wheel extends ActiveRecord {
         return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
+    private static function getReflectedWheel($assessmentId, $memberId, $type) {
+        $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("wheel.observer_id <> $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->groupBy('wheel_answer.dimension')
+                ->all();
+
+        foreach ($rawAnswers as $rawAnswer)
+            $answers[] = $rawAnswer['value'];
+        return $answers;
+    }
+
+    public static function getReflectedGroupWheel($assessmentId, $memberId) {
+        return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
+    }
+
+    public static function getReflectedOrganizationalWheel($assessmentId, $memberId) {
+        return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
+    }
+
 }

@@ -58,7 +58,8 @@ class AssessmentController extends Controller {
             $newWheel->token = $this->newToken();
             $newWheel->assessment_id = $assessment->id;
 
-            $newWheel->save();
+            if ($newWheel->save())
+                $this->sendWheel($observerMember->member, $newWheel->token, Wheel::TYPE_INDIVIDUAL);
         }
 
         $assessment->individual_status = Assessment::STATUS_SENT;
@@ -84,6 +85,8 @@ class AssessmentController extends Controller {
 
                 $newWheel->save();
             }
+
+            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_GROUP);
         }
 
         $assessment->group_status = Assessment::STATUS_SENT;
@@ -109,6 +112,8 @@ class AssessmentController extends Controller {
 
                 $newWheel->save();
             }
+
+            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_GROUP);
         }
 
         $assessment->organizational_status = Assessment::STATUS_SENT;
@@ -141,6 +146,18 @@ class AssessmentController extends Controller {
         return $string[1] . $string[2] . $string[3] . '-' .
                 $string[4] . $string[5] . $string[6] . '-' .
                 $string[7] . $string[8] . $string[9];
+    }
+
+    private function sendWheel($member, $token, $type) {
+        $type_text = Wheel::getWheelTypes()[$type];
+        Yii::$app->mailer->compose('wheel', [
+                    'token' => $token,
+                    'type' => $type
+                ])
+                ->setSubject(Yii::t('assessment', "CPC: $type_text link"))
+                ->setFrom(Yii::$app->user->identity->email)
+                ->setTo($member->email)
+                ->send();
     }
 
 }

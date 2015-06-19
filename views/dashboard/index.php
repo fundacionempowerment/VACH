@@ -32,9 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?=
         $wheelType == Wheel::TYPE_INDIVIDUAL && $assessmentId > 0 && $memberId > 0 ?
                 $this->render('_individual', [
-                    'individualWheel' => $individualWheel,
+                    'projectedIndividualWheel' => $projectedIndividualWheel,
                     'projectedGroupWheel' => $projectedGroupWheel,
                     'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                    'reflectedGroupWheel' => $reflectedGroupWheel,
+                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
                 ]) : ''
         ?>
     </div>

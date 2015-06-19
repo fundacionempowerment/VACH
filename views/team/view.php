@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'member.fullname',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return Html::a($data->member->fullname, Url::to(['team/view-member', 'id' => $data['id']]));
+                        return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
                     },
                 ],
                 ['class' => 'yii\grid\ActionColumn',

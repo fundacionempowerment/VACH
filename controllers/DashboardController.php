@@ -43,20 +43,18 @@ class DashboardController extends Controller {
 
         $wheelType = Yii::$app->request->post('wheelType')? : 0;
 
-        $individualWheel = [];
-        if ($memberId > 0 && $wheelType == Wheel::TYPE_INDIVIDUAL) {
-            $individualWheel = Wheel::getProjectedIndividualWheel($assessmentId, $memberId);
-        }
-
+        $projectedIndividualWheel = [];
         $projectedGroupWheel = [];
-        if ($memberId > 0 && $wheelType == Wheel::TYPE_INDIVIDUAL) {
-            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessmentId, $memberId);
-        }
-
-
         $projectedOrganizationalWheel = [];
+        $reflectedIndividualWheel = [];
+        $reflectedGroupWheel = [];
+        $reflectedOrganizationalWheel = [];
         if ($memberId > 0 && $wheelType == Wheel::TYPE_INDIVIDUAL) {
+            $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($assessmentId, $memberId);
+            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessmentId, $memberId);
             $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessmentId, $memberId);
+            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessmentId, $memberId);
+            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessmentId, $memberId);
         }
 
         return $this->render('index', [
@@ -69,9 +67,11 @@ class DashboardController extends Controller {
                     'memberId' => $memberId,
                     'members' => $members,
                     'wheelType' => $wheelType,
-                    'individualWheel' => $individualWheel,
+                    'projectedIndividualWheel' => $projectedIndividualWheel,
                     'projectedGroupWheel' => $projectedGroupWheel,
                     'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                    'reflectedGroupWheel' => $reflectedGroupWheel,
+                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
         ]);
     }
 
