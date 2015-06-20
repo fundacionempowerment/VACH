@@ -67,7 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'data' => $coachees,
             'options' => [
                 'placeholder' => Yii::t('team', 'Select new member ...'),
-                'style' => 'width: 220px;',
             ],
         ])
         ?>

@@ -12,67 +12,98 @@ use app\models\TeamMember;
 use app\models\Team;
 use app\models\Assessment;
 use app\models\Company;
+use app\models\DashboardFilter;
 
 class DashboardController extends Controller {
 
     public $layout = 'inner';
 
     public function actionIndex() {
-        $companyId = Yii::$app->request->post('companyId')? : 0;
+        $filter = Yii::$app->session->get('DashboardFilte') ? : new DashboardFilter();
+        if ($filter->load(Yii::$app->request->post())) {
+            Yii::$app->session->set('DashboardFilte', $filter);
+            $this->redirect(['/dashboard']);
+        }
+
+        $companies = [];
+        $teams = [];
+        $assessments = [];
+        $members = [];
+
         $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
-        $companies[0] = Yii::t('app', 'All');
 
-        $teamId = Yii::$app->request->post('teamId')? : 0;
-        if ($companyId > 0) {
-            $teams = ArrayHelper::map(Team::findAll(['company_id' => $companyId]), 'id', 'name');
+        if ($filter->companyId > 0) {
+            $teams = ArrayHelper::map(Team::findAll(['company_id' => $filter->companyId]), 'id', 'name');
         }
-        $teams[0] = Yii::t('app', 'All');
 
-        $assessmentId = Yii::$app->request->post('assessmentId')? : 0;
-        if ($teamId > 0) {
-            $assessments = ArrayHelper::map(Assessment::findAll(['team_id' => $teamId]), 'id', 'name');
-        }
-        $assessments[0] = Yii::t('app', 'All');
+        if ($filter->teamId > 0) {
+            $assessments = ArrayHelper::map(Assessment::findAll(['team_id' => $filter->teamId]), 'id', 'name');
 
-        $memberId = Yii::$app->request->post('memberId')? : 0;
-        if ($teamId > 0) {
-            foreach (TeamMember::findAll(['team_id' => $teamId]) as $teamMember)
+            foreach (TeamMember::findAll(['team_id' => $filter->teamId]) as $teamMember)
                 $members[$teamMember->user_id] = $teamMember->member->fullname;
         }
         $members[0] = Yii::t('app', 'All');
 
-        $wheelType = Yii::$app->request->post('wheelType')? : 0;
-
         $projectedIndividualWheel = [];
         $projectedGroupWheel = [];
         $projectedOrganizationalWheel = [];
-        $reflectedIndividualWheel = [];
         $reflectedGroupWheel = [];
         $reflectedOrganizationalWheel = [];
-        if ($memberId > 0 && $wheelType == Wheel::TYPE_INDIVIDUAL) {
-            $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($assessmentId, $memberId);
-            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessmentId, $memberId);
-            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessmentId, $memberId);
-            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessmentId, $memberId);
-            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessmentId, $memberId);
+
+        $groupWheel = [];
+        $organizationalWheel = [];
+
+        if ($filter->assessmentId == 0 || ($filter->wheelType == Wheel::TYPE_INDIVIDUAL && $filter->memberId == 0)) {
+            return $this->render('index', [
+                        'filter' => $filter,
+                        'companies' => $companies,
+                        'teams' => $teams,
+                        'assessments' => $assessments,
+                        'members' => $members,
+            ]);
         }
 
-        return $this->render('index', [
-                    'companyId' => $companyId,
-                    'companies' => $companies,
-                    'teamId' => $teamId,
-                    'teams' => $teams,
-                    'assessmentId' => $assessmentId,
-                    'assessments' => $assessments,
-                    'memberId' => $memberId,
-                    'members' => $members,
-                    'wheelType' => $wheelType,
-                    'projectedIndividualWheel' => $projectedIndividualWheel,
-                    'projectedGroupWheel' => $projectedGroupWheel,
-                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
-                    'reflectedGroupWheel' => $reflectedGroupWheel,
-                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
-        ]);
+        if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
+
+            $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($filter->assessmentId, $filter->memberId);
+            $projectedGroupWheel = Wheel::getProjectedGroupWheel($filter->assessmentId, $filter->memberId);
+            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($filter->assessmentId, $filter->memberId);
+            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($filter->assessmentId, $filter->memberId);
+            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($filter->assessmentId, $filter->memberId);
+
+            $performanceMatrix = [
+                ['name' => 'Marcelo', 'productivity' => 67.59, 'consciousness' => -12.44],
+                ['name' => 'Maria', 'productivity' => 77.78, 'consciousness' => -9.34],
+                ['name' => 'Mariana', 'productivity' => 79.34, 'consciousness' => -10.53]
+            ];
+            return $this->render('individual', [
+                        'filter' => $filter,
+                        'companies' => $companies,
+                        'teams' => $teams,
+                        'assessments' => $assessments,
+                        'members' => $members,
+                        'projectedIndividualWheel' => $projectedIndividualWheel,
+                        'projectedGroupWheel' => $projectedGroupWheel,
+                        'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                        'reflectedGroupWheel' => $reflectedGroupWheel,
+                        'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
+                        'performanceMatrix' => $performanceMatrix,
+            ]);
+        }
+
+
+        if ($filter->wheelType == Wheel::TYPE_GROUP) {
+            $reflectedGroupWheel = Wheel::getGroupWheel($assessmentId);
+
+            return $this->render('individual', [
+                        'filter' => $filter,
+                        'companies' => $companies,
+                        'teams' => $teams,
+                        'assessments' => $assessments,
+                        'members' => $members,
+                        'groupWheel' => $groupWheel,
+            ]);
+        }
     }
 
 }
