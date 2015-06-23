@@ -139,7 +139,7 @@ class Wheel extends ActiveRecord {
                 ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
                 ->groupBy('wheel_answer.dimension')
                 ->all();
-
+        $answers = [];
         foreach ($rawAnswers as $rawAnswer)
             $answers[] = $rawAnswer['value'];
         return $answers;
@@ -165,7 +165,7 @@ class Wheel extends ActiveRecord {
                 ->where("wheel.observer_id <> $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
                 ->groupBy('wheel_answer.dimension')
                 ->all();
-
+        $answers = [];
         foreach ($rawAnswers as $rawAnswer)
             $answers[] = $rawAnswer['value'];
         return $answers;
@@ -177,6 +177,133 @@ class Wheel extends ActiveRecord {
 
     public static function getReflectedOrganizationalWheel($assessmentId, $memberId) {
         return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
+    }
+
+    public static function getGroupPerformanceMatrix($assessmentId) {
+        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_GROUP);
+    }
+
+    public static function getOrganizationalPerformanceMatrix($assessmentId) {
+        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
+    }
+
+    public static function getPerformanceMatrix($assessmentId, $type) {
+        $reflectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id <> wheel.observed_id")
+                ->groupBy('wheel.observed_id')
+                ->all();
+
+        $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, user.name, user.surname')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('user', 'user.id = wheel.observed_id')
+                ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id = wheel.observed_id")
+                ->groupBy('wheel.observed_id')
+                ->all();
+
+        $result = [];
+        foreach ($reflectedValues as $reflectedValue)
+            foreach ($projectedValues as $projectedValue)
+                if ($reflectedValue['observed_id'] == $projectedValue['observed_id']) {
+                    $result[] = [
+                        'name' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
+                        'productivity' => $reflectedValue['value'] / 4 * 100,
+                        'consciousness' => ($reflectedValue['value'] - $projectedValue['value']) / 4 * 100
+                    ];
+                }
+
+        return $result;
+    }
+
+    public static function getGroupWheel($assessmentId) {
+        return self::getTotalWheel($assessmentId, Wheel::TYPE_GROUP);
+    }
+
+    public static function getOrganizationalWheel($assessmentId) {
+        return self::getTotalWheel($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
+    }
+
+    public static function getTotalWheel($assessmentId, $type) {
+        $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("assessment.id = $assessmentId and wheel.type = " . $type)
+                ->groupBy('wheel_answer.dimension')
+                ->all();
+
+        foreach ($rawAnswers as $rawAnswer)
+            $answers[] = $rawAnswer['value'];
+        return $answers;
+    }
+
+    public static function getMemberGroupWheel($assessmentId, $memberId) {
+        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
+    }
+
+    public static function getMemberOrganizationalWheel($assessmentId, $memberId) {
+        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
+    }
+
+    public static function getMemberTotalWheel($assessmentId, $memberId, $type) {
+        $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->where("wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->groupBy('wheel_answer.dimension')
+                ->all();
+        $answers = [];
+        foreach ($rawAnswers as $rawAnswer)
+            $answers[] = $rawAnswer['value'];
+        return $answers;
+    }
+
+    public static function getEmergents($assessmentId, $type) {
+        $rawEmergents = (new Query)->select('wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
+                ->where("assessment.id = $assessmentId and wheel.type = $type")
+                ->groupBy('wheel_answer.answer_order, wheel_question.question')
+                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->orderBy('avg(wheel_answer.answer_value) desc')
+                ->all();
+
+        return $rawEmergents;
+    }
+
+    public static function getMemberEmergents($assessmentId, $memberId, $type) {
+        $rawEmergents = (new Query)->select('wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
+                ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
+                ->groupBy('wheel_answer.answer_order, wheel_question.question')
+                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->orderBy('avg(wheel_answer.answer_value) desc')
+                ->all();
+
+        return $rawEmergents;
+    }
+
+    public static function getRelationsMatrix($assessmentId, $type) {
+        $rawAnswers = (new Query())->select('wheel.observer_id, wheel.observed_id, avg(wheel_answer.answer_value) as value, user.name, user.surname')
+                ->from('wheel_answer')
+                ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
+                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('user', 'user.id = wheel.observer_id')
+                ->where("assessment.id = $assessmentId and wheel.type = " . $type)
+                ->groupBy('wheel.observer_id, wheel.observed_id, user.name, user.surname')
+                ->all();
+
+        return $rawAnswers;
     }
 
 }

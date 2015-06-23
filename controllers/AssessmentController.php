@@ -21,10 +21,7 @@ class AssessmentController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $assessments = Assessment::find();
-
-        return $this->render('index', [
-        ]);
+        return $this->redirect(['/team']);
     }
 
     public function actionView($id) {
@@ -59,7 +56,7 @@ class AssessmentController extends Controller {
             $newWheel->assessment_id = $assessment->id;
 
             if ($newWheel->save())
-                $this->sendWheel($observerMember->member, $newWheel->token, Wheel::TYPE_INDIVIDUAL);
+                $this->sendWheel($teamMember->member, $newWheel->token, Wheel::TYPE_INDIVIDUAL);
         }
 
         $assessment->individual_status = Assessment::STATUS_SENT;
@@ -113,7 +110,7 @@ class AssessmentController extends Controller {
                 $newWheel->save();
             }
 
-            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_GROUP);
+            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_ORGANIZATIONAL);
         }
 
         $assessment->organizational_status = Assessment::STATUS_SENT;

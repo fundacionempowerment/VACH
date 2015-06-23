@@ -23,6 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             [
+                'attribute' => 'id',
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::a($data['id'], Url::to(['team/view', 'id' => $data['id'],]));
+                },
+            ],
+                        [
+                'attribute' => 'company.name',
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::a($data->company->name, Url::to(['team/view', 'id' => $data['id'],]));
+                },
+            ],
+            [
                 'attribute' => 'name',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
