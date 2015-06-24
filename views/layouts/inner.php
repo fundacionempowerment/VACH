@@ -12,11 +12,21 @@ use app\widgets\Alert;
 
 AppAsset::register($this);
 $isCoach = Yii::$app->user->identity->is_coach;
+$isAdministrator = Yii::$app->user->identity->is_administrator;
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
-if ($isCoach)
-    $items[] = ['label' => Yii::t('user', 'Clients'), 'url' => ['/coach/clients']];
-$items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/account']];
+if ($isAdministrator) {
+    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
+    $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
+    $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
+}
+if ($isCoach) {
+    $items[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
+    $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
+    $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
+    $items[] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+}
+$items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];
 $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
     'url' => ['/site/logout'],
     'linkOptions' => ['data-method' => 'post']];
@@ -26,7 +36,7 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
 <html lang="<?= Yii::$app->language ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>"/>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>

@@ -77,10 +77,10 @@ class SiteController extends Controller {
         Yii::$app->session->set('is_coach', $isCoach);
 
         if ($isCoach)
-            return $this->redirect(['/coach']);
+            return $this->redirect(['/team']);
         else {
-            Yii::$app->session->set('clientid', Yii::$app->user->id);
-            return $this->redirect(['/wheel']);
+            Yii::$app->session->set('coachee_id', Yii::$app->user->id);
+            return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
         }
     }
 
@@ -125,6 +125,15 @@ class SiteController extends Controller {
     public function actionEn() {
         Yii::$app->session->set('language', 'en');
         return $this->goHome();
+    }
+
+    public static function FlashErrors($record) {
+        if (!isset($record))
+            return;
+
+        foreach ($record->getErrors() as $attribute => $messages)
+            foreach ($messages as $message)
+                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ' . $message));
     }
 
     public function actionMigrateUp() {

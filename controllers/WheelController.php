@@ -11,125 +11,17 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\WheelModel;
+use app\models\Wheel;
+use app\models\WheelAnswer;
+use app\models\WheelQuestion;
 
 class WheelController extends Controller {
 
     public $layout = 'inner';
-    public $dimensions = [
-        'Tiempo libre',
-        'Trabajo',
-        'Familia',
-        'Dimensión física',
-        'Dimensión emocional',
-        'Dimensión mental',
-        'Dimensión existencial',
-        'Dimensión espiritual',
-    ];
-    public $shortDimensions = [
-        'Tiempo libre',
-        'Trabajo',
-        'Familia',
-        'D. física',
-        'D. emocional',
-        'D. mental',
-        'D. existencial',
-        'D. espiritual',
-    ];
-    public $questions = [
-        // Tiempo libre
-        '¿Me divierto y participo del ocio?',
-        '¿Tengo claro cuáles son mis momentos de ocio?',
-        '¿Logro separar mi familia del ocio?',
-        '¿Logro separar mi trabajo del ocio?',
-        '¿Desarrollo personal?',
-        '¿Identifico un hobby en especial?',
-        '¿Tengo actividades de ocio programadas?',
-        '¿Tengo actividades de ocio compartidas?',
-        '¿Me estimula el juntarme con amigos?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Trabajo
-        '¿Ambiente y entorno de trabajo?',
-        '¿Se valoran mis capacidades?',
-        '¿Mi trabajo es acorde a mi vocación?',
-        '¿Tengo un trabajo estimulante?',
-        '¿Tengo posibilidad de crecimiento?',
-        '¿Tengo claridad con mis Proyectos de trabajo?',
-        '¿Controlo el estrés?',
-        '¿Tengo un presupuesto estable?',
-        '¿Estado de satisfacción en gral con mi trabajo?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Familia
-        '¿Disponibilidad para la familia?',
-        '¿Relación con los padres?',
-        '¿Relación de pareja?',
-        '¿Relación con los hijos?',
-        '¿Relación con otros miembros de la familia?',
-        '¿Actividades recreativas en conjunto?',
-        '¿Comodidades familiares?',
-        '¿Proyecto en común?',
-        '¿Nivel de satisfacción en general?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Dimensión Fisica
-        '¿Apariencia?',
-        '¿Energía?',
-        '¿Actividad física?',
-        '¿Dieta equilibrada?',
-        '¿Estimulación de sentidos?',
-        '¿Ambiente y Entorno en general?',
-        '¿Nivel de materialización de los Proyectos?',
-        '¿Hábitos que no me gustan?',
-        '¿Estado de salud en general?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Dimensión Emocional
-        ' ¿Mis estados de ánimo son estables?',
-        '¿Me conecto con mi pasión?',
-        '¿Me conecto con mi voluntad?',
-        '¿Mi actitud emocional es positiva?',
-        '¿Tengo una vida estimulante?',
-        '¿Cómo es mi autoestima?',
-        '¿Ansiedad?',
-        '¿Nostalgia?',
-        '¿Miedos?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Dimensión Mental
-        '¿Qué grado de felicidad tengo?',
-        '¿Hay alguna situación que no me deja ser feliz?',
-        '¿Qué tan seguido me encuentro juzgando las situaciones?',
-        '¿Qué tan seguido me descubro tejiendo fantasías?',
-        '¿Estoy esperando algo de alguien?',
-        '¿Espero que las personas adivinen lo que necesito?',
-        '¿Soy racional?',
-        '¿Mi actitud mental es positiva?',
-        '¿Tengo una mentalidad abierta?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Dimensión Existencial
-        '¿Me considero una persona de mucha consciencia?',
-        '¿Me preocupo por el crecimiento de los demás?',
-        '¿Tengo claridad con mi vocación?',
-        '¿Tengo claridad en cuál es mi servicio diferencial?',
-        '¿Qué nivel de Escucha tengo?',
-        '¿Qué nivel de Comunicación tengo?',
-        '¿Las relaciones con mis Vínculos son sanas?',
-        '¿Participo en Comunidades y trabajos sociales?',
-        '¿Existe satisfacción con la Comunidad en que vivo?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-        //Dimensión Espiritual
-        '¿Creo en algún tipo de configuración superior?',
-        '¿Soy congruente con ese tipo de configuración?',
-        '¿Tengo claridad con mi propósito de trascendencia?',
-        '¿Soy congruente en mi vida con mis Valores?',
-        '¿Me mantengo en un continuo con el Amor?',
-        '¿Me mantengo en un continuo con la Verdad?',
-        '¿Doy sin esperar recibir?',
-        '¿Me mantengo en un continuo con la Paciencia?',
-        '¿Tengo una rutina espiritual?',
-        '¿Qué interés tenés en trabajar esta dimensión?',
-    ];
 
     public function actionIndex() {
-        if (Yii::$app->request->get('clientid')) {
-            Yii::$app->session->set('clientid', Yii::$app->request->get('clientid'));
+        if (Yii::$app->request->get('coachee_id')) {
+            Yii::$app->session->set('coachee_id', Yii::$app->request->get('coachee_id'));
             Yii::$app->session->set('wheelid', null);
             Yii::$app->session->set('compareid', -1);
         }
@@ -142,33 +34,25 @@ class WheelController extends Controller {
             Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
         }
 
-        $userId = Yii::$app->session->get('clientid');
+        $coachee_id = Yii::$app->session->get('coachee_id');
         $wheelid = Yii::$app->session->get('wheelid');
         $compareId = Yii::$app->session->get('compareid');
 
-        $model = new WheelModel();
-        $model->coacheeId = $userId;
-
-        if ($wheelid == 0) {
-            $model->populateLast();
-            $wheelid = $model->id;
+        if ($wheelid > 0) {
+            $model = Wheel::find()->where(['id' => $wheelid])->one();
         } else {
-            $model->id = $wheelid;
-            $model->populate();
+            $model = Wheel::find()->where(['coachee_id' => $coachee_id])->orderBy('id desc')->one();
         }
 
-        $compareModel = new WheelModel();
+        if (!isset($model))
+            $this->redirect(['/site']);
+
+        $compareModel = new Wheel();
         if ($compareId > 0) {
-            $compareModel->id = $compareId;
-            $compareModel->populate();
+            $compareModel = Wheel::findOne(['id' => $compareId]);
         }
 
-
-        $wheels = $model->browse();
-        $wheelArray;
-        foreach ($wheels as $wheel) {
-            $wheelArray[$wheel['id']] = $wheel['date'];
-        }
+        $wheels = Wheel::browse($model->coachee->id);
 
         if ($model->id == 0)
             return $this->redirect(['form', 'id' => 0]);
@@ -176,57 +60,177 @@ class WheelController extends Controller {
             return $this->render('view', [
                         'model' => $model,
                         'compare' => $compareModel,
-                        'wheels' => $wheelArray,
-                        'id' => $wheelid,
-                        'compareId' => $compareId,
-                        'dimensions' => $this->shortDimensions,
+                        'wheels' => $wheels,
             ]);
     }
 
-    public function actionForm() {
-        $model = new WheelModel();
-        if (Yii::$app->request->isPost) {
+    public function actionRun() {
+        $this->layout = 'printable';
+        $showMissingAnswers = false;
+        $current_dimension = 0;
+        $token = Yii::$app->request->get('token');
 
-            $model->coacheeId = $userId = Yii::$app->session->get('clientid');
-            $model->date = date(DATE_ATOM);
+        if (Yii::$app->request->isGet) {
+            if ($token != null) {
+                $wheels = Wheel::findAll(['token' => $token]);
 
-            for ($i = 0; $i < 80; $i++) {
-                $answer = Yii::$app->request->post('answer' . $i);
-                if ($answer)
-                    $model->answers[$i] = $answer;
-            }
+                if (count($wheels) == 0)
+                    $this->redirect(['/site']);
 
-            if ($model->validate()) {
-                $model->save();
-                return $this->redirect(['index']);
-            }
-        } else {
-            $id = Yii::$app->request->get('Id');
-
-            if ($id > 0) {
-                $model->id = $id;
-                $model->populate();
-            }
-        }
-
-        if (defined('YII_DEBUG')) {
-            if (!is_array($model->answers)) {
-                for ($i = 0; $i < 80; $i++)
-                    $model->answers[] = rand(0, 9);
+                $current_wheel = null;
+                foreach ($wheels as $wheel)
+                    if ($wheel->AnswerStatus == '0 %') {
+                        $current_dimension = -1;
+                        $current_wheel = $wheel;
+                        break;
+                    } else if ($wheel->AnswerStatus != '100 %') {
+                        $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+                        $setSize = $questionCount / 8;
+                        $current_dimension = intval(count($wheel->answers) / $setSize);
+                        $current_wheel = $wheel;
+                        break;
+                    }
             } else {
-                for ($i = 0; $i < 80; $i++)
-                    if (!isset($answer[$i]))
-                        $answer[$i] = rand(0, 9);
-                    else if ($answer[$i] < 0 || $answer[$i] > 9)
-                        $answer[$i] = rand(0, 9);
+                $this->redirect(['/site']);
+            }
+        } else if (Yii::$app->request->isPost) {
+            $current_dimension = Yii::$app->request->post('current_dimension');
+            $id = Yii::$app->request->post('id');
+            $current_wheel = Wheel::findOne(['id' => $id]);
+            $questionCount = count(WheelQuestion::getQuestions($current_wheel->type));
+            $setSize = $questionCount / 8;
+
+            $count = 0;
+
+            for ($i = 0; $i < $questionCount; $i++) {
+                $new_answer_value = Yii::$app->request->post('answer' . $i);
+
+                if (isset($new_answer_value)) {
+                    $count += 1;
+                    $answer = null;
+                    foreach ($current_wheel->answers as $lookup_answer)
+                        if ($lookup_answer->answer_order == $i) {
+                            $answer = $lookup_answer;
+                            break;
+                        }
+
+                    if (isset($answer)) {
+                        $answer->answer_order = $i;
+                        $answer->answer_value = $new_answer_value;
+                        $answer->dimension = $current_dimension;
+                        $answer->save();
+                    } else {
+                        $new_answer = new WheelAnswer();
+                        $new_answer->answer_order = $i;
+                        $new_answer->answer_value = $new_answer_value;
+                        $new_answer->dimension = $current_dimension;
+                        $current_wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                    }
+                }
+            }
+
+            if ($current_dimension == -1 || $count == $setSize)
+                $current_dimension += 1;
+            else {
+                \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
+                $showMissingAnswers = true;
+            }
+
+            if ($current_wheel->validate()) {
+                $current_wheel->save();
+                if (count($current_wheel->answers) == $questionCount) {
+                    $this->sendAnswers($current_wheel);
+                    return $this->redirect(['/wheel/run', 'token' => $token]);
+                }
             }
         }
 
-        return $this->render('details', [
-                    'model' => $model,
-                    'questions' => $this->questions,
-                    'dimensions' => $this->dimensions,
+        if (!isset($current_wheel))
+            return $this->render('thanks');
+        else if ($current_dimension == -1)
+            return $this->render('intro', [
+                        'wheel' => $current_wheel,
+                        'current_dimension' => $current_dimension,
+            ]);
+        else
+            return $this->render('form', [
+                        'wheel' => $current_wheel,
+                        'current_dimension' => $current_dimension,
+                        'showMissingAnswers' => $showMissingAnswers,
+            ]);
+    }
+
+    public function actionDelete($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+        if ($wheel->delete()) {
+            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel deleted.'));
+        } else {
+            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
+                    . $wheel->getErrors());
+        }
+        return $this->redirect(['/coachee/view', 'id' => $wheel->coachee->id]);
+    }
+
+    public function actionAnswers($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+        $questions = WheelQuestion::find()->asArray()->all();
+
+        if (Yii::$app->request->get('printable') != null)
+            $this->layout = 'printable';
+
+        return $this->render('answers', [
+                    'wheel' => $wheel,
         ]);
     }
 
+    public function actionQuestions() {
+        if (Yii::$app->request->isPost) {
+
+            $update_questions = WheelQuestion::find()->all();
+            foreach ($update_questions as $update_question) {
+                $new_question_text = Yii::$app->request->post('question' . ($update_question->order - 1));
+                $new_answer_type = Yii::$app->request->post('answer' . ($update_question->order - 1));
+
+                $update_question->question = $new_question_text;
+                $update_question->answer_type = $new_answer_type;
+                $update_question->save();
+            }
+
+            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+
+            return $this->redirect(['/site']);
+        }
+
+        return $this->render('questions', [
+        ]);
+    }
+
+    public function sendAnswers($wheel) {
+        $type_text = Wheel::getWheelTypes()[$wheel->type];
+        $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
+
+        Yii::$app->mailer->compose('answers', [
+                    'wheel' => $wheel,
+                    'questions' => $questions,
+                ])
+                ->setSubject(Yii::t('assessment', 'CPC: {wheel} answers', [
+                            'wheel' => $type_text
+                ]))
+                ->setFrom(Yii::$app->user->identity->email)
+                ->setTo($wheel->observer->email)
+                ->send();
+
+        Yii::$app->mailer->compose('answers', [
+                    'wheel' => $wheel,
+                    'questions' => $questions,
+                ])
+                ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
+                            'wheel' => $type_text, 'person' => $wheel->observer->fullname
+                ]))
+                ->setFrom(Yii::$app->user->identity->email)
+                ->setTo(Yii::$app->user->identity->email)
+                ->send();
+    }
+
 }
+

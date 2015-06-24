@@ -3,7 +3,7 @@
 return [
   'class' => 'yii\db\Connection',
   'dsn' => 'mysql:host=localhost;dbname=vach_development',
-  'username' => 'root',
+  'username' => 'vach',
   'password' => '',
   'charset' => 'utf8',
 ];

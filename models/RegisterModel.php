@@ -28,7 +28,7 @@ class RegisterModel extends Model {
             // email has to be a valid email address
             ['email', 'email'],
             ['isCoach', 'boolean'],
-            ['confirm', 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user', 'Password don\'t match.')],
+            ['confirm', 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user', 'Passwords don\'t match.')],
         ];
     }
 
@@ -37,10 +37,10 @@ class RegisterModel extends Model {
      */
     public function attributeLabels() {
         return [
-            'name' => Yii::t('user', 'Name'),
+            'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
-            'email' => Yii::t('user', 'Email'),
-            'username' => Yii::t('user', 'username'),
+            'email' => Yii::t('app', 'Email'),
+            'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'confirm' => Yii::t('user', 'Re-enter password'),
             'isCoach' => Yii::t('user', 'I\'m coach'),
