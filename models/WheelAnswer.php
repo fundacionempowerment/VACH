@@ -16,11 +16,11 @@ class WheelAnswer extends ActiveRecord {
     const ANSWER_WORST_TO_OPTIMAL = 1;
     const ANSWER_NEVER_TO_ALWAYS = 2;
     const ANSWER_NONE_TO_ALL = 3;
-    const ANSWER_NONE_TO_ABSOLUTLY = 4;
+    const ANSWER_NOTHING_TO_ABSOLUTLY = 4;
     const ANSWER_OPTIMAL_TO_WORST = 101;
     const ANSWER_ALWAYS_TO_NEVER = 102;
     const ANSWER_ALL_TO_NONE = 103;
-    const ANSWER_ABSOLUTLY_TO_NONE = 104;
+    const ANSWER_ABSOLUTLY_TO_NOTHING = 104;
 
     /**
      * @inheritdoc
@@ -35,12 +35,6 @@ class WheelAnswer extends ActiveRecord {
     public function rules() {
         return [
             [['answer_order', 'answer_value'], 'required'],
-        ];
-    }
-
-    public function behaviors() {
-        return [
-            TimestampBehavior::className(),
         ];
     }
 
@@ -60,11 +54,11 @@ class WheelAnswer extends ActiveRecord {
             self::ANSWER_WORST_TO_OPTIMAL => implode(', ', self::getAnswerLabels(self::ANSWER_WORST_TO_OPTIMAL)),
             self::ANSWER_NEVER_TO_ALWAYS => implode(', ', self::getAnswerLabels(self::ANSWER_NEVER_TO_ALWAYS)),
             self::ANSWER_NONE_TO_ALL => implode(', ', self::getAnswerLabels(self::ANSWER_NONE_TO_ALL)),
-            self::ANSWER_NONE_TO_ABSOLUTLY => implode(', ', self::getAnswerLabels(self::ANSWER_NONE_TO_ABSOLUTLY)),
+            self::ANSWER_NOTHING_TO_ABSOLUTLY => implode(', ', self::getAnswerLabels(self::ANSWER_NOTHING_TO_ABSOLUTLY)),
             self::ANSWER_OPTIMAL_TO_WORST => implode(', ', self::getAnswerLabels(self::ANSWER_OPTIMAL_TO_WORST)),
             self::ANSWER_ALWAYS_TO_NEVER => implode(', ', self::getAnswerLabels(self::ANSWER_ALWAYS_TO_NEVER)),
             self::ANSWER_ALL_TO_NONE => implode(', ', self::getAnswerLabels(self::ANSWER_ALL_TO_NONE)),
-            self::ANSWER_ABSOLUTLY_TO_NONE => implode(', ', self::getAnswerLabels(self::ANSWER_ABSOLUTLY_TO_NONE)),
+            self::ANSWER_ABSOLUTLY_TO_NOTHING => implode(', ', self::getAnswerLabels(self::ANSWER_ABSOLUTLY_TO_NOTHING)),
         ];
     }
 
@@ -103,16 +97,16 @@ class WheelAnswer extends ActiveRecord {
             case WheelAnswer::ANSWER_ALWAYS_TO_NEVER:
                 return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NEVER_TO_ALWAYS));
 
-            case WheelAnswer::ANSWER_NONE_TO_ABSOLUTLY:
+            case WheelAnswer::ANSWER_NOTHING_TO_ABSOLUTLY:
                 return [
-                    Yii::t('wheel', 'none'),
+                    Yii::t('wheel', 'nothing'),
                     Yii::t('wheel', 'rarely'),
                     Yii::t('wheel', 'regularly'),
                     Yii::t('wheel', 'mostly'),
                     Yii::t('wheel', 'absolutly')
                 ];
-            case WheelAnswer::ANSWER_ABSOLUTLY_TO_NONE:
-                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NONE_TO_ABSOLUTLY));
+            case WheelAnswer::ANSWER_ABSOLUTLY_TO_NOTHING:
+                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NOTHING_TO_ABSOLUTLY));
         }
     }
 

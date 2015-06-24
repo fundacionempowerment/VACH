@@ -91,6 +91,7 @@ return [
     'mostly' => 'mayormente',
     'never' => 'nunca',
     'none' => 'ninguno',
+    'nothing' => 'nada',
     'observer \\ observed' => 'observador \\ observado',
     'often' => 'a menudo',
     'optimal' => 'óptimo',

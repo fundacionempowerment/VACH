@@ -19,11 +19,11 @@ class WheelModelTest extends TestCase {
             WheelAnswer::ANSWER_WORST_TO_OPTIMAL,
             WheelAnswer::ANSWER_NEVER_TO_ALWAYS,
             WheelAnswer::ANSWER_NONE_TO_ALL,
-            WheelAnswer::ANSWER_NONE_TO_ABSOLUTLY,
+            WheelAnswer::ANSWER_NOTHING_TO_ABSOLUTLY,
             WheelAnswer::ANSWER_OPTIMAL_TO_WORST,
             WheelAnswer::ANSWER_ALWAYS_TO_NEVER,
             WheelAnswer::ANSWER_ALL_TO_NONE,
-            WheelAnswer::ANSWER_ABSOLUTLY_TO_NONE,
+            WheelAnswer::ANSWER_ABSOLUTLY_TO_NOTHING,
         ];
 
         foreach ($answerTypes as $answerType) {
