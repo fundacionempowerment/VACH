@@ -137,12 +137,17 @@ class AssessmentController extends Controller {
     }
 
     private static function newToken() {
-        $number = rand(1000000000, 1999999999);
-        $string = (string) $number;
+        $token_exists = true;
+        while ($token_exists) {
+            $number = rand(1000000000, 1999999999);
+            $string = (string) $number;
+            $newToken = $string[1] . $string[2] . $string[3] . '-' .
+                    $string[4] . $string[5] . $string[6] . '-' .
+                    $string[7] . $string[8] . $string[9];
 
-        return $string[1] . $string[2] . $string[3] . '-' .
-                $string[4] . $string[5] . $string[6] . '-' .
-                $string[7] . $string[8] . $string[9];
+            $token_exists = Wheel::doesTokenExist($newToken);
+        }
+        return $newToken;
     }
 
     private function sendWheel($member, $token, $type) {

@@ -306,4 +306,11 @@ class Wheel extends ActiveRecord {
         return $rawAnswers;
     }
 
+    public static function doesTokenExist($token) {
+        return (new Query())->select('count(*)')
+                        ->from('wheel')
+                        ->where("token = $token")
+                        ->scalar() > 0;
+    }
+
 }
