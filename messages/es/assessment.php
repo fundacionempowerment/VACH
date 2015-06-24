@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -18,8 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Assessment' => 'Relavamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
-    'Assessments' => 'Relevamientos',
+    'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
+    'CPC: {wheel} link' => 'CPC: acceso a {wheel}',
     'Group wheels' => 'Ruedas grupales',
     'Group wheels sent' => 'Ruedas grupales enviadas',
     'Individual wheels' => 'Ruedas individuales',

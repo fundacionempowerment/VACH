@@ -84,20 +84,20 @@ $standar_deviation = sd($gaps);
             </td>
             <?php foreach ($howISeeMe as $value) { ?>
                 <td>
-                    <?= $value ?>
+                    <?= round($value, 2) ?>
                 </td>
             <?php } ?>
-        </tr>       
+        </tr>
         <tr>
             <td>
-                <?= Yii::t('dashboard', 'How They see me') ?>
+                <?= Yii::t('dashboard', 'How they see me') ?>
             </td>
             <?php foreach ($howTheySeeMe as $value) { ?>
                 <td>
-                    <?= $value ?>
+                    <?= round($value, 2) ?>
                 </td>
             <?php } ?>
-        </tr> 
+        </tr>
         <tr>
             <td>
                 <?= Yii::t('dashboard', 'Monofactorial productivity') ?>

@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_radar', [
             'title' => Yii::t('dashboard', 'Individual Wheel'),
             'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see myself'),
+            'wheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_INDIVIDUAL,
         ]);
 //
@@ -55,9 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_radar', [
             'title' => Yii::t('dashboard', 'Individual projection toward the group'),
             'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see myself'),
+            'wheelName' => Yii::t('dashboard', 'How I see me'),
             'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How other see me'),
+            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
             'type' => Wheel::TYPE_GROUP,
         ]);
 
@@ -65,19 +65,19 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_lineal', [
             'title' => Yii::t('dashboard', 'Group Perception Matrix'),
             'wheel' => $reflectedGroupWheel,
-            'wheelName' => Yii::t('dashboard', 'How other see me'),
+            'wheelName' => Yii::t('dashboard', 'How they see me'),
             'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see myself'),
+            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_GROUP,
         ]);
 
     if (count($projectedIndividualWheel) > 0 && count($projectedOrganizationalWheel) > 0)
         echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual projection toward the group'),
+            'title' => Yii::t('dashboard', 'Individual projection toward the organization'),
             'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see myself'),
+            'wheelName' => Yii::t('dashboard', 'How I see me'),
             'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How other see me'),
+            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
             'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
 
@@ -85,16 +85,17 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_lineal', [
             'title' => Yii::t('dashboard', 'Organizational Perception Matrix'),
             'wheel' => $reflectedOrganizationalWheel,
-            'wheelName' => Yii::t('dashboard', 'How other see me'),
+            'wheelName' => Yii::t('dashboard', 'How they see me'),
             'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see myself'),
+            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_GROUP,
         ]);
 
     if (count($individualEmergents))
         echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Individual Potencial Matrix'),
+            'title' => Yii::t('dashboard', 'Individual Potential Matrix'),
             'emergents' => $individualEmergents,
+            'type' => Wheel::TYPE_INDIVIDUAL,
         ]);
 
     // group
@@ -134,8 +135,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($groupEmergents))
         echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Group Potencial Matrix'),
+            'title' => Yii::t('dashboard', 'Group Potential Matrix'),
             'emergents' => $groupEmergents,
+            'type' => Wheel::TYPE_GROUP,
         ]);
 
     // organizational
@@ -175,8 +177,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($organizationalEmergents))
         echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Organizational Potencial Matrix'),
+            'title' => Yii::t('dashboard', 'Organizational Potential Matrix'),
             'emergents' => $organizationalEmergents,
+            'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     ?>
 </div>

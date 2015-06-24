@@ -9,7 +9,11 @@ $type_text = Wheel::getWheelTypes()[$type];
 $url = Url::toRoute(['wheel/run', 'token' => $token], true);
 ?>
 <p>
-    <?= Yii::t('wheel', "Please, click next link to access to your $type_text: ") ?>
+    <?=
+    Yii::t('wheel', "Please, click next link to run the {wheel} of your team", [
+        'wheel' => $type_text
+    ])
+    ?>
 </p>
 <p>
     <?= Html::a($url, $url) ?>

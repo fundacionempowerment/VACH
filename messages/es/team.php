@@ -38,5 +38,4 @@ return [
     'Team member has been succesfully created.' => 'Miembro de equipo creado exitosamente.',
     'Team member has been succesfully deleted.' => 'Miembro de equipo eliminado exitosamente.',
     'Team member has been succesfully saved.' => 'Miembro de equipo guardado exitosamente.',
-    'Teams' => 'Equipos',
 ];

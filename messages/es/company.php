@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Companies' => 'Empresas',
+    'Company' => 'Empresa',
     'Company data' => 'Datos de la empresa',
     'Company has been succesfully created.' => 'Empresa ha sido creada con éxito.',
     'Company has been succesfully deleted.' => 'Empresa ha sido eliminada con éxito.',

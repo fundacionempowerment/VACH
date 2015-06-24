@@ -151,7 +151,7 @@ class AssessmentController extends Controller {
                     'token' => $token,
                     'type' => $type
                 ])
-                ->setSubject(Yii::t('assessment', "CPC: $type_text link"))
+                ->setSubject(Yii::t('assessment', 'CPC: {wheel} link', ['wheel' => $type_text]))
                 ->setFrom(Yii::$app->user->identity->email)
                 ->setTo($member->email)
                 ->send();

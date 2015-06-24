@@ -36,7 +36,7 @@ function doRelations(context, data)
 
         for (i in data) {
             if (i > 0)
-                var current_angle = (i - 1) * 2 * Math.PI / data.length;
+                var current_angle = (i - 1) * 2 * Math.PI / (data.length - 1);
             // draw member image
             context.drawImage(imageObj,
                     width / 2 + xradio * Math.cos(current_angle) - imageSize / 2,

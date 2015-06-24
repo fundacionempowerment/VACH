@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
     <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
-    <?= Yii::t('wheel', 'Date') ?>: <?= Html::label($wheel->date) ?><br />
     <div class="row col-md-12">
         <h3><?= $dimensions[$current_dimension] ?></h3>
         <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>

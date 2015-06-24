@@ -212,7 +212,7 @@ class Wheel extends ActiveRecord {
                     $result[] = [
                         'name' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
                         'productivity' => $reflectedValue['value'] / 4 * 100,
-                        'consciousness' => ($reflectedValue['value'] - $projectedValue['value']) / 4 * 100
+                        'consciousness' => ($projectedValue['value'] - $reflectedValue['value']) / 4 * 100
                     ];
                 }
 
@@ -264,7 +264,7 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getEmergents($assessmentId, $type) {
-        $rawEmergents = (new Query)->select('wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
+        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
@@ -272,14 +272,14 @@ class Wheel extends ActiveRecord {
                 ->where("assessment.id = $assessmentId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
                 ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
-                ->orderBy('avg(wheel_answer.answer_value) desc')
+                ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 
         return $rawEmergents;
     }
 
     public static function getMemberEmergents($assessmentId, $memberId, $type) {
-        $rawEmergents = (new Query)->select('wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
+        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
@@ -287,7 +287,7 @@ class Wheel extends ActiveRecord {
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
                 ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
-                ->orderBy('avg(wheel_answer.answer_value) desc')
+                ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 
         return $rawEmergents;

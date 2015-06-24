@@ -28,7 +28,7 @@ class AccountModel extends Model {
             ['email', 'email'],
             ['confirm', 'compare',
                 'compareAttribute' => 'password',
-                'message' => Yii::t('user', Yii::t('user', 'Passwords don\t match.'))
+                'message' => Yii::t('user', 'Passwords don\'t match.')
             ],
         ];
     }
