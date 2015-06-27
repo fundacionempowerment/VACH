@@ -18,8 +18,8 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Relations Matrix');
 
-$width = 400;
-$height = 300;
+$width = 525;
+$height = 250;
 $token = rand(100000, 999999);
 
 $drawing_data = [];
@@ -35,7 +35,7 @@ foreach ($data as $datum) {
 ?>
 <h3><?= $title ?></h3>
 <div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8" >
-    <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive"></canvas>
+    <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
 </div>
 <div class="col-md-12">
     <table class="table table-bordered table-hover">
@@ -72,7 +72,7 @@ foreach ($data as $datum) {
                                     else
                                         $class = 'warning';
 
-                                    echo Html::tag('td', round($datum['value'] * 100 / 4) . ' %', ['class' => $class]);
+                                    echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . ' %', ['class' => $class]);
                                 }
                             }
                         }

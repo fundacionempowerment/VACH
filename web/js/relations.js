@@ -16,23 +16,27 @@ function canvas_arrow(context, fromx, fromy, tox, toy) {
 function doRelations(context, data)
 {
     // This code asume squere proto human image
-    var width = 400;
-    var height = 300;
+    var width = 525;
+    var height = 250;
     var imageSize = 30;
     var margin = 20;
-    var arraw_ring = 40;
+    var arrow_x_ring = 50;
+    var arrow_y_ring = arrow_x_ring * height / width;
     var xradio = width / 2 - imageSize / 2 - margin;
-    var yradio = height / 2 - imageSize / 2 - margin;
+    var yradio = xradio * height / width;
+    var text_height = 6;
+    var image_text_height = imageSize + text_height;
+
     var imageObj = new Image();
     imageObj.src = '/images/protoMale.png';
     imageObj.onload = function() {
         // draw central image
-        context.drawImage(imageObj, (width - imageSize) / 2, (height - imageSize) / 2);
+        context.drawImage(imageObj, (width - imageSize) / 2, (height - image_text_height) / 2);
         context.textBaseline = 'top';
         context.textAlign = 'center';
         context.fillText(data[0]['name'] + ' ' + data[0]['surname'],
                 width / 2,
-                height / 2 + 20);
+                height / 2 + image_text_height / 2);
 
         for (i in data) {
             if (i > 0)
@@ -40,7 +44,7 @@ function doRelations(context, data)
             // draw member image
             context.drawImage(imageObj,
                     width / 2 + xradio * Math.cos(current_angle) - imageSize / 2,
-                    height / 2 + yradio * Math.sin(current_angle) - imageSize / 2);
+                    height / 2 + yradio * Math.sin(current_angle) - image_text_height / 2);
 
             if (data[i]['value'] < 1.6)
                 context.strokeStyle = '#d9534f';
@@ -49,18 +53,18 @@ function doRelations(context, data)
             else
                 context.strokeStyle = '#f0ad4e';
             canvas_arrow(context,
-                    width / 2 + (xradio - arraw_ring) * Math.cos(current_angle),
-                    height / 2 + (yradio - arraw_ring) * Math.sin(current_angle),
-                    width / 2 + arraw_ring * Math.cos(current_angle),
-                    height / 2 + arraw_ring * Math.sin(current_angle));
+                    width / 2 + (xradio - arrow_x_ring) * Math.cos(current_angle),
+                    height / 2 + (yradio - arrow_y_ring) * Math.sin(current_angle),
+                    width / 2 + arrow_x_ring * Math.cos(current_angle),
+                    height / 2 + arrow_y_ring * Math.sin(current_angle));
 
             context.textBaseline = 'top';
             context.textAlign = 'center';
             context.fillText(data[i]['name'] + ' ' + data[i]['surname'],
                     width / 2 + xradio * Math.cos(current_angle),
-                    height / 2 + yradio * Math.sin(current_angle) + 20);
+                    height / 2 + yradio * Math.sin(current_angle) + image_text_height / 2 - 2);
 
-            context.fillText(Math.round(data[i]['value'] * 100 / 4) + ' %',
+            context.fillText(Math.round(data[i]['value'] * 1000 / 4) / 10 + ' %',
                     width / 2 + xradio / 2 * Math.cos(current_angle),
                     height / 2 + yradio / 2 * Math.sin(current_angle) + 15);
         }

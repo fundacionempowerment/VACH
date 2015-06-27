@@ -54,7 +54,6 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
     $sum += $howTheySeeMe[$i] - $howISeeMe[$i];
     $gaps [] = $howTheySeeMe[$i] - $howISeeMe[$i];
 }
-$allConsciousness = $sum / (count($members) - 1);
 
 $standar_deviation = Utils::standard_deviation($gaps);
 ?>

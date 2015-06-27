@@ -68,10 +68,8 @@ class DashboardController extends Controller {
             $reflectedGroupWheel = Wheel::getReflectedGroupWheel($filter->assessmentId, $filter->memberId);
             $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($filter->assessmentId, $filter->memberId);
 
-            $individualPerformanceMatrix = Wheel::getPerformanceMatrix($filter->assessmentId, Wheel::TYPE_INDIVIDUAL);
-
             $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
-        } else if ($filter->assessmentId > 0) {
+        } else if ($filter->assessmentId > 0 && $filter->wheelType > 0) {
             $performanceMatrix = Wheel::getPerformanceMatrix($filter->assessmentId, $filter->wheelType);
             $relationsMatrix = Wheel::getRelationsMatrix($filter->assessmentId, $filter->wheelType);
 
