@@ -9,6 +9,7 @@ use yii\bootstrap\Progress;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
+
 $this->title = Yii::t('dashboard', 'Dashboard');
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -44,12 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'wheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_INDIVIDUAL,
         ]);
-//
-//    if (count($individualPerformanceMatrix) > 0)
-//        echo $this->render('_matrix', [
-//            'title' => Yii::t('dashboard', 'Performance Matrix'),
-//            'matrix' => $individualPerformanceMatrix,
-//        ]);
 
     if (count($projectedIndividualWheel) > 0 && count($projectedGroupWheel) > 0)
         echo $this->render('_radar', [
@@ -88,98 +83,45 @@ $this->params['breadcrumbs'][] = $this->title;
             'wheelName' => Yii::t('dashboard', 'How they see me'),
             'comparedWheel' => $projectedOrganizationalWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-
-    if (count($individualEmergents))
-        echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Individual Potential Matrix'),
-            'emergents' => $individualEmergents,
-            'type' => Wheel::TYPE_INDIVIDUAL,
+            'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
 
     // group
-    if (count($groupWheel) > 0)
+    if (count($gauges) > 0)
         echo $this->render('_gauges', [
-            'title' => Yii::t('dashboard', 'Group indicators'),
-            'wheel' => $groupWheel,
-            'type' => Wheel::TYPE_GROUP,
+            'wheel' => $gauges,
+            'type' => $filter->wheelType,
         ]);
 
-    if (count($groupPerformanceMatrix) > 0)
+    if (count($performanceMatrix) > 0) {
         echo $this->render('_matrix', [
-            'title' => Yii::t('dashboard', 'Group Potential Matrix'),
-            'data' => $groupPerformanceMatrix,
-            'type' => Wheel::TYPE_GROUP,
+            'data' => $performanceMatrix,
+            'type' => $filter->wheelType,
         ]);
+    }
 
-    if (count($groupRelationsMatrix) > 0)
+    if (count($relationsMatrix) > 0) {
         echo $this->render('_relation', [
-            'title' => Yii::t('dashboard', 'Group Relations Matrix'),
-            'data' => $groupRelationsMatrix,
+            'data' => $relationsMatrix,
             'members' => $members,
             'memberRelationMatrix' => $memberRelationMatrix,
-            'type' => Wheel::TYPE_GROUP,
+            'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);
 
-    if (count($groupRelationsMatrix) > 0)
         echo $this->render('_number_matrix', [
-            'title' => Yii::t('dashboard', 'Group conciousness and responsability Matrix'),
-            'data' => $groupRelationsMatrix,
+            'data' => $relationsMatrix,
             'members' => $members,
             'memberRelationMatrix' => $memberRelationMatrix,
-            'type' => Wheel::TYPE_GROUP,
+            'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);
+    }
 
-    if (count($groupEmergents))
+    if (count($emergents))
         echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Group Potential Matrix'),
-            'emergents' => $groupEmergents,
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-
-    // organizational
-    if (count($organizationalWheel) > 0)
-        echo $this->render('_gauges', [
-            'title' => Yii::t('dashboard', 'Organizational indicators'),
-            'wheel' => $organizationalWheel,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-
-    if (count($organizationalPerformanceMatrix) > 0)
-        echo $this->render('_matrix', [
-            'title' => Yii::t('dashboard', 'Organizational Potential Matrix'),
-            'data' => $organizationalPerformanceMatrix,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-
-    if (count($organizationalRelationsMatrix) > 0)
-        echo $this->render('_relation', [
-            'title' => Yii::t('dashboard', 'Organizational Relations Matrix'),
-            'data' => $organizationalRelationsMatrix,
-            'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'memberId' => $filter->memberId,
-        ]);
-
-    if (count($organizationalRelationsMatrix) > 0)
-        echo $this->render('_number_matrix', [
-            'title' => Yii::t('dashboard', 'Organizational conciousness and responsability Matrix'),
-            'data' => $organizationalRelationsMatrix,
-            'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'memberId' => $filter->memberId,
-        ]);
-
-    if (count($organizationalEmergents))
-        echo $this->render('_emergents', [
-            'title' => Yii::t('dashboard', 'Organizational Potential Matrix'),
-            'emergents' => $organizationalEmergents,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'emergents' => $emergents,
+            'type' => $filter->wheelType,
         ]);
     ?>
 </div>
@@ -187,10 +129,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     window.onload = function() {
         for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true});
+            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true});
         }
         for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true});
+            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true});
         }
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);

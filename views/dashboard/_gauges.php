@@ -10,6 +10,13 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Indicators');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Indicators');
+else
+    $title = Yii::t('dashboard', 'Individual Indicators');
+
 $gaugeRadio = 200;
 $token = rand(100000, 999999);
 

@@ -11,6 +11,13 @@ use yii\helpers\Json;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Relations Matrix');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Relations Matrix');
+else
+    $title = Yii::t('dashboard', 'Individual Relations Matrix');
+
 $width = 400;
 $height = 300;
 $token = rand(100000, 999999);

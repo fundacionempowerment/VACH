@@ -10,6 +10,13 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Potential Matrix');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Potential Matrix');
+else
+    $title = Yii::t('dashboard', 'Individual Potential Matrix');
+
 $dimensions = WheelQuestion::getDimensionNames($type);
 
 $current_dimension = -1;

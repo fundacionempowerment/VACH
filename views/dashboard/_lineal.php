@@ -10,6 +10,13 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Perception Adjustment Matrix');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Perception Adjustment Matrix');
+else
+    $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
+
 $linealWidth = 350 * 1.5;
 $linealHeight = 200;
 $token = rand(100000, 999999);

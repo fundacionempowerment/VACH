@@ -50,20 +50,15 @@ class DashboardController extends Controller {
         $reflectedGroupWheel = [];
         $reflectedOrganizationalWheel = [];
 
-        $groupWheel = [];
-        $organizationalWheel = [];
+        $gauges = [];
 
         $individualPerformanceMatrix = [];
-        $groupPerformanceMatrix = [];
-        $organizationalPerformanceMatrix = [];
+        $performanceMatrix = [];
 
         $memberRelationMatrix = [];
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
+        $relationsMatrix = [];
 
-        $individualEmergents = [];
-        $groupEmergents = [];
-        $organizationalEmergents = [];
+        $emergents = [];
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
 
@@ -75,44 +70,25 @@ class DashboardController extends Controller {
 
             $individualPerformanceMatrix = Wheel::getPerformanceMatrix($filter->assessmentId, Wheel::TYPE_INDIVIDUAL);
 
-            $individualEmergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
-        }
-
-        if ($filter->assessmentId > 0 && $filter->wheelType == Wheel::TYPE_GROUP) {
-            $groupPerformanceMatrix = Wheel::getGroupPerformanceMatrix($filter->assessmentId);
-            $groupRelationsMatrix = Wheel::getRelationsMatrix($filter->assessmentId, $filter->wheelType);
+            $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
+        } else if ($filter->assessmentId > 0) {
+            $performanceMatrix = Wheel::getPerformanceMatrix($filter->assessmentId, $filter->wheelType);
+            $relationsMatrix = Wheel::getRelationsMatrix($filter->assessmentId, $filter->wheelType);
 
             if ($filter->memberId > 0) {
-                $groupWheel = Wheel::getMemberGroupWheel($filter->assessmentId, $filter->memberId);
-                $groupEmergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_GROUP);
+                $gauges = Wheel::getMemberGauges($filter->assessmentId, $filter->memberId, $filter->wheelType);
+                $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, $filter->wheelType);
 
-                foreach ($groupRelationsMatrix as $relation)
+                foreach ($relationsMatrix as $relation)
                     if ($relation['observed_id'] == $filter->memberId) {
                         $memberRelationMatrix[] = $relation;
                     }
             } else {
-                $groupWheel = Wheel::getGroupWheel($filter->assessmentId);
-                $groupEmergents = Wheel::getEmergents($filter->assessmentId, Wheel::TYPE_GROUP);
+                $gauges = Wheel::getGauges($filter->assessmentId, $filter->wheelType);
+                $emergents = Wheel::getEmergents($filter->assessmentId, $filter->wheelType);
             }
         }
 
-        if ($filter->assessmentId > 0 && $filter->wheelType == Wheel::TYPE_ORGANIZATIONAL) {
-            $organizationalPerformanceMatrix = Wheel::getOrganizationalPerformanceMatrix($filter->assessmentId);
-            $organizationalRelationsMatrix = Wheel::getRelationsMatrix($filter->assessmentId, $filter->wheelType);
-
-            if ($filter->memberId > 0) {
-                $organizationalWheel = Wheel::getMemberOrganizationalWheel($filter->assessmentId, $filter->memberId);
-                $organizationalEmergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_ORGANIZATIONAL);
-
-                foreach ($organizationalRelationsMatrix as $relation)
-                    if ($relation['observed_id'] == $filter->memberId) {
-                        $memberRelationMatrix[] = $relation;
-                    }
-            } else {
-                $organizationalWheel = Wheel::getOrganizationalWheel($filter->assessmentId);
-                $organizationalEmergents = Wheel::getEmergents($filter->assessmentId, Wheel::TYPE_ORGANIZATIONAL);
-            }
-        }
         return $this->render('index', [
                     'filter' => $filter,
                     'companies' => $companies,
@@ -126,18 +102,12 @@ class DashboardController extends Controller {
                     'reflectedGroupWheel' => $reflectedGroupWheel,
                     'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
                     'individualPerformanceMatrix' => $individualPerformanceMatrix,
-                    'individualEmergents' => $individualEmergents,
                     // group wheel
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'groupWheel' => $groupWheel,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'performanceMatrix' => $performanceMatrix,
+                    'gauges' => $gauges,
+                    'relationsMatrix' => $relationsMatrix,
                     'memberRelationMatrix' => $memberRelationMatrix,
-                    'groupEmergents' => $groupEmergents,
-                    // organizational
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'organizationalWheel' => $organizationalWheel,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'organizationalEmergents' => $organizationalEmergents,
+                    'emergents' => $emergents,
         ]);
     }
 

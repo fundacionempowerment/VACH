@@ -179,14 +179,6 @@ class Wheel extends ActiveRecord {
         return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
-    public static function getGroupPerformanceMatrix($assessmentId) {
-        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getOrganizationalPerformanceMatrix($assessmentId) {
-        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
     public static function getPerformanceMatrix($assessmentId, $type) {
         $reflectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
@@ -219,15 +211,7 @@ class Wheel extends ActiveRecord {
         return $result;
     }
 
-    public static function getGroupWheel($assessmentId) {
-        return self::getTotalWheel($assessmentId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getOrganizationalWheel($assessmentId) {
-        return self::getTotalWheel($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
-    public static function getTotalWheel($assessmentId, $type) {
+    public static function getGauges($assessmentId, $type) {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -241,15 +225,7 @@ class Wheel extends ActiveRecord {
         return $answers;
     }
 
-    public static function getMemberGroupWheel($assessmentId, $memberId) {
-        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getMemberOrganizationalWheel($assessmentId, $memberId) {
-        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
-    public static function getMemberTotalWheel($assessmentId, $memberId, $type) {
+    public static function getMemberGauges($assessmentId, $memberId, $type) {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
