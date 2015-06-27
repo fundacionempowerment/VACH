@@ -9,7 +9,7 @@ use app\models\WheelAnswer;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('wheel', 'Thanks!');
+$this->title = Yii::t('app', 'Thanks!');
 ?>
 <div class="site-wheel">
     <h2>

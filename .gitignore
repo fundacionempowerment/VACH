@@ -34,3 +34,10 @@ phpunit.phar
 # ignore sub directory for dev installed apps and extensions
 /apps
 /extensions
+
+# compressed files used for publishing are not needed
+*.zip
+*.7zip
+*.7z
+*.xz
+*.rar

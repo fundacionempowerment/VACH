@@ -42,7 +42,7 @@ return [
     'Save' => 'Salvar',
     'Sign in' => 'Ingresar',
     'Sign up' => 'Registrese',
-    'Thanks!' => 'Gracias!',
+    'Thanks!' => '¡Gracias!',
     'Type' => 'Tipo',
     'Users' => 'Usuarios',
     'done' => 'listo',
