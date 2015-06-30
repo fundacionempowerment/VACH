@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-    <div class="row col-md-6">
+    <div class="row col-md-4">
         <h3><?= Yii::t('team', 'Team data') ?> </h3>
         <p>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
     </div>
-    <div class="row col-md-6">
+    <div class="row col-md-4" style="margin-right: 0px;">
         <h3><?= Yii::t('team', 'Members') ?></h3>
         <?php
         $membersDataProvider = new ArrayDataProvider([
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
         <?php ActiveForm::end(); ?>
     </div>
-    <div class="row col-md-6">
+    <div class="row col-md-4">
         <h3><?= Yii::t('team', 'Assessments') ?></h3>
         <?php
         $assessmentsDataProvider = new ArrayDataProvider([

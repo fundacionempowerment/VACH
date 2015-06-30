@@ -41,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <h3><?= $dimensions[$current_dimension] ?></h3>
         <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
-        <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
-        <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
+        <?= Html::hiddenInput('id', $wheel->id) ?>
+        <?= Html::hiddenInput('current_dimension', $current_dimension) ?>
         <?php
         for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++) {
             ?>

@@ -34,7 +34,7 @@ foreach ($data as $datum) {
 }
 ?>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8" >
+<div class="col-md-push-2 col-md-8" >
     <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
 </div>
 <div class="col-md-12">

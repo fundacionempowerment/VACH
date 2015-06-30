@@ -43,7 +43,6 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
         <?php $this->head() ?>
     </head>
     <body>
-
         <?php $this->beginBody() ?>
         <div class="wrap">
             <?php
@@ -72,7 +71,6 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
                 <?= $content ?>
             </div>
         </div>
-
         <footer class="footer">
             <div class="container">
                 <p class="pull-left">

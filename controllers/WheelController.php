@@ -216,7 +216,7 @@ class WheelController extends Controller {
                 ->setSubject(Yii::t('assessment', 'CPC: {wheel} answers', [
                             'wheel' => $type_text
                 ]))
-                ->setFrom(Yii::$app->user->identity->email)
+                ->setFrom($wheel->coach->email)
                 ->setTo($wheel->observer->email)
                 ->send();
 
@@ -227,8 +227,8 @@ class WheelController extends Controller {
                 ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
                             'wheel' => $type_text, 'person' => $wheel->observer->fullname
                 ]))
-                ->setFrom(Yii::$app->user->identity->email)
-                ->setTo(Yii::$app->user->identity->email)
+                ->setFrom($wheel->observer->email)
+                ->setTo($wheel->coach->email)
                 ->send();
     }
 

@@ -45,7 +45,7 @@ function doMatrix(context, data)
         matrixData.push(valueToPush);
     }
 
-    var goodConsciousness = Math.floor((maxy - stardarDeviation) * height / 2 / maxy);
+    var goodConsciousness = Math.floor(stardarDeviation * height / 2 / maxy);
 
     //high conciouness zone
     context.beginPath();
