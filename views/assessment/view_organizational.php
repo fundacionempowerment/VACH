@@ -13,7 +13,7 @@ use app\models\Wheel;
 /* @var $model app\models\LoginForm */
 
 $this->title = $assessment->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->name, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

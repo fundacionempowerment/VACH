@@ -8,7 +8,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $model app\models\LoginForm */
 
 $this->title = $company->id == 0 ? Yii::t('company', 'New company') : $company->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">

@@ -27,15 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data['fullname'], Url::to(['person/view', 'id' => $data['id'],])); // $data['name'] for array data, e.g. using SqlDataProvider.
+                    return Html::a($data['fullname'], Url::to(['person/edit', 'id' => $data['id'],])); // $data['name'] for array data, e.g. using SqlDataProvider.
                 },
             ],
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{delete}',
                 'options' => ['width' => '60px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
                     switch ($action) {
-                        case 'update' : return Url::to(['person/edit', 'id' => $model['id']]);
                         case 'delete' : return Url::to(['person/delete', 'id' => $model['id'], 'delete' => '1',]);
                     };
                 }

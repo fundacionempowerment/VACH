@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -24,7 +25,6 @@ return [
     'Company' => 'Empresa',
     'Member' => 'Miembro',
     'Members' => 'Miembros',
-    'My Teams' => 'Mi equipos',
     'New assessment' => 'Nueva evaluación',
     'New member' => 'Nuevo miembro',
     'New team' => 'Nuevo equipo',
@@ -38,4 +38,5 @@ return [
     'Team member has been succesfully created.' => 'Miembro de equipo creado exitosamente.',
     'Team member has been succesfully deleted.' => 'Miembro de equipo eliminado exitosamente.',
     'Team member has been succesfully saved.' => 'Miembro de equipo guardado exitosamente.',
+    'Teams' => 'Equipos',
 ];

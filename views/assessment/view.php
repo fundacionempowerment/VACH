@@ -18,7 +18,7 @@ $groupQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_GROUP));
 $organizationalQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_ORGANIZATIONAL));
 
 $this->title = $assessment->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->name, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

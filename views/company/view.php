@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $model app\models\LoginForm */
 
 $this->title = $company->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">

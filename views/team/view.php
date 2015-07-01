@@ -12,7 +12,7 @@ use kartik\widgets\Select2;
 /* @var $model app\models\LoginForm */
 
 $this->title = $team->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">

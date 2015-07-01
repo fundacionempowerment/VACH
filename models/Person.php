@@ -79,11 +79,8 @@ class Person extends ActiveRecord {
     }
 
     public function getWheels() {
-        return $this->hasMany(Wheel::className(), ['observed_id' => 'id']);
-    }
-
-    public function getGoals() {
-        return $this->hasMany(Goal::className(), ['coachee_id' => 'id']);
+        return $this->hasMany(Wheel::className(), ['observed_id' => 'id'])
+                        ->where(['type' => '0']);
     }
 
 }
