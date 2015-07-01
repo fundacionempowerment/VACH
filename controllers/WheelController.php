@@ -184,16 +184,16 @@ class WheelController extends Controller {
     }
 
     public function actionQuestions() {
+        $questions = WheelQuestion::find()->orderBy('type, dimension, order')->all();
+
         if (Yii::$app->request->isPost) {
+            foreach ($questions as $question) {
+                $new_question_text = Yii::$app->request->post('question' . $question->id);
+                $new_answer_type = Yii::$app->request->post('answer' . $question->id);
 
-            $update_questions = WheelQuestion::find()->all();
-            foreach ($update_questions as $update_question) {
-                $new_question_text = Yii::$app->request->post('question' . ($update_question->order - 1));
-                $new_answer_type = Yii::$app->request->post('answer' . ($update_question->order - 1));
-
-                $update_question->question = $new_question_text;
-                $update_question->answer_type = $new_answer_type;
-                $update_question->save();
+                $question->question = $new_question_text;
+                $question->answer_type = $new_answer_type;
+                $question->save();
             }
 
             \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
@@ -202,6 +202,7 @@ class WheelController extends Controller {
         }
 
         return $this->render('questions', [
+                    'questions' => $questions
         ]);
     }
 

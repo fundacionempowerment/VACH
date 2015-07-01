@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
+use app\models\WheelQuestion;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -17,20 +18,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
         <?php
-        for ($i = 0; $i < 80; $i++) {
-            $dimension = $i / 10;
+        $current_dimension = -1;
+        $div_open = false;
+        foreach ($questions as $question) {
+            $dimensions = WheelQuestion::getDimensionNames($question->type);
+
+            if ($current_dimension != $question->dimension) {
+                $current_dimension = $question->dimension;
+
+                if ($div_open == true) {
+                    echo '</div>';
+                    $div_open = false;
+                }
+
+                echo '<div class="box"><h3>' . $dimensions[$question->dimension] . '</h3>';
+                $div_open = true;
+            }
             ?>
-            <?= $i % 10 == 0 ? '<div class="box"><h3>' . $dimensions[$dimension] . '</h3>' : '' ?>
             <p>
-                <?= Html::input('text', 'question' . $i, $questions[$i]['question'], ['class' => 'col-md-12']) ?>
+                <?= Html::input('text', 'question' . $question->id, $question->question, ['class' => 'col-md-12']) ?>
             </p>
             <p>
                 <?=
-                Html::dropDownList('answer' . $i, $questions[$i]['answer_type'], WheelAnswer::getAnswerTypes(), ['class' => 'col-md-12'])
+                Html::dropDownList('answer' . $question->id, $question->answer_type, WheelAnswer::getAnswerTypes(), ['class' => 'col-md-12'])
                 ?>
             </p>
-            <?= $i % 10 == 9 ? '</div>' : '' ?>
         <?php } ?>
+        <?= '</div>' ?>
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']); ?>
         </div>
