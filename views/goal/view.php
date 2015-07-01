@@ -9,15 +9,15 @@ use kartik\widgets\DatePicker;
 use app\models\GoalMilestone;
 
 $this->title = Yii::t('goal', 'Goal - ') . $goal->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
-$this->params['breadcrumbs'][] = ['label' => $goal->coachee->fullname, 'url' => ['/coachee/view', 'id' => $goal->coachee->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => $goal->person->fullname, 'url' => ['/person/view', 'id' => $goal->person->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="new-goal">
     <h1><?= Html::encode($this->title) ?></h1>
      <p>
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($goal->coachee->coach->fullname) ?><br />
-        <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($goal->coachee->fullname) ?><br />
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($goal->person->coach->fullname) ?><br />
+        <?= Yii::t('user', 'Person') ?>: <?= Html::label($goal->person->fullname) ?><br />
     </p>
     <h2><?= Yii::t('goal', 'Resources') ?></h2>
     <?=

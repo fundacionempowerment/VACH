@@ -20,8 +20,8 @@ class WheelController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        if (Yii::$app->request->get('coachee_id')) {
-            Yii::$app->session->set('coachee_id', Yii::$app->request->get('coachee_id'));
+        if (Yii::$app->request->get('person_id')) {
+            Yii::$app->session->set('person_id', Yii::$app->request->get('person_id'));
             Yii::$app->session->set('wheelid', null);
             Yii::$app->session->set('compareid', -1);
         }
@@ -34,14 +34,14 @@ class WheelController extends Controller {
             Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
         }
 
-        $coachee_id = Yii::$app->session->get('coachee_id');
+        $person_id = Yii::$app->session->get('person_id');
         $wheelid = Yii::$app->session->get('wheelid');
         $compareId = Yii::$app->session->get('compareid');
 
         if ($wheelid > 0) {
             $model = Wheel::find()->where(['id' => $wheelid])->one();
         } else {
-            $model = Wheel::find()->where(['coachee_id' => $coachee_id])->orderBy('id desc')->one();
+            $model = Wheel::find()->where(['person_id' => $person_id])->orderBy('id desc')->one();
         }
 
         if (!isset($model))
@@ -52,7 +52,7 @@ class WheelController extends Controller {
             $compareModel = Wheel::findOne(['id' => $compareId]);
         }
 
-        $wheels = Wheel::browse($model->coachee->id);
+        $wheels = Wheel::browse($model->person->id);
 
         if ($model->id == 0)
             return $this->redirect(['form', 'id' => 0]);
@@ -168,7 +168,7 @@ class WheelController extends Controller {
             \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
                     . $wheel->getErrors());
         }
-        return $this->redirect(['/coachee/view', 'id' => $wheel->coachee->id]);
+        return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
     }
 
     public function actionAnswers($id) {

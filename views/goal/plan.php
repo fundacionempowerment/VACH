@@ -9,16 +9,16 @@ use kartik\widgets\DatePicker;
 use app\models\GoalMilestone;
 
 $this->title = Yii::t('goal', 'Action plan');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
-$this->params['breadcrumbs'][] = ['label' => $coachee->fullname, 'url' => ['/coachee/view', 'id' => $coachee->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => $person->fullname, 'url' => ['/person/view', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="new-goal">
-    <h1><?= Html::encode($this->title) ?>    <?= Yii::$app->request->get('printable') == null ? Html::a(Yii::t('app', 'Printable'), Url::to(['/goal/plan', 'coachee_id' => $coachee->id, 'printable' => 1]), ['class' => 'btn btn-default']) : '' ?></h1>
+    <h1><?= Html::encode($this->title) ?>    <?= Yii::$app->request->get('printable') == null ? Html::a(Yii::t('app', 'Printable'), Url::to(['/goal/plan', 'person_id' => $person->id, 'printable' => 1]), ['class' => 'btn btn-default']) : '' ?></h1>
     
     <p>
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($coachee->coach->fullname) ?><br />
-        <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($coachee->fullname) ?><br />
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($person->coach->fullname) ?><br />
+        <?= Yii::t('user', 'Person') ?>: <?= Html::label($person->fullname) ?><br />
     </p>
     <?php foreach ($milestones as $milestone): ?>
         <div class="row col-md-12">

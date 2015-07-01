@@ -14,7 +14,7 @@ use app\models\ClientModel;
 use app\models\Goal;
 use app\models\GoalMilestone;
 use app\models\GoalResource;
-use app\models\Coachee;
+use app\models\Person;
 
 class GoalController extends Controller {
 
@@ -35,9 +35,9 @@ class GoalController extends Controller {
         ]);
     }
 
-    public function actionNew($coachee_id) {
+    public function actionNew($person_id) {
         $goal = new Goal();
-        $goal->coachee_id = $coachee_id;
+        $goal->person_id = $person_id;
 
         $this->save($goal);
         return $this->render('form', [
@@ -225,18 +225,18 @@ class GoalController extends Controller {
             \Yii::$app->session->addFlash('error', \Yii::t('goal', 'Goal not delete:')
                     . $goal->getErrors());
         }
-        return $this->redirect(['/coachee/view', 'id' => $goal->coachee->id]);
+        return $this->redirect(['/person/view', 'id' => $goal->person->id]);
     }
 
-    public function actionPlan($coachee_id) {
-        $coachee = Coachee::findOne(['id' => $coachee_id]);
-        $milestones = GoalMilestone::getPlan($coachee_id);
+    public function actionPlan($person_id) {
+        $person = Person::findOne(['id' => $person_id]);
+        $milestones = GoalMilestone::getPlan($person_id);
 
         if (Yii::$app->request->get('printable') != null)
             $this->layout = 'printable';
 
         return $this->render('plan', [
-                    'coachee' => $coachee,
+                    'person' => $person,
                     'milestones' => $milestones,
         ]);
     }

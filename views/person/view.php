@@ -10,8 +10,8 @@ use yii\grid\GridView;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = $coachee->fullname;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
+$this->title = $person->fullname;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -20,17 +20,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <h3><?= Yii::t('user', 'Personal data') ?></h3>
         <p>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($coachee->coach->fullname) ?><br />
-            <?= Yii::t('app', 'Email') ?>: <?= Html::label($coachee->email) ?><br />
-            <?= Yii::t('app', 'Phone') ?>: <?= Html::label($coachee->phone) ?>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($person->coach->fullname) ?><br />
+            <?= Yii::t('app', 'Email') ?>: <?= Html::label($person->email) ?><br />
+            <?= Yii::t('app', 'Phone') ?>: <?= Html::label($person->phone) ?>
         </p>
-        <?= Html::a(Yii::t('user', 'Edit coachee'), Url::to(['coachee/edit', 'id' => $coachee->id]), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('user', 'Edit person'), Url::to(['person/edit', 'id' => $person->id]), ['class' => 'btn btn-default']) ?>
     </div>
     <div class="row col-md-12">
         <h3><?= Yii::t('wheel', 'Wheels') ?></h3>
         <?php
         $wheelDataProvider = new ArrayDataProvider([
-            'allModels' => $coachee->wheels,
+            'allModels' => $person->wheels,
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options' => ['width' => '120px'],
                     'buttons' => [
                         'continue' => function ($url, $data, $key) {
-                            return count($data->answers) == 80 ? '' : Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $data->coachee->id, 'id' => $data->id]), ['class' => 'btn btn-success btn-xs']);
+                            return count($data->answers) == 80 ? '' : Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'person_id' => $data->person->id, 'id' => $data->id]), ['class' => 'btn btn-success btn-xs']);
                         }
                     ],
                     'urlCreator' => function( $action, $model, $key, $index ) {
@@ -81,14 +81,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
         ?>
-        <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'person_id' => $person->id]), ['class' => 'btn btn-success']) ?>
     </div>
 
     <div class="row col-md-12">
         <h3><?= Yii::t('goal', 'Goals') ?></h3>
         <?php
         $goalDataProvider = new ArrayDataProvider([
-            'allModels' => $coachee->goals,
+            'allModels' => $person->goals,
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
         ?>
-        <?= Html::a(Yii::t('goal', 'New goal'), Url::to(['goal/new', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('goal', 'View action plan'), Url::to(['goal/plan', 'coachee_id' => $coachee->id]), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('goal', 'New goal'), Url::to(['goal/new', 'person_id' => $person->id]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('goal', 'View action plan'), Url::to(['goal/plan', 'person_id' => $person->id]), ['class' => 'btn btn-primary']) ?>
     </div>
 </div>

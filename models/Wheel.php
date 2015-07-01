@@ -56,11 +56,11 @@ class Wheel extends ActiveRecord {
     }
 
     public function getObserver() {
-        return $this->hasOne(Coachee::className(), ['id' => 'observer_id']);
+        return $this->hasOne(Person::className(), ['id' => 'observer_id']);
     }
 
     public function getObserved() {
-        return $this->hasOne(Coachee::className(), ['id' => 'observed_id']);
+        return $this->hasOne(Person::className(), ['id' => 'observed_id']);
     }
 
     public function getCoach() {
@@ -115,10 +115,10 @@ class Wheel extends ActiveRecord {
         return true;
     }
 
-    public static function browse($coacheeId) {
+    public static function browse($personId) {
         return (new Query())->select('id, date')
                         ->from('wheel')
-                        ->where(['coachee_id' => $coacheeId])
+                        ->where(['person_id' => $personId])
                         ->orderBy('id desc')
                         ->all();
     }

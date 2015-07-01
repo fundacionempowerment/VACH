@@ -13,8 +13,8 @@ use app\models\GoalMilestone;
 /* @var $model app\models\LoginForm */
 
 $this->title = $milestone->id == 0 ?  Yii::t('goal', 'New goal milestone') : Yii::t('goal', 'Editing goal milestone');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Coachees'), 'url' => ['/coachee']];
-$this->params['breadcrumbs'][] = ['label' => $goal->coachee->fullname, 'url' => ['/coachee/view', 'id' => $goal->coachee->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => $goal->person->fullname, 'url' => ['/person/view', 'id' => $goal->person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('goal', 'Goal - ') . $goal->name, 'url' => ['/goal/view', 'id' => $goal->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

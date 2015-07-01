@@ -59,10 +59,10 @@ class GoalMilestone extends ActiveRecord {
         ];
     }
 
-    public static function getPlan($coachee_id) {
+    public static function getPlan($person_id) {
         return GoalMilestone::find()
                         ->innerJoin('goal', 'goal.id = goal_milestone.goal_id')
-                        ->where(['coachee_id' => $coachee_id])
+                        ->where(['person_id' => $person_id])
                         ->orderBy('date')
                         ->all();
     }

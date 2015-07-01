@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?=
         Select2::widget([
             'name' => 'new_member',
-            'data' => $coachees,
+            'data' => $persons,
             'options' => [
                 'placeholder' => Yii::t('team', 'Select new member ...'),
             ],

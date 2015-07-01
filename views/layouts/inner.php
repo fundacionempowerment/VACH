@@ -23,7 +23,7 @@ if ($isAdministrator) {
 if ($isCoach) {
     $items[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
     $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
-    $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
+    $items[] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
     $items[] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
 }
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];

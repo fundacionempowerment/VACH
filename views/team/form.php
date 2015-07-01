@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?=
     $form->field($team, 'sponsor_id')->widget(Select2::classname(), [
-        'data' => $coachees,
+        'data' => $persons,
     ]);
     ?>
     <div class="form-group">

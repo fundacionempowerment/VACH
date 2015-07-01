@@ -79,7 +79,7 @@ class SiteController extends Controller {
         if ($isCoach)
             return $this->redirect(['/team']);
         else {
-            Yii::$app->session->set('coachee_id', Yii::$app->user->id);
+            Yii::$app->session->set('person_id', Yii::$app->user->id);
             return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
         }
     }
@@ -112,8 +112,8 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function actionCoachee() {
-        return $this->render('coacheeIntro', [
+    public function actionPerson() {
+        return $this->render('personIntro', [
         ]);
     }
 

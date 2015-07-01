@@ -7,18 +7,18 @@ use yii\bootstrap\ActiveForm;
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p><?= Yii::t('user', 'Please fill out the following fields with coachee data:') ?></p>
+    <p><?= Yii::t('user', 'Please fill out the following fields with person data:') ?></p>
 
     <?php
     $form = ActiveForm::begin([
-                'id' => 'newcoachee-form',
+                'id' => 'newperson-form',
     ]);
     ?>
 
-    <?= $form->field($coachee, 'name') ?>
-    <?= $form->field($coachee, 'surname') ?>
-    <?= $form->field($coachee, 'email') ?>
-    <?= $form->field($coachee, 'phone') ?>
+    <?= $form->field($person, 'name') ?>
+    <?= $form->field($person, 'surname') ?>
+    <?= $form->field($person, 'email') ?>
+    <?= $form->field($person, 'phone') ?>
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
     </div>

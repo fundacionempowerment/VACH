@@ -6,7 +6,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?=
 
-$this->render('../coachee/_form', [
-    'coachee' => $member,
+$this->render('../person/_form', [
+    'person' => $member,
 ])
 ?>

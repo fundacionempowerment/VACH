@@ -15,7 +15,7 @@ class Goal extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['coachee_id', 'name'], 'required'],
+            [['person_id', 'name'], 'required'],
         ];
     }
 
@@ -34,12 +34,12 @@ class Goal extends ActiveRecord {
         ];
     }
 
-    public function getCoachee() {
-        return $this->hasOne(Coachee::className(), ['id' => 'coachee_id']);
+    public function getPerson() {
+        return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
 
     public function getCoach() {
-        return User::findOne(['id' => $this->coachee->coach_id]);
+        return User::findOne(['id' => $this->person->coach_id]);
     }
 
     public function getResources() {
