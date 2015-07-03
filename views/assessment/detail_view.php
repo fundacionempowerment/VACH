@@ -12,9 +12,17 @@ use app\models\Wheel;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = $assessment->name;
+$wheels = [];
+if ($type == Wheel::TYPE_GROUP) {
+    $this->title = Yii::t('assessment', 'Group wheel detailed status');
+    $wheels = $assessment->groupWheels;
+} else {
+    $this->title = Yii::t('assessment', 'Organizational wheel detailed status');
+    $wheels = $assessment->organizationalWheels;
+}
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->name, 'url' => ['/team/view', 'id' => $assessment->team->id]];
+$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
+$this->params['breadcrumbs'][] = ['label' => $assessment->name, 'url' => ['assessment/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -26,7 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
     <div class="row col-md-12">
-        <h2><?= Yii::t('assessment', 'Organizational wheels') ?></h2>
+        <h2><?=
+            Yii::t('assessment', $type == Wheel::TYPE_GROUP ?
+                            Yii::t('assessment', 'Group wheels') :
+                            Yii::t('assessment', 'Organizational wheels'))
+            ?></h2>
         <table width="100%">
             <tr>
                 <th>
@@ -46,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php foreach ($assessment->team->members as $observedMember) { ?>
                         <td>
                             <?php
-                            foreach ($assessment->organizationalWheels as $wheel)
+                            foreach ($wheels as $wheel)
                                 if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
                                     echo $wheel->answerStatus;
                                 }
@@ -55,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php } ?>
                 </tr>
             <?php } ?>
-        </table>
+        </table>        
     </div>
+    <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['assessment/detail-view', 'id' => $assessment->id, 'type' => $type]), ['class' => 'btn btn-default']) ?>
 </div>

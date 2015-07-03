@@ -38,6 +38,7 @@ return [
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
     'Problem while saving: ' => 'Problemas al guardar',
+    'Refresh' => 'Refrescar',
     'Register' => 'Registrar',
     'Save' => 'Salvar',
     'Sign in' => 'Ingresar',

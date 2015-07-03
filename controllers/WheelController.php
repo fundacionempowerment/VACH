@@ -71,28 +71,36 @@ class WheelController extends Controller {
         $token = Yii::$app->request->get('token');
 
         if (Yii::$app->request->isGet) {
-            if ($token != null) {
-                $wheels = Wheel::findAll(['token' => $token]);
-
-                if (count($wheels) == 0)
-                    $this->redirect(['/site']);
-
-                $current_wheel = null;
-                foreach ($wheels as $wheel)
-                    if ($wheel->AnswerStatus == '0 %') {
-                        $current_dimension = -1;
-                        $current_wheel = $wheel;
-                        break;
-                    } else if ($wheel->AnswerStatus != '100 %') {
-                        $questionCount = count(WheelQuestion::getQuestions($wheel->type));
-                        $setSize = $questionCount / 8;
-                        $current_dimension = intval(count($wheel->answers) / $setSize);
-                        $current_wheel = $wheel;
-                        break;
-                    }
-            } else {
+            if ($token == null)
                 $this->redirect(['/site']);
-            }
+
+            $wheels = Wheel::findAll(['token' => $token]);
+
+            if (count($wheels) == 0)
+                $this->redirect(['/site']);
+
+            for ($i = 1; $i < count($wheels); $i++)
+                if ($wheels[$i]->observer_id == $wheels[$i]->observed_id) {
+                    $auxiliar_wheel = $wheels[$i];
+                    $wheels[$i] = $wheels[0];
+                    $wheels[0] = $auxiliar_wheel;
+                    break;
+                }
+
+            $current_wheel = null;
+
+            foreach ($wheels as $wheel)
+                if ($wheel->AnswerStatus == '0 %') {
+                    $current_dimension = -1;
+                    $current_wheel = $wheel;
+                    break;
+                } else if ($wheel->AnswerStatus != '100 %') {
+                    $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+                    $setSize = $questionCount / 8;
+                    $current_dimension = intval(count($wheel->answers) / $setSize);
+                    $current_wheel = $wheel;
+                    break;
+                }
         } else if (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
@@ -152,12 +160,12 @@ class WheelController extends Controller {
                         'wheel' => $current_wheel,
                         'current_dimension' => $current_dimension,
             ]);
-        else
-            return $this->render('form', [
-                        'wheel' => $current_wheel,
-                        'current_dimension' => $current_dimension,
-                        'showMissingAnswers' => $showMissingAnswers,
-            ]);
+
+        return $this->render('form', [
+                    'wheel' => $current_wheel,
+                    'current_dimension' => $current_dimension,
+                    'showMissingAnswers' => $showMissingAnswers,
+        ]);
     }
 
     public function actionDelete($id) {

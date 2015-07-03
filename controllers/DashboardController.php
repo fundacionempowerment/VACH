@@ -33,7 +33,7 @@ class DashboardController extends Controller {
         $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
 
         if ($filter->companyId > 0) {
-            $teams = ArrayHelper::map(Team::findAll(['company_id' => $filter->companyId]), 'id', 'name');
+            $teams = ArrayHelper::map(Team::findAll(['company_id' => $filter->companyId]), 'id', 'fullname');
         }
 
         if ($filter->teamId > 0) {

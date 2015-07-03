@@ -52,7 +52,7 @@ class Wheel extends ActiveRecord {
         $count = WheelAnswer::findByCondition(['wheel_id' => $this->id])
                 ->count();
         $questionCount = count(WheelQuestion::getQuestions($this->type));
-        return ($count * 100 / $questionCount) . ' %';
+        return round($count * 100 / $questionCount, 1) . ' %';
     }
 
     public function getObserver() {

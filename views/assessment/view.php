@@ -19,7 +19,7 @@ $organizationalQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_ORG
 
 $this->title = $assessment->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->name, 'url' => ['/team/view', 'id' => $assessment->team->id]];
+$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::a(\Yii::t('assessment', 'Send group wheels'), Url::to(['assessment/send-group', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
             } else {
                 echo Html::a(\Yii::t('assessment', 'Group wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/view-group', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
+                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/detail-view', 'id' => $assessment->id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-primary']);
             }
             ?>
         <ul>
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / $groupQuestionCount ) . '%' ?>
+                    <?= round($wheel['count'] * 100 / count($assessment->team->members) / $groupQuestionCount, 1) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::a(\Yii::t('assessment', 'Send organizational wheels'), Url::to(['assessment/send-organizational', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
             } else {
                 echo Html::a(\Yii::t('assessment', 'Organizational wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/view-organizational', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
+                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/detail-view', 'id' => $assessment->id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-primary']);
             }
             ?>
         <ul>
@@ -93,12 +93,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= ($wheel['count'] * 100 / count($assessment->team->members) / $organizationalQuestionCount) . '%' ?>
+                    <?= round($wheel['count'] * 100 / count($assessment->team->members) / $organizationalQuestionCount, 1) . '%' ?>
                     <?= Yii::t('app', 'done') ?>
                     <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
                 </li>
             <?php endforeach; ?>
         </ul>
         </p>
+        <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['assessment/view', 'id' => $assessment->id,]), ['class' => 'btn btn-default']) ?>
+
     </div>
 </div>

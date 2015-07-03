@@ -120,19 +120,12 @@ class AssessmentController extends Controller {
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
-    public function actionViewGroup($id) {
+    public function actionDetailView($id, $type) {
         $assessment = Assessment::findOne(['id' => $id]);
 
-        return $this->render('view_group', [
+        return $this->render('detail_view', [
                     'assessment' => $assessment,
-        ]);
-    }
-
-    public function actionViewOrganizational($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        return $this->render('view_organizational', [
-                    'assessment' => $assessment,
+                    'type' => $type,
         ]);
     }
 

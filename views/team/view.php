@@ -11,7 +11,7 @@ use kartik\widgets\Select2;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = $team->name;
+$this->title = $team->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

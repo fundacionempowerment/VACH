@@ -10,6 +10,8 @@ use yii\behaviors\TimestampBehavior;
 
 class Team extends ActiveRecord {
 
+    public $fullname;
+
     /**
      * @return array the validation rules.
      */
@@ -42,6 +44,11 @@ class Team extends ActiveRecord {
             $this->coach_id = Yii::$app->user->id;
 
         return parent::beforeValidate();
+    }
+
+    public function afterFind() {
+        $this->fullname = $this->company->name . ' ' . $this->name;
+        parent::afterFind();
     }
 
     public function getCoach() {
