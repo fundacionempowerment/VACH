@@ -17,8 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Assessment' => 'Relavamiento',
+    'Assessment' => 'Relevamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
+    'Autofill answers off' => 'Autoresponder inactivo',
+    'Autofill answers on' => 'Autoresponder activo',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'CPC: {wheel} link' => 'CPC: acceso a {wheel}',
     'Group wheel detailed status' => 'Estado detallado de rueda grupales',

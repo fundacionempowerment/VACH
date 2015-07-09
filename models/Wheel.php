@@ -18,7 +18,6 @@ class Wheel extends ActiveRecord {
     const TYPE_ORGANIZATIONAL = 2;
 
     public $dimensionAnswers = [0, 0, 0, 0, 0, 0, 0, 0];
-    private $_answers_status = null;
 
     public function __construct() {
         $this->date = date("Y-m-d");
@@ -65,6 +64,10 @@ class Wheel extends ActiveRecord {
 
     public function getCoach() {
         return User::findOne(['id' => $this->observer->coach_id]);
+    }
+
+    public function getAssessment() {
+        return Assessment::findOne(['id' => $this->assessment_id]);
     }
 
     public function getAnswers() {
@@ -219,7 +222,7 @@ class Wheel extends ActiveRecord {
                 ->where("assessment.id = $assessmentId and wheel.type = " . $type)
                 ->groupBy('wheel_answer.dimension')
                 ->all();
-
+        $answers = [];
         foreach ($rawAnswers as $rawAnswer)
             $answers[] = $rawAnswer['value'];
         return $answers;

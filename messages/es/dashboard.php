@@ -22,7 +22,7 @@ return [
     'Consciousness' => 'Consciencia',
     'Dashboard' => 'Tablero',
     'Group Conciousness and Responsability Matrix' => 'Matriz de consciancia y responsabilidad grupal',
-    'Group Indicators' => 'Indicatores grupales',
+    'Group Indicators' => 'Indicadores grupales',
     'Group Perception Adjustment Matrix' => '',
     'Group Perception Matrix' => 'Matriz de percepción grupal',
     'Group Potential Matrix' => 'Matriz de potencialidad grupal',

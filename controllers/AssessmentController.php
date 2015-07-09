@@ -116,7 +116,6 @@ class AssessmentController extends Controller {
         $assessment->organizational_status = Assessment::STATUS_SENT;
         $assessment->save();
 
-
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
@@ -127,6 +126,15 @@ class AssessmentController extends Controller {
                     'assessment' => $assessment,
                     'type' => $type,
         ]);
+    }
+
+    public function actionToggleAutofill($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        $assessment->autofill_answers = !$assessment->autofill_answers;
+        $assessment->save();
+
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
     private static function newToken() {

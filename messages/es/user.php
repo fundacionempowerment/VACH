@@ -19,10 +19,9 @@
 return [
     'Answers' => 'Respuestas',
     'Coach' => 'Coach',
-    'Edit person' => '@@Editar persona@@',
     'Email already used.' => 'Correo electrónico ya usado.',
     'I\'m coach' => 'Soy coach',
-    'If you forgot your password you can ' => 'Si olvidó su contraseña puede ',
+    'If you forgot your password you can ' => '@@Si olvidó su contraseña puede @@',
     'Is administrator' => 'Es administrador',
     'My Account' => 'Mi cuenta',
     'My Persons' => 'Mis Personas',
@@ -53,5 +52,5 @@ return [
     'Users' => 'Usuarios',
     'Wrong old password.' => 'Antigua contraseña incorrecta',
     'Your personal data has been succesfully saved.' => 'Sus datos personales han sido salvado con éxito.',
-    'reset it' => 'resetearlo',
+    'reset it' => '@@resetearlo@@',
 ];

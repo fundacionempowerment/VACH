@@ -20,11 +20,12 @@ $this->title = 'VACH';
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                    <?= Html::a(Yii::t('app', 'Sign up'), Url::to(['register']), ['class' => 'btn btn-success']) ?>
                 </div>
-                <div style="color:#999;margin:1em 0">
-                    <?= \Yii::t('user', 'If you forgot your password you can ') ?>
-                    <?= Html::a(\Yii::t('user', 'reset it'), ['site/request-password-reset']) ?>.
+                <?php ActiveForm::end(); ?>
+                <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
+                <?= $wheelForm->field($wheel, 'token') ?>
+                <div class="form-group">
+                    <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-primary', 'name' => 'run-button']) ?>                    
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

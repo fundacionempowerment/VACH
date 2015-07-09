@@ -15,7 +15,7 @@ $questions = WheelQuestion::getQuestions($wheel->type);
 $setQuantity = count($questions) / 8;
 
 for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)
-    if (YII_DEBUG)
+    if ($wheel->assessment->autofill_answers)
         $answers[$i] = rand(0, 4);
     else
         $answers[$i] = null;

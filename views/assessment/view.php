@@ -25,10 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="row col-md-12">
-        <p>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?><br />
-        </p>
+    <div class="row col-md-6">
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?>
+    </div>
+    <div class="row col-md-6 text-right">
+        <?=
+        $assessment->autofill_answers ?
+                '<b>' . Yii::t('assessment', 'Autofill answers on') . '</b>' :
+                Yii::t('assessment', 'Autofill answers off')
+        ?>
+        <?=
+        Html::a(($assessment->autofill_answers ?
+                        Yii::t('app', 'Deactivate') :
+                        Yii::t('app', 'Activate'))
+                , ['assessment/toggle-autofill', 'id' => $assessment->id], ['class' => 'btn btn-default btn-sm'])
+        ?>
     </div>
     <div class="row col-md-12">
         <h2><?= Yii::t('assessment', 'Individual wheels') ?></h2>
