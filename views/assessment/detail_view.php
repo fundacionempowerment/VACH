@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <table width="100%">
             <tr>
                 <th>
-                    <?= Yii::t('wheel', 'Observer \ Observed') ?>
+                    <?= Yii::t('wheel', "Observer \\ Observed") ?>
                 </th>
                 <?php foreach ($assessment->team->members as $teamMember): ?>
                     <th>

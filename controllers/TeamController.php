@@ -23,7 +23,7 @@ class TeamController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $teams = Team::find();
+        $teams = Team::browse();
 
         return $this->render('index', [
                     'teams' => $teams,

@@ -56,7 +56,7 @@ class AssessmentController extends Controller {
             $newWheel->assessment_id = $assessment->id;
 
             if ($newWheel->save())
-                $this->sendWheel($teamMember->member, $newWheel->token, Wheel::TYPE_INDIVIDUAL);
+                $this->sendWheel($newWheel);
         }
 
         $assessment->individual_status = Assessment::STATUS_SENT;
@@ -83,7 +83,7 @@ class AssessmentController extends Controller {
                 $newWheel->save();
             }
 
-            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_GROUP);
+            $this->sendWheel($newWheel);
         }
 
         $assessment->group_status = Assessment::STATUS_SENT;
@@ -110,7 +110,7 @@ class AssessmentController extends Controller {
                 $newWheel->save();
             }
 
-            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_ORGANIZATIONAL);
+            $this->sendWheel($newWheel);
         }
 
         $assessment->organizational_status = Assessment::STATUS_SENT;
@@ -151,15 +151,17 @@ class AssessmentController extends Controller {
         return $newToken;
     }
 
-    private function sendWheel($member, $token, $type) {
-        $type_text = Wheel::getWheelTypes()[$type];
+    private function sendWheel($wheel) {
+        $type_text = Wheel::getWheelTypes()[$wheel->type];
         Yii::$app->mailer->compose('wheel', [
-                    'token' => $token,
-                    'type' => $type
+                    'wheel' => $wheel,
                 ])
-                ->setSubject(Yii::t('assessment', 'CPC: {wheel} link', ['wheel' => $type_text]))
-                ->setFrom(Yii::$app->user->identity->email)
-                ->setTo($member->email)
+                ->setSubject(Yii::t('assessment', 'CPC: access to {wheel} of assessment {assessment}', [
+                            'wheel' => $type_text,
+                            'assessment' => $wheel->assessment->name,
+                ]))
+                ->setFrom($wheel->coach->email)
+                ->setTo($wheel->observer->email)
                 ->send();
     }
 

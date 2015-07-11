@@ -18,14 +18,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Assessment has been succesfully created.' => 'Evaluación ha sido creado exitosamente.',
-    'Assessment has been succesfully deleted.' => 'Evaluación ha sido eliminada exitasamente.',
-    'Assessments' => 'Evaluaciones',
+    'Assessment has been succesfully created.' => 'Relevamiento ha sido creado exitosamente.',
+    'Assessment has been succesfully deleted.' => 'Relevamiento ha sido eliminada exitasamente.',
+    'Assessments' => 'Relevamientos',
     'Coach' => 'Coach',
     'Company' => 'Empresa',
     'Member' => 'Miembro',
     'Members' => 'Miembros',
-    'New assessment' => 'Nueva evaluación',
+    'New assessment' => 'Nuevo relevamiento',
     'New member' => 'Nuevo miembro',
     'New team' => 'Nuevo equipo',
     'Please fill out the following fields with team data:' => 'Por favor, complete los campos con los datos del equipo',

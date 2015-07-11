@@ -51,6 +51,10 @@ class Team extends ActiveRecord {
         parent::afterFind();
     }
 
+    public static function browse() {
+        return Team::find()->where(['coach_id' => Yii::$app->user->id]);
+    }
+
     public function getCoach() {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }

@@ -41,7 +41,7 @@ foreach ($data as $datum) {
     <table class="table table-bordered table-hover">
         <tr>
             <td>
-                <?= Yii::t('wheel', 'observer \\ observed') ?>
+                <?= Yii::t('wheel', "Observer \\ Observed") ?>
             </td>
             <?php
             foreach ($members as $id => $member)

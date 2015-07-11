@@ -35,6 +35,7 @@ class Wheel extends ActiveRecord {
     public function attributeLabels() {
         return [
             'date' => Yii::t('app', 'Date'),
+            'token' => Yii::t('wheel', 'Wheel token'),
         ];
     }
 
