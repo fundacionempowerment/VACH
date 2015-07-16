@@ -6,14 +6,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Assessment;
-use app\models\AssessmentAnswer;
-use app\models\AssessmentQuestion;
+use app\models\DashboardFilter;
 use app\models\Wheel;
 
 class AssessmentController extends Controller {
@@ -135,6 +129,19 @@ class AssessmentController extends Controller {
         $assessment->save();
 
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+    }
+
+    public function actionGoToDashboard($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+        $filter = new DashboardFilter();
+
+        $filter->companyId = $assessment->team->company_id;
+        $filter->teamId = $assessment->team->id;
+        $filter->assessmentId = $id;
+        $filter->wheelType = Wheel::TYPE_GROUP;
+
+        Yii::$app->session->set('DashboardFilter', $filter);
+        $this->redirect(['/dashboard']);
     }
 
     private static function newToken() {

@@ -52,7 +52,7 @@ class Team extends ActiveRecord {
     }
 
     public static function browse() {
-        return Team::find()->where(['coach_id' => Yii::$app->user->id]);
+        return Team::find()->where(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
     }
 
     public function getCoach() {

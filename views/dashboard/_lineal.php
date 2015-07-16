@@ -22,14 +22,18 @@ $linealHeight = 200;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
+for ($i = 0; $i < count($dimensions); $i++) {
+    $dimensions[$i] = str_replace('Orientación', 'O.', $dimensions[$i]);
+    $dimensions[$i] = str_replace('Orientation', 'O.', $dimensions[$i]);
+}
 ?>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8" >
+<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8 text-center" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive"></canvas><br />
     <p>
-        <span style="color: red;"><?= $wheelName ?></span>
+        <span style="color: red;"><?= $comparedWheelName ?></span>
         <?php if (isset($comparedWheel)) { ?>
-            <span style="color: blue;"><?= $comparedWheelName ?></span>
+            <span style="color: blue;"><?= $wheelName ?></span>
         <?php } ?>
     </p>
 </div>

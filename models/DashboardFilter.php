@@ -10,10 +10,10 @@ use yii\base\Model;
  */
 class DashboardFilter extends Model {
 
-    public $companyId;
-    public $teamId;
-    public $assessmentId;
-    public $memberId;
+    public $companyId = 0;
+    public $teamId = 0;
+    public $assessmentId = 0;
+    public $memberId = 0;
     public $wheelType = 0;
 
     /**

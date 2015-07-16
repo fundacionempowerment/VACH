@@ -18,14 +18,14 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Potential Matrix');
 
-$linealWidth = 350 * 1.5;
-$linealHeight = 250;
+$linealWidth = 800;
+$linealHeight = 400;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
 ?>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8" >
+<div class="col-xs-12 col-md-push-1 col-md-10" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive center-block"></canvas>
 </div>
 <div class="clearfix"></div>

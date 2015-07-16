@@ -21,6 +21,7 @@ $this->title = $assessment->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
+$wheel_count = 0;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -52,7 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
         <ul>
-            <?php foreach ($assessment->wheelStatus(Wheel::TYPE_INDIVIDUAL) as $individualWheel):
+            <?php
+            foreach ($assessment->wheelStatus(Wheel::TYPE_INDIVIDUAL) as $individualWheel):
+                if ($individualWheel['count'] / $individualQuestionCount == 1)
+                    $wheel_count++;
                 ?>
                 <li>
                     <?= $individualWheel['name'] . ' ' . $individualWheel['surname'] ?>:&nbsp;
@@ -76,7 +80,10 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
         <ul>
-            <?php foreach ($assessment->wheelStatus(Wheel::TYPE_GROUP) as $wheel):
+            <?php
+            foreach ($assessment->wheelStatus(Wheel::TYPE_GROUP) as $wheel):
+                if ($wheel['count'] / count($assessment->team->members) / $groupQuestionCount == 1)
+                    $wheel_count++;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
@@ -100,7 +107,10 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
         <ul>
-            <?php foreach ($assessment->wheelStatus(Wheel::TYPE_ORGANIZATIONAL) as $wheel):
+            <?php
+            foreach ($assessment->wheelStatus(Wheel::TYPE_ORGANIZATIONAL) as $wheel):
+                if ($wheel['count'] / count($assessment->team->members) / $organizationalQuestionCount == 1)
+                    $wheel_count++;
                 ?>
                 <li>
                     <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
@@ -112,6 +122,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </ul>
         </p>
         <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['assessment/view', 'id' => $assessment->id,]), ['class' => 'btn btn-default']) ?>
-
+        <?=
+        Html::a(\Yii::t('assessment', 'Go to dashboard...'), Url::to(['assessment/go-to-dashboard', 'id' => $assessment->id,]), [
+            'class' => ($wheel_count == count($assessment->team->members) * 3 ? 'btn btn-success' : 'btn btn-default')
+        ])
+        ?>
     </div>
 </div>

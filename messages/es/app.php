@@ -43,7 +43,7 @@ return [
     'Refresh' => 'Refrescar',
     'Register' => 'Registrar',
     'Run' => 'Ejecutar',
-    'Save' => 'Salvar',
+    'Save' => 'Guardar',
     'Sign in' => 'Ingresar',
     'Sign up' => '@@Registrese@@',
     'Thanks!' => '¡Gracias!',

@@ -28,4 +28,12 @@ if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
     <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
     <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
     <?= Html::submitButton(Yii::t('app', 'Begin'), ['class' => 'btn btn-primary']); ?>
+    <br/><br/>
+    <?php
+    if (isset(Yii::$app->user))
+        if (isset(Yii::$app->user->identity))
+            if (Yii::$app->user->identity->is_coach) {
+                echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+            }
+    ?>
 </div>

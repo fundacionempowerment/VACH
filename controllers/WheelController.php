@@ -79,14 +79,6 @@ class WheelController extends Controller {
             if (count($wheels) == 0)
                 $this->redirect(['/site']);
 
-            for ($i = 1; $i < count($wheels); $i++)
-                if ($wheels[$i]->observer_id == $wheels[$i]->observed_id) {
-                    $auxiliar_wheel = $wheels[$i];
-                    $wheels[$i] = $wheels[0];
-                    $wheels[0] = $auxiliar_wheel;
-                    break;
-                }
-
             $current_wheel = null;
 
             foreach ($wheels as $wheel)

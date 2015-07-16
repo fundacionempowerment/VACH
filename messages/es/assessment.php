@@ -23,6 +23,7 @@ return [
     'Autofill answers on' => 'Autoresponder activo',
     'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
+    'Go to dashboard...' => 'Ir al tablero...',
     'Group wheel detailed status' => 'Estado detallado de rueda grupales',
     'Group wheels' => 'Ruedas grupales',
     'Group wheels sent' => 'Ruedas grupales enviadas',

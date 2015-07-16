@@ -16,10 +16,12 @@ function canvas_arrow(context, fromx, fromy, tox, toy) {
 function doRelations(context, data)
 {
     // This code asume squere proto human image
-    var width = 525;
-    var height = 250;
+    var width = 800;
+    var height = 400;
+    if (data.length < 4)
+        height = 150;
     var imageSize = 30;
-    var margin = 20;
+    var margin = 40;
     var arrow_x_ring = 50;
     var arrow_y_ring = arrow_x_ring * height / width;
     var xradio = width / 2 - imageSize / 2 - margin;
@@ -30,13 +32,7 @@ function doRelations(context, data)
     var imageObj = new Image();
     imageObj.src = '../images/protoMale.png';
     imageObj.onload = function() {
-        // draw central image
-        context.drawImage(imageObj, (width - imageSize) / 2, (height - image_text_height) / 2);
-        context.textBaseline = 'top';
-        context.textAlign = 'center';
-        context.fillText(data[0]['name'] + ' ' + data[0]['surname'],
-                width / 2,
-                height / 2 + image_text_height / 2);
+        context.font = '11pt Helvetica';
 
         for (i in data) {
             if (i > 0)
@@ -46,9 +42,9 @@ function doRelations(context, data)
                     width / 2 + xradio * Math.cos(current_angle) - imageSize / 2,
                     height / 2 + yradio * Math.sin(current_angle) - image_text_height / 2);
 
-            if (data[i]['value'] < 1.6)
+            if (data[i]['value'] < 4 / 3)
                 context.strokeStyle = '#d9534f';
-            else if (data[i]['value'] > 2.8)
+            else if (data[i]['value'] > 4 * 2 / 3)
                 context.strokeStyle = '#5cb85c';
             else
                 context.strokeStyle = '#f0ad4e';
@@ -66,8 +62,15 @@ function doRelations(context, data)
 
             context.fillText(Math.round(data[i]['value'] * 1000 / 4) / 10 + ' %',
                     width / 2 + xradio / 2 * Math.cos(current_angle),
-                    height / 2 + yradio / 2 * Math.sin(current_angle) + 15);
+                    height / 2 + yradio / 2 * Math.sin(current_angle) + 10);
         }
 
+        // draw central image
+        context.drawImage(imageObj, (width - imageSize) / 2, (height - image_text_height) / 2);
+        context.textBaseline = 'top';
+        context.textAlign = 'center';
+        context.fillText(data[0]['name'] + ' ' + data[0]['surname'],
+                width / 2,
+                height / 2 + image_text_height / 2);
     };
 }

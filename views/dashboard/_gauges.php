@@ -27,14 +27,12 @@ $dimensions = WheelQuestion::getDimensionNames($type);
     <div class="col-md-3" >
         <label><?= $dimensions[$i] ?></label>
         <?php
-        if ($wheel[$i] > 3.5)
-            $class = 'progress-bar-info';
-        else if ($wheel[$i] < 1)
+        if ($wheel[$i] > Yii::$app->params['good_consciousness'])
+            $class = 'progress-bar-success';
+        else if ($wheel[$i] < Yii::$app->params['minimal_consciousness'])
             $class = 'progress-bar-danger';
-        else if ($wheel[$i] < 2)
-            $class = 'progress-bar-warning';
         else
-            $class = 'progress-bar-info';
+            $class = 'progress-bar-warning';
 
         echo Progress::widget([
             'percent' => $wheel[$i] / 4 * 100,

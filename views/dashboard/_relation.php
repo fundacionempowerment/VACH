@@ -18,8 +18,6 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Relations Matrix');
 
-$width = 525;
-$height = 250;
 $token = rand(100000, 999999);
 
 $drawing_data = [];
@@ -32,11 +30,18 @@ foreach ($data as $datum) {
     if ($datum['observer_id'] != $memberId && $datum['observed_id'] == $memberId)
         $drawing_data[] = $datum;
 }
+
+$width = 800;
+$height = 400;
+if (count($drawing_data) < 4)
+    $height = 150;
 ?>
 <h3><?= $title ?></h3>
-<div class="col-md-push-2 col-md-8" >
-    <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
-</div>
+<?php if (count($drawing_data) > 0) { ?>
+    <div class="col-xs-12 col-md-push-1 col-md-10" >
+        <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+    </div>
+<?php } ?>
 <div class="col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
@@ -65,9 +70,9 @@ foreach ($data as $datum) {
                         if ($observedId > 0) {
                             foreach ($data as $datum) {
                                 if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
-                                    if ($datum['value'] > 2.8)
+                                    if ($datum['value'] > Yii::$app->params['good_consciousness'])
                                         $class = 'success';
-                                    else if ($datum['value'] < 1.6)
+                                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
                                         $class = 'danger';
                                     else
                                         $class = 'warning';
@@ -82,9 +87,11 @@ foreach ($data as $datum) {
     </table>
 </div>
 <div class="clearfix"></div>
-<script>
-    var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;
+<?php if (count($drawing_data) > 0) { ?>
+    <script>
+        var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;
 
-    relations.push("<?= $token ?>");
-    relationsData.push(data<?= $token ?>);
-</script>
+        relations.push("<?= $token ?>");
+        relationsData.push(data<?= $token ?>);
+    </script>
+<?php } ?>

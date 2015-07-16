@@ -20,33 +20,54 @@ else
 $dimensions = WheelQuestion::getDimensionNames($type);
 
 $current_dimension = -1;
+
+$min_value = 5;
+$max_value = -1;
+foreach ($emergents as $emergent) {
+    if ($emergent['value'] < $min_value)
+        $min_value = $emergent['value'];
+    if ($emergent['value'] > $max_value)
+        $max_value = $emergent['value'];
+}
 ?>
 <h3><?= $title ?></h3>
-<?php foreach ($emergents as $emergent) { ?>
-    <?php
-    if ($emergent['dimension'] != $current_dimension) {
-        $current_dimension = $emergent['dimension'];
+<?php
+foreach ($emergents as $emergent)
+    if (($emergent['value'] == $max_value && $max_value > Yii::$app->params['good_consciousness']) || ($emergent['value'] == $min_value && $min_value < Yii::$app->params['minimal_consciousness'])) {
         ?>
-        <h4><?= $dimensions[$current_dimension] ?></h4>
-    <?php } ?>
-    <div class="col-md-12" >
-        <label><?= $emergent['question'] ?></label>
         <?php
-        if ($emergent['value'] > 3.5)
-            $class = 'progress-bar-info';
-        else if ($emergent['value'] < 1)
-            $class = 'progress-bar-danger';
-        else if ($emergent['value'] < 2)
-            $class = 'progress-bar-warning';
-        else
-            $class = 'progress-bar-active';
+        if ($emergent['dimension'] != $current_dimension) {
+            $current_dimension = $emergent['dimension'];
+            ?>
+            <h4><?= $dimensions[$current_dimension] ?></h4>
+        <?php } ?>
+        <div class="col-md-12" >
+            <label><?= $emergent['question'] ?></label>
+            <?php
+            if ($emergent['value'] > Yii::$app->params['good_consciousness'])
+                $class = 'progress-bar-success';
+            else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
+                $class = 'progress-bar-danger';
+            else
+                $class = 'progress-bar-warning';
 
-        echo Progress::widget([
-            'percent' => $emergent['value'] / 4 * 100,
-            'label' => floor($emergent['value'] / 4 * 100) . ' %',
-            'barOptions' => ['class' => $class],
-        ]);
-        ?>
-    </div>
-<?php } ?>
+
+            if ($emergent['value'] == 0) {
+                echo Progress::widget([
+                    'percent' => $emergent['value'] / 4 * 100,
+                    'label' => floor($emergent['value'] / 4 * 100) . ' %',
+                    'barOptions' => ['class' => $class, 'style' => 'width: 3%;'
+                    ],
+                ]);
+            } else {
+
+                echo Progress::widget([
+                    'percent' => $emergent['value'] / 4 * 100,
+                    'label' => floor($emergent['value'] / 4 * 100) . ' %',
+                    'barOptions' => ['class' => $class],
+                ]);
+            }
+            ?>
+        </div>
+    <?php } ?>
 <div class="clearfix"></div>

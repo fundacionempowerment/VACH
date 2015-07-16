@@ -19,6 +19,7 @@
 return [
     'Answer type' => 'Tipo de respuesta',
     'Appropriateness' => 'Pertinencia',
+    'Back to assessment board' => 'Volver al tablero del relevamiento',
     'Belonging' => 'Pertenencia',
     'CPC: {wheel} answers of {person}' => 'CPC: respuestas a {wheel} de {person}',
     'Change Management' => 'Gestión del cambio',
@@ -58,7 +59,6 @@ return [
     'Running group wheel' => 'Ejecutando rueda grupal',
     'Running individual wheel' => 'Ejecutando rueda individual',
     'Running organizational wheel' => 'Ejecutando rueda organizacional',
-    'Save and finish' => 'Guardar y finalizar',
     'Save and next dimension...' => 'Guardar y próxima dimensión',
     'Some answers left.' => 'Faltan alguna respuestas',
     'Some answers missed' => 'Alguna respuestas faltan',

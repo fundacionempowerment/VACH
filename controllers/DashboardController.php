@@ -34,14 +34,51 @@ class DashboardController extends Controller {
 
         if ($filter->companyId > 0) {
             $teams = ArrayHelper::map(Team::findAll(['company_id' => $filter->companyId]), 'id', 'fullname');
+
+            if (count($teams) == 1) {
+                foreach ($teams as $id => $fullname) {
+                    $filter->teamId = $id;
+                    break;
+                }
+            } else {
+                $exists = false;
+                foreach ($teams as $id => $fullname)
+                    if ($id == $filter->teamId) {
+                        $exists = true;
+                        break;
+                    }
+
+                if (!$exists) {
+                    $filter->teamId = 0;
+                    $filter->assessmentId = 0;
+                }
+            }
         }
 
         if ($filter->teamId > 0) {
             $assessments = ArrayHelper::map(Assessment::findAll(['team_id' => $filter->teamId]), 'id', 'name');
 
+            if (count($assessments) == 1) {
+                foreach ($assessments as $id => $fullname) {
+                    $filter->assessmentId = $id;
+                    break;
+                }
+            } else {
+                $exists = false;
+                foreach ($assessments as $id => $name)
+                    if ($id == $filter->assessmentId) {
+                        $exists = true;
+                        break;
+                    }
+
+                if (!$exists)
+                    $filter->assessmentId = 0;
+            }
+
             foreach (TeamMember::findAll(['team_id' => $filter->teamId]) as $teamMember)
                 $members[$teamMember->user_id] = $teamMember->member->fullname;
         }
+
         $members[0] = Yii::t('app', 'All');
 
         $projectedIndividualWheel = [];

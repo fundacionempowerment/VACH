@@ -14,10 +14,14 @@ $radarDiameter = 350;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
+for ($i = 0; $i < count($dimensions); $i++) {
+    $dimensions[$i] = str_replace('Dimensión', 'D.', $dimensions[$i]);
+    $dimensions[$i] = str_replace('Dimension', 'D.', $dimensions[$i]);
+}
 ?>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-4 col-md-4" >
-    <canvas id="canvas<?= $token ?>" height="<?= $radarDiameter ?>" width="<?= $radarDiameter ?>" class="img-responsive"></canvas>
+<div class="col-xs-push-2 col-xs-8 col-md-push-3 col-md-6 text-center" >
+    <canvas id="canvas<?= $token ?>" height="<?= $radarDiameter * 0.8 ?>" width="<?= $radarDiameter ?>" class="img-responsive"></canvas>
     <p>
         <span style="color: blue;"><?= $wheelName ?></span>
         <?php if (isset($comparedWheel)) { ?>

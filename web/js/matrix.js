@@ -1,7 +1,7 @@
 function doMatrix(context, data)
 {
-    var width = 350 * 1.5;
-    var height = 250;
+    var width = 800;
+    var height = 400;
     var matrixData = new Array();
     var minProductivity = 10000;
     var maxProductivity = -10000;
@@ -33,7 +33,7 @@ function doMatrix(context, data)
 
     var minx = Math.floor((minProductivity - 1) / 10) * 10;
     var maxx = (Math.floor((maxProductivity + 1) / 10) + 1) * 10;
-    var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1) * 10;
+    var maxy = (Math.floor((maxConsciousness + 1) / 15) + 1) * 15;
 
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minx) / (maxx - minx) * width);
@@ -56,6 +56,7 @@ function doMatrix(context, data)
     context.stroke();
 
     // do cool things with the context
+    context.font = '12pt Helvetica';
     context.fillStyle = 'red';
     context.textAlign = 'left';
     context.textBaseline = 'top';
@@ -84,6 +85,9 @@ function doMatrix(context, data)
     context.lineTo(width / 2, height);
     context.stroke();
 
+    context.font = '11pt Helvetica';
+    context.textAlign = 'center';
+    context.textBaseline = 'top';
     for (i in matrixData) {
         context.beginPath();
         context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
@@ -97,7 +101,6 @@ function doMatrix(context, data)
         context.stroke();
 
         context.fillStyle = '#496987';
-        context.textAlign = 'center';
-        context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 24);
+        context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 16);
     }
 }

@@ -244,6 +244,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getEmergents($assessmentId, $type) {
+                $good = Yii::$app->params['good_consciousness'];
+        $minimal = Yii::$app->params['minimal_consciousness'];
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -251,7 +253,7 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->where("assessment.id = $assessmentId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
-                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->having("avg(wheel_answer.answer_value) > $good or avg(wheel_answer.answer_value) < $minimal")
                 ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 
@@ -259,6 +261,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getMemberEmergents($assessmentId, $memberId, $type) {
+        $good = Yii::$app->params['good_consciousness'];
+        $minimal = Yii::$app->params['minimal_consciousness'];
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -266,7 +270,7 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
-                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->having("avg(wheel_answer.answer_value) > $good or avg(wheel_answer.answer_value) < $minimal")
                 ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 
