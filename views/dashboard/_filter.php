@@ -10,6 +10,12 @@ use kartik\widgets\Select2;
 
 /* @var $this yii\web\View */
 ?>
+<div class="clearfix"></div>
+<script type="text/javascript">
+    function lockAndSubmit(form) {
+        form.submit();
+    }
+</script>
 <div class="col-lg-12">
     <?php
     $form = ActiveForm::begin([
@@ -28,50 +34,59 @@ use kartik\widgets\Select2;
                 ],
     ]);
     ?>
-    <?=
-    $form->field($filter, 'companyId')->widget(Select2::classname(), [
-        'data' => $companies,
-        'options' => ['placeholder' => Yii::t('dashboard', 'Select company ...'), 'onchange' => 'this.form.submit()'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ])
-    ?>
-    <?=
-    $form->field($filter, 'teamId')->widget(Select2::classname(), [
-        'data' => $teams,
-        'options' => ['placeholder' => Yii::t('dashboard', 'Select team ...'), 'onchange' => 'this.form.submit()',],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ])
-    ?>
-    <?=
-    $form->field($filter, 'assessmentId')->widget(Select2::classname(), [
-        'data' => $assessments,
-        'options' => ['placeholder' => Yii::t('dashboard', 'Select assesment ...'), 'onchange' => 'this.form.submit()',],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ])
-    ?>
-    <?=
-    $form->field($filter, 'memberId')->widget(Select2::classname(), [
-        'data' => $members,
-        'options' => ['placeholder' => Yii::t('dashboard', 'Select member ...'), 'onchange' => 'this.form.submit()',],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ])
-    ?>
-    <?=
-    $form->field($filter, 'wheelType')->widget(Select2::classname(), [
-        'data' => Wheel::getWheelTypes(),
-        'options' => ['placeholder' => Yii::t('dashboard', 'Select wheel type ...'), 'onchange' => 'this.form.submit()',],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ])
-    ?>
+    <div class="form-group">
+        <?=
+        $form->field($filter, 'companyId')->widget(Select2::classname(), [
+            'data' => $companies,
+            'hideSearch' => true,
+            'options' => ['placeholder' => Yii::t('dashboard', 'Select company ...'), 'onchange' => 'lockAndSubmit(this.form);'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])
+        ?>
+        <?=
+        $form->field($filter, 'teamId')->widget(Select2::classname(), [
+            'data' => $teams,
+            'hideSearch' => true,
+            'options' => ['placeholder' => Yii::t('dashboard', 'Select team ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])
+        ?>
+        <?=
+        $form->field($filter, 'assessmentId')->widget(Select2::classname(), [
+            'data' => $assessments,
+            'hideSearch' => true,
+            'options' => ['placeholder' => Yii::t('dashboard', 'Select assesment ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])
+        ?>
+    </div>
+    <div class="form-group">
+        <?=
+        $form->field($filter, 'memberId')->widget(Select2::classname(), [
+            'data' => $members,
+            'hideSearch' => true,
+            'options' => ['placeholder' => Yii::t('dashboard', 'Select member ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])
+        ?>
+        <?=
+        $form->field($filter, 'wheelType')->widget(Select2::classname(), [
+            'data' => Wheel::getWheelTypes(),
+            'hideSearch' => true,
+            'options' => ['placeholder' => Yii::t('dashboard', 'Select wheel type ...'), 'onchange' => "lockAndSubmit(this.form);",],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])
+        ?>
+    </div>
     <?php ActiveForm::end(); ?>
 </div>

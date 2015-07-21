@@ -36,6 +36,7 @@ $height = 400;
 if (count($drawing_data) < 4)
     $height = 150;
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php if (count($drawing_data) > 0) { ?>
     <div class="col-xs-12 col-md-push-1 col-md-10" >

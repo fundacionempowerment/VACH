@@ -83,8 +83,10 @@ class SiteController extends Controller {
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->redirectIfCoach();
         } else {
+            $wheel = new Wheel();
             return $this->render('index', [
                         'model' => $model,
+                        'wheel' => $wheel,
             ]);
         }
     }

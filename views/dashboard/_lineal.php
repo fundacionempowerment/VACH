@@ -27,6 +27,7 @@ for ($i = 0; $i < count($dimensions); $i++) {
     $dimensions[$i] = str_replace('Orientation', 'O.', $dimensions[$i]);
 }
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8 text-center" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive"></canvas><br />

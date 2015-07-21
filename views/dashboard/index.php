@@ -97,6 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_matrix', [
             'data' => $performanceMatrix,
             'type' => $filter->wheelType,
+            'memberId' => $filter->memberId,
         ]);
     }
 

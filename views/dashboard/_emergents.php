@@ -20,20 +20,12 @@ else
 $dimensions = WheelQuestion::getDimensionNames($type);
 
 $current_dimension = -1;
-
-$min_value = 5;
-$max_value = -1;
-foreach ($emergents as $emergent) {
-    if ($emergent['value'] < $min_value)
-        $min_value = $emergent['value'];
-    if ($emergent['value'] > $max_value)
-        $max_value = $emergent['value'];
-}
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php
 foreach ($emergents as $emergent)
-    if (($emergent['value'] == $max_value && $max_value > Yii::$app->params['good_consciousness']) || ($emergent['value'] == $min_value && $min_value < Yii::$app->params['minimal_consciousness'])) {
+    if ($emergent['value'] > Yii::$app->params['good_consciousness'] || $emergent['value'] < Yii::$app->params['minimal_consciousness']) {
         ?>
         <?php
         if ($emergent['dimension'] != $current_dimension) {

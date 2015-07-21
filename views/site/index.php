@@ -10,6 +10,11 @@ $this->title = 'VACH';
 <div class="site-index">
     <div class="jumbotron">
         <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
+        <?php if (Yii::$app->params['server_status'] != 'online') { ?>
+            <h5 class="text-info">
+                <?= Yii::$app->params['server_status'] ?>
+            </h5>
+        <?php } ?>
     </div>
     <div class="body-content">
         <div class="row">
@@ -17,11 +22,13 @@ $this->title = 'VACH';
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
+                <br />
+                <br />
+                <br />
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
                 <?= $wheelForm->field($wheel, 'token') ?>
                 <div class="form-group">

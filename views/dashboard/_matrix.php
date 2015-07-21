@@ -23,14 +23,18 @@ $linealHeight = 400;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
+
+$matrix_data['data'] = $data;
+$matrix_data['memberId'] = $memberId;
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <div class="col-xs-12 col-md-push-1 col-md-10" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive center-block"></canvas>
 </div>
 <div class="clearfix"></div>
 <script>
-    var data<?= $token ?> = <?= Json::encode($data) ?>;
+    var data<?= $token ?> = <?= Json::encode($matrix_data) ?>;
 
     matrixes.push("<?= $token ?>");
     matrixesData.push(data<?= $token ?>);

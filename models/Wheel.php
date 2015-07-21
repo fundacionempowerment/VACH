@@ -206,6 +206,7 @@ class Wheel extends ActiveRecord {
             foreach ($projectedValues as $projectedValue)
                 if ($reflectedValue['observed_id'] == $projectedValue['observed_id']) {
                     $result[] = [
+                        'id' => $reflectedValue['observed_id'],
                         'name' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
                         'productivity' => $reflectedValue['value'] / 4 * 100,
                         'consciousness' => ($projectedValue['value'] - $reflectedValue['value']) / 4 * 100

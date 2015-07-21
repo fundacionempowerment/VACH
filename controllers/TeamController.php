@@ -177,7 +177,7 @@ class TeamController extends Controller {
     }
 
     private function getPersons() {
-
+        $persons = [];
         foreach (Person::browse()->all() as $person)
             $persons[$person->id] = $person->fullname;
         return $persons;

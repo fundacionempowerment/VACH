@@ -18,14 +18,12 @@
  */
 return [
     'Access denied' => 'Acceso denegado',
-    'Activate' => 'Activar',
     'Add' => 'Agregar',
     'Admin' => 'Admin',
     'All' => 'Todos',
     'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
-    'Deactivate' => 'Desactivar',
     'Description' => 'Descripción',
     'Edit' => '@@Editar@@',
     'Email' => 'Correo eletrónico',

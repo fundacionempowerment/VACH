@@ -19,8 +19,6 @@
 return [
     'Assessment' => 'Relevamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
-    'Autofill answers off' => 'Autoresponder inactivo',
-    'Autofill answers on' => 'Autoresponder activo',
     'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'Go to dashboard...' => 'Ir al tablero...',

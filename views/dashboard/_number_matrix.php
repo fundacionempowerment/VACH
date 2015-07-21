@@ -57,6 +57,7 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
 
 $standar_deviation = Utils::standard_deviation($gaps);
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <div class="col-md-12">
     <table class="table table-bordered table-hover">
