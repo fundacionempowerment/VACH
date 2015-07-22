@@ -18,6 +18,7 @@ $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
     $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
+    $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 if ($isCoach) {
@@ -72,21 +73,8 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
             </div>
         </div>
         <footer class="footer">
-            <div class="container">
-                <p class="pull-left">
-                    <?= Html::a('Fundación Empowerment', 'http://www.fundacionempowerment.org/') ?>
-                    &nbsp;
-                    <?= Html::a('Español', ['site/es']) ?>
-                    &nbsp;
-                    <?= Html::a('English', ['site/en']) ?>
-                </p>
-                <p class="pull-right">
-                    <?= Yii::t('app', 'Powered by') ?>
-                    <?= Html::a('Yii Framework', 'http://www.yiiframework.com/', ['rel' => 'external', 'target' => '_blank']) ?>
-                </p>
-            </div>
+            <?= $this->render('_footer') ?>
         </footer>
-
         <?php $this->endBody() ?>
     </body>
 </html>

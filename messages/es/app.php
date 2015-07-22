@@ -24,6 +24,7 @@ return [
     'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
+    'Date and Time' => 'Fecha y hora',
     'Description' => 'Descripción',
     'Edit' => '@@Editar@@',
     'Email' => 'Correo eletrónico',
