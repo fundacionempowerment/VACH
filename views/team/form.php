@@ -10,7 +10,7 @@ use kartik\widgets\DepDrop;
 /* @var $model app\models\LoginForm */
 
 $this->title = $team->id == 0 ? Yii::t('team', 'New team') : $team->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
@@ -26,11 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=
     $form->field($team, 'company_id')->widget(Select2::classname(), [
         'data' => $companies,
+        'hideSearch' => true,
     ]);
     ?>
     <?=
     $form->field($team, 'sponsor_id')->widget(Select2::classname(), [
-        'data' => $coachees,
+        'data' => $persons,
+        'hideSearch' => true,
     ]);
     ?>
     <div class="form-group">

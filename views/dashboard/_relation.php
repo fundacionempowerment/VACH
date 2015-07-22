@@ -11,8 +11,13 @@ use yii\helpers\Json;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-$width = 400;
-$height = 300;
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Relations Matrix');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Relations Matrix');
+else
+    $title = Yii::t('dashboard', 'Individual Relations Matrix');
+
 $token = rand(100000, 999999);
 
 $drawing_data = [];
@@ -25,16 +30,24 @@ foreach ($data as $datum) {
     if ($datum['observer_id'] != $memberId && $datum['observed_id'] == $memberId)
         $drawing_data[] = $datum;
 }
+
+$width = 800;
+$height = 400;
+if (count($drawing_data) < 4)
+    $height = 150;
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8" >
-    <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive"></canvas>
-</div>
+<?php if (count($drawing_data) > 0) { ?>
+    <div class="col-xs-12 col-md-push-1 col-md-10" >
+        <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+    </div>
+<?php } ?>
 <div class="col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
             <td>
-                <?= Yii::t('wheel', 'observer \\ observed') ?>
+                <?= Yii::t('wheel', "Observer \\ Observed") ?>
             </td>
             <?php
             foreach ($members as $id => $member)
@@ -58,14 +71,14 @@ foreach ($data as $datum) {
                         if ($observedId > 0) {
                             foreach ($data as $datum) {
                                 if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
-                                    if ($datum['value'] > 2.8)
+                                    if ($datum['value'] > Yii::$app->params['good_consciousness'])
                                         $class = 'success';
-                                    else if ($datum['value'] < 1.6)
+                                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
                                         $class = 'danger';
                                     else
                                         $class = 'warning';
 
-                                    echo Html::tag('td', round($datum['value'] * 100 / 4) . ' %', ['class' => $class]);
+                                    echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . ' %', ['class' => $class]);
                                 }
                             }
                         }
@@ -75,9 +88,11 @@ foreach ($data as $datum) {
     </table>
 </div>
 <div class="clearfix"></div>
-<script>
-    var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;
+<?php if (count($drawing_data) > 0) { ?>
+    <script>
+        var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;
 
-    relations.push("<?= $token ?>");
-    relationsData.push(data<?= $token ?>);
-</script>
+        relations.push("<?= $token ?>");
+        relationsData.push(data<?= $token ?>);
+    </script>
+<?php } ?>

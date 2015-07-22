@@ -7,13 +7,13 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = $coachee->id == 0 ? Yii::t('user', 'New coachee') : $coachee->fullname;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
+$this->title = $person->id == 0 ? Yii::t('user', 'New person') : $person->fullname;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?=
 
 $this->render('_form', [
-    'coachee' => $coachee,
+    'person' => $person,
 ])
 ?>

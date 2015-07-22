@@ -4,17 +4,18 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\Wheel;
 
 /**
  * DashboardForm is the model behind the login form.
  */
 class DashboardFilter extends Model {
 
-    public $companyId;
-    public $teamId;
-    public $assessmentId;
-    public $memberId;
-    public $wheelType = 0;
+    public $companyId = 0;
+    public $teamId = 0;
+    public $assessmentId = 0;
+    public $memberId = 0;
+    public $wheelType = Wheel::TYPE_GROUP;
 
     /**
      * @return array the validation rules.

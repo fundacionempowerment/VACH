@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 
 /* @var $this yii\web\View */
-$this->title = Yii::t('team', 'My Teams');
+$this->title = Yii::t('team', 'Teams');
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,27 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             [
-                'attribute' => 'id',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
-                'format' => 'html',
-                'value' => function ($data) {
-                    return Html::a($data['id'], Url::to(['team/view', 'id' => $data['id'],]));
-                },
-            ],
-                        [
-                'attribute' => 'company.name',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
-                'format' => 'html',
-                'value' => function ($data) {
-                    return Html::a($data->company->name, Url::to(['team/view', 'id' => $data['id'],]));
-                },
-            ],
-            [
                 'attribute' => 'name',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data['name'], Url::to(['team/view', 'id' => $data['id'],]));
+                    return Html::a($data->fullname, Url::to(['team/view', 'id' => $data['id'],]));
                 },
             ],
             ['class' => 'yii\grid\ActionColumn',

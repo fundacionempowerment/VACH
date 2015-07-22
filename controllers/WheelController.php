@@ -20,8 +20,8 @@ class WheelController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        if (Yii::$app->request->get('coachee_id')) {
-            Yii::$app->session->set('coachee_id', Yii::$app->request->get('coachee_id'));
+        if (Yii::$app->request->get('person_id')) {
+            Yii::$app->session->set('person_id', Yii::$app->request->get('person_id'));
             Yii::$app->session->set('wheelid', null);
             Yii::$app->session->set('compareid', -1);
         }
@@ -34,14 +34,14 @@ class WheelController extends Controller {
             Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
         }
 
-        $coachee_id = Yii::$app->session->get('coachee_id');
+        $person_id = Yii::$app->session->get('person_id');
         $wheelid = Yii::$app->session->get('wheelid');
         $compareId = Yii::$app->session->get('compareid');
 
         if ($wheelid > 0) {
             $model = Wheel::find()->where(['id' => $wheelid])->one();
         } else {
-            $model = Wheel::find()->where(['coachee_id' => $coachee_id])->orderBy('id desc')->one();
+            $model = Wheel::find()->where(['person_id' => $person_id])->orderBy('id desc')->one();
         }
 
         if (!isset($model))
@@ -52,7 +52,7 @@ class WheelController extends Controller {
             $compareModel = Wheel::findOne(['id' => $compareId]);
         }
 
-        $wheels = Wheel::browse($model->coachee->id);
+        $wheels = Wheel::browse($model->person->id);
 
         if ($model->id == 0)
             return $this->redirect(['form', 'id' => 0]);
@@ -71,28 +71,28 @@ class WheelController extends Controller {
         $token = Yii::$app->request->get('token');
 
         if (Yii::$app->request->isGet) {
-            if ($token != null) {
-                $wheels = Wheel::findAll(['token' => $token]);
-
-                if (count($wheels) == 0)
-                    $this->redirect(['/site']);
-
-                $current_wheel = null;
-                foreach ($wheels as $wheel)
-                    if ($wheel->AnswerStatus == '0 %') {
-                        $current_dimension = -1;
-                        $current_wheel = $wheel;
-                        break;
-                    } else if ($wheel->AnswerStatus != '100 %') {
-                        $questionCount = count(WheelQuestion::getQuestions($wheel->type));
-                        $setSize = $questionCount / 8;
-                        $current_dimension = intval(count($wheel->answers) / $setSize);
-                        $current_wheel = $wheel;
-                        break;
-                    }
-            } else {
+            if ($token == null)
                 $this->redirect(['/site']);
-            }
+
+            $wheels = Wheel::findAll(['token' => $token]);
+
+            if (count($wheels) == 0)
+                $this->redirect(['/site']);
+
+            $current_wheel = null;
+
+            foreach ($wheels as $wheel)
+                if ($wheel->AnswerStatus == '0 %') {
+                    $current_dimension = -1;
+                    $current_wheel = $wheel;
+                    break;
+                } else if ($wheel->AnswerStatus != '100 %') {
+                    $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+                    $setSize = $questionCount / 8;
+                    $current_dimension = intval(count($wheel->answers) / $setSize);
+                    $current_wheel = $wheel;
+                    break;
+                }
         } else if (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
@@ -152,12 +152,12 @@ class WheelController extends Controller {
                         'wheel' => $current_wheel,
                         'current_dimension' => $current_dimension,
             ]);
-        else
-            return $this->render('form', [
-                        'wheel' => $current_wheel,
-                        'current_dimension' => $current_dimension,
-                        'showMissingAnswers' => $showMissingAnswers,
-            ]);
+
+        return $this->render('form', [
+                    'wheel' => $current_wheel,
+                    'current_dimension' => $current_dimension,
+                    'showMissingAnswers' => $showMissingAnswers,
+        ]);
     }
 
     public function actionDelete($id) {
@@ -168,7 +168,7 @@ class WheelController extends Controller {
             \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
                     . $wheel->getErrors());
         }
-        return $this->redirect(['/coachee/view', 'id' => $wheel->coachee->id]);
+        return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
     }
 
     public function actionAnswers($id) {
@@ -184,16 +184,16 @@ class WheelController extends Controller {
     }
 
     public function actionQuestions() {
+        $questions = WheelQuestion::find()->orderBy('type, dimension, order')->all();
+
         if (Yii::$app->request->isPost) {
+            foreach ($questions as $question) {
+                $new_question_text = Yii::$app->request->post('question' . $question->id);
+                $new_answer_type = Yii::$app->request->post('answer' . $question->id);
 
-            $update_questions = WheelQuestion::find()->all();
-            foreach ($update_questions as $update_question) {
-                $new_question_text = Yii::$app->request->post('question' . ($update_question->order - 1));
-                $new_answer_type = Yii::$app->request->post('answer' . ($update_question->order - 1));
-
-                $update_question->question = $new_question_text;
-                $update_question->answer_type = $new_answer_type;
-                $update_question->save();
+                $question->question = $new_question_text;
+                $question->answer_type = $new_answer_type;
+                $question->save();
             }
 
             \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
@@ -202,6 +202,7 @@ class WheelController extends Controller {
         }
 
         return $this->render('questions', [
+                    'questions' => $questions
         ]);
     }
 
@@ -216,7 +217,7 @@ class WheelController extends Controller {
                 ->setSubject(Yii::t('assessment', 'CPC: {wheel} answers', [
                             'wheel' => $type_text
                 ]))
-                ->setFrom(Yii::$app->user->identity->email)
+                ->setFrom($wheel->coach->email)
                 ->setTo($wheel->observer->email)
                 ->send();
 
@@ -227,8 +228,8 @@ class WheelController extends Controller {
                 ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
                             'wheel' => $type_text, 'person' => $wheel->observer->fullname
                 ]))
-                ->setFrom(Yii::$app->user->identity->email)
-                ->setTo(Yii::$app->user->identity->email)
+                ->setFrom($wheel->observer->email)
+                ->setTo($wheel->coach->email)
                 ->send();
     }
 

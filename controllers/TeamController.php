@@ -15,7 +15,7 @@ use app\models\ClientModel;
 use app\models\Team;
 use app\models\TeamMember;
 use app\models\Company;
-use app\models\Coachee;
+use app\models\Person;
 use app\models\Assessment;
 
 class TeamController extends Controller {
@@ -23,7 +23,7 @@ class TeamController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $teams = Team::find();
+        $teams = Team::browse();
 
         return $this->render('index', [
                     'teams' => $teams,
@@ -49,7 +49,7 @@ class TeamController extends Controller {
 
         return $this->render('view', [
                     'team' => $team,
-                    'coachees' => $this->getCoachees(),
+                    'persons' => $this->getPersons(),
         ]);
     }
 
@@ -61,7 +61,7 @@ class TeamController extends Controller {
         return $this->render('form', [
                     'team' => $team,
                     'companies' => $this->getCompanies(),
-                    'coachees' => $this->getCoachees(),
+                    'persons' => $this->getPersons(),
         ]);
     }
 
@@ -74,7 +74,7 @@ class TeamController extends Controller {
         return $this->render('form', [
                     'team' => $team,
                     'companies' => $this->getCompanies(),
-                    'coachees' => $this->getCoachees(),
+                    'persons' => $this->getPersons(),
         ]);
     }
 
@@ -100,7 +100,7 @@ class TeamController extends Controller {
     public function actionNewMember($id) {
         $team = Team::findOne($id);
 
-        $member = new Coachee();
+        $member = new Person();
 
         if ($member->load(Yii::$app->request->post()) && $member->save()) {
             $teamMember = new TeamMember();
@@ -176,11 +176,11 @@ class TeamController extends Controller {
         return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
-    private function getCoachees() {
-
-        foreach (Coachee::browse()->all() as $coachee)
-            $coachees[$coachee->id] = $coachee->fullname;
-        return $coachees;
+    private function getPersons() {
+        $persons = [];
+        foreach (Person::browse()->all() as $person)
+            $persons[$person->id] = $person->fullname;
+        return $persons;
     }
 
 }

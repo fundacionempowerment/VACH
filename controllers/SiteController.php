@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterModel;
-use app\models\User;
+use app\models\Wheel;
 
 class SiteController extends Controller {
 
@@ -52,9 +52,26 @@ class SiteController extends Controller {
         }
 
         $model = new LoginForm();
+        $wheel = new Wheel();
         return $this->render('index', [
                     'model' => $model,
+                    'wheel' => $wheel,
         ]);
+    }
+
+    public function actionToken() {
+        if (!Yii::$app->request->isPost)
+            return $this->goHome();
+
+        $wheel = Yii::$app->request->post('Wheel');
+        if (!isset($wheel))
+            return $this->goHome();
+
+        $token = $wheel['token'];
+        if (!isset($token))
+            return $this->goHome();
+
+        return $this->redirect(['wheel/run', 'token' => $token]);
     }
 
     public function actionLogin() {
@@ -66,8 +83,10 @@ class SiteController extends Controller {
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->redirectIfCoach();
         } else {
+            $wheel = new Wheel();
             return $this->render('index', [
                         'model' => $model,
+                        'wheel' => $wheel,
             ]);
         }
     }
@@ -79,7 +98,7 @@ class SiteController extends Controller {
         if ($isCoach)
             return $this->redirect(['/team']);
         else {
-            Yii::$app->session->set('coachee_id', Yii::$app->user->id);
+            Yii::$app->session->set('person_id', Yii::$app->user->id);
             return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
         }
     }
@@ -112,8 +131,8 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function actionCoachee() {
-        return $this->render('coacheeIntro', [
+    public function actionPerson() {
+        return $this->render('personIntro', [
         ]);
     }
 

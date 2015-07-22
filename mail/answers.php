@@ -33,10 +33,16 @@ foreach ($wheel->answers as $answer) {
     ?>
     <p>
         <label class="control-label" for="loginmodel-email"><?= $questions[$answer['answer_order']]['question'] ?></label>
-        <?=
-        Html::radioList(
-                'answer' . $answer['answer_order'], $answer['answer_value'], WheelAnswer::getAnswerLabels($questions[$answer['answer_order']]['answer_type']), ['itemOptions' => ['labelOptions' => ['style' => 'font-weight: unset;']]]
-        )
+        <?php
+        $answers_texts = WheelAnswer::getAnswerLabels($questions[$answer['answer_order']]['answer_type']);
+        $answers_to_show = [];
+        foreach ($answers_texts as $answer_value => $answer_text) {
+            $answer_to_show = $answer_value == $answer['answer_value'] ? '<b>' : '';
+            $answer_to_show .= $answer_text;
+            $answer_to_show .= $answer_value == $answer['answer_value'] ? '</b>' : '';
+            $answers_to_show[] = $answer_to_show;
+        }
+        echo implode(', ', $answers_to_show);
         ?>
     </p>
 <?php } ?>

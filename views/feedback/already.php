@@ -12,12 +12,10 @@ use app\models\WheelAnswer;
 $this->title = Yii::t('app', 'Thanks!');
 ?>
 <div class="site-wheel">
+    <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
     <h2>
-        <?= Yii::t('wheel', 'You\'ve successfully answered all questions!') ?>
+        <?= Yii::t('feedback', 'You have already given us a feedback. We are waiting to hear a new feedback next month. Thank you!') ?>
     </h2>
-    <h1>
-        <?= Html::encode($this->title) ?>
-    </h1>
     <p>
         <?= Html::a(Yii::t('app', 'Home'), ['/site'], ['class' => 'btn btn-default']) ?>
     </p>

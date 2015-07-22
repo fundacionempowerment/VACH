@@ -48,6 +48,9 @@ $config = [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'rules' => [
+                '<a:\d+>-<b:\d+>-<c:\d+>' => 'run',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

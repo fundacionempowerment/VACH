@@ -6,14 +6,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Assessment;
-use app\models\AssessmentAnswer;
-use app\models\AssessmentQuestion;
+use app\models\DashboardFilter;
 use app\models\Wheel;
 
 class AssessmentController extends Controller {
@@ -56,7 +50,7 @@ class AssessmentController extends Controller {
             $newWheel->assessment_id = $assessment->id;
 
             if ($newWheel->save())
-                $this->sendWheel($teamMember->member, $newWheel->token, Wheel::TYPE_INDIVIDUAL);
+                $this->sendWheel($newWheel);
         }
 
         $assessment->individual_status = Assessment::STATUS_SENT;
@@ -83,7 +77,7 @@ class AssessmentController extends Controller {
                 $newWheel->save();
             }
 
-            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_GROUP);
+            $this->sendWheel($newWheel);
         }
 
         $assessment->group_status = Assessment::STATUS_SENT;
@@ -110,30 +104,44 @@ class AssessmentController extends Controller {
                 $newWheel->save();
             }
 
-            $this->sendWheel($observerMember->member, $token, Wheel::TYPE_ORGANIZATIONAL);
+            $this->sendWheel($newWheel);
         }
 
         $assessment->organizational_status = Assessment::STATUS_SENT;
         $assessment->save();
 
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+    }
+
+    public function actionDetailView($id, $type) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        return $this->render('detail_view', [
+                    'assessment' => $assessment,
+                    'type' => $type,
+        ]);
+    }
+
+    public function actionToggleAutofill($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        $assessment->autofill_answers = !$assessment->autofill_answers;
+        $assessment->save();
 
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
-    public function actionViewGroup($id) {
+    public function actionGoToDashboard($id) {
         $assessment = Assessment::findOne(['id' => $id]);
+        $filter = new DashboardFilter();
 
-        return $this->render('view_group', [
-                    'assessment' => $assessment,
-        ]);
-    }
+        $filter->companyId = $assessment->team->company_id;
+        $filter->teamId = $assessment->team->id;
+        $filter->assessmentId = $id;
+        $filter->wheelType = Wheel::TYPE_GROUP;
 
-    public function actionViewOrganizational($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        return $this->render('view_organizational', [
-                    'assessment' => $assessment,
-        ]);
+        Yii::$app->session->set('DashboardFilter', $filter);
+        $this->redirect(['/dashboard']);
     }
 
     private static function newToken() {
@@ -150,15 +158,17 @@ class AssessmentController extends Controller {
         return $newToken;
     }
 
-    private function sendWheel($member, $token, $type) {
-        $type_text = Wheel::getWheelTypes()[$type];
+    private function sendWheel($wheel) {
+        $type_text = Wheel::getWheelTypes()[$wheel->type];
         Yii::$app->mailer->compose('wheel', [
-                    'token' => $token,
-                    'type' => $type
+                    'wheel' => $wheel,
                 ])
-                ->setSubject(Yii::t('assessment', 'CPC: {wheel} link', ['wheel' => $type_text]))
-                ->setFrom(Yii::$app->user->identity->email)
-                ->setTo($member->email)
+                ->setSubject(Yii::t('assessment', 'CPC: access to {wheel} of assessment {assessment}', [
+                            'wheel' => $type_text,
+                            'assessment' => $wheel->assessment->name,
+                ]))
+                ->setFrom($wheel->coach->email)
+                ->setTo($wheel->observer->email)
                 ->send();
     }
 

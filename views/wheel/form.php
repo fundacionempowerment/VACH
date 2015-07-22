@@ -15,7 +15,7 @@ $questions = WheelQuestion::getQuestions($wheel->type);
 $setQuantity = count($questions) / 8;
 
 for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)
-    if (YII_DEBUG)
+    if ($wheel->assessment->autofill_answers)
         $answers[$i] = rand(0, 4);
     else
         $answers[$i] = null;
@@ -41,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12">
         <h3><?= $dimensions[$current_dimension] ?></h3>
         <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
-        <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
-        <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
+        <?= Html::hiddenInput('id', $wheel->id) ?>
+        <?= Html::hiddenInput('current_dimension', $current_dimension) ?>
         <?php
         for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++) {
             ?>
@@ -54,13 +54,17 @@ $this->params['breadcrumbs'][] = $this->title;
             )
             ?><br/>
         <?php } ?>
-
-
         <?php
         if ($current_dimension < 7)
             echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-primary']);
         else
-            echo Html::submitButton(Yii::t('wheel', 'Save and finish'), ['class' => 'btn btn-success']);
+            echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']);
+        echo "<br/><br/>";
+        if (isset(Yii::$app->user))
+            if (isset(Yii::$app->user->identity))
+                if (Yii::$app->user->identity->is_coach) {
+                    echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+                }
         ?>
         <?php ActiveForm::end(); ?>
         <br />

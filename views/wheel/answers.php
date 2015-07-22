@@ -13,15 +13,15 @@ foreach ($wheel->answers as $answer)
     $answers[$answer->answer_order] = $answer->answer_value;
 
 $this->title = $wheel->id == 0 ? Yii::t('wheel', 'New wheel') : Yii::t('user', 'Answers');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
-$this->params['breadcrumbs'][] = ['label' => $wheel->coachee->fullname, 'url' => ['/coachee/view', 'id' => $wheel->coachee->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => $wheel->person->fullname, 'url' => ['/person/view', 'id' => $wheel->person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-wheel">
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br />
-    <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($wheel->coachee->fullname) ?><br />
+    <?= Yii::t('user', 'Person') ?>: <?= Html::label($wheel->person->fullname) ?><br />
     <?= Yii::t('wheel', 'Date') ?>: <?= Html::label($wheel->date) ?><br />
     <div class="row">
         <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>

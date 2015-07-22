@@ -6,15 +6,16 @@ use yii\db\Migration;
 class m150613_021630_add_assessment_wheel_fields extends Migration {
 
     public function up() {
-        $this->addColumn('{{%assessment}}', 'individual_status', Schema::TYPE_INTEGER. ' NOT NULL');
-        $this->addColumn('{{%assessment}}', 'group_status', Schema::TYPE_INTEGER. ' NOT NULL');
-        $this->addColumn('{{%assessment}}', 'organizational_status', Schema::TYPE_INTEGER. ' NOT NULL');
-
-        $this->addColumn('{{%wheel}}', 'assessment_id', Schema::TYPE_INTEGER. ' NOT NULL');
-        $this->addColumn('{{%wheel}}', 'type', Schema::TYPE_INTEGER. ' NOT NULL');
-        $this->addColumn('{{%wheel}}', 'token', Schema::TYPE_STRING. ' NOT NULL');
-
+        $this->addColumn('{{%wheel}}', 'assessment_id', Schema::TYPE_INTEGER . ' NOT NULL');
+        $this->execute('update {{%wheel}} set assessment_id = (select id from {{%assessment}} limit 1) where assessment_id = 0');
         $this->addForeignKey('fk_wheel_assessment', '{{%wheel}}', 'assessment_id', '{{%assessment}}', 'id');
+
+        $this->addColumn('{{%wheel}}', 'type', Schema::TYPE_INTEGER . ' NOT NULL');
+        $this->addColumn('{{%wheel}}', 'token', Schema::TYPE_STRING . ' NOT NULL');
+
+        $this->addColumn('{{%assessment}}', 'individual_status', Schema::TYPE_INTEGER . ' NOT NULL');
+        $this->addColumn('{{%assessment}}', 'group_status', Schema::TYPE_INTEGER . ' NOT NULL');
+        $this->addColumn('{{%assessment}}', 'organizational_status', Schema::TYPE_INTEGER . ' NOT NULL');
 
         $this->dropForeignKey('fk_wheel_user', '{{%wheel}}');
         $this->renameColumn('{{%wheel}}', 'coachee_id', 'observer_id');

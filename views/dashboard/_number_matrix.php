@@ -6,22 +6,18 @@ use app\models\Wheel;
 use app\models\WheelQuestion;
 use yii\bootstrap\Progress;
 use yii\helpers\Json;
+use app\controllers\Utils;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-// Function to calculate square of value - mean
-function sd_square($x, $mean) {
-    return pow($x - $mean, 2);
-}
-
-// Function to calculate standard deviation (uses sd_square)
-function sd($array) {
-
-// square root of sum of squares devided by N-1
-    return sqrt(array_sum(array_map("sd_square", $array, array_fill(0, count($array), (array_sum($array) / count($array))))) / (count($array) - 1));
-}
+if ($type == Wheel::TYPE_GROUP)
+    $title = Yii::t('dashboard', 'Group Conciousness and Responsability Matrix');
+else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+    $title = Yii::t('dashboard', 'Organizational Conciousness and Responsability Matrix');
+else
+    $title = Yii::t('dashboard', 'Individual conciousness and Responsability Matrix');
 
 $howISeeMe = [];
 foreach ($members as $id => $member)
@@ -58,10 +54,10 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
     $sum += $howTheySeeMe[$i] - $howISeeMe[$i];
     $gaps [] = $howTheySeeMe[$i] - $howISeeMe[$i];
 }
-$allConsciousness = $sum / (count($members) - 1);
 
-$standar_deviation = sd($gaps);
+$standar_deviation = Utils::standard_deviation($gaps);
 ?>
+<div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <div class="col-md-12">
     <table class="table table-bordered table-hover">

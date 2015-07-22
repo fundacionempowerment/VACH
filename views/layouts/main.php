@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\widgets\Alert;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -20,28 +21,16 @@ AppAsset::register($this);
         <?php $this->head() ?>
     </head>
     <body>
-
         <?php $this->beginBody() ?>
         <div class="wrap">
             <div class="container">
+                <?= Alert::widget() ?>
                 <?= $content ?>
             </div>
         </div>
 
         <footer class="footer">
-            <div class="container">
-                <p class="pull-left">
-                    <?= Html::a('Fundación Empowerment', 'http://www.fundacionempowerment.org/') ?>
-                    &nbsp;
-                    <?= Html::a('Español', ['site/es']) ?>
-                    &nbsp;
-                    <?= Html::a('English', ['site/en']) ?>
-                </p>
-                <p class="pull-right">
-                    <?= Yii::t('app', 'Powered by') ?>
-                    <?= Html::a('Yii Framework', 'http://www.yiiframework.com/', ['rel' => 'external', 'target' => '_blank']) ?>
-                </p>
-            </div>
+            <?= $this->render('_footer') ?>            
         </footer>
 
         <?php $this->endBody() ?>

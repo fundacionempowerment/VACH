@@ -41,7 +41,7 @@ class Assessment extends ActiveRecord {
     }
 
     public function afterFind() {
-        $this->name = $this->id . ' - ' . $this->team->company->name . ' ' . $this->team->name . ' ';
+        $this->name = '#' . $this->id . ' - ' . $this->team->fullname . ' ';
     }
 
     public function getTeam() {

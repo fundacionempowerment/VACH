@@ -9,8 +9,8 @@ use sibilino\y2dygraphs\DygraphsWidget;
 /* @var $model app\models\ContactForm */
 
 $this->title = Yii::t('wheel', 'Wheel');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
-$this->params['breadcrumbs'][] = ['label' => $model->coachee->fullname, 'url' => ['/coachee/view', 'id' => $model->coachee->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => $model->person->fullname, 'url' => ['/person/view', 'id' => $model->person->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -21,14 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-4">
         <p>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($model->coach->fullname) ?><br />
-            <?= Yii::t('user', 'Coachee') ?>: <?= Html::label($model->coachee->fullname) ?><br />
+            <?= Yii::t('user', 'Person') ?>: <?= Html::label($model->person->fullname) ?><br />
             <?= Yii::t('wheel', 'Date') ?>: <?= Html::label($model->date) ?><br />
         </p>
         <p>
             <?=
             count($model->answers) == 80 ?
                     Html::a(Yii::t('wheel', 'View answers'), Url::to(['wheel/answers', 'id' => $model->id]), ['class' => 'btn btn-primary']) :
-                    Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'coachee_id' => $model->coachee->id, 'id' => $model->id]), ['class' => 'btn btn-success'])
+                    Html::a(Yii::t('wheel', 'continue...'), Url::to(['wheel/run', 'person_id' => $model->person->id, 'id' => $model->id]), ['class' => 'btn btn-success'])
             ?>
         </p>
         <p>
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <p>
             <br /><br />
-            <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'coachee_id' => $model->coachee->id]), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t('wheel', 'New wheel'), Url::to(['wheel/run', 'person_id' => $model->person->id]), ['class' => 'btn btn-success']) ?>
         </p>    </div>
 
     <div class="col-md-4" >

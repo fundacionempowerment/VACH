@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * LoginForm is the model behind the login form.
  */
-class Coachee extends ActiveRecord {
+class Person extends ActiveRecord {
 
     public $fullname;
 
@@ -71,7 +71,7 @@ class Coachee extends ActiveRecord {
     }
 
     public static function browse() {
-        return Coachee::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => false]);
+        return Person::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => false]);
     }
 
     public function getCoach() {
@@ -79,11 +79,8 @@ class Coachee extends ActiveRecord {
     }
 
     public function getWheels() {
-        return $this->hasMany(Wheel::className(), ['coachee_id' => 'id']);
-    }
-
-    public function getGoals() {
-        return $this->hasMany(Goal::className(), ['coachee_id' => 'id']);
+        return $this->hasMany(Wheel::className(), ['observed_id' => 'id'])
+                        ->where(['type' => '0']);
     }
 
 }

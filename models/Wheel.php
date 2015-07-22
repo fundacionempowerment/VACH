@@ -18,7 +18,6 @@ class Wheel extends ActiveRecord {
     const TYPE_ORGANIZATIONAL = 2;
 
     public $dimensionAnswers = [0, 0, 0, 0, 0, 0, 0, 0];
-    private $_answers_status = null;
 
     public function __construct() {
         $this->date = date("Y-m-d");
@@ -36,6 +35,7 @@ class Wheel extends ActiveRecord {
     public function attributeLabels() {
         return [
             'date' => Yii::t('app', 'Date'),
+            'token' => Yii::t('wheel', 'Wheel token'),
         ];
     }
 
@@ -52,19 +52,23 @@ class Wheel extends ActiveRecord {
         $count = WheelAnswer::findByCondition(['wheel_id' => $this->id])
                 ->count();
         $questionCount = count(WheelQuestion::getQuestions($this->type));
-        return ($count * 100 / $questionCount) . ' %';
+        return round($count * 100 / $questionCount, 1) . ' %';
     }
 
     public function getObserver() {
-        return $this->hasOne(Coachee::className(), ['id' => 'observer_id']);
+        return $this->hasOne(Person::className(), ['id' => 'observer_id']);
     }
 
     public function getObserved() {
-        return $this->hasOne(Coachee::className(), ['id' => 'observed_id']);
+        return $this->hasOne(Person::className(), ['id' => 'observed_id']);
     }
 
     public function getCoach() {
         return User::findOne(['id' => $this->observer->coach_id]);
+    }
+
+    public function getAssessment() {
+        return Assessment::findOne(['id' => $this->assessment_id]);
     }
 
     public function getAnswers() {
@@ -115,10 +119,10 @@ class Wheel extends ActiveRecord {
         return true;
     }
 
-    public static function browse($coacheeId) {
+    public static function browse($personId) {
         return (new Query())->select('id, date')
                         ->from('wheel')
-                        ->where(['coachee_id' => $coacheeId])
+                        ->where(['person_id' => $personId])
                         ->orderBy('id desc')
                         ->all();
     }
@@ -179,14 +183,6 @@ class Wheel extends ActiveRecord {
         return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
-    public static function getGroupPerformanceMatrix($assessmentId) {
-        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getOrganizationalPerformanceMatrix($assessmentId) {
-        return self::getPerformanceMatrix($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
     public static function getPerformanceMatrix($assessmentId, $type) {
         $reflectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
@@ -210,6 +206,7 @@ class Wheel extends ActiveRecord {
             foreach ($projectedValues as $projectedValue)
                 if ($reflectedValue['observed_id'] == $projectedValue['observed_id']) {
                     $result[] = [
+                        'id' => $reflectedValue['observed_id'],
                         'name' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
                         'productivity' => $reflectedValue['value'] / 4 * 100,
                         'consciousness' => ($projectedValue['value'] - $reflectedValue['value']) / 4 * 100
@@ -219,15 +216,7 @@ class Wheel extends ActiveRecord {
         return $result;
     }
 
-    public static function getGroupWheel($assessmentId) {
-        return self::getTotalWheel($assessmentId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getOrganizationalWheel($assessmentId) {
-        return self::getTotalWheel($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
-    public static function getTotalWheel($assessmentId, $type) {
+    public static function getGauges($assessmentId, $type) {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -235,21 +224,13 @@ class Wheel extends ActiveRecord {
                 ->where("assessment.id = $assessmentId and wheel.type = " . $type)
                 ->groupBy('wheel_answer.dimension')
                 ->all();
-
+        $answers = [];
         foreach ($rawAnswers as $rawAnswer)
             $answers[] = $rawAnswer['value'];
         return $answers;
     }
 
-    public static function getMemberGroupWheel($assessmentId, $memberId) {
-        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
-    }
-
-    public static function getMemberOrganizationalWheel($assessmentId, $memberId) {
-        return self::getMemberTotalWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
-    }
-
-    public static function getMemberTotalWheel($assessmentId, $memberId, $type) {
+    public static function getMemberGauges($assessmentId, $memberId, $type) {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -264,6 +245,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getEmergents($assessmentId, $type) {
+                $good = Yii::$app->params['good_consciousness'];
+        $minimal = Yii::$app->params['minimal_consciousness'];
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -271,7 +254,7 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->where("assessment.id = $assessmentId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
-                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->having("avg(wheel_answer.answer_value) > $good or avg(wheel_answer.answer_value) < $minimal")
                 ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 
@@ -279,6 +262,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getMemberEmergents($assessmentId, $memberId, $type) {
+        $good = Yii::$app->params['good_consciousness'];
+        $minimal = Yii::$app->params['minimal_consciousness'];
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -286,7 +271,7 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
-                ->having('avg(wheel_answer.answer_value) > 3.5 or avg(wheel_answer.answer_value) < 2')
+                ->having("avg(wheel_answer.answer_value) > $good or avg(wheel_answer.answer_value) < $minimal")
                 ->orderBy('wheel_question.dimension, avg(wheel_answer.answer_value) desc')
                 ->all();
 

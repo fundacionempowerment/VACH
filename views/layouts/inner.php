@@ -18,13 +18,14 @@ $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
     $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
+    $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 if ($isCoach) {
     $items[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
-    $items[] = ['label' => Yii::t('company', 'My Companies'), 'url' => ['/company']];
-    $items[] = ['label' => Yii::t('user', 'My Coachees'), 'url' => ['/coachee']];
-    $items[] = ['label' => Yii::t('team', 'My Teams'), 'url' => ['/team']];
+    $items[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
+    $items[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
+    $items[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 }
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];
 $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
@@ -43,7 +44,6 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
         <?php $this->head() ?>
     </head>
     <body>
-
         <?php $this->beginBody() ?>
         <div class="wrap">
             <?php
@@ -72,23 +72,9 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
                 <?= $content ?>
             </div>
         </div>
-
         <footer class="footer">
-            <div class="container">
-                <p class="pull-left">
-                    <?= Html::a('Fundación Empowerment', 'http://www.fundacionempowerment.org/') ?>
-                    &nbsp;
-                    <?= Html::a('Español', ['site/es']) ?>
-                    &nbsp;
-                    <?= Html::a('English', ['site/en']) ?>
-                </p>
-                <p class="pull-right">
-                    <?= Yii::t('app', 'Powered by') ?>
-                    <?= Html::a('Yii Framework', 'http://www.yiiframework.com/', ['rel' => 'external', 'target' => '_blank']) ?>
-                </p>
-            </div>
+            <?= $this->render('_footer') ?>
         </footer>
-
         <?php $this->endBody() ?>
     </body>
 </html>

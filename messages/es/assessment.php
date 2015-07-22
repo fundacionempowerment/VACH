@@ -17,14 +17,17 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Assessment' => 'Relavamiento',
+    'Assessment' => 'Relevamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
+    'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
-    'CPC: {wheel} link' => 'CPC: acceso a {wheel}',
+    'Go to dashboard...' => 'Ir al tablero...',
+    'Group wheel detailed status' => 'Estado detallado de rueda grupales',
     'Group wheels' => 'Ruedas grupales',
     'Group wheels sent' => 'Ruedas grupales enviadas',
     'Individual wheels' => 'Ruedas individuales',
     'Individual wheels sent' => 'Ruedas individuales enviadas',
+    'Organizational wheel detailed status' => 'Estado detallado de rueda organizacionales',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Organizational wheels sent' => 'Ruedas organizacionales enviadas',
     'Send group wheels' => 'Enviar ruedas grupales',

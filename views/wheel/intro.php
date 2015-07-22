@@ -24,11 +24,16 @@ if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
         <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
         <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
     </h2>
-    <div class="row">
-        <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
-        <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
-        <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
-        <?= Html::submitButton(Yii::t('app', 'Begin'), ['class' => 'btn btn-primary']); ?>
-        <?php ActiveForm::end(); ?>
-    </div>
+    <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
+    <input type="hidden" name="id" value="<?= $wheel->id ?>"/>
+    <input type="hidden" name="current_dimension" value="<?= $current_dimension ?>"/>
+    <?= Html::submitButton(Yii::t('app', 'Begin'), ['class' => 'btn btn-primary']); ?>
+    <br/><br/>
+    <?php
+    if (isset(Yii::$app->user))
+        if (isset(Yii::$app->user->identity))
+            if (Yii::$app->user->identity->is_coach) {
+                echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+            }
+    ?>
 </div>
