@@ -17,7 +17,7 @@ use app\models\Feedback;
 class FeedbackController extends Controller {
 
     public function actionIndex() {
-        $previous_feedback = Feedback::find()->where("ip = '" . Yii::$app->request->userIP . "' and datetime >= '" . date('Y-m-d', strtotime("-30 days")) . '\'')->all();
+        $previous_feedback = Feedback::getPrevious();
         if (count($previous_feedback) > 0)
             return $this->render('already');
 
@@ -28,6 +28,9 @@ class FeedbackController extends Controller {
             $feedback->efficience = Yii::$app->request->post('efficience');
             $feedback->satisfaction = Yii::$app->request->post('satisfaction');
             $feedback->comment = Yii::$app->request->post('comment');
+
+            if (!Yii::$app->user->isGuest)
+                $feedback->user_id = Yii::$app->user->identity->id;
 
             if ($feedback->save()) {
                 return $this->render('thanks');
