@@ -58,22 +58,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
         ?>
-        <?php $form = ActiveForm::begin([ 'id' => 'addmember-form', 'options' => [ 'class' => 'form-inline']]);
-        ?>
-        <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
-        <?=
-        Select2::widget([
-            'name' => 'new_member',
-            'data' => $persons,
-            'hideSearch' => true,
-            'options' => [
-                'placeholder' => Yii::t('team', 'Select new member ...'),
-            ],
-        ])
-        ?>
-
-        <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
-        <?php ActiveForm::end(); ?>
+        <?php if (count($team->assessments) == 0) { ?>
+            <?php $form = ActiveForm::begin([ 'id' => 'addmember-form', 'options' => [ 'class' => 'form-inline']]);
+            ?>
+            <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
+            <?=
+            Select2::widget([
+                'name' => 'new_member',
+                'data' => $persons,
+                'hideSearch' => true,
+                'options' => [
+                    'placeholder' => Yii::t('team', 'Select new member ...'),
+                ],
+            ])
+            ?>
+            <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+            <?php ActiveForm::end(); ?>
+        <?php } ?>
     </div>
     <div class="row col-md-4">
         <h3><?= Yii::t('team', 'Assessments') ?></h3>
@@ -95,18 +96,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a($data->name, Url::to(['assessment/view', 'id' => $data['id']]));
                     },
                 ],
-                ['class' => 'yii\grid\ActionColumn',
-                    'template' => '{delete}',
-                    'options' => ['width' => '60px'],
-                    'urlCreator' => function( $action, $model, $key, $index ) {
-                        switch ($action) {
-                            case 'delete' : return Url::to(['team/delete-assessment', 'id' => $model['id']]);
-                        };
-                    }
-                ]
             ],
         ]);
         ?>
-        <?= Html::a(Yii::t('team', 'New assessment'), Url::to(['team/new-assessment', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-primary']) ?>
     </div>
 </div>

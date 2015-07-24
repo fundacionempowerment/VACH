@@ -14,7 +14,11 @@ class Assessment extends ActiveRecord {
     const STATUS_SENT = 1;
     const STATUS_FINISHED = 2;
 
-    public $name;
+    public $fullname;
+
+    public function __construct() {
+        $this->name = date("Y-m");
+    }
 
     /**
      * @return array the validation rules.
@@ -27,6 +31,7 @@ class Assessment extends ActiveRecord {
 
     public function attributeLabels() {
         return [
+            'name' => Yii::t('app', 'Name'),
             'team_id' => Yii::t('team', 'Team'),
         ];
     }
@@ -41,7 +46,8 @@ class Assessment extends ActiveRecord {
     }
 
     public function afterFind() {
-        $this->name = '#' . $this->id . ' - ' . $this->team->fullname . ' ';
+        $this->fullname = $this->team->company->name . ' ' . $this->team->name . ' ' . $this->name;
+        parent::afterFind();
     }
 
     public function getTeam() {

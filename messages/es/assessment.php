@@ -30,5 +30,5 @@ return [
     'Wheel sent to {user}' => 'Rueda enviada a {user}',
     'and click over "Run" button' => 'y presione el botón "Ejecutar"',
     'and enter this token in "Wheel Token" field' => 'e ingrese este indentificador en el campo "Identificador de rueda"',
-    'to enter this site in his/her phone browser' => 'que ingrese este sitio en el navegador de se celular',
+    'to enter this site in his/her phone browser' => 'que ingrese este sitio en el navegador de su celular',
 ];

@@ -18,7 +18,7 @@ $individualQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_INDIVID
 $groupQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_GROUP));
 $organizationalQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_ORGANIZATIONAL));
 
-$this->title = $assessment->name;
+$this->title = $assessment->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
@@ -30,7 +30,10 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row col-md-6">
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?>
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?><br />
+        <?= Yii::t('team', 'Company') ?>: <?= Html::label($assessment->team->company->name) ?><br />
+        <?= Yii::t('team', 'Team') ?>: <?= Html::label($assessment->team->name) ?><br />
+        <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?>
     </div>
     <div class="clearfix"></div>
     <div class="row col-md-5">

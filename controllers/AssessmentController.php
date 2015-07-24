@@ -26,6 +26,56 @@ class AssessmentController extends Controller {
         ]);
     }
 
+    public function actionNew($teamId) {
+        $assessment = new Assessment();
+        $assessment->team_id = $teamId;
+
+        if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
+            foreach ($assessment->team->members as $observerMember) {
+                $token = $this->newToken();
+                $newWheel = new Wheel();
+
+                $newWheel->observer_id = $observerMember->member->id;
+                $newWheel->observed_id = $observerMember->member->id;
+                $newWheel->type = Wheel::TYPE_INDIVIDUAL;
+                $newWheel->token = $token;
+                $newWheel->assessment_id = $assessment->id;
+
+                $newWheel->save();
+
+                foreach ($assessment->team->members as $observedMember) {
+                    $newWheel = new Wheel();
+                    $token = $this->newToken();
+                    $newWheel->observer_id = $observerMember->member->id;
+                    $newWheel->observed_id = $observedMember->member->id;
+                    $newWheel->type = Wheel::TYPE_GROUP;
+                    $newWheel->token = $token;
+                    $newWheel->assessment_id = $assessment->id;
+
+                    $newWheel->save();
+
+                    $newWheel = new Wheel();
+                    $token = $this->newToken();
+                    $newWheel->observer_id = $observerMember->member->id;
+                    $newWheel->observed_id = $observedMember->member->id;
+                    $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
+                    $newWheel->token = $token;
+                    $newWheel->assessment_id = $assessment->id;
+
+                    $newWheel->save();
+                }
+            }
+            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully created.'));
+            return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+        } else {
+            SiteController::FlashErrors($assessment);
+        }
+
+        return $this->render('form', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
     public function actionDelete($id) {
         $assessment = Assessment::findOne(['id' => $id]);
         $teamId = $assessment->team->id;
