@@ -23,7 +23,12 @@ return [
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'Go to dashboard...' => 'Ir al tablero...',
     'Group wheels' => 'Ruedas grupales',
+    'In order to run this wheel via smartphone, please ask' => 'Para poder ejecutar esta rueda en un teléfono celular, por favor pida a',
     'Individual wheels' => 'Ruedas individuales',
     'Organizational wheels' => 'Ruedas organizacionales',
+    'Run on smartphone' => 'Ejecutar en teléfono celular',
     'Wheel sent to {user}' => 'Rueda enviada a {user}',
+    'and click over "Run" button' => 'y presione el botón "Ejecutar"',
+    'and enter this token in "Wheel Token" field' => 'e ingrese este indentificador en el campo "Identificador de rueda"',
+    'to enter this site in his/her phone browser' => 'que ingrese este sitio en el navegador de se celular',
 ];

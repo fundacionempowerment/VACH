@@ -8,6 +8,7 @@ use yii\grid\GridView;
 use app\models\Assessment;
 use app\models\Wheel;
 use app\models\WheelQuestion;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -39,6 +40,17 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
                         <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?php
+                        foreach ($assessment->individualWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                ?>
+                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                    <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                                </button>
+                                <?php
+                                break;
+                            }
+                        ?>
                     </th>
                     <td>
                         <?php
@@ -70,7 +82,18 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>  
+                        <?php
+                        foreach ($assessment->groupWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                ?>
+                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                    <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                                </button>
+                                <?php
+                                break;
+                            }
+                        ?>
                     </th>
                     <?php foreach ($assessment->team->members as $observedMember) { ?>
                         <td>
@@ -105,6 +128,17 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
                         <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?php
+                        foreach ($assessment->organizationalWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                ?>
+                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                    <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                                </button>
+                                <?php
+                                break;
+                            }
+                        ?>
                     </th>
                     <?php foreach ($assessment->team->members as $observedMember) { ?>
                         <td>
@@ -126,4 +160,24 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
         ])
         ?>
     </div>
+    <?php Modal::begin(['header' => '<h4>' . Yii::t('assessment', 'Run on smartphone') . '</h4>']); ?>
+    <div class="text-center">
+        <h3><?= Yii::t('assessment', 'In order to run this wheel via smartphone, please ask') ?></h3>
+        <h2 id="member"></h2>
+        <h3><?= Yii::t('assessment', 'to enter this site in his/her phone browser') ?></h3>
+        <h2><?= Url::to('@web/', true); ?></h2>
+        <h3><?= Yii::t('assessment', 'and enter this token in "Wheel Token" field') ?></h3>
+        <h2 id="token"></h2>
+        <h3><?= Yii::t('assessment', 'and click over "Run" button') ?></h3>
+        <?php Modal::end(); ?>
+    </div>
 </div>
+<script type="text/javascript">
+                                    function showToken(member, token)
+                                    {
+                                        $('#w0').modal('show');
+                                        $('#member').html(member);
+                                        $('#token').html(token);
+
+                                    }
+</script>
