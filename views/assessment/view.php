@@ -22,94 +22,103 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => [
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 $wheel_count = 0;
+
+$mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>';
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="row col-md-6">
         <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?>
     </div>
-    <div class="row col-md-6 text-right">
-    </div>
-    <div class="row col-md-12">
+    <div class="clearfix"></div>
+    <div class="row col-md-5">
         <h2><?= Yii::t('assessment', 'Individual wheels') ?></h2>
-        <p>
-            <?php
-            if ($assessment->individual_status == Assessment::STATUS_PENDING) {
-                echo Html::a(\Yii::t('assessment', 'Send individual wheels'), Url::to(['assessment/send-individual', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
-            } else {
-                echo Html::a(\Yii::t('assessment', 'Individual wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-            }
-            ?>
-        <ul>
-            <?php
-            foreach ($assessment->wheelStatus(Wheel::TYPE_INDIVIDUAL) as $individualWheel):
-                if ($individualWheel['count'] / $individualQuestionCount == 1)
-                    $wheel_count++;
-                ?>
-                <li>
-                    <?= $individualWheel['name'] . ' ' . $individualWheel['surname'] ?>:&nbsp;
-                    <?= ($individualWheel['count'] / $individualQuestionCount * 100) . '%' ?>
-                    <?= Yii::t('app', 'done') ?>
-                    <?= Html::a($individualWheel['token'], ['wheel/run', 'token' => $individualWheel['token']]) ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        </p>
+        <table class="table table-bordered table-striped">
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <th style="text-align: right;">
+                        <?= $observerMember->member->fullname ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                    </th>
+                    <td>
+                        <?php
+                        foreach ($assessment->individualWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                echo $wheel->answerStatus;
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
     </div>
+    <div class="clearfix"></div>
     <div class="row col-md-12">
         <h2><?= Yii::t('assessment', 'Group wheels') ?></h2>
-        <p>       
-            <?php
-            if ($assessment->group_status == Assessment::STATUS_PENDING) {
-                echo Html::a(\Yii::t('assessment', 'Send group wheels'), Url::to(['assessment/send-group', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
-            } else {
-                echo Html::a(\Yii::t('assessment', 'Group wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/detail-view', 'id' => $assessment->id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-primary']);
-            }
-            ?>
-        <ul>
-            <?php
-            foreach ($assessment->wheelStatus(Wheel::TYPE_GROUP) as $wheel):
-                if ($wheel['count'] / count($assessment->team->members) / $groupQuestionCount == 1)
-                    $wheel_count++;
-                ?>
-                <li>
-                    <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= round($wheel['count'] * 100 / count($assessment->team->members) / $groupQuestionCount, 1) . '%' ?>
-                    <?= Yii::t('app', 'done') ?>
-                    <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        </p>
+        <table width="100%" class="table table-bordered">
+            <tr>
+                <th style="text-align: right;">
+                    <?= Yii::t('wheel', "Observer \\ Observed") ?>
+                </th>
+                <?php foreach ($assessment->team->members as $teamMember): ?>
+                    <th>
+                        <?= $teamMember->member->fullname ?>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <th style="text-align: right;">
+                        <?= $observerMember->member->fullname ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>
+                    </th>
+                    <?php foreach ($assessment->team->members as $observedMember) { ?>
+                        <td>
+                            <?php
+                            foreach ($assessment->groupWheels as $wheel)
+                                if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
+                                    echo $wheel->answerStatus;
+                                }
+                            ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        </table>
     </div>
+    <div class="clearfix"></div>
     <div class="row col-md-12">
         <h2><?= Yii::t('assessment', 'Organizational wheels') ?></h2>
-        <p>
-            <?php
-            if ($assessment->organizational_status == Assessment::STATUS_PENDING) {
-                echo Html::a(\Yii::t('assessment', 'Send organizational wheels'), Url::to(['assessment/send-organizational', 'id' => $assessment->id]), ['class' => 'btn btn-primary']);
-            } else {
-                echo Html::a(\Yii::t('assessment', 'Organizational wheels sent'), '#', ['class' => 'btn btn-default', 'disabled' => 'disabled']);
-                echo '&nbsp;' . Html::a(\Yii::t('assessment', 'View detailed status'), Url::to(['assessment/detail-view', 'id' => $assessment->id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-primary']);
-            }
-            ?>
-        <ul>
-            <?php
-            foreach ($assessment->wheelStatus(Wheel::TYPE_ORGANIZATIONAL) as $wheel):
-                if ($wheel['count'] / count($assessment->team->members) / $organizationalQuestionCount == 1)
-                    $wheel_count++;
-                ?>
-                <li>
-                    <?= $wheel['name'] . ' ' . $wheel['surname'] ?>:&nbsp;
-                    <?= round($wheel['count'] * 100 / count($assessment->team->members) / $organizationalQuestionCount, 1) . '%' ?>
-                    <?= Yii::t('app', 'done') ?>
-                    <?= Html::a($wheel['token'], ['wheel/run', 'token' => $wheel['token']]) ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        </p>
+        <table width="100%" class="table table-bordered">
+            <tr>
+                <th style="text-align: right;">
+                    <?= Yii::t('wheel', "Observer \\ Observed") ?>
+                </th>
+                <?php foreach ($assessment->team->members as $teamMember): ?>
+                    <th>
+                        <?= $teamMember->member->fullname ?>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <th style="text-align: right;">
+                        <?= $observerMember->member->fullname ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                    </th>
+                    <?php foreach ($assessment->team->members as $observedMember) { ?>
+                        <td>
+                            <?php
+                            foreach ($assessment->organizationalWheels as $wheel)
+                                if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
+                                    echo $wheel->answerStatus;
+                                }
+                            ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        </table>
         <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['assessment/view', 'id' => $assessment->id,]), ['class' => 'btn btn-default']) ?>
         <?=
         Html::a(\Yii::t('assessment', 'Go to dashboard...'), Url::to(['assessment/go-to-dashboard', 'id' => $assessment->id,]), [

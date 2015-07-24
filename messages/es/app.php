@@ -39,7 +39,7 @@ return [
     'Phone' => 'Teléfono',
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
-    'Problem while saving: ' => 'Problemas al guardar',
+    'Problem while saving: ' => 'Problemas al guardar: ',
     'Refresh' => 'Refrescar',
     'Register' => 'Registrar',
     'Run' => 'Ejecutar',
@@ -49,5 +49,5 @@ return [
     'Thanks!' => '¡Gracias!',
     'Type' => '@@Tipo@@',
     'Users' => 'Usuarios',
-    'done' => 'listo',
+    'done' => '@@listo@@',
 ];

@@ -37,80 +37,31 @@ class AssessmentController extends Controller {
         return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
-    public function actionSendIndividual($id) {
+    public function actionSendWheel($id, $memberId, $type) {
         $assessment = Assessment::findOne(['id' => $id]);
 
         foreach ($assessment->team->members as $teamMember) {
-            $newWheel = new Wheel();
+            if ($teamMember->user_id == $memberId) {
+                $wheels = [];
+                switch ($type) {
+                    case Wheel::TYPE_INDIVIDUAL:
+                        $wheels = $assessment->individualWheels;
+                        break;
+                    case Wheel::TYPE_GROUP:
+                        $wheels = $assessment->groupWheels;
+                        break;
+                    default :
+                        $wheels = $assessment->organizationalWheels;
+                        break;
+                }
 
-            $newWheel->observer_id = $teamMember->member->id;
-            $newWheel->observed_id = $teamMember->member->id;
-            $newWheel->type = Wheel::TYPE_INDIVIDUAL;
-            $newWheel->token = $this->newToken();
-            $newWheel->assessment_id = $assessment->id;
-
-            if ($newWheel->save())
-                $this->sendWheel($newWheel);
-        }
-
-        $assessment->individual_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
-    public function actionSendGroup($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        foreach ($assessment->team->members as $observerMember) {
-            $token = $this->newToken();
-
-            foreach ($assessment->team->members as $observedMember) {
-                $newWheel = new Wheel();
-
-                $newWheel->observer_id = $observerMember->member->id;
-                $newWheel->observed_id = $observedMember->member->id;
-                $newWheel->type = Wheel::TYPE_GROUP;
-                $newWheel->token = $token;
-                $newWheel->assessment_id = $assessment->id;
-
-                $newWheel->save();
+                foreach ($wheels as $wheel)
+                    if ($wheel->observer_id == $memberId && $wheel->answerStatus != '100%') {
+                        $this->sendWheel($wheel);
+                        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+                    }
             }
-
-            $this->sendWheel($newWheel);
         }
-
-        $assessment->group_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
-    public function actionSendOrganizational($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        foreach ($assessment->team->members as $observerMember) {
-            $token = $this->newToken();
-
-            foreach ($assessment->team->members as $observedMember) {
-                $newWheel = new Wheel();
-
-                $newWheel->observer_id = $observerMember->member->id;
-                $newWheel->observed_id = $observedMember->member->id;
-                $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
-                $newWheel->token = $token;
-                $newWheel->assessment_id = $assessment->id;
-
-                $newWheel->save();
-            }
-
-            $this->sendWheel($newWheel);
-        }
-
-        $assessment->organizational_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
     public function actionDetailView($id, $type) {
@@ -170,6 +121,8 @@ class AssessmentController extends Controller {
                 ->setFrom($wheel->coach->email)
                 ->setTo($wheel->observer->email)
                 ->send();
+
+        \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Wheel sent to {user}', ['user' => $wheel->observer->fullname]));
     }
 
 }

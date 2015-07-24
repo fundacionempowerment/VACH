@@ -82,11 +82,11 @@ class WheelController extends Controller {
             $current_wheel = null;
 
             foreach ($wheels as $wheel)
-                if ($wheel->AnswerStatus == '0 %') {
+                if ($wheel->AnswerStatus == '0%') {
                     $current_dimension = -1;
                     $current_wheel = $wheel;
                     break;
-                } else if ($wheel->AnswerStatus != '100 %') {
+                } else if ($wheel->AnswerStatus != '100%') {
                     $questionCount = count(WheelQuestion::getQuestions($wheel->type));
                     $setSize = $questionCount / 8;
                     $current_dimension = intval(count($wheel->answers) / $setSize);
