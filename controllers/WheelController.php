@@ -206,6 +206,48 @@ class WheelController extends Controller {
         ]);
     }
 
+    public function actionManualForm($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+
+        if (Yii::$app->request->isPost) {
+            $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+            $setSize = $questionCount / 8;
+
+            for ($i = 0; $i < $questionCount; $i++) {
+                $new_answer_value = Yii::$app->request->post('answer' . $i);
+
+                if ($new_answer_value != '') {
+                    $answer = null;
+                    foreach ($wheel->answers as $lookup_answer)
+                        if ($lookup_answer->answer_order == $i) {
+                            $answer = $lookup_answer;
+                            break;
+                        }
+
+                    if (isset($answer)) {
+                        $answer->answer_order = $i;
+                        $answer->answer_value = $new_answer_value;
+                        $answer->dimension = $i % $setSize;
+                        $answer->save();
+                    } else {
+                        $new_answer = new WheelAnswer();
+                        $new_answer->answer_order = $i;
+                        $new_answer->answer_value = $new_answer_value;
+                        $new_answer->dimension = $i % $setSize;
+                        $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                    }
+                }
+            }
+            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+
+            return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+        }
+
+        return $this->render('manual-form', [
+                    'wheel' => $wheel
+        ]);
+    }
+
     public function sendAnswers($wheel) {
         $type_text = Wheel::getWheelTypes()[$wheel->type];
         $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();

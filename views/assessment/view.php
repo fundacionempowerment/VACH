@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $wheel_count = 0;
 
 $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>';
+$file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>';
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -34,7 +35,7 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
     <div class="clearfix"></div>
     <div class="row col-md-5">
         <h2><?= Yii::t('assessment', 'Individual wheels') ?></h2>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-hover">
             <?php foreach ($assessment->team->members as $observerMember) { ?>
                 <tr>
                     <th style="text-align: right;">
@@ -56,7 +57,8 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
-                                echo $wheel->answerStatus;
+                                echo $wheel->answerStatus . '&nbsp;';
+                                echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                             }
                         ?>
                     </td>
@@ -67,7 +69,7 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
     <div class="clearfix"></div>
     <div class="row col-md-12">
         <h2><?= Yii::t('assessment', 'Group wheels') ?></h2>
-        <table width="100%" class="table table-bordered">
+        <table width="100%" class="table table-bordered table-hover">
             <tr>
                 <th style="text-align: right;">
                     <?= Yii::t('wheel', "Observer \\ Observed") ?>
@@ -82,7 +84,7 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>  
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>
                         <?php
                         foreach ($assessment->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
@@ -100,7 +102,8 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                             <?php
                             foreach ($assessment->groupWheels as $wheel)
                                 if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
-                                    echo $wheel->answerStatus;
+                                    echo $wheel->answerStatus . '&nbsp;';
+                                    echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                                 }
                             ?>
                         </td>
@@ -112,7 +115,7 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
     <div class="clearfix"></div>
     <div class="row col-md-12">
         <h2><?= Yii::t('assessment', 'Organizational wheels') ?></h2>
-        <table width="100%" class="table table-bordered">
+        <table width="100%" class="table table-bordered table-hover">
             <tr>
                 <th style="text-align: right;">
                     <?= Yii::t('wheel', "Observer \\ Observed") ?>
@@ -145,7 +148,8 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
                             <?php
                             foreach ($assessment->organizationalWheels as $wheel)
                                 if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
-                                    echo $wheel->answerStatus;
+                                    echo $wheel->answerStatus . '&nbsp;';
+                                    echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                                 }
                             ?>
                         </td>
