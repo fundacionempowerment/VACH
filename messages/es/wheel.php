@@ -43,6 +43,7 @@ return [
     'Initiative' => 'Iniciativa',
     'Leadership' => 'Liderazgo',
     'Legitimation' => 'Legitimación',
+    'Manual form' => 'Formulario manual',
     'Mental Dimension' => 'Dimensión mental',
     'New wheel' => 'Nueva rueda',
     'Observed' => 'Observado',

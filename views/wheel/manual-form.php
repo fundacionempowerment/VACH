@@ -21,17 +21,10 @@ for ($i = 0; $i < count($questions); $i++)
 foreach ($wheel->answers as $answer)
     $answers[$answer->answer_order] = $answer->answer_value;
 
-if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
-    $this->title = Yii::t('wheel', 'Running individual wheel');
-} else if ($wheel->type == Wheel::TYPE_GROUP) {
-    $this->title = Yii::t('wheel', 'Running group wheel');
-} else {
-    $this->title = Yii::t('wheel', 'Running organizational wheel');
-}
-$this->title = $wheel->assessment->name;
+$this->title = Yii::t('wheel', 'Manual form');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $wheel->assessment->team->fullname, 'url' => ['/team/view', 'id' => $wheel->assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $wheel->assessment->name, 'url' => ['/assessment/view', 'id' => $wheel->assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $wheel->assessment->fullname, 'url' => ['/assessment/view', 'id' => $wheel->assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="wheel-manual">
