@@ -71,6 +71,10 @@ class Assessment extends ActiveRecord {
         return $this->hasOne(Team::className(), ['id' => 'team_id']);
     }
 
+    public function getReport() {
+        return $this->hasOne(Report::className(), ['assessment_id' => 'id']);
+    }
+
     public function wheelStatus($type) {
         return (new Query)->select('count(wheel_answer.id) as count')
                         ->from('wheel')

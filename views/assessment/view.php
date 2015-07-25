@@ -204,6 +204,11 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
             'class' => ($wheels_completed ? 'btn btn-success' : 'btn btn-default')
         ])
         ?>
+        <?=
+        Html::a(\Yii::t('assessment', 'Go to technical report...'), Url::to(['report/technical', 'id' => $assessment->id,]), [
+            'class' => ($wheel_count == count($assessment->team->members) * 3 ? 'btn btn-success' : 'btn btn-default')
+        ])
+        ?>
     </div>
     <?php
     Modal::begin([

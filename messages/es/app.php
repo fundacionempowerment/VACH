@@ -30,7 +30,7 @@ return [
     'Date' => 'Fecha',
     'Date and Time' => 'Fecha y hora',
     'Description' => 'Descripción',
-    'Edit' => '@@Editar@@',
+    'Edit' => 'Editar',
     'Email' => 'Correo eletrónico',
     'Empowerment Foundation' => 'Fundación Empowerment',
     'High' => 'Alto',
