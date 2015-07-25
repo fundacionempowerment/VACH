@@ -208,13 +208,26 @@ class WheelController extends Controller {
 
     public function actionManualForm($id) {
         $wheel = Wheel::findOne(['id' => $id]);
+        $invalids = [];
 
         if (Yii::$app->request->isPost) {
             $questionCount = count(WheelQuestion::getQuestions($wheel->type));
             $setSize = $questionCount / 8;
 
             for ($i = 0; $i < $questionCount; $i++) {
+                $valid_answer = true;
                 $new_answer_value = Yii::$app->request->post('answer' . $i);
+                if ($new_answer_value == '') {
+                    $invalids[] = $i;
+                    $valid_answer = false;
+                }
+
+                $new_answer_value = intval($new_answer_value);
+
+                if ($new_answer_value < 0 || $new_answer_value > 4) {
+                    $invalids[] = $i;
+                    $valid_answer = false;
+                }
 
                 if ($new_answer_value != '') {
                     $answer = null;
@@ -228,23 +241,27 @@ class WheelController extends Controller {
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = $i % $setSize;
-                        $answer->save();
+                        if ($valid_answer)
+                            $answer->save();
                     } else {
                         $new_answer = new WheelAnswer();
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
                         $new_answer->dimension = $i % $setSize;
-                        $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                        if ($valid_answer)
+                            $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }
                 }
             }
-            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
-
-            return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+            if (count($invalids) == 0) {
+                \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+                return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+            }
         }
 
         return $this->render('manual-form', [
-                    'wheel' => $wheel
+                    'wheel' => $wheel,
+                    'invalids' => $invalids,
         ]);
     }
 

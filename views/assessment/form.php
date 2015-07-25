@@ -62,5 +62,4 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
         </div>
         <?php ActiveForm::end(); ?>
-
     </div>

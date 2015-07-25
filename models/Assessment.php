@@ -25,7 +25,8 @@ class Assessment extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['team_id'], 'required'],
+            [['name', 'team_id'], 'required'],
+            [['name'], 'filter', 'filter' => 'trim'],
         ];
     }
 

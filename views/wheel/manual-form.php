@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php } ?>
                 <tr>
                     <td style="text-align: right;"><?= $questions[$i]['question'] ?></td>
-                    <td><?= Html::textInput('answer' . $i, $answers[$i], ['size' => '2']) ?></td>
+                    <td><?= Html::textInput('answer' . $i, $answers[$i], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
                 </tr>
                 <?php if ($i % $setQuantity == $setQuantity - 1) { ?>
                 </table>
