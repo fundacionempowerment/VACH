@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -21,8 +22,8 @@ return [
     'Add' => 'Agregar',
     'Admin' => 'Admin',
     'All' => 'Todos',
-    'Average' => 'Promedio',
     'Are you sure to continue?' => '¿Está seguro de continuar?',
+    'Average' => 'Promedio',
     'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',

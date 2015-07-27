@@ -19,7 +19,10 @@ class AssessmentController extends Controller {
     }
 
     public function actionView($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+        $assessment = Assessment::find()
+                ->where(['id' => $id])
+                ->with(['individualWheels', 'groupWheels', 'organizationalWheels'])
+                ->one();
 
         return $this->render('view', [
                     'assessment' => $assessment,
@@ -43,17 +46,19 @@ class AssessmentController extends Controller {
 
                 $newWheel->save();
 
+                $token = $this->newToken();
                 foreach ($assessment->team->members as $observedMember) {
                     $newWheel = new Wheel();
-                    $token = $this->newToken();
                     $newWheel->observer_id = $observerMember->member->id;
                     $newWheel->observed_id = $observedMember->member->id;
                     $newWheel->type = Wheel::TYPE_GROUP;
                     $newWheel->token = $token;
                     $newWheel->assessment_id = $assessment->id;
-
                     $newWheel->save();
+                }
 
+                $token = $this->newToken();
+                foreach ($assessment->team->members as $observedMember) {
                     $newWheel = new Wheel();
                     $token = $this->newToken();
                     $newWheel->observer_id = $observerMember->member->id;
@@ -61,7 +66,6 @@ class AssessmentController extends Controller {
                     $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
                     $newWheel->token = $token;
                     $newWheel->assessment_id = $assessment->id;
-
                     $newWheel->save();
                 }
             }
@@ -90,6 +94,7 @@ class AssessmentController extends Controller {
     public function actionSendWheel($id, $memberId, $type) {
         $assessment = Assessment::findOne(['id' => $id]);
 
+        $sent = false;
         foreach ($assessment->team->members as $teamMember) {
             if ($teamMember->user_id == $memberId) {
                 $wheels = [];
@@ -108,10 +113,15 @@ class AssessmentController extends Controller {
                 foreach ($wheels as $wheel)
                     if ($wheel->observer_id == $memberId && $wheel->answerStatus != '100%') {
                         $this->sendWheel($wheel);
-                        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+                        $sent = true;
+                        break;
                     }
             }
         }
+
+        if ($sent == false)
+            \Yii::$app->session->addFlash('info', \Yii::t('assessment', 'Wheel already fullfilled. Email not sent.'));
+        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
     public function actionDetailView($id, $type) {
@@ -172,7 +182,7 @@ class AssessmentController extends Controller {
                 ->setTo($wheel->observer->email)
                 ->send();
 
-        \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Wheel sent to {user}', ['user' => $wheel->observer->fullname]));
+        \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Wheel sent to {user}.', ['user' => $wheel->observer->fullname]));
     }
 
 }

@@ -49,9 +49,8 @@ class Wheel extends ActiveRecord {
     }
 
     public function getAnswerStatus() {
-        $count = WheelAnswer::findByCondition(['wheel_id' => $this->id])
-                ->count();
-        $questionCount = count(WheelQuestion::getQuestions($this->type));
+        $count = count($this->answers);
+        $questionCount = WheelQuestion::getQuestionCount($this->type);
         return round($count * 100 / $questionCount, 1) . '%';
     }
 
@@ -245,7 +244,7 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getEmergents($assessmentId, $type) {
-                $good = Yii::$app->params['good_consciousness'];
+        $good = Yii::$app->params['good_consciousness'];
         $minimal = Yii::$app->params['minimal_consciousness'];
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')

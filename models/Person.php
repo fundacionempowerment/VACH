@@ -71,7 +71,7 @@ class Person extends ActiveRecord {
     }
 
     public static function browse() {
-        return Person::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => false]);
+        return Person::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => 0]);
     }
 
     public function getCoach() {

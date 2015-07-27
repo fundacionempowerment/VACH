@@ -93,15 +93,16 @@ if (count($drawing_data) < 4)
                                 }
                             }
                         }
+                    if ($observer_count > 0) {
+                        if ($observer_sum / $observer_count > Yii::$app->params['good_consciousness'])
+                            $class = 'success';
+                        else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
+                            $class = 'danger';
+                        else
+                            $class = 'warning';
 
-                    if ($observer_sum / $observer_count > Yii::$app->params['good_consciousness'])
-                        $class = 'success';
-                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
-                        $class = 'danger';
-                    else
-                        $class = 'warning';
-
-                    echo Html::tag('td', round($observer_sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                        echo Html::tag('td', round($observer_sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                    }
                     ?>
                 </tr>
             <?php } ?>
@@ -110,16 +111,17 @@ if (count($drawing_data) < 4)
                 <?= Yii::t('app', 'Average') ?>
             </td>
             <?php
-            foreach ($observed_sum as $sum) {
-                if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
-                    $class = 'success';
-                else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
-                    $class = 'danger';
-                else
-                    $class = 'warning';
+            if ($observer_count > 0)
+                foreach ($observed_sum as $sum) {
+                    if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
+                        $class = 'success';
+                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
+                        $class = 'danger';
+                    else
+                        $class = 'warning';
 
-                echo Html::tag('td', round($sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
-            }
+                    echo Html::tag('td', round($sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                }
             ?>
         </tr>
     </table>

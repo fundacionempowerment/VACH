@@ -14,9 +14,9 @@ use yii\bootstrap\Modal;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$individualQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_INDIVIDUAL));
-$groupQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_GROUP));
-$organizationalQuestionCount = count(WheelQuestion::getQuestions(Wheel::TYPE_ORGANIZATIONAL));
+$individualQuestionCount = WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+$groupQuestionCount = WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+$organizationalQuestionCount = WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
 
 $this->title = $assessment->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
