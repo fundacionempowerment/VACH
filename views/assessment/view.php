@@ -22,7 +22,25 @@ $this->title = $assessment->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
-$wheel_count = 0;
+
+$wheels_completed = true;
+foreach ($assessment->individualWheels as $wheel)
+    if ($wheel->answerStatus != '100%') {
+        $wheels_completed = false;
+        break;
+    }
+if ($wheels_completed)
+    foreach ($assessment->groupWheels as $wheel)
+        if ($wheel->answerStatus != '100%') {
+            $wheels_completed = false;
+            break;
+        }
+if ($wheels_completed)
+    foreach ($assessment->organizationalWheels as $wheel)
+        if ($wheel->answerStatus != '100%') {
+            $wheels_completed = false;
+            break;
+        }
 
 $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>';
 $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>';
@@ -163,7 +181,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['assessment/view', 'id' => $assessment->id,]), ['class' => 'btn btn-default']) ?>
         <?=
         Html::a(\Yii::t('assessment', 'Go to dashboard...'), Url::to(['assessment/go-to-dashboard', 'id' => $assessment->id,]), [
-            'class' => ($wheel_count == count($assessment->team->members) * 3 ? 'btn btn-success' : 'btn btn-default')
+            'class' => ($wheels_completed ? 'btn btn-success' : 'btn btn-default')
         ])
         ?>
     </div>

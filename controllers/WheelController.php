@@ -229,7 +229,7 @@ class WheelController extends Controller {
                     $valid_answer = false;
                 }
 
-                if ($new_answer_value != '') {
+                if ($valid_answer) {
                     $answer = null;
                     foreach ($wheel->answers as $lookup_answer)
                         if ($lookup_answer->answer_order == $i) {
@@ -240,14 +240,14 @@ class WheelController extends Controller {
                     if (isset($answer)) {
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
-                        $answer->dimension = $i % $setSize;
+                        $answer->dimension = intval($i / $setSize);
                         if ($valid_answer)
                             $answer->save();
                     } else {
                         $new_answer = new WheelAnswer();
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
-                        $new_answer->dimension = $i % $setSize;
+                        $new_answer->dimension = intval($i / $setSize);
                         if ($valid_answer)
                             $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }

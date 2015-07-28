@@ -43,7 +43,7 @@ function doMatrix(context, matrixData)
     }
     var stardarDeviation = Math.sqrt(sumConsciousness / (data.length - 1)); //standar deviation
 
-    var maxy = (Math.floor((maxConsciousness + 1) / 15) + 1) * 15;
+    var maxy = (Math.floor((maxConsciousness + 1) / 20) + 1) * 20;
 
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minProductivity) / deltaProductivity * deltax + minx);
@@ -105,9 +105,9 @@ function doMatrix(context, matrixData)
     context.fillStyle = '#496987';
     context.textAlign = 'center';
     context.textBaseline = 'bottom';
-    context.fillText(Math.round(minProductivity * 10) / 10 + ' %', minx, height - 5);
-    context.fillText(Math.round(maxProductivity * 10) / 10 + ' %', maxx, height - 5);
-    context.fillText(Math.round(avgProductivity * 10) / 10 + ' %', posx, height - 5);
+    context.fillText('Min: ' + Math.round(minProductivity * 10) / 10 + ' %', minx, height - 5);
+    context.fillText('Max: ' + Math.round(maxProductivity * 10) / 10 + ' %', maxx, height - 5);
+    context.fillText('Prom: ' + Math.round(avgProductivity * 10) / 10 + ' %', posx, height - 5);
 
     context.textAlign = 'center';
     context.textBaseline = 'top';
