@@ -124,6 +124,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'emergents' => $emergents,
             'type' => $filter->wheelType,
         ]);
+
+    if (count($emergents))
+        echo $this->render('_emergents_detailed', [
+            'emergents' => $emergents,
+            'type' => $filter->wheelType,
+        ]);
     ?>
 </div>
 <script>
