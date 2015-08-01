@@ -60,7 +60,6 @@ class AssessmentController extends Controller {
                 $token = $this->newToken();
                 foreach ($assessment->team->members as $observedMember) {
                     $newWheel = new Wheel();
-                    $token = $this->newToken();
                     $newWheel->observer_id = $observerMember->member->id;
                     $newWheel->observed_id = $observedMember->member->id;
                     $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
@@ -178,7 +177,7 @@ class AssessmentController extends Controller {
                             'wheel' => $type_text,
                             'assessment' => $wheel->assessment->name,
                 ]))
-                ->setFrom($wheel->coach->email)
+                ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($wheel->observer->email)
                 ->send();
 

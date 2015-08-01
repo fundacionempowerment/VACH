@@ -139,7 +139,6 @@ class WheelController extends Controller {
             if ($current_wheel->validate()) {
                 $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
-                    $this->sendAnswers($current_wheel);
                     return $this->redirect(['/wheel/run', 'token' => $token]);
                 }
             }
@@ -263,33 +262,6 @@ class WheelController extends Controller {
                     'wheel' => $wheel,
                     'invalids' => $invalids,
         ]);
-    }
-
-    public function sendAnswers($wheel) {
-        $type_text = Wheel::getWheelTypes()[$wheel->type];
-        $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
-
-        Yii::$app->mailer->compose('answers', [
-                    'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('assessment', 'CPC: {wheel} answers', [
-                            'wheel' => $type_text
-                ]))
-                ->setFrom($wheel->coach->email)
-                ->setTo($wheel->observer->email)
-                ->send();
-
-        Yii::$app->mailer->compose('answers', [
-                    'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
-                            'wheel' => $type_text, 'person' => $wheel->observer->fullname
-                ]))
-                ->setFrom($wheel->observer->email)
-                ->setTo($wheel->coach->email)
-                ->send();
     }
 
 }
