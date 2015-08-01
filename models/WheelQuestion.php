@@ -94,4 +94,10 @@ class WheelQuestion extends ActiveRecord {
         return self::find()->where(['type' => $wheelType])->asArray()->all();
     }
 
+    public static function getQuestionCount($wheelType) {
+        if ($wheelType == Wheel::TYPE_INDIVIDUAL)
+            return 80;
+        return 64;
+    }
+
 }

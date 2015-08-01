@@ -4,6 +4,7 @@ function doMatrix(context, matrixData)
     var memberId = matrixData['memberId'];
     var width = 800;
     var height = 400;
+    var bottomMargin = 26;
     var horizontalMargin = 120;
     var matrixData = new Array();
     var minx = horizontalMargin;
@@ -43,11 +44,11 @@ function doMatrix(context, matrixData)
     }
     var stardarDeviation = Math.sqrt(sumConsciousness / (data.length - 1)); //standar deviation
 
-    var maxy = (Math.floor((maxConsciousness + 1) / 15) + 1) * 15;
+    var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1) * 10;
 
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minProductivity) / deltaProductivity * deltax + minx);
-        var posy = Math.floor((maxy - data[i]['consciousness']) * height / 2 / maxy);
+        var posy = Math.floor((maxy - data[i]['consciousness']) * (height - bottomMargin) / 2 / maxy);
         var valueToPush = new Array();
         valueToPush.push(data[i]['name']);
         valueToPush.push(posx);
@@ -56,11 +57,13 @@ function doMatrix(context, matrixData)
         matrixData.push(valueToPush);
     }
 
-    var goodConsciousness = Math.floor(stardarDeviation * height / 2 / maxy);
+    var goodConsciousnessY1 = Math.floor((maxy - stardarDeviation) * (height - bottomMargin) / 2 / maxy);
+    var goodConsciousnessY2 = Math.floor((maxy + stardarDeviation) * (height - bottomMargin) / 2 / maxy);
+    var goodConsciousnessYAxe = Math.floor((height - bottomMargin) / 2);
 
     //high conciouness zone
     context.beginPath();
-    context.rect(0, height / 2 - goodConsciousness, width, goodConsciousness * 2);
+    context.rect(0, goodConsciousnessY1, width, goodConsciousnessY2 - goodConsciousnessY1);
     context.fillStyle = '#d9edf7';
     context.fill();
     context.strokeStyle = '#5a9bbc';
@@ -73,7 +76,7 @@ function doMatrix(context, matrixData)
     context.textBaseline = 'top';
     context.fillText('BC/BP+', 5, 5);
     context.textBaseline = 'bottom';
-    context.fillText('AC/BP', 5, height / 2 - 2);
+    context.fillText('AC/BP', 5, goodConsciousnessYAxe - 2);
     context.textAlign = 'left';
     context.textBaseline = 'bottom';
     context.fillText('BC/BP-', 5, height - 5);
@@ -81,7 +84,7 @@ function doMatrix(context, matrixData)
     context.textBaseline = 'top';
     context.fillText('BC/AP+', width - 5, 5);
     context.textBaseline = 'bottom';
-    context.fillText('AC/AP', width - 5, height / 2 - 2);
+    context.fillText('AC/AP', width - 5, goodConsciousnessYAxe - 2);
     context.textAlign = 'right';
     context.textBaseline = 'bottom';
     context.fillText('BC/AP-', width - 5, height - 5);
@@ -90,8 +93,8 @@ function doMatrix(context, matrixData)
     posx = (avgProductivity - minProductivity) / deltaProductivity * deltax + minx;
     context.strokeStyle = '#5a9bbc';
     context.beginPath();
-    context.moveTo(0, height / 2);
-    context.lineTo(width, height / 2);
+    context.moveTo(0, goodConsciousnessYAxe);
+    context.lineTo(width, goodConsciousnessYAxe);
     context.moveTo(posx, 0);
     context.lineTo(posx, height - 26);
     context.moveTo(minx, 0);
@@ -105,15 +108,15 @@ function doMatrix(context, matrixData)
     context.fillStyle = '#496987';
     context.textAlign = 'center';
     context.textBaseline = 'bottom';
-    context.fillText(Math.round(minProductivity * 10) / 10 + ' %', minx, height - 5);
-    context.fillText(Math.round(maxProductivity * 10) / 10 + ' %', maxx, height - 5);
-    context.fillText(Math.round(avgProductivity * 10) / 10 + ' %', posx, height - 5);
+    context.fillText('Min: ' + Math.round(minProductivity * 10) / 10 + ' %', minx, height - 5);
+    context.fillText('Max: ' + Math.round(maxProductivity * 10) / 10 + ' %', maxx, height - 5);
+    context.fillText('Prom: ' + Math.round(avgProductivity * 10) / 10 + ' %', posx, height - 5);
 
     context.textAlign = 'center';
     context.textBaseline = 'top';
     for (i in matrixData) {
         context.beginPath();
-        if (matrixData[i][3] == memberId)
+        if (matrixData[i][3] === memberId)
             context.lineWidth = 5;
         else
             context.lineWidth = 1;
@@ -127,7 +130,7 @@ function doMatrix(context, matrixData)
         context.strokeStyle = '#5a9bbc';
         context.stroke();
 
-        if (matrixData[i][3] == memberId)
+        if (matrixData[i][3] === memberId)
             context.font = 'bold 11pt Helvetica';
         else
             context.font = '11pt Helvetica';

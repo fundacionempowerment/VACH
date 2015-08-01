@@ -82,12 +82,12 @@ class WheelController extends Controller {
             $current_wheel = null;
 
             foreach ($wheels as $wheel)
-                if ($wheel->AnswerStatus == '0 %') {
+                if ($wheel->AnswerStatus == '0%') {
                     $current_dimension = -1;
                     $current_wheel = $wheel;
                     break;
-                } else if ($wheel->AnswerStatus != '100 %') {
-                    $questionCount = count(WheelQuestion::getQuestions($wheel->type));
+                } else if ($wheel->AnswerStatus != '100%') {
+                    $questionCount = WheelQuestion::getQuestionCount($wheel->type);
                     $setSize = $questionCount / 8;
                     $current_dimension = intval(count($wheel->answers) / $setSize);
                     $current_wheel = $wheel;
@@ -97,7 +97,7 @@ class WheelController extends Controller {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
             $current_wheel = Wheel::findOne(['id' => $id]);
-            $questionCount = count(WheelQuestion::getQuestions($current_wheel->type));
+            $questionCount = WheelQuestion::getQuestionCount($current_wheel->type);
             $setSize = $questionCount / 8;
 
             $count = 0;
@@ -139,7 +139,6 @@ class WheelController extends Controller {
             if ($current_wheel->validate()) {
                 $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
-                    $this->sendAnswers($current_wheel);
                     return $this->redirect(['/wheel/run', 'token' => $token]);
                 }
             }
@@ -206,31 +205,63 @@ class WheelController extends Controller {
         ]);
     }
 
-    public function sendAnswers($wheel) {
-        $type_text = Wheel::getWheelTypes()[$wheel->type];
-        $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
+    public function actionManualForm($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+        $invalids = [];
 
-        Yii::$app->mailer->compose('answers', [
-                    'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('assessment', 'CPC: {wheel} answers', [
-                            'wheel' => $type_text
-                ]))
-                ->setFrom($wheel->coach->email)
-                ->setTo($wheel->observer->email)
-                ->send();
+        if (Yii::$app->request->isPost) {
+            $questionCount = WheelQuestion::getQuestionCount($wheel->type);
+            $setSize = $questionCount / 8;
 
-        Yii::$app->mailer->compose('answers', [
+            for ($i = 0; $i < $questionCount; $i++) {
+                $valid_answer = true;
+                $new_answer_value = Yii::$app->request->post('answer' . $i);
+                if ($new_answer_value == '') {
+                    $invalids[] = $i;
+                    $valid_answer = false;
+                }
+
+                $new_answer_value = intval($new_answer_value);
+
+                if ($new_answer_value < 0 || $new_answer_value > 4) {
+                    $invalids[] = $i;
+                    $valid_answer = false;
+                }
+
+                if ($valid_answer) {
+                    $answer = null;
+                    foreach ($wheel->answers as $lookup_answer)
+                        if ($lookup_answer->answer_order == $i) {
+                            $answer = $lookup_answer;
+                            break;
+                        }
+
+                    if (isset($answer)) {
+                        $answer->answer_order = $i;
+                        $answer->answer_value = $new_answer_value;
+                        $answer->dimension = intval($i / $setSize);
+                        if ($valid_answer)
+                            $answer->save();
+                    } else {
+                        $new_answer = new WheelAnswer();
+                        $new_answer->answer_order = $i;
+                        $new_answer->answer_value = $new_answer_value;
+                        $new_answer->dimension = intval($i / $setSize);
+                        if ($valid_answer)
+                            $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                    }
+                }
+            }
+            if (count($invalids) == 0) {
+                \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+                return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+            }
+        }
+
+        return $this->render('manual-form', [
                     'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
-                            'wheel' => $type_text, 'person' => $wheel->observer->fullname
-                ]))
-                ->setFrom($wheel->observer->email)
-                ->setTo($wheel->coach->email)
-                ->send();
+                    'invalids' => $invalids,
+        ]);
     }
 
 }

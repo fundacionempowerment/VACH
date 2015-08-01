@@ -44,6 +44,7 @@ class User extends ActiveRecord implements IdentityInterface {
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['password_confirm', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 

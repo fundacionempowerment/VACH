@@ -152,7 +152,7 @@ class SiteController extends Controller {
 
         foreach ($record->getErrors() as $attribute => $messages)
             foreach ($messages as $message)
-                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ' . $message));
+                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ') . $message);
     }
 
     public function actionMigrateUp() {

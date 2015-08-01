@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -21,6 +22,8 @@ return [
     'Add' => 'Agregar',
     'Admin' => 'Admin',
     'All' => 'Todos',
+    'Are you sure to continue?' => '¿Está seguro de continuar?',
+    'Average' => 'Promedio',
     'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
     'Date' => 'Fecha',
@@ -38,7 +41,7 @@ return [
     'Phone' => 'Teléfono',
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
-    'Problem while saving: ' => 'Problemas al guardar',
+    'Problem while saving: ' => 'Problemas al guardar: ',
     'Refresh' => 'Refrescar',
     'Register' => 'Registrar',
     'Run' => 'Ejecutar',
@@ -46,7 +49,8 @@ return [
     'Sign in' => 'Ingresar',
     'Sign up' => '@@Registrese@@',
     'Thanks!' => '¡Gracias!',
+    'This action cannot be reverted.' => 'Esta acción no puede ser revertida.',
     'Type' => '@@Tipo@@',
     'Users' => 'Usuarios',
-    'done' => 'listo',
+    'done' => '@@listo@@',
 ];

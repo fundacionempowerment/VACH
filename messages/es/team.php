@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -19,7 +18,6 @@
  */
 return [
     'Assessment has been succesfully created.' => 'Relevamiento ha sido creado exitosamente.',
-    'Assessment has been succesfully deleted.' => 'Relevamiento ha sido eliminada exitasamente.',
     'Assessments' => 'Relevamientos',
     'Coach' => 'Coach',
     'Company' => 'Empresa',

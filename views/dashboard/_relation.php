@@ -57,10 +57,16 @@ if (count($drawing_data) < 4)
                         <?= $member ?>
                     </td>
                 <?php } ?>
+            <td>
+                <?= Yii::t('app', 'Average') ?>
+            </td>
         </tr>
         <?php
+        $observed_sum = [];
         foreach ($members as $observerId => $observer)
             if ($observerId > 0) {
+                $observer_sum = 0;
+                $observer_count = 0;
                 ?>
                 <tr>
                     <td>
@@ -79,12 +85,45 @@ if (count($drawing_data) < 4)
                                         $class = 'warning';
 
                                     echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . ' %', ['class' => $class]);
+                                    $observer_sum += $datum['value'];
+                                    $observer_count++;
+                                    if (!isset($observed_sum[$observedId]))
+                                        $observed_sum[$observedId] = 0;
+                                    $observed_sum[$observedId] += $datum['value'];
                                 }
                             }
                         }
+                    if ($observer_count > 0) {
+                        if ($observer_sum / $observer_count > Yii::$app->params['good_consciousness'])
+                            $class = 'success';
+                        else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
+                            $class = 'danger';
+                        else
+                            $class = 'warning';
+
+                        echo Html::tag('td', round($observer_sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                    }
                     ?>
                 </tr>
             <?php } ?>
+        <tr>
+            <td>
+                <?= Yii::t('app', 'Average') ?>
+            </td>
+            <?php
+            if ($observer_count > 0)
+                foreach ($observed_sum as $sum) {
+                    if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
+                        $class = 'success';
+                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
+                        $class = 'danger';
+                    else
+                        $class = 'warning';
+
+                    echo Html::tag('td', round($sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                }
+            ?>
+        </tr>
     </table>
 </div>
 <div class="clearfix"></div>

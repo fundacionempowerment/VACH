@@ -27,7 +27,7 @@ class UserController extends Controller {
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [ 'allow' => true, 'roles' => ['@'],],
+                    ['allow' => true, 'roles' => ['@'],],
                 ],
             ],
         ];
@@ -55,11 +55,20 @@ class UserController extends Controller {
     public function actionNew($personId = null) {
         $user = new User();
 
-        if ($user->load(Yii::$app->request->post()) && ($user->save())) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully created.'));
-            return $this->redirect(['/user']);
-        } else {
-            SiteController::FlashErrors($user);
+        if ($user->load(Yii::$app->request->post())) {
+            $postUser = Yii::$app->request->post('User');
+            $password = $postUser['password'];
+            if (isset($password)) {
+                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
+                $user->password_hash = $encryptedPassword;
+            }
+
+            if ($user->save()) {
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully created.'));
+                return $this->redirect(['/user']);
+            } else {
+                SiteController::FlashErrors($user);
+            }
         }
 
         return $this->render('form', [
@@ -71,11 +80,20 @@ class UserController extends Controller {
     public function actionEdit($id) {
         $user = User::findOne(['id' => $id]);
 
-        if ($user->load(Yii::$app->request->post()) && ($user->save())) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully edited.'));
-            return $this->redirect(['/user']);
-        } else {
-            SiteController::FlashErrors($user);
+        if ($user->load(Yii::$app->request->post())) {
+            $postUser = Yii::$app->request->post('User');
+            $password = $postUser['password'];
+            if (isset($password)) {
+                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
+                $user->password_hash = $encryptedPassword;
+            }
+
+            if ($user->save()) {
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully edited.'));
+                return $this->redirect(['/user']);
+            } else {
+                SiteController::FlashErrors($user);
+            }
         }
 
         return $this->render('form', [
@@ -101,11 +119,20 @@ class UserController extends Controller {
 
         $user = User::findOne(['id' => Yii::$app->user->id]);
 
-        if ($user->load(Yii::$app->request->post()) && ($user->save())) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Your personal data has been succesfully saved.'));
-            return $this->redirect(['/site']);
-        } else {
-            SiteController::FlashErrors($user);
+        if ($user->load(Yii::$app->request->post())) {
+            $postUser = Yii::$app->request->post('User');
+            $password = $postUser['password'];
+            if (isset($password)) {
+                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
+                $user->password_hash = $encryptedPassword;
+            }
+
+            if ($user->save()) {
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'Your personal data has been succesfully saved.'));
+                return $this->redirect(['/site']);
+            } else {
+                SiteController::FlashErrors($user);
+            }
         }
 
         return $this->render('myAccount', [
