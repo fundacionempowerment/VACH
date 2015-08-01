@@ -40,4 +40,11 @@ class Feedback extends ActiveRecord {
         ];
     }
 
+    public static function getPrevious() {
+        if (!Yii::$app->user->isGuest)
+            return [];
+
+        return Feedback::find()->where("user_id is null and ip = '" . Yii::$app->request->userIP . "' and datetime >= '" . date('Y-m-d', strtotime("-30 days")) . '\'')->all();
+    }
+
 }

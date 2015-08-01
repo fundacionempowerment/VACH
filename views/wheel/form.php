@@ -15,10 +15,7 @@ $questions = WheelQuestion::getQuestions($wheel->type);
 $setQuantity = count($questions) / 8;
 
 for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)
-    if ($wheel->assessment->autofill_answers)
-        $answers[$i] = rand(0, 4);
-    else
-        $answers[$i] = null;
+    $answers[$i] = null;
 
 foreach ($wheel->answers as $answer)
     if ($answer->answer_order >= $current_dimension * $setQuantity && $answer->answer_order < ($current_dimension + 1) * $setQuantity)

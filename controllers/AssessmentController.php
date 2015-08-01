@@ -19,9 +19,62 @@ class AssessmentController extends Controller {
     }
 
     public function actionView($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+        $assessment = Assessment::find()
+                ->where(['id' => $id])
+                ->with(['individualWheels', 'groupWheels', 'organizationalWheels'])
+                ->one();
 
         return $this->render('view', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
+    public function actionNew($teamId) {
+        $assessment = new Assessment();
+        $assessment->team_id = $teamId;
+
+        if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
+            foreach ($assessment->team->members as $observerMember) {
+                $token = $this->newToken();
+                $newWheel = new Wheel();
+
+                $newWheel->observer_id = $observerMember->member->id;
+                $newWheel->observed_id = $observerMember->member->id;
+                $newWheel->type = Wheel::TYPE_INDIVIDUAL;
+                $newWheel->token = $token;
+                $newWheel->assessment_id = $assessment->id;
+
+                $newWheel->save();
+
+                $token = $this->newToken();
+                foreach ($assessment->team->members as $observedMember) {
+                    $newWheel = new Wheel();
+                    $newWheel->observer_id = $observerMember->member->id;
+                    $newWheel->observed_id = $observedMember->member->id;
+                    $newWheel->type = Wheel::TYPE_GROUP;
+                    $newWheel->token = $token;
+                    $newWheel->assessment_id = $assessment->id;
+                    $newWheel->save();
+                }
+
+                $token = $this->newToken();
+                foreach ($assessment->team->members as $observedMember) {
+                    $newWheel = new Wheel();
+                    $newWheel->observer_id = $observerMember->member->id;
+                    $newWheel->observed_id = $observedMember->member->id;
+                    $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
+                    $newWheel->token = $token;
+                    $newWheel->assessment_id = $assessment->id;
+                    $newWheel->save();
+                }
+            }
+            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully created.'));
+            return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+        } else {
+            SiteController::FlashErrors($assessment);
+        }
+
+        return $this->render('form', [
                     'assessment' => $assessment,
         ]);
     }
@@ -37,79 +90,36 @@ class AssessmentController extends Controller {
         return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
-    public function actionSendIndividual($id) {
+    public function actionSendWheel($id, $memberId, $type) {
         $assessment = Assessment::findOne(['id' => $id]);
 
+        $sent = false;
         foreach ($assessment->team->members as $teamMember) {
-            $newWheel = new Wheel();
+            if ($teamMember->user_id == $memberId) {
+                $wheels = [];
+                switch ($type) {
+                    case Wheel::TYPE_INDIVIDUAL:
+                        $wheels = $assessment->individualWheels;
+                        break;
+                    case Wheel::TYPE_GROUP:
+                        $wheels = $assessment->groupWheels;
+                        break;
+                    default :
+                        $wheels = $assessment->organizationalWheels;
+                        break;
+                }
 
-            $newWheel->observer_id = $teamMember->member->id;
-            $newWheel->observed_id = $teamMember->member->id;
-            $newWheel->type = Wheel::TYPE_INDIVIDUAL;
-            $newWheel->token = $this->newToken();
-            $newWheel->assessment_id = $assessment->id;
-
-            if ($newWheel->save())
-                $this->sendWheel($newWheel);
-        }
-
-        $assessment->individual_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
-    public function actionSendGroup($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        foreach ($assessment->team->members as $observerMember) {
-            $token = $this->newToken();
-
-            foreach ($assessment->team->members as $observedMember) {
-                $newWheel = new Wheel();
-
-                $newWheel->observer_id = $observerMember->member->id;
-                $newWheel->observed_id = $observedMember->member->id;
-                $newWheel->type = Wheel::TYPE_GROUP;
-                $newWheel->token = $token;
-                $newWheel->assessment_id = $assessment->id;
-
-                $newWheel->save();
+                foreach ($wheels as $wheel)
+                    if ($wheel->observer_id == $memberId && $wheel->answerStatus != '100%') {
+                        $this->sendWheel($wheel);
+                        $sent = true;
+                        break;
+                    }
             }
-
-            $this->sendWheel($newWheel);
         }
 
-        $assessment->group_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
-    public function actionSendOrganizational($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        foreach ($assessment->team->members as $observerMember) {
-            $token = $this->newToken();
-
-            foreach ($assessment->team->members as $observedMember) {
-                $newWheel = new Wheel();
-
-                $newWheel->observer_id = $observerMember->member->id;
-                $newWheel->observed_id = $observedMember->member->id;
-                $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
-                $newWheel->token = $token;
-                $newWheel->assessment_id = $assessment->id;
-
-                $newWheel->save();
-            }
-
-            $this->sendWheel($newWheel);
-        }
-
-        $assessment->organizational_status = Assessment::STATUS_SENT;
-        $assessment->save();
-
+        if ($sent == false)
+            \Yii::$app->session->addFlash('info', \Yii::t('assessment', 'Wheel already fullfilled. Email not sent.'));
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
@@ -167,9 +177,11 @@ class AssessmentController extends Controller {
                             'wheel' => $type_text,
                             'assessment' => $wheel->assessment->name,
                 ]))
-                ->setFrom($wheel->coach->email)
+                ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($wheel->observer->email)
                 ->send();
+
+        \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Wheel sent to {user}.', ['user' => $wheel->observer->fullname]));
     }
 
 }

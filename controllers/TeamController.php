@@ -151,31 +151,6 @@ class TeamController extends Controller {
         return $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
     }
 
-    public function actionNewAssessment($id) {
-        $assessment = new Assessment();
-        $assessment->team_id = $id;
-
-        if ($assessment->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully created.'));
-        } else {
-            SiteController::FlashErrors($assessment);
-        }
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
-    public function actionDeleteAssessment($id) {
-        $assessment = Assessment::findOne($id);
-
-        $teamId = $assessment->team->id;
-
-        if ($assessment->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully deleted.'));
-        } else {
-            SiteController::FlashErrors($assessment);
-        }
-        return $this->redirect(['/team/view', 'id' => $teamId]);
-    }
-
     private function getPersons() {
         $persons = [];
         foreach (Person::browse()->all() as $person)
@@ -184,4 +159,3 @@ class TeamController extends Controller {
     }
 
 }
-

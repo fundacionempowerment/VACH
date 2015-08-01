@@ -33,7 +33,11 @@ class DashboardController extends Controller {
         $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
 
         if ($filter->companyId > 0) {
-            $teams = ArrayHelper::map(Team::findAll(['company_id' => $filter->companyId]), 'id', 'fullname');
+            $teamQuery = Team::find()
+                    ->where(['company_id' => $filter->companyId])
+                    ->with(['coach', 'company'])
+                    ->all();
+            $teams = ArrayHelper::map($teamQuery, 'id', 'fullname');
 
             if (count($teams) == 1) {
                 foreach ($teams as $id => $fullname) {
@@ -56,7 +60,11 @@ class DashboardController extends Controller {
         }
 
         if ($filter->teamId > 0) {
-            $assessments = ArrayHelper::map(Assessment::findAll(['team_id' => $filter->teamId]), 'id', 'name');
+            $assessmentQuery = Assessment::find()
+                    ->where(['team_id' => $filter->teamId])
+                    ->with(['team', 'team.company'])
+                    ->all();
+            $assessments = ArrayHelper::map($assessmentQuery, 'id', 'name');
 
             if (count($assessments) == 1) {
                 foreach ($assessments as $id => $fullname) {
@@ -75,7 +83,7 @@ class DashboardController extends Controller {
                     $filter->assessmentId = 0;
             }
 
-            foreach (TeamMember::findAll(['team_id' => $filter->teamId]) as $teamMember)
+            foreach (TeamMember::find()->where(['team_id' => $filter->teamId])->all() as $teamMember)
                 $members[$teamMember->user_id] = $teamMember->member->fullname;
         }
 
