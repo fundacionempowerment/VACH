@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use \yii\widgets\MaskedInput;
 
 /* @var $this yii\web\View */
 $this->title = 'VACH';
@@ -30,11 +31,15 @@ $this->title = 'VACH';
                 <br />
                 <br />
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
-                <?= $wheelForm->field($wheel, 'token') ?>
+                <?=
+                $wheelForm->field($wheel, 'token')->widget(MaskedInput::className(), [
+                    'mask' => '999-999-999',
+                ])
+                ?>
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-primary', 'name' => 'run-button']) ?>                    
+                <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-primary', 'name' => 'run-button']) ?>                    
                 </div>
-                <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>
