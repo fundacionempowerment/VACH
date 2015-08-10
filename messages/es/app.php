@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -50,6 +49,7 @@ return [
     'Sign up' => '@@Registrese@@',
     'Thanks!' => '¡Gracias!',
     'This action cannot be reverted.' => 'Esta acción no puede ser revertida.',
+    'Tutorial' => 'Tutorial',
     'Type' => '@@Tipo@@',
     'Users' => 'Usuarios',
     'done' => '@@listo@@',

@@ -21,6 +21,7 @@ return [
     'Appropriateness' => 'Pertinencia',
     'Back to assessment board' => 'Volver al tablero del relevamiento',
     'Belonging' => 'Pertenencia',
+    'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'CPC: {wheel} answers of {person}' => 'CPC: respuestas a {wheel} de {person}',
     'Change Management' => 'Gestión del cambio',
     'Client guidance' => 'Orientación al cliente',

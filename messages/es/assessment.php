@@ -20,7 +20,6 @@ return [
     'Assessment' => 'Relevamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
     'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
-    'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'Go to dashboard...' => 'Ir al tablero...',
     'Group wheels' => 'Ruedas grupales',
     'In order to run this wheel via smartphone, please ask' => 'Para poder ejecutar esta rueda en un teléfono celular, por favor pida a',

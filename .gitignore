@@ -41,3 +41,6 @@ phpunit.phar
 *.7z
 *.xz
 *.rar
+
+# rendered documents
+*.pdf

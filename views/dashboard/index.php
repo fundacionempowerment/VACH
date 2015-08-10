@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
     var relationsData = new Array();
 </script>
 <div class="dashboard">
-    <script src="<?= yii\helpers\Url::to('@web/js/Chart.min.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/matrix.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/relations.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
     echo $this->render('_filter', [
