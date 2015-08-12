@@ -185,7 +185,12 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         ])
         ?>
     </div>
-    <?php Modal::begin(['header' => '<h4>' . Yii::t('assessment', 'Run on smartphone') . '</h4>']); ?>
+    <?php
+    Modal::begin([
+        'header' => '<h4>' . Yii::t('assessment', 'Run on smartphone') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
     <div class="text-center">
         <h3><?= Yii::t('assessment', 'In order to run this wheel via smartphone, please ask') ?></h3>
         <h2 id="member"></h2>

@@ -19,6 +19,7 @@
 return [
     'Assessment' => 'Relevamiento',
     'Assessment deleted.' => 'Relevamiento eliminadA',
+    'Assessments' => 'Relevamientos',
     'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
     'Go to dashboard...' => 'Ir al tablero...',
     'Group wheels' => 'Ruedas grupales',

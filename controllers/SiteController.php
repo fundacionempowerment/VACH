@@ -96,7 +96,7 @@ class SiteController extends Controller {
         Yii::$app->session->set('is_coach', $isCoach);
 
         if ($isCoach)
-            return $this->redirect(['/team']);
+            return $this->redirect(['/assessment']);
         else {
             Yii::$app->session->set('person_id', Yii::$app->user->id);
             return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
@@ -111,16 +111,23 @@ class SiteController extends Controller {
 
     public function actionRegister() {
         $model = new RegisterModel();
+        $model->isCoach = true;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->register()) {
                 $loginModel = new LoginForm();
                 $loginModel->username = $model->username;
                 $loginModel->password = $model->password;
 
-                if ($loginModel->login())
+                if ($loginModel->login()) {
+                    \Yii::$app->session->addFlash('success', \Yii::t('register', 'Sign up successfull. Welcome to VACH!'));
                     return $this->goHome();
+                }
             }
+            else
+                \Yii::$app->session->addFlash('error', \Yii::t('register', 'Username already used.'));
         }
+        else
+            SiteController::FlashErrors($model);
         return $this->render('register', [
                     'model' => $model,
         ]);

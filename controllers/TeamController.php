@@ -23,6 +23,9 @@ class TeamController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
+        if (Yii::$app->user->isGuest)
+            return $this->redirect(['/site']);
+
         $teams = Team::browse();
 
         return $this->render('index', [

@@ -23,11 +23,20 @@ if ($isAdministrator) {
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 if ($isCoach) {
-    $items[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
-    $items[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
-    $items[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
-    $items[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
+    $coachMenu[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
+    $coachMenu[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
+    $coachMenu[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
+    $coachMenu[] = ['label' => Yii::t('assessment', 'Assessments'), 'url' => ['/assessment']];
+    $coachMenu[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
+    $items[] = ['label' => Yii::t('app', 'Clients'), 'items' => $coachMenu];
 }
+
+$assisstanceMenu[] = ['label' => Yii::t('help', 'Tutorial'), 'url' => Url::to('@web/docs/tutorial.es.pdf')];
+$assisstanceMenu[] = ['label' => Yii::t('help', 'Empty individual wheel form'), 'url' => Url::to('@web/docs/individual.wheel.form.es.pdf')];
+$assisstanceMenu[] = ['label' => Yii::t('help', 'Empty group wheel form'), 'url' => Url::to('@web/docs/group.wheel.form.es.pdf')];
+$assisstanceMenu[] = ['label' => Yii::t('help', 'Empty organizational wheel form'), 'url' => Url::to('@web/docs/oganizational.wheel.form.es.pdf')];
+$items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
+
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];
 $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
     'url' => ['/site/logout'],

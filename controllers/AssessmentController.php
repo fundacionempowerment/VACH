@@ -15,7 +15,14 @@ class AssessmentController extends Controller {
     public $layout = 'inner';
 
     public function actionIndex() {
-        return $this->redirect(['/team']);
+        if (Yii::$app->user->isGuest)
+            return $this->redirect(['/site']);
+
+        $assessments = Assessment::browse();
+
+        return $this->render('index', [
+                    'assessments' => $assessments,
+        ]);
     }
 
     public function actionView($id) {
