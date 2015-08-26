@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "490a248d9cf261a14b22055170d1cdbb",
+    "hash": "010d9d1ff42ec8c8e8d4d756a21527db",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1437,6 +1437,43 @@
                 "yii2"
             ],
             "time": "2014-11-09 19:54:17"
+        },
+        {
+            "name": "mercadopago/sdk",
+            "version": "v0.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mercadopago/sdk-php.git",
+                "reference": "4e76a2b1d1dafa9ec58f42629b9192e82900cbe7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/4e76a2b1d1dafa9ec58f42629b9192e82900cbe7",
+                "reference": "4e76a2b1d1dafa9ec58f42629b9192e82900cbe7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/mercadopago.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Horacio Casatti",
+                    "email": "horacio.casatti@mercadolibre.com"
+                }
+            ],
+            "description": "MercadoPago SDK module for Payments integration.",
+            "keywords": [
+                "mercadopago",
+                "sdk"
+            ],
+            "time": "2015-08-24 20:12:20"
         },
         {
             "name": "swiftmailer/swiftmailer",

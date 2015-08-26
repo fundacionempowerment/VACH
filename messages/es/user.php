@@ -24,7 +24,6 @@ return [
     'If you forgot your password you can ' => '@@Si olvidó su contraseña puede @@',
     'Is administrator' => 'Es administrador',
     'My Account' => 'Mi cuenta',
-    'My Persons' => 'Mis Personas',
     'My account' => 'Mi cuenta',
     'New password' => 'Nueva contraseña',
     'New person' => 'Nueva persona',

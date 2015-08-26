@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="alert alert-warning">
             <?= Yii::t('app', "This action cannot be reverted.") ?>
             <br />
-            <?= Yii::t('assessment', "Once you click 'Save' button, team is locked, new member are not allowed, assessment is created and {count} licences are discounted.", ['count' => count($assessment->team->members)]) ?>
+            <?= Yii::t('assessment', "Once you click 'Save' button, team is locked, new member are not allowed and new assessment is created.") ?>
             <br />
             <?= Yii::t('app', 'Are you sure to continue?') ?>
         </div>

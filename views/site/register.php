@@ -10,13 +10,13 @@ use app\models\RegisterModel;
 
 $assisstances = RegisterModel::getAssisstanceTypes();
 
-$this->title = 'Registro';
+$this->title = Yii::t('register','Sign up');
 ?>
 <div class="site-register">
     <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Por favor, complete el formulario de registro:</p>
+    <p><?= Yii::t('register','Please, fill your sign up form out:') ?></p>
 
     <?php $form = ActiveForm::begin([ 'id' => 'register-form']); ?>
     <?= $form->field($model, 'name') ?>

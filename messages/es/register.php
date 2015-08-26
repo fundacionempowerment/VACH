@@ -19,7 +19,9 @@
 return [
     'Basic assisstance' => 'Asistencia básica',
     'No assisstance' => 'Sin asistencia',
+    'Please, fill your sign up form out:' => 'Por favor, complete este formulario:',
     'Premium assisstance' => 'Asistencia preferencial',
+    'Sign up' => 'Crear cuenta',
     'Sign up successfull. Welcome to VACH!' => 'Registro exitoso. ¡Bievenido a VACH!',
     'Technical assistance via any required communication device, all days, whole year.' => 'Asistencia técnica a través de cualquier dispositivo de comunicación requerido, todos los días, todo el año.',
     'Technical assistance via email, chat, teleconference, remote desktop, in labor days, in tipical commercial schedule, 9am to 6pm (Arg)' => 'Asistencia técnia a través de correo electrónico, chat, teleconferencia, escritorio remoto, en días laborales, dentro del hoarario típico de comercio, 9h a 18h (Arg)',

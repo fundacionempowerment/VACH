@@ -13,7 +13,7 @@ foreach ($wheel->answers as $answer)
     $answers[$answer->answer_order] = $answer->answer_value;
 
 $this->title = $wheel->id == 0 ? Yii::t('wheel', 'New wheel') : Yii::t('user', 'Answers');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'My Persons'), 'url' => ['/person']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
 $this->params['breadcrumbs'][] = ['label' => $wheel->person->fullname, 'url' => ['/person/view', 'id' => $wheel->person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel']];
 $this->params['breadcrumbs'][] = $this->title;

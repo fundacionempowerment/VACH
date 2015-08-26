@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if (count($team->assessments) == 0) { ?>
             <?php $form = ActiveForm::begin([ 'id' => 'addmember-form', 'options' => [ 'class' => 'form-inline']]);
             ?>
-            <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-primary', 'style' => 'margin-bottom: 10px;']) ?>
             <?=
             Select2::widget([
                 'name' => 'new_member',

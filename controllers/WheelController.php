@@ -257,6 +257,8 @@ class WheelController extends Controller {
             if (count($invalids) == 0) {
                 \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
                 return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+            } else {
+                \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
             }
         }
 

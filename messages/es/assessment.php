@@ -26,7 +26,7 @@ return [
     'In order to run this wheel via smartphone, please ask' => 'Para poder ejecutar esta rueda en un teléfono celular, por favor pida a',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',
-    'Once you click \'Save\' button, team is locked, new member are not allowed, assessment is created and {count} licences are discounted.' => 'Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos, el relevamiento es creado y {count} licencias serán descontadas.',
+    'Once you click \'Save\' button, team is locked, new member are not allowed and new assessment is created.' => 'Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos y un relevamiento es creado.',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Run on smartphone' => 'Ejecutar en teléfono celular',
     'Wheel already fullfilled. Email not sent.' => 'Rueda ya completada. Correo electrónico no enviado.',
