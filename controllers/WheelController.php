@@ -15,7 +15,7 @@ use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 
-class WheelController extends Controller {
+class WheelController extends BaseController {
 
     public $layout = 'inner';
 

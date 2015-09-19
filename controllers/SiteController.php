@@ -10,7 +10,7 @@ use app\models\LoginForm;
 use app\models\RegisterModel;
 use app\models\Wheel;
 
-class SiteController extends Controller {
+class SiteController extends BaseController {
 
     public function behaviors() {
         return [
@@ -63,12 +63,10 @@ class SiteController extends Controller {
         if (!Yii::$app->request->isPost)
             return $this->goHome();
 
-        $wheel = Yii::$app->request->post('Wheel');
-        if (!isset($wheel))
-            return $this->goHome();
-
-        $token = $wheel['token'];
-        if (!isset($token))
+        $token = Yii::$app->request->post('token1');
+        $token .= '-' . Yii::$app->request->post('token2');
+        $token .= '-' . Yii::$app->request->post('token3');
+        if (!isset($token) || strlen($token) < 11)
             return $this->goHome();
 
         return $this->redirect(['wheel/run', 'token' => $token]);
@@ -98,8 +96,8 @@ class SiteController extends Controller {
         if ($isCoach)
             return $this->redirect(['/assessment']);
         else {
-            Yii::$app->session->set('person_id', Yii::$app->user->id);
-            return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
+            Yii::$app->user->logout();
+            return $this->redirect(['/site']);
         }
     }
 

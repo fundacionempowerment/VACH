@@ -19,28 +19,23 @@ $this->title = 'VACH';
     </div>
     <div class="body-content">
         <div class="row">
-            <div class="col-md-push-4 col-md-4">
+            <div class="col-sm-push-4 col-sm-4 text-center">
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
-                <div class="form-group">
-                    <div class="row col-md-2">
-                        <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                    </div>
-                    <div class="text-right">
-                        <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-success']) ?>
-                    </div>
-                </div>
+                <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?> 
+                <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-success']) ?>
                 <?php ActiveForm::end(); ?>
                 <br />
                 <br />
                 <br />
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
-                <?=
-                $wheelForm->field($wheel, 'token')->widget(MaskedInput::className(), [
-                    'mask' => '999-999-999',
-                ])
-                ?>
+                <label class="control-label"><?= Yii::t('wheel', 'Wheel token') ?></label><br>
+                <?= Html::textInput('token1', '', ['size' => '4', 'maxlength' => '3']) ?>
+                -
+                <?= Html::textInput('token2', '', ['size' => '4', 'maxlength' => '3']) ?>
+                -
+                <?= Html::textInput('token3', '', ['size' => '4', 'maxlength' => '3']) ?>
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-primary', 'name' => 'run-button']) ?>                    
                 </div>

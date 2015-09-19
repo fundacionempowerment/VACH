@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use app\models\Company;
 
-class CompanyController extends Controller {
+class CompanyController extends BaseController {
 
     public $layout = 'inner';
 
@@ -28,7 +28,7 @@ class CompanyController extends Controller {
         $company = new Company();
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been succesfully created.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been successfully created.'));
             return $this->redirect(['/company']);
         } else {
             SiteController::FlashErrors($company);
@@ -43,7 +43,7 @@ class CompanyController extends Controller {
         $company = Company::findOne(['id' => $id]);
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been succesfully created.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been successfully created.'));
             return $this->redirect(['/company']);
         } else {
             SiteController::FlashErrors($company);
@@ -57,7 +57,7 @@ class CompanyController extends Controller {
     public function actionDelete($id) {
         $company = Company::findOne(['id' => $id]);
         if ($company->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been succesfully deleted.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('company', 'Company has been successfully deleted.'));
         } else {
             SiteController::FlashErrors($company);
         }

@@ -14,7 +14,7 @@ use app\models\ClientModel;
 use app\models\AccountModel;
 use app\models\Feedback;
 
-class FeedbackController extends Controller {
+class FeedbackController extends BaseController {
 
     public function actionIndex() {
         $previous_feedback = Feedback::getPrevious();

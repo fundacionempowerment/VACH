@@ -64,7 +64,7 @@ class UserController extends Controller {
             }
 
             if ($user->save()) {
-                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully created.'));
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been successfully created.'));
                 return $this->redirect(['/user']);
             } else {
                 SiteController::FlashErrors($user);
@@ -89,7 +89,7 @@ class UserController extends Controller {
             }
 
             if ($user->save()) {
-                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully edited.'));
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been successfully edited.'));
                 return $this->redirect(['/user']);
             } else {
                 SiteController::FlashErrors($user);
@@ -105,7 +105,7 @@ class UserController extends Controller {
     public function actionDelete($id) {
         $user = User::findOne(['id' => $id]);
         if ($user->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been succesfully deleted.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('user', 'User has been successfully deleted.'));
         } else {
             SiteController::FlashErrors($user);
         }
@@ -128,7 +128,7 @@ class UserController extends Controller {
             }
 
             if ($user->save()) {
-                \Yii::$app->session->addFlash('success', \Yii::t('user', 'Your personal data has been succesfully saved.'));
+                \Yii::$app->session->addFlash('success', \Yii::t('user', 'Your personal data has been successfully saved.'));
                 return $this->redirect(['/site']);
             } else {
                 SiteController::FlashErrors($user);

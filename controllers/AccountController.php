@@ -13,7 +13,7 @@ use app\models\CoachModel;
 use app\models\ClientModel;
 use app\models\AccountModel;
 
-class AccountController extends Controller {
+class AccountController extends BaseController {
 
     public $layout = 'inner';
 

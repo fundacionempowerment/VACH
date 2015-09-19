@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Assessment has been succesfully created.' => 'Relevamiento ha sido creado exitosamente.',
+    'Assessment has been successfully created.' => 'Relevamiento ha sido creado exitosamente.',
     'Assessments' => 'Relevamientos',
     'Coach' => 'Coach',
     'Company' => 'Empresa',
@@ -32,9 +32,9 @@ return [
     'Team' => 'Equipo',
     'Team data' => 'Datos del equipo',
     'Team deleted.' => 'Equipo eliminado.',
-    'Team has been succesfully created.' => 'Equipo creado exitosamente.',
-    'Team member has been succesfully created.' => 'Miembro de equipo creado exitosamente.',
-    'Team member has been succesfully deleted.' => 'Miembro de equipo eliminado exitosamente.',
-    'Team member has been succesfully saved.' => 'Miembro de equipo guardado exitosamente.',
+    'Team has been successfully created.' => 'Equipo creado exitosamente.',
+    'Team member has been successfully created.' => 'Miembro de equipo creado exitosamente.',
+    'Team member has been successfully deleted.' => 'Miembro de equipo eliminado exitosamente.',
+    'Team member has been successfully saved.' => 'Miembro de equipo guardado exitosamente.',
     'Teams' => 'Equipos',
 ];

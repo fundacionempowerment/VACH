@@ -10,7 +10,7 @@ use app\models\Assessment;
 use app\models\DashboardFilter;
 use app\models\Wheel;
 
-class AssessmentController extends Controller {
+class AssessmentController extends BaseController {
 
     public $layout = 'inner';
 
@@ -75,7 +75,7 @@ class AssessmentController extends Controller {
                     $newWheel->save();
                 }
             }
-            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully created.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been successfully created.'));
             return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
         } else {
             SiteController::FlashErrors($assessment);

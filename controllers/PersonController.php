@@ -7,7 +7,7 @@ use yii\web\Controller;
 use app\models\CoachModel;
 use app\models\Person;
 
-class PersonController extends Controller {
+class PersonController extends BaseController {
 
     public $layout = 'inner';
 
@@ -30,7 +30,7 @@ class PersonController extends Controller {
         $person = new Person();
 
         if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been succesfully created.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully created.'));
             return $this->redirect(['/person']);
         } else {
             foreach ($person->getErrors() as $attribute => $errors)
@@ -47,7 +47,7 @@ class PersonController extends Controller {
         $person = Person::findOne(['id' => $id]);
 
         if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been succesfully created.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully created.'));
             return $this->redirect(['/person']);
         } else {
             foreach ($person->getErrors() as $attribute => $errors)
@@ -63,7 +63,7 @@ class PersonController extends Controller {
     public function actionDelete($id) {
         $person = Person::findOne(['id' => $id]);
         if ($person->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been succesfully deleted.'));
+            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully deleted.'));
             return $this->redirect(['/person']);
         } else {
             foreach ($person->getErrors() as $attribute => $errors)
