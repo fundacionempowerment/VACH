@@ -54,6 +54,11 @@ class Person extends ActiveRecord {
     public function afterFind() {
         $this->fullname = $this->name . ' ' . $this->surname;
     }
+    
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        $this->afterFind();
+    }
 
     public function beforeValidate() {
         if (!isset($this->username))

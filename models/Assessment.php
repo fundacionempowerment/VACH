@@ -54,6 +54,11 @@ class Assessment extends ActiveRecord {
         parent::afterFind();
     }
 
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        $this->afterFind();
+    }
+
     public static function browse() {
         return Assessment::find()
                         ->select('assessment.*')

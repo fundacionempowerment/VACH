@@ -35,6 +35,9 @@ $assisstanceMenu[] = ['label' => Yii::t('help', 'Tutorial'), 'url' => Url::to('@
 $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty individual wheel form'), 'url' => Url::to('@web/docs/individual.wheel.form.es.pdf')];
 $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty group wheel form'), 'url' => Url::to('@web/docs/group.wheel.form.es.pdf')];
 $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty organizational wheel form'), 'url' => Url::to('@web/docs/oganizational.wheel.form.es.pdf')];
+if ($isCoach) {
+    $assisstanceMenu[] = ['label' => Yii::t('log', 'Event Log'), 'url' => ['/log']];
+}
 $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 
 $items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];

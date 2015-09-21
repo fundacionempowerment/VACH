@@ -141,6 +141,11 @@ class WheelController extends BaseController {
                 if (count($current_wheel->answers) == $questionCount) {
                     if (Yii::$app->params['send_wheel_answers'] == true)
                         $this->sendAnswers($current_wheel);
+
+                    $type_text = Wheel::getWheelTypes()[$current_wheel->type];
+
+                    $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);
+                    LogController::log($text, $current_wheel->coach->id);
                     return $this->redirect(['/wheel/run', 'token' => $token]);
                 }
             }
@@ -164,10 +169,9 @@ class WheelController extends BaseController {
     public function actionDelete($id) {
         $wheel = Wheel::findOne(['id' => $id]);
         if ($wheel->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel deleted.'));
+            SiteController::addFlash('success', Yii::t('wheel', 'Wheel deleted.'));
         } else {
-            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
-                    . $wheel->getErrors());
+            SiteController::FlashErrors($wheel);
         }
         return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
     }
@@ -197,8 +201,7 @@ class WheelController extends BaseController {
                 $question->save();
             }
 
-            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
-
+            SiteController::addFlash('success', Yii::t('wheel', 'Wheel questions saved.'));
             return $this->redirect(['/site']);
         }
 
@@ -255,7 +258,7 @@ class WheelController extends BaseController {
                 }
             }
             if (count($invalids) == 0) {
-                \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+                SiteController::addFlash('success', Yii::t('wheel', 'Wheel answers saved.'));
                 return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
             } else {
                 \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));

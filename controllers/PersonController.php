@@ -30,12 +30,10 @@ class PersonController extends BaseController {
         $person = new Person();
 
         if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully created.'));
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $person->fullname]));
             return $this->redirect(['/person']);
         } else {
-            foreach ($person->getErrors() as $attribute => $errors)
-                foreach ($errors as $error)
-                    \Yii::$app->session->addFlash('error', \Yii::t('user', 'Person not saved: ') . $error);
+            SiteController::FlashErrors($person);
         }
 
         return $this->render('form', [
@@ -47,12 +45,10 @@ class PersonController extends BaseController {
         $person = Person::findOne(['id' => $id]);
 
         if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully created.'));
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $person->fullname]));
             return $this->redirect(['/person']);
         } else {
-            foreach ($person->getErrors() as $attribute => $errors)
-                foreach ($errors as $error)
-                    \Yii::$app->session->addFlash('error', \Yii::t('user', 'Person not saved: ') . $error);
+           SiteController::FlashErrors($person);
         }
 
         return $this->render('form', [
@@ -63,12 +59,10 @@ class PersonController extends BaseController {
     public function actionDelete($id) {
         $person = Person::findOne(['id' => $id]);
         if ($person->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('user', 'Person has been successfully deleted.'));
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $person->fullname]));
             return $this->redirect(['/person']);
         } else {
-            foreach ($person->getErrors() as $attribute => $errors)
-                foreach ($errors as $error)
-                    \Yii::$app->session->addFlash('error', \Yii::t('user', 'Person not deleted: ') . $error);
+            SiteController::FlashErrors($person);
         }
     }
 

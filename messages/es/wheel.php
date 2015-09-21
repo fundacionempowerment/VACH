@@ -76,8 +76,8 @@ return [
     'View answers' => 'Ver respuestas',
     'Wheel' => 'Rueda',
     'Wheel Questions' => 'Preguntas de ruedas',
+    'Wheel answers saved.' => 'Repuestas de rueda guardadas.',
     'Wheel deleted.' => 'Rueda eliminada.',
-    'Wheel not delete:' => 'Rueda no eliminada:',
     'Wheel questions saved.' => 'La preguntas de ruedas guardadas.',
     'Wheel token' => 'Identificador de rueda',
     'Wheel type' => 'Tipo de rueda',
@@ -104,4 +104,5 @@ return [
     'sometimes' => 'a veces',
     'usually' => 'seguido',
     'worst' => 'pésimo',
+    '{wheel_type} of {observer} observing {observed} completed.' => '{wheel_type} de {observer} observando a {observed} completada.',
 ];

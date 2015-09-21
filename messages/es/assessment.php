@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -18,9 +19,8 @@
  */
 return [
     'Assessment' => 'Relevamiento',
-    'Assessment deleted.' => 'Relevamiento eliminadA',
     'Assessments' => 'Relevamientos',
-    'CPC: access to {wheel} of assessment {assessment}' => 'CPC: acceso a {wheel} del relavamiento {assessment}',
+    'CPC: access to {wheel_type} of assessment {assessment}' => 'CPC: acceso a {wheel_type} del relavamiento {assessment}',
     'Go to dashboard...' => 'Ir al tablero...',
     'Group wheels' => 'Ruedas grupales',
     'In order to run this wheel via smartphone, please ask' => 'Para poder ejecutar esta rueda en un teléfono celular, por favor pida a',
@@ -32,8 +32,8 @@ return [
     'Run on smartphone' => 'Ejecutar en teléfono celular',
     'Run on smartphones' => 'Ejectuar en teléfonos celulares',
     'Wheel already fullfilled. Email not sent.' => 'Rueda ya completada. Correo electrónico no enviado.',
-    'Wheel sent to {user}.' => 'Rueda enviada a {user}.',
     'and click over "Run" button' => 'y presione el botón "Ejecutar"',
     'and enter this token in "Wheel Token" field' => 'e ingrese este indentificador en el campo "Identificador de rueda"',
     'to enter this site in his/her phone browser' => 'que ingrese este sitio en el navegador de su celular',
+    '{wheel_type} sent to {user}.' => '{wheel_type} enviada a {user}',
 ];

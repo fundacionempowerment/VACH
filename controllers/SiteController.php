@@ -79,6 +79,7 @@ class SiteController extends BaseController {
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            LogController::log(Yii::t('app', 'Logged in as {username}.', ['username' => Yii::$app->user->identity->username]));
             return $this->redirectIfCoach();
         } else {
             $wheel = new Wheel();
@@ -151,13 +152,18 @@ class SiteController extends BaseController {
         return $this->goHome();
     }
 
+    public static function addFlash($key, $value) {
+        \Yii::$app->session->addFlash('success', $value);
+        LogController::log($value);
+    }
+
     public static function FlashErrors($record) {
         if (!isset($record))
             return;
 
         foreach ($record->getErrors() as $attribute => $messages)
             foreach ($messages as $message)
-                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ') . $message);
+                self::addFlash('error', \Yii::t('app', 'Problem: ') . $message);
     }
 
     public function actionMigrateUp() {
