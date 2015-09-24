@@ -71,14 +71,15 @@ class WheelController extends BaseController {
         $token = Yii::$app->request->get('token');
 
         if (Yii::$app->request->isGet) {
-            if ($token == null)
-                $this->redirect(['/site']);
+            if ($token == null) {
+                return $this->redirect(['/site', 'nowheel' => 1]);
+            }
 
             $wheels = Wheel::findAll(['token' => $token]);
 
-            if (count($wheels) == 0)
-                $this->redirect(['/site']);
-
+            if (count($wheels) == 0) {
+                return $this->redirect(['/site', 'nowheel' => 1]);
+            }
             $current_wheel = null;
 
             foreach ($wheels as $wheel)

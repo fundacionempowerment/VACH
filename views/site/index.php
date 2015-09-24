@@ -19,23 +19,23 @@ $this->title = 'VACH';
     </div>
     <div class="body-content">
         <div class="row">
-            <div class="col-sm-push-4 col-sm-4 text-center">
+            <div class="col-sm-push-4 col-sm-4">
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
-                <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?> 
-                <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-success']) ?>
+                <div class="row col-xs-2">
+                    <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                </div>
+                <div class="text-right">
+                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-success']) ?>
+                </div>
                 <?php ActiveForm::end(); ?>
-                <br />
-                <br />
-                <br />
+            </div>
+            <div class="clearfix" >
+            </div>
+            <div class="col-sm-push-5 col-sm-2 text-center" style="margin-top: 30px;">    
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
-                <label class="control-label"><?= Yii::t('wheel', 'Wheel token') ?></label><br>
-                <?= Html::textInput('token1', '', ['size' => '4', 'maxlength' => '3']) ?>
-                -
-                <?= Html::textInput('token2', '', ['size' => '4', 'maxlength' => '3']) ?>
-                -
-                <?= Html::textInput('token3', '', ['size' => '4', 'maxlength' => '3']) ?>
+                <?= $wheelForm->field($wheel, 'token') ?>
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-primary', 'name' => 'run-button']) ?>                    
                 </div>

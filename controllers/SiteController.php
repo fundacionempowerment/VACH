@@ -53,6 +53,11 @@ class SiteController extends BaseController {
 
         $model = new LoginForm();
         $wheel = new Wheel();
+
+        $nowheel = Yii::$app->request->get('nowheel');
+        if (isset($nowheel))
+            $wheel->addError('token', Yii::t('wheel', 'Wheel not found.'));
+
         return $this->render('index', [
                     'model' => $model,
                     'wheel' => $wheel,
@@ -63,12 +68,14 @@ class SiteController extends BaseController {
         if (!Yii::$app->request->isPost)
             return $this->goHome();
 
-        $token = Yii::$app->request->post('token1');
-        $token .= '-' . Yii::$app->request->post('token2');
-        $token .= '-' . Yii::$app->request->post('token3');
-        if (!isset($token) || strlen($token) < 11)
-            return $this->goHome();
-
+        $wheel = Yii::$app->request->post('Wheel');
+        if (!isset($wheel)) {
+            return $this->redirect(['/site', 'nowheel' => 1]);
+        }
+        $token = $wheel['token'];
+        if (!isset($token)) {
+            return $this->redirect(['/site', 'nowheel' => 1]);
+        }
         return $this->redirect(['wheel/run', 'token' => $token]);
     }
 

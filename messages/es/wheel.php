@@ -78,6 +78,7 @@ return [
     'Wheel Questions' => 'Preguntas de ruedas',
     'Wheel answers saved.' => 'Repuestas de rueda guardadas.',
     'Wheel deleted.' => 'Rueda eliminada.',
+    'Wheel not found.' => 'Rueda no encontrada.',
     'Wheel questions saved.' => 'La preguntas de ruedas guardadas.',
     'Wheel token' => 'Identificador de rueda',
     'Wheel type' => 'Tipo de rueda',
