@@ -23,6 +23,8 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => [
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
+$buttonId = 0;
+
 $wheels_completed = true;
 foreach ($assessment->individualWheels as $wheel)
     if ($wheel->answerStatus != '100%') {
@@ -55,7 +57,12 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
     </div>
     <div class="clearfix"></div>
     <div class="row col-md-5">
-        <h2><?= Yii::t('assessment', 'Individual wheels') ?></h2>
+        <h2>
+            <?= Yii::t('assessment', 'Individual wheels') ?>
+            <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('individual_modal');" >
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+            </button>
+        </h2>
         <table class="table table-bordered table-hover">
             <?php foreach ($assessment->team->members as $observerMember) { ?>
                 <tr>
@@ -66,10 +73,11 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                         foreach ($assessment->individualWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
                                     <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
                                 </button>
                                 <?php
+                                $buttonId++;
                                 break;
                             }
                         ?>
@@ -89,7 +97,12 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
     </div>
     <div class="clearfix"></div>
     <div class="row col-md-12">
-        <h2><?= Yii::t('assessment', 'Group wheels') ?></h2>
+        <h2>
+            <?= Yii::t('assessment', 'Group wheels') ?>
+            <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('group_modal');" >
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+            </button>
+        </h2>
         <table width="100%" class="table table-bordered table-hover">
             <tr>
                 <th style="text-align: right;">
@@ -110,10 +123,11 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                         foreach ($assessment->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
                                     <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
                                 </button>
                                 <?php
+                                $buttonId++;
                                 break;
                             }
                         ?>
@@ -135,7 +149,12 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
     </div>
     <div class="clearfix"></div>
     <div class="row col-md-12">
-        <h2><?= Yii::t('assessment', 'Organizational wheels') ?></h2>
+        <h2>
+            <?= Yii::t('assessment', 'Organizational wheels') ?>
+            <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('organizational_modal');" >
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+            </button>
+        </h2>
         <table width="100%" class="table table-bordered table-hover">
             <tr>
                 <th style="text-align: right;">
@@ -156,10 +175,11 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                         foreach ($assessment->organizationalWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <button type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showToken('<?= $observerMember->member->fullname ?>', '<?= $wheel->token ?>');" >
                                     <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
                                 </button>
                                 <?php
+                                $buttonId++;
                                 break;
                             }
                         ?>
@@ -185,7 +205,13 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         ])
         ?>
     </div>
-    <?php Modal::begin(['header' => '<h4>' . Yii::t('assessment', 'Run on smartphone') . '</h4>']); ?>
+    <?php
+    Modal::begin([
+        'id' => 'token_modal',
+        'header' => '<h4>' . Yii::t('assessment', 'Run on smartphone') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
     <div class="text-center">
         <h3><?= Yii::t('assessment', 'In order to run this wheel via smartphone, please ask') ?></h3>
         <h2 id="member"></h2>
@@ -194,15 +220,110 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         <h3><?= Yii::t('assessment', 'and enter this token in "Wheel Token" field') ?></h3>
         <h2 id="token"></h2>
         <h3><?= Yii::t('assessment', 'and click over "Run" button') ?></h3>
-        <?php Modal::end(); ?>
     </div>
+    <?php Modal::end(); ?>
+    <?php
+    Modal::begin([
+        'id' => 'individual_modal',
+        'header' => '<h4>' . Yii::t('assessment', 'Run on smartphones') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
+    <div class="text-center">
+        <h3><?= Yii::t('assessment', 'Please ask the audience to enter this site and token in his/her phone browser') ?></h3>
+        <h2><?= Url::to('@web/', true); ?></h2>
+        <table align="center" class="table table-bordered table-hover" style="width: 50%; font-size: 18px;">
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <td style="text-align: right">
+                        <?= $observerMember->member->fullname ?>:
+                    </td>
+                    <td>
+                        <?php
+                        foreach ($assessment->individualWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                echo $wheel->token;
+                                break;
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+    <?php Modal::end(); ?>
+    <?php
+    Modal::begin([
+        'id' => 'group_modal',
+        'header' => '<h4>' . Yii::t('assessment', 'Run on smartphones') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
+    <div class="text-center">
+        <h3><?= Yii::t('assessment', 'Please ask the audience to enter this site and token in his/her phone browser') ?></h3>
+        <h2><?= Url::to('@web/', true); ?></h2>
+        <table align="center" class="table table-bordered table-hover" style="width: 50%; font-size: 18px;">
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <td style="text-align: right">
+                        <?= $observerMember->member->fullname ?>:
+                    </td>
+                    <td>
+                        <?php
+                        foreach ($assessment->groupWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                echo $wheel->token;
+                                break;
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+    <?php Modal::end(); ?>
+    <?php
+    Modal::begin([
+        'id' => 'organizational_modal',
+        'header' => '<h4>' . Yii::t('assessment', 'Run on smartphones') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
+    <div class="text-center">
+        <h3><?= Yii::t('assessment', 'Please ask the audience to enter this site and token in his/her phone browser') ?></h3>
+        <h2><?= Url::to('@web/', true); ?></h2>
+        <table align="center" class="table table-bordered table-hover" style="width: 50%; font-size: 18px;">
+            <?php foreach ($assessment->team->members as $observerMember) { ?>
+                <tr>
+                    <td style="text-align: right">
+                        <?= $observerMember->member->fullname ?>:
+                    </td>
+                    <td>
+                        <?php
+                        foreach ($assessment->organizationalWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->user_id) {
+                                echo $wheel->token;
+                                break;
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+    <?php Modal::end(); ?>
 </div>
 <script type="text/javascript">
-                                    function showToken(member, token)
-                                    {
-                                        $('#w0').modal('show');
-                                        $('#member').html(member);
-                                        $('#token').html(token);
+                function showToken(member, token)
+                {
+                    $('#token_modal').modal('show');
+                    $('#member').html(member);
+                    $('#token').html(token);
 
-                                    }
+                }
+
+                function showTokens(modal)
+                {
+                    $('#' + modal).modal('show');
+                }
 </script>

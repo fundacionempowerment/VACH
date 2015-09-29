@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -26,6 +25,8 @@ return [
     'Average' => 'Promedio',
     'Begin' => 'Comenzar',
     'Cancel' => 'Cancelar',
+    'Clients' => 'Clientes',
+    'Create' => 'Crear',
     'Date' => 'Fecha',
     'Date and Time' => 'Fecha y hora',
     'Description' => 'Descripción',
@@ -34,6 +35,7 @@ return [
     'Empowerment Foundation' => 'Fundación Empowerment',
     'High' => 'Alto',
     'Home' => 'Inicio',
+    'Logged in as {username}.' => 'Ingresado como {username}',
     'Logout' => 'Salir',
     'Low' => 'Bajo',
     'Medium' => '@@Medio@@',
@@ -41,16 +43,20 @@ return [
     'Phone' => 'Teléfono',
     'Powered by' => 'Potenciado por',
     'Printable' => 'Imprimible',
-    'Problem while saving: ' => 'Problemas al guardar: ',
+    'Problem: ' => 'Problema: ',
     'Refresh' => 'Refrescar',
-    'Register' => 'Registrar',
     'Run' => 'Ejecutar',
     'Save' => 'Guardar',
     'Sign in' => 'Ingresar',
-    'Sign up' => '@@Registrese@@',
+    'Sign up' => 'Crear cuenta',
     'Thanks!' => '¡Gracias!',
     'This action cannot be reverted.' => 'Esta acción no puede ser revertida.',
     'Type' => '@@Tipo@@',
     'Users' => 'Usuarios',
     'done' => '@@listo@@',
+    '{name} has been successfully added to {group}.' => '{name} ha sido existosamente agregado a {group}',
+    '{name} has been successfully created.' => '{name} ha sido exitasamente creado.',
+    '{name} has been successfully deleted.' => '{name} ha sido exitosamente eliminado.',
+    '{name} has been successfully edited.' => '{name} ha sido exitosamente editado.',
+    '{name} has been successfully removed from {group}.' => '{name} ha sido exitosamente removido de {group}',
 ];

@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
     var relationsData = new Array();
 </script>
 <div class="dashboard">
-    <script src="<?= yii\helpers\Url::to('@web/js/Chart.min.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/matrix.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/relations.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
     echo $this->render('_filter', [
@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     window.onload = function() {
         for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15});
+            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});
         }
         for (var i in lineals) {
             new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, bezierCurve: false});

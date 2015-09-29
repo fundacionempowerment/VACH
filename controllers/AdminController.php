@@ -14,7 +14,7 @@ use app\models\ClientModel;
 use app\models\AccountModel;
 use app\models\Feedback;
 
-class AdminController extends Controller {
+class AdminController extends BaseController {
 
     public $layout = 'inner';
 

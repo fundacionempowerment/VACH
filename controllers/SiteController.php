@@ -10,7 +10,7 @@ use app\models\LoginForm;
 use app\models\RegisterModel;
 use app\models\Wheel;
 
-class SiteController extends Controller {
+class SiteController extends BaseController {
 
     public function behaviors() {
         return [
@@ -53,6 +53,11 @@ class SiteController extends Controller {
 
         $model = new LoginForm();
         $wheel = new Wheel();
+
+        $nowheel = Yii::$app->request->get('nowheel');
+        if (isset($nowheel))
+            $wheel->addError('token', Yii::t('wheel', 'Wheel not found.'));
+
         return $this->render('index', [
                     'model' => $model,
                     'wheel' => $wheel,
@@ -64,13 +69,13 @@ class SiteController extends Controller {
             return $this->goHome();
 
         $wheel = Yii::$app->request->post('Wheel');
-        if (!isset($wheel))
-            return $this->goHome();
-
+        if (!isset($wheel)) {
+            return $this->redirect(['/site', 'nowheel' => 1]);
+        }
         $token = $wheel['token'];
-        if (!isset($token))
-            return $this->goHome();
-
+        if (!isset($token)) {
+            return $this->redirect(['/site', 'nowheel' => 1]);
+        }
         return $this->redirect(['wheel/run', 'token' => $token]);
     }
 
@@ -81,6 +86,7 @@ class SiteController extends Controller {
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            LogController::log(Yii::t('app', 'Logged in as {username}.', ['username' => Yii::$app->user->identity->username]));
             return $this->redirectIfCoach();
         } else {
             $wheel = new Wheel();
@@ -96,10 +102,10 @@ class SiteController extends Controller {
         Yii::$app->session->set('is_coach', $isCoach);
 
         if ($isCoach)
-            return $this->redirect(['/team']);
+            return $this->redirect(['/assessment']);
         else {
-            Yii::$app->session->set('person_id', Yii::$app->user->id);
-            return $this->redirect(['/client/view', ['id' => Yii::$app->user->id]]);
+            Yii::$app->user->logout();
+            return $this->redirect(['/site']);
         }
     }
 
@@ -111,16 +117,23 @@ class SiteController extends Controller {
 
     public function actionRegister() {
         $model = new RegisterModel();
+        $model->isCoach = true;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->register()) {
                 $loginModel = new LoginForm();
                 $loginModel->username = $model->username;
                 $loginModel->password = $model->password;
 
-                if ($loginModel->login())
+                if ($loginModel->login()) {
+                    \Yii::$app->session->addFlash('success', \Yii::t('register', 'Sign up successfull. Welcome to VACH!'));
                     return $this->goHome();
+                }
             }
+            else
+                \Yii::$app->session->addFlash('error', \Yii::t('register', 'Username already used.'));
         }
+        else
+            SiteController::FlashErrors($model);
         return $this->render('register', [
                     'model' => $model,
         ]);
@@ -146,13 +159,18 @@ class SiteController extends Controller {
         return $this->goHome();
     }
 
+    public static function addFlash($key, $value) {
+        \Yii::$app->session->addFlash('success', $value);
+        LogController::log($value);
+    }
+
     public static function FlashErrors($record) {
         if (!isset($record))
             return;
 
         foreach ($record->getErrors() as $attribute => $messages)
             foreach ($messages as $message)
-                \Yii::$app->session->addFlash('error', \Yii::t('app', 'Problem while saving: ') . $message);
+                self::addFlash('error', \Yii::t('app', 'Problem: ') . $message);
     }
 
     public function actionMigrateUp() {

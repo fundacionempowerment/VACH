@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,18 +18,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Assessments' => 'Relevamientos',
-    'Coach' => 'Coach',
-    'Company' => 'Empresa',
-    'Member' => 'Miembro',
-    'Members' => 'Miembros',
-    'New assessment' => 'Nuevo relevamiento',
-    'New member' => 'Nuevo miembro',
-    'New team' => 'Nuevo equipo',
-    'Please fill out the following fields with team data:' => 'Por favor, complete los campos con los datos del equipo',
-    'Select new member ...' => 'Elegir nuevo miembro ...',
-    'Sponsor' => 'Patrocinador',
-    'Team' => 'Equipo',
-    'Team data' => 'Datos del equipo',
-    'Teams' => 'Equipos',
+    'Empty group wheel form' => 'Formulario vacío de rueda grupal',
+    'Empty individual wheel form' => 'Formulario vacío de rueda individual',
+    'Empty organizational wheel form' => 'Formulario vacío de rueda organizacional',
+    'Help' => 'Ayuda',
+    'Tutorial' => 'Tutorial',
 ];

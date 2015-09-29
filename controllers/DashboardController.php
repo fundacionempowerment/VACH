@@ -14,7 +14,7 @@ use app\models\Assessment;
 use app\models\Company;
 use app\models\DashboardFilter;
 
-class DashboardController extends Controller {
+class DashboardController extends BaseController {
 
     public $layout = 'inner';
 
