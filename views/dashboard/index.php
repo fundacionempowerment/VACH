@@ -105,7 +105,6 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_relation', [
             'data' => $relationsMatrix,
             'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);
@@ -113,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_number_matrix', [
             'data' => $relationsMatrix,
             'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);

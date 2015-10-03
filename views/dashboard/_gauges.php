@@ -11,11 +11,11 @@ use yii\bootstrap\Progress;
 /* @var $model app\models\ContactForm */
 
 if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Indicators');
+    $title = Yii::t('dashboard', 'Group Competence Matrix');
 else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Indicators');
+    $title = Yii::t('dashboard', 'Organizational Competence Matrix');
 else
-    $title = Yii::t('dashboard', 'Individual Indicators');
+    $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
 $gaugeRadio = 200;
 $token = rand(100000, 999999);
