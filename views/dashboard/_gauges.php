@@ -17,9 +17,6 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
-$gaugeRadio = 200;
-$token = rand(100000, 999999);
-
 $dimensions = WheelQuestion::getDimensionNames($type);
 ?>
 <div class="clearfix"></div>
@@ -27,20 +24,22 @@ $dimensions = WheelQuestion::getDimensionNames($type);
 <?php for ($i = 0; $i < 8; $i++) { ?>
     <div class="col-md-3" >
         <label><?= $dimensions[$i] ?></label>
-        <?php
-        if ($wheel[$i] > Yii::$app->params['good_consciousness'])
-            $class = 'progress-bar-success';
-        else if ($wheel[$i] < Yii::$app->params['minimal_consciousness'])
-            $class = 'progress-bar-danger';
-        else
-            $class = 'progress-bar-warning';
+        <b>
+            <?php
+            if ($gauges[$i] > Yii::$app->params['good_consciousness'])
+                $class = 'progress-bar-success';
+            else if ($gauges[$i] < Yii::$app->params['minimal_consciousness'])
+                $class = 'progress-bar-danger';
+            else
+                $class = 'progress-bar-warning';
 
-        echo Progress::widget([
-            'percent' => $wheel[$i] / 4 * 100,
-            'label' => floor($wheel[$i] / 4 * 100) . ' %',
-            'barOptions' => ['class' => $class],
-        ]);
-        ?>
+            echo Progress::widget([
+                'percent' => $gauges[$i] / 4 * 100,
+                'label' => floor($gauges[$i] / 4 * 100) . ' %',
+                'barOptions' => ['class' => $class],
+            ]);
+            ?>
+        </b>
     </div>
 <?php } ?>
 <div class="clearfix"></div>

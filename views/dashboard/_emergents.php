@@ -55,31 +55,33 @@ foreach ($selected_emergents as $emergent) {
     <?php } ?>
     <div class="col-md-12" >
         <label><?= $emergent['question'] ?></label>
-        <?php
-        if ($emergent['value'] > Yii::$app->params['good_consciousness'])
-            $class = 'progress-bar-success';
-        else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
-            $class = 'progress-bar-danger';
-        else
-            $class = 'progress-bar-warning';
+        <b>
+            <?php
+            if ($emergent['value'] > Yii::$app->params['good_consciousness'])
+                $class = 'progress-bar-success';
+            else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
+                $class = 'progress-bar-danger';
+            else
+                $class = 'progress-bar-warning';
 
 
-        if ($emergent['value'] == 0) {
-            echo Progress::widget([
-                'percent' => $emergent['value'] / 4 * 100,
-                'label' => floor($emergent['value'] / 4 * 100) . ' %',
-                'barOptions' => ['class' => $class, 'style' => 'width: 3%;'
-                ],
-            ]);
-        } else {
+            if ($emergent['value'] == 0) {
+                echo Progress::widget([
+                    'percent' => $emergent['value'] / 4 * 100,
+                    'label' => floor($emergent['value'] / 4 * 100) . ' %',
+                    'barOptions' => ['class' => $class, 'style' => 'width: 3%;'
+                    ],
+                ]);
+            } else {
 
-            echo Progress::widget([
-                'percent' => $emergent['value'] / 4 * 100,
-                'label' => floor($emergent['value'] / 4 * 100) . ' %',
-                'barOptions' => ['class' => $class],
-            ]);
-        }
-        ?>
+                echo Progress::widget([
+                    'percent' => $emergent['value'] / 4 * 100,
+                    'label' => floor($emergent['value'] / 4 * 100) . ' %',
+                    'barOptions' => ['class' => $class],
+                ]);
+            }
+            ?>
+        </b>
     </div>
 <?php } ?>
 <div class="clearfix"></div>

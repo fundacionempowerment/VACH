@@ -95,14 +95,13 @@ class DashboardController extends BaseController {
         $reflectedGroupWheel = [];
         $reflectedOrganizationalWheel = [];
 
-        $gauges = [];
-
         $individualPerformanceMatrix = [];
         $performanceMatrix = [];
 
         $memberRelationMatrix = [];
         $relationsMatrix = [];
 
+        $gauges = [];
         $emergents = [];
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {

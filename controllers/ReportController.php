@@ -84,7 +84,7 @@ class ReportController extends Controller {
                     'members' => $members,
         ]);
     }
-    
+
     public function actionPerformance($id) {
         $assessment = Assessment::findOne(['id' => $id]);
 
@@ -114,6 +114,37 @@ class ReportController extends Controller {
                     'assessment' => $assessment,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'members' => $members,
+        ]);
+    }
+
+    public function actionCompetences($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $assessment->report->competences = $analysis;
+            $assessment->report->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $id]);
+        }
+
+        $members = [];
+        $gauges = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('competences', [
+                    'assessment' => $assessment,
+                    'groupGauges' => $groupGauges,
+                    'organizationalGauges' => $organizationalGauges,
                     'members' => $members,
         ]);
     }

@@ -34,26 +34,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('report', 'Efectiveness Matrix'); ?>
         <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/effectiveness', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
     </h3>
-    <p> 
+    <p>
         <?= $assessment->report->effectiveness ?>
     </p>
     <h3>
         <?= Yii::t('report', 'Performance Matrix'); ?>
         <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/performance', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
     </h3>
-    <p> 
+    <p>
         <?= $assessment->report->performance ?>
     </p>
     <h3>
-        <?= Yii::t('report', 'Competence Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/competence', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        <?= Yii::t('report', 'Competences Matrix'); ?>
+        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/competences', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
     </h3>
-    <p> 
+    <p>
         <?= $assessment->report->competences ?>
     </p>
     <h3>
-        <?= Yii::t('report', 'Emergent Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/emergent', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        <?= Yii::t('report', 'Emergents Matrix'); ?>
+        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/emergents', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
     </h3>
     <p> 
         <?= $assessment->report->emergents ?>

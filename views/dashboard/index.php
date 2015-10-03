@@ -86,10 +86,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
 
-    // group
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
-            'wheel' => $gauges,
+            'gauges' => $gauges,
             'type' => $filter->wheelType,
         ]);
 
