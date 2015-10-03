@@ -211,5 +211,36 @@ class ReportController extends Controller {
         ]);
     }
 
+    public function actionRelations($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->relations = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $assessment->id]);
+        }
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('relations', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'members' => $members,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+        ]);
+    }
+
 }
 

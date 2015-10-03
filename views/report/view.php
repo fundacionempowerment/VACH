@@ -75,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Yii::t('report', 'Relations Matrix'); ?>
                 <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
-
+            <p>
+                <?= $individualReport->relations ?>
+            </p>
             <h3>
                 <?= Yii::t('report', 'Performance Matrix'); ?>
                 <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual_performance', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
