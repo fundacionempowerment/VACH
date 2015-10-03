@@ -58,32 +58,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <p> 
         <?= $assessment->report->emergents ?>
     </p>
-    <?php foreach ($assessment->team->members as $teamMember) { ?>
+    <?php foreach ($assessment->report->individualReports as $individualReport) { ?>
         <div class="clearfix"></div>
         <h1>
-            <?= $teamMember->member->fullname ?>
+            <?= $individualReport->member->fullname ?>
         </h1>
         <div class="col-md-push-1 col-md-11">
             <h3>
                 <?= Yii::t('report', 'Perception Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/perception', 'id' => 0,]), ['class' => 'btn btn-default']) ?>
+                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/perception', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
+            <p>
+                <?= $individualReport->perception ?>
+            </p>
             <h3>
                 <?= Yii::t('report', 'Relations Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => 0,]), ['class' => 'btn btn-default']) ?>
+                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
 
             <h3>
                 <?= Yii::t('report', 'Performance Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/performance', 'id' => 0,]), ['class' => 'btn btn-default']) ?>
+                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual_performance', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
             <h3>
                 <?= Yii::t('report', 'Competence Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/competence', 'id' => 0,]), ['class' => 'btn btn-default']) ?>
+                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual_competences', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
             <h3>
                 <?= Yii::t('report', 'Emergent Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/emergent', 'id' => 0,]), ['class' => 'btn btn-default']) ?>
+                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual_emergents', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
         </div>
     <?php } ?>

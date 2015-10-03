@@ -18,7 +18,7 @@ else
     $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
 
 $linealWidth = 350 * 1.5;
-$linealHeight = 200;
+$linealHeight = 250;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
@@ -29,7 +29,7 @@ for ($i = 0; $i < count($dimensions); $i++) {
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-xs-push-2 col-xs-8 col-md-push-2 col-md-8 text-center" >
+<div class="col-sm-12 col-md-push-2 col-md-8 text-center" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive"></canvas><br />
     <p>
         <span style="color: red;"><?= $comparedWheelName ?></span>

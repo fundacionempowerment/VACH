@@ -19,8 +19,12 @@ class Report extends ActiveRecord {
         ];
     }
 
-    public function getIndividuals() {
+    public function getIndividualReports() {
         return $this->hasMany(IndividualReport::className(), ['report_id' => 'id']);
+    }
+
+    public function getAssessment() {
+        return $this->hasOne(Assessment::className(), ['id' => 'assessment_id']);
     }
 
 }

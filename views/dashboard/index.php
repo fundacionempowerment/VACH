@@ -130,7 +130,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 </div>
 <script>
-
     window.onload = function() {
         for (var i in radars) {
             new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});

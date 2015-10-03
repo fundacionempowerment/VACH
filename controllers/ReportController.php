@@ -33,8 +33,8 @@ class ReportController extends Controller {
 
         foreach ($assessment->team->members as $teamMember) {
             $exists = false;
-            foreach ($assessment->report->individuals as $individual)
-                if ($individual->user_id == $teamMember->user_id) {
+            foreach ($assessment->report->individualReports as $individualReport)
+                if ($individualReport->user_id == $teamMember->user_id) {
                     $exists = true;
                     break;
                 }
@@ -132,7 +132,7 @@ class ReportController extends Controller {
 
         $members = [];
         $groupGauges = [];
-        $organizationalGauges= [];
+        $organizationalGauges = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
             $members[$teamMember->user_id] = $teamMember->member->fullname;
@@ -181,5 +181,35 @@ class ReportController extends Controller {
                     'members' => $members,
         ]);
     }
+
+    public function actionPerception($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->perception = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $assessment->id]);
+        }
+
+        $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->user_id);
+        $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->user_id);
+        $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->user_id);
+        $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->user_id);
+
+        return $this->render('perception', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'projectedGroupWheel' => $projectedGroupWheel,
+                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                    'reflectedGroupWheel' => $reflectedGroupWheel,
+                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
+        ]);
+    }
+
 }
 
