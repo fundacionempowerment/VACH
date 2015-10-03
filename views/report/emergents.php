@@ -14,7 +14,7 @@ use franciscomaya\sceditor\SCEditor;
 
 
 
-$this->title = Yii::t('report', 'Competences Matrix') . ' - ' . $assessment->fullname;
+$this->title = Yii::t('report', 'Emergents Matrix') . ' - ' . $assessment->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
@@ -24,20 +24,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="report-technical">
 
     <h1>
-        <?= Yii::t('report', 'Competences Matrix') ?>
+        <?= Yii::t('report', 'Emergents Matrix') ?>
     </h1>
     <?php
-    if (count($groupGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
-            'gauges' => $groupGauges,
+    if (count($groupEmergents) > 0) {
+        echo $this->render('../dashboard/_emergents', [
+            'emergents' => $groupEmergents,
             'type' => Wheel::TYPE_GROUP,
         ]);
     }
     ?>
     <?php
-    if (count($organizationalGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
-            'gauges' => $organizationalGauges,
+    if (count($organizationalEmergents) > 0) {
+        echo $this->render('../dashboard/_emergents', [
+            'emergents' => $organizationalEmergents,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             SCEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->competences,
+                'value' => $assessment->report->emergents,
                 'options' => ['rows' => 10],
                 'clientOptions' => [
                     'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",

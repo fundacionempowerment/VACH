@@ -131,7 +131,8 @@ class ReportController extends Controller {
         }
 
         $members = [];
-        $gauges = [];
+        $groupGauges = [];
+        $organizationalGauges= [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
             $members[$teamMember->user_id] = $teamMember->member->fullname;
@@ -149,5 +150,36 @@ class ReportController extends Controller {
         ]);
     }
 
+    public function actionEmergents($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $assessment->report->emergents = $analysis;
+            $assessment->report->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $id]);
+        }
+
+        $members = [];
+        $groupEmergents = [];
+        $organizationalEmergents = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('emergents', [
+                    'assessment' => $assessment,
+                    'groupEmergents' => $groupEmergents,
+                    'organizationalEmergents' => $organizationalEmergents,
+                    'members' => $members,
+        ]);
+    }
 }
 
