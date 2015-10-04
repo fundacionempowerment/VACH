@@ -120,10 +120,10 @@ class DashboardController extends BaseController {
             if ($filter->memberId > 0) {
                 $gauges = Wheel::getMemberGauges($filter->assessmentId, $filter->memberId, $filter->wheelType);
                 $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, $filter->wheelType);
+            } else {
+                $gauges = Wheel::getGauges($filter->assessmentId, $filter->wheelType);
+                $emergents = Wheel::getEmergents($filter->assessmentId, $filter->wheelType);
             }
-        } else {
-            $gauges = Wheel::getGauges($filter->assessmentId, $filter->wheelType);
-            $emergents = Wheel::getEmergents($filter->assessmentId, $filter->wheelType);
         }
 
         $selected_member_index = 0;

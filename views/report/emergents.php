@@ -14,7 +14,7 @@ use franciscomaya\sceditor\SCEditor;
 
 
 
-$this->title = Yii::t('report', 'Emergents Matrix') . ' - ' . $assessment->fullname;
+$this->title = Yii::t('report', 'Emergents Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];

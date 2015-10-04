@@ -18,6 +18,7 @@ else
     $title = Yii::t('dashboard', 'Individual Emergents Matrix');
 
 $dimensions = WheelQuestion::getDimensionNames($type);
+$questionCount = WheelQuestion::getQuestionCount($type) / 8;
 
 $selected_emergents = [];
 
@@ -26,18 +27,20 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
     $minValue = 100;
 
     foreach ($emergents as $emergent)
-        if ($emergent['dimension'] == $current_dimension) {
-            if ($emergent['value'] > Yii::$app->params['good_consciousness'] && $emergent['value'] > $maxValue)
-                $maxValue = $emergent['value'];
-            if ($emergent['value'] < Yii::$app->params['minimal_consciousness'] && $emergent['value'] < $minValue)
-                $minValue = $emergent['value'];
-        }
+        if ($emergent['dimension'] == $current_dimension)
+            if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
+                if ($emergent['value'] > Yii::$app->params['good_consciousness'] && $emergent['value'] > $maxValue)
+                    $maxValue = $emergent['value'];
+                if ($emergent['value'] < Yii::$app->params['minimal_consciousness'] && $emergent['value'] < $minValue)
+                    $minValue = $emergent['value'];
+            }
 
     foreach ($emergents as $emergent)
-        if ($emergent['dimension'] == $current_dimension) {
-            if ($emergent['value'] == $maxValue || $emergent['value'] == $minValue)
-                $selected_emergents[] = $emergent;
-        }
+        if ($emergent['dimension'] == $current_dimension)
+            if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
+                if ($emergent['value'] == $maxValue || $emergent['value'] == $minValue)
+                    $selected_emergents[] = $emergent;
+            }
 }
 
 $current_dimension = -1;
@@ -53,7 +56,7 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
         <h4><?= $dimensions[$current_dimension] ?></h4>
         <?php
         foreach ($selected_emergents as $emergent)
-            if ($emergent['dimension'] == $current_dimension && $emergent['value'] > Yii::$app->params['good_consciousness'] || $emergent['value'] < Yii::$app->params['minimal_consciousness']) {
+            if ($emergent['dimension'] == $current_dimension && ($emergent['value'] > Yii::$app->params['good_consciousness'] || $emergent['value'] < Yii::$app->params['minimal_consciousness'])) {
                 ?>
                 <label><?= $emergent['question'] ?></label>
                 <?php

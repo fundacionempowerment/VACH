@@ -28,7 +28,6 @@ class ReportController extends Controller {
             $newReport = new Report();
             $newReport->assessment_id = $id;
             $newReport->save();
-            $assessment->report = $newReport;
         }
 
         foreach ($assessment->team->members as $teamMember) {
