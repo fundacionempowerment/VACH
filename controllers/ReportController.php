@@ -26,23 +26,23 @@ class ReportController extends Controller {
 
         if ($assessment->report == null) {
             $newReport = new Report();
-            $newReport->assessment_id = $id;
-            $newReport->save();
+            $assessment->link('report', $newReport);
         }
 
         foreach ($assessment->team->members as $teamMember) {
             $exists = false;
-            foreach ($assessment->report->individualReports as $individualReport)
-                if ($individualReport->user_id == $teamMember->user_id) {
-                    $exists = true;
-                    break;
-                }
+            if (count($assessment->report->individualReports) > 0) {
+                foreach ($assessment->report->individualReports as $individualReport)
+                    if ($individualReport->user_id == $teamMember->user_id) {
+                        $exists = true;
+                        break;
+                    }
+            }
 
             if (!$exists) {
                 $newIndividualReport = new IndividualReport();
                 $newIndividualReport->user_id = $teamMember->user_id;
-                $newIndividualReport->report_id = $assessment->report->id;
-                $newIndividualReport->save();
+                $assessment->report->link('individualReports', $newIndividualReport);
             }
         }
 
@@ -238,6 +238,112 @@ class ReportController extends Controller {
                     'members' => $members,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+        ]);
+    }
+
+    public function actionIndividualPerformance($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->performance = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $assessment->id]);
+        }
+
+        $members = [];
+
+        $groupPerformanceMatrix = [];
+        $organizationalPerformanceMatrix = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('individual_performance', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'members' => $members,
+        ]);
+    }
+
+    public function actionIndividualCompetences($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->competences = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $assessment->id]);
+        }
+
+        $members = [];
+        $groupGauges = [];
+        $organizationalGauges = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('individual_competences', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupGauges' => $groupGauges,
+                    'organizationalGauges' => $organizationalGauges,
+                    'members' => $members,
+        ]);
+    }
+
+    public function actionIndividualEmergents($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->emergents = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/technical', 'id' => $assessment->id]);
+        }
+
+        $members = [];
+        $groupEmergents = [];
+        $organizationalEmergents = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('individual_emergents', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupEmergents' => $groupEmergents,
+                    'organizationalEmergents' => $organizationalEmergents,
+                    'members' => $members,
         ]);
     }
 

@@ -35,6 +35,7 @@ class m150725_000559_add_technical_report extends Migration {
             'perception' => Schema::TYPE_TEXT . ' NOT NULL',
             'relations' => Schema::TYPE_TEXT . ' NOT NULL',
             'competences' => Schema::TYPE_TEXT . ' NOT NULL',
+            'performance' => Schema::TYPE_TEXT . ' NOT NULL',
             'emergents' => Schema::TYPE_TEXT . ' NOT NULL',
             'summary' => Schema::TYPE_TEXT . ' NOT NULL',
             'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',

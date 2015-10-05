@@ -98,7 +98,6 @@ class DashboardController extends BaseController {
         $individualPerformanceMatrix = [];
         $performanceMatrix = [];
 
-        $memberRelationMatrix = [];
         $relationsMatrix = [];
 
         $gauges = [];
