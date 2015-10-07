@@ -57,6 +57,7 @@ return [
     'Organizational Wheels' => 'Ruedas organizacionales',
     'Physical Dimension' => 'Dimensión física',
     'Please, click next link to run the {wheel} of assessment {assessment}' => 'Por favor, cliquee el siguiente vínculo para ejecutar la {wheel} del relevamiento {assessment}',
+    'Please, enter next link in your brower to run the {wheel} of assessment {assessment}' => '',
     'Please, keep this email until the CPC process of your team is completed.' => 'Por favor, conserve este correo hasta que el proceso CPC de su equipo sea completado.',
     'Quality guidance' => 'Orientación a la calidad',
     'Question' => 'Pregunta',

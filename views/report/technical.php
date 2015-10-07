@@ -10,7 +10,7 @@ use yii\bootstrap\Button;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('report', 'Technical report');
+$this->title = Yii::t('report', 'Technical Report');
 ?>
 <script>
     function toggle(id)
@@ -32,7 +32,7 @@ $this->title = Yii::t('report', 'Technical report');
     <div class="col-lg-12 text-center">
         <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
         <h1>
-            <?= Yii::t('report', 'Technical report') ?>
+            <?= Yii::t('report', 'Technical Report') ?>
         </h1>
     </div>
     <div class="col-lg-6">
