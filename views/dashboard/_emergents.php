@@ -52,7 +52,7 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
     if ($current_dimension % 2 == 0)
         echo '<div class="clearfix"></div>';
     ?>
-    <div class="col-lg-6">
+    <div class="col-sm-6">
         <h4><?= $dimensions[$current_dimension] ?></h4>
         <?php
         foreach ($selected_emergents as $emergent)

@@ -14,7 +14,7 @@ use franciscomaya\sceditor\SCEditor;
 
 
 
-$this->title = Yii::t('report', 'Competences Matrix');
+$this->title = Yii::t('report', 'Summary');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
@@ -22,26 +22,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
-
     <h1>
-        <?= Yii::t('report', 'Competences Matrix of {member}', ['member' => $report->member->fullname]) ?>
+        <?= Yii::t('report', 'Summary') ?>
     </h1>
-    <?php
-    if (count($groupGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
-            'gauges' => $groupGauges,
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-    }
-    ?>
-    <?php
-    if (count($organizationalGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
-            'gauges' => $organizationalGauges,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-    }
-    ?>
     <div class="row col-md-12">
         <p>
             <?php
@@ -52,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             SCEditor::widget([
                 'name' => 'analysis',
-                'value' => $report->competences,
-                'options' => ['rows' => 10],
+                'value' => $assessment->report->summary,
+                'options' => ['rows' => 15],
                 'clientOptions' => [
                     'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
                     'width' => '100%',

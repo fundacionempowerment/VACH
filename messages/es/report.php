@@ -17,9 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Action plan' => 'Plan de acción',
+    'Action Plan' => 'Plan de acción',
     'Analysis saved.' => 'Análisis guardado.',
-    'Assessment summary' => 'Sintesis de relevamiento',
     'Competence Matrix' => 'Matriz de competencias',
     'Competences Matrix' => 'Matriz de competencias',
     'Competences Matrix of {member}' => 'Matriz de competencias de {member}',
@@ -27,16 +26,16 @@ return [
     'Emergent Matrix' => 'Matriz de emergentes',
     'Emergents Matrix' => 'Matriz de emergentes',
     'Emergents Matrix of {member}' => 'Matriz de emergentes de {member}',
+    'Fundaments' => 'Fundamentos',
     'Group and organizational performance' => 'Performance organizacional y grupal',
     'Index' => 'Índice',
     'Individual perferformance' => 'Performance individual',
     'Introduction' => 'Introducción',
-    'Method fundaments' => 'Fundamentos del método',
     'Perception Matrix' => 'Matriz de percepción',
     'Perception Matrix of {member}' => 'Matriz de percepción de {member}',
     'Performance Matrix' => 'Matriz de performance',
-    'Performance Matrix of {member}' => 'Matriz de performance de {member}',
     'Relations Matrix' => 'Matriz de relaciones',
     'Relations Matrix of {member}' => 'Matriz de relaciones de {member}',
-    'Technical Report' => 'Reporte técnico',
+    'Report' => 'Reporte',
+    'Summary' => 'Síntesis',
 ];

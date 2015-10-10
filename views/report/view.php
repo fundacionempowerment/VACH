@@ -14,7 +14,7 @@ use yii\bootstrap\Modal;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = Yii::t('report', 'Technical Report');
+$this->title = Yii::t('report', 'Report');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
@@ -29,7 +29,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?><br />
         <?= Yii::t('assessment', 'Assessment') ?>: <?= Html::label($assessment->fullname) ?>
     </div>
+    <div class="col-md-6 text-right">
+        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+    </div>
     <div class="clearfix"></div>
+    <h3>
+        <?= Yii::t('report', 'Introduction'); ?>
+        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/introduction', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+    </h3>
+    <p>
+        <?= $assessment->report->introduction ?>
+    </p>
     <h3>
         <?= Yii::t('report', 'Efectiveness Matrix'); ?>
         <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/effectiveness', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
@@ -79,13 +89,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $individualReport->relations ?>
             </p>
             <h3>
-                <?= Yii::t('report', 'Performance Matrix'); ?>
-                <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-performance', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
-            </h3>
-            <p>
-                <?= $individualReport->performance ?>
-            </p>
-            <h3>
                 <?= Yii::t('report', 'Competence Matrix'); ?>
                 <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-competences', 'id' => $individualReport->id]), ['class' => 'btn btn-default']) ?>
             </h3>
@@ -101,4 +104,20 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
     <?php } ?>
+    <div class="col-md-12">
+        <h3>
+            <?= Yii::t('report', 'Summary'); ?>
+            <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/summary', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        </h3>
+        <p>
+            <?= $assessment->report->summary ?>
+        </p>
+        <h3>
+            <?= Yii::t('report', 'Action Plan'); ?>
+            <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/action-plan', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        </h3>
+        <p>
+            <?= $assessment->report->action_plan ?>
+        </p>
+    </div>
 </div>

@@ -96,6 +96,15 @@ use kartik\widgets\Select2;
             ])
             ?>
         </div>
+        <div class="col-md-2 text-right">
+            <?php
+            if ($filter->assessmentId > 0)
+                echo Html::a(\Yii::t('assessment', 'Go to report...'), Url::to(['report/view', 'id' => $filter->assessmentId]), [
+                    'class' => 'btn btn-default'
+                ])
+                ?>
+        </div>
+
     </div>
     <?php ActiveForm::end(); ?>
 </div>

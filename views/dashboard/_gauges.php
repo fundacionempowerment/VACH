@@ -22,7 +22,7 @@ $dimensions = WheelQuestion::getDimensionNames($type);
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php for ($i = 0; $i < 8; $i++) { ?>
-    <div class="col-md-3" >
+    <div class="col-xs-3" >
         <label><?= $dimensions[$i] ?></label>
         <b>
             <?php

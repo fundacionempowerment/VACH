@@ -68,29 +68,15 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
 
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <?php
-                                $type_text = Wheel::getWheelTypes()[$wheel->type];
-                                $url = Url::toRoute(['wheel/run', 'token' => $wheel->token], true);
-                                $br = '%0D%0A%0D%0A';
-                                $to = $observerMember->member->email;
-                                $subject = Yii::t('assessment', 'CPC: access to {wheel_type} of assessment {assessment}', [
-                                            'wheel_type' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                ]);
-                                $body = Yii::t('wheel', "Dear {name},", [
-                                            'name' => $wheel->observer->name
-                                        ]) . $br . Yii::t('wheel', "Please, enter next link in your brower to run the {wheel} of assessment {assessment}", [
-                                            'wheel' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                        ]) . $br . urlencode($url) . $br . Yii::t('app', 'Empowerment Foundation');
-                                echo Html::a($mail_icon . '!', Url::to("mailto:$to?subject=$subject&body=$body"), ['class' => 'btn btn-default btn-xs'])
-                                ?>
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon ?>!
+                                </button>
                                 <?php
                                 $buttonId++;
                                 break;
@@ -133,28 +119,14 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <?php
-                                $type_text = Wheel::getWheelTypes()[$wheel->type];
-                                $url = Url::toRoute(['wheel/run', 'token' => $wheel->token], true);
-                                $br = '%0D%0A%0D%0A';
-                                $to = $observerMember->member->email;
-                                $subject = Yii::t('assessment', 'CPC: access to {wheel_type} of assessment {assessment}', [
-                                            'wheel_type' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                ]);
-                                $body = Yii::t('wheel', "Dear {name},", [
-                                            'name' => $wheel->observer->name
-                                        ]) . $br . Yii::t('wheel', "Please, enter next link in your brower to run the {wheel} of assessment {assessment}", [
-                                            'wheel' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                        ]) . $br . urlencode($url) . $br . Yii::t('app', 'Empowerment Foundation');
-                                echo Html::a($mail_icon . '!', Url::to("mailto:$to?subject=$subject&body=$body"), ['class' => 'btn btn-default btn-xs'])
-                                ?>
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon ?>!
+                                </button>
                                 <?php
                                 $buttonId++;
                                 break;
@@ -199,28 +171,14 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs']) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->organizationalWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->user_id) {
                                 ?>
-                                <?php
-                                $type_text = Wheel::getWheelTypes()[$wheel->type];
-                                $url = Url::toRoute(['wheel/run', 'token' => $wheel->token], true);
-                                $br = '%0D%0A%0D%0A';
-                                $to = $observerMember->member->email;
-                                $subject = Yii::t('assessment', 'CPC: access to {wheel_type} of assessment {assessment}', [
-                                            'wheel_type' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                ]);
-                                $body = Yii::t('wheel', "Dear {name},", [
-                                            'name' => $wheel->observer->name
-                                        ]) . $br . Yii::t('wheel', "Please, enter next link in your brower to run the {wheel} of assessment {assessment}", [
-                                            'wheel' => $type_text,
-                                            'assessment' => $wheel->assessment->name,
-                                        ]) . $br . urlencode($url) . $br . Yii::t('app', 'Empowerment Foundation');
-                                echo Html::a($mail_icon . '!', Url::to("mailto:$to?subject=$subject&body=$body"), ['class' => 'btn btn-default btn-xs'])
-                                ?>
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon ?>!
+                                </button>
                                 <?php
                                 $buttonId++;
                                 break;
@@ -248,11 +206,41 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         ])
         ?>
         <?=
-        Html::a(\Yii::t('assessment', 'Go to technical report...'), Url::to(['report/technical', 'id' => $assessment->id,]), [
+        Html::a(\Yii::t('assessment', 'Go to report...'), Url::to(['report/view', 'id' => $assessment->id,]), [
             'class' => ($wheels_completed ? 'btn btn-success' : 'btn btn-default')
         ])
         ?>
     </div>
+    <?php
+    Modal::begin([
+        'id' => 'email_modal',
+        'header' => '<h4>' . Yii::t('assessment', 'Email to send') . '</h4>',
+        'size' => Modal::SIZE_LARGE,
+    ]);
+    ?>
+    <div>
+        <h3><?= Yii::t('assessment', 'Please send this email') ?></h3>
+        <h2><?= Yii::t('app', 'To:') ?> <span id="member_email"></span></h2>
+        <h3><?= Yii::t('app', 'Body:') ?></h3>
+        <h3 style="margin-left: 50px;">
+            <p>
+                <?= Yii::t('wheel', "Dear ") ?> <span id="member"></span>
+            </p>
+            <p>
+                <?= Yii::t('wheel', "Please, use next link in your browser") ?>
+            </p>
+            <p>
+                <span id="url"></span>
+            </p>
+            <p>
+                <?= Yii::t('wheel', 'Thank you very much!') ?>
+            </p>
+            <p>
+                <?= Yii::t('app', 'Empowerment Foundation') ?>
+            </p>
+        </h3>        
+    </div>
+    <?php Modal::end(); ?>
     <?php
     Modal::begin([
         'id' => 'individual_modal',
@@ -345,12 +333,12 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
     <?php Modal::end(); ?>
 </div>
 <script type="text/javascript">
-                function showToken(member, token)
+                function showEmail(member, email, url, token)
                 {
-                    $('#token_modal').modal('show');
+                    $('#email_modal').modal('show');
                     $('#member').html(member);
-                    $('#token').html(token);
-
+                    $('#member_email').html(email);
+                    $('#url').html(url);
                 }
 
                 function showTokens(modal)

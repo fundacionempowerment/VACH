@@ -18,13 +18,14 @@ else
     $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
 
 $linealWidth = 350 * 1.5;
-$linealHeight = 250;
+$linealHeight = 200;
 $token = rand(100000, 999999);
 
 $dimensions = WheelQuestion::getDimensionNames($type);
 for ($i = 0; $i < count($dimensions); $i++) {
     $dimensions[$i] = str_replace('Orientación', 'O.', $dimensions[$i]);
     $dimensions[$i] = str_replace('Orientation', 'O.', $dimensions[$i]);
+    $dimensions[$i] = str_replace('Resolución', 'Res.', $dimensions[$i]);
 }
 ?>
 <div class="clearfix"></div>
