@@ -19,7 +19,6 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widgets": "*",
-        "mercadopago/sdk": "*",
         "franciscomaya/yii2-sceditor": "dev-master",
         "kartik-v/yii2-mpdf": "*"
     },

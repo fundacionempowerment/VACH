@@ -61,26 +61,23 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
                 <label><?= $emergent['question'] ?></label>
                 <?php
                 if ($emergent['value'] > Yii::$app->params['good_consciousness'])
-                    $class = 'progress-bar-success';
+                    $color = 'dff0d8';
                 else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
-                    $class = 'progress-bar-danger';
+                    $color = 'f2dede';
                 else
-                    $class = 'progress-bar-warning';
+                    $color = 'faf2cc';
 
-                if ($emergent['value'] == 0) {
-                    echo Progress::widget([
-                        'percent' => $emergent['value'] / 4 * 100,
-                        'label' => floor($emergent['value'] / 4 * 100) . ' %',
-                        'barOptions' => ['class' => $class, 'style' => 'width: 3%;'
-                        ],
-                    ]);
-                } else {
-                    echo Progress::widget([
-                        'percent' => $emergent['value'] / 4 * 100,
-                        'label' => floor($emergent['value'] / 4 * 100) . ' %',
-                        'barOptions' => ['class' => $class],
-                    ]);
-                }
+                $percentage = $emergent['value'] / 4 * 100;
+                if ($percentage < 6)
+                    $width = 6;
+                else
+                    $width = $percentage;
+                ?>
+                <div style='position:relative;' class="table table-bordered">
+                    <div style='font-size:0px;  border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</DIV>
+                    <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</DIV>
+                </div>
+                <?php
             }
         ?>
     </div>

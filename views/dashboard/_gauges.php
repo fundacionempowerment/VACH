@@ -24,22 +24,23 @@ $dimensions = WheelQuestion::getDimensionNames($type);
 <?php for ($i = 0; $i < 8; $i++) { ?>
     <div class="col-xs-3" >
         <label><?= $dimensions[$i] ?></label>
-        <b>
-            <?php
-            if ($gauges[$i] > Yii::$app->params['good_consciousness'])
-                $class = 'progress-bar-success';
-            else if ($gauges[$i] < Yii::$app->params['minimal_consciousness'])
-                $class = 'progress-bar-danger';
-            else
-                $class = 'progress-bar-warning';
-
-            echo Progress::widget([
-                'percent' => $gauges[$i] / 4 * 100,
-                'label' => floor($gauges[$i] / 4 * 100) . ' %',
-                'barOptions' => ['class' => $class],
-            ]);
-            ?>
-        </b>
+        <?php
+        if ($gauges[$i] > Yii::$app->params['good_consciousness'])
+            $color = 'dff0d8';
+        else if ($gauges[$i] < Yii::$app->params['minimal_consciousness'])
+            $color = 'f2dede';
+        else
+            $color = 'faf2cc';
+        $percentage = $gauges[$i] / 4 * 100;
+        if ($percentage < 5)
+            $width = 5;
+        else
+            $width = $percentage;
+        ?>
+        <div style='position:relative;' class="table table-bordered">
+            <div style='font-size:0px;  border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</DIV>
+            <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</DIV>
+        </div>
     </div>
 <?php } ?>
 <div class="clearfix"></div>

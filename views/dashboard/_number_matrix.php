@@ -59,7 +59,7 @@ $standar_deviation = Utils::standard_deviation($gaps);
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-md-12">
+<div class="row col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
             <td>

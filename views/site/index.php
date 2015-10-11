@@ -10,7 +10,7 @@ $this->title = 'VACH';
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <?= Html::img('@web/images/logo.png', ['class' => 'img-responsive']) ?>
+        <?= Html::img('@web/images/logo.png') ?>
         <?php if (Yii::$app->params['server_status'] != 'online') { ?>
             <h5 class="text-info">
                 <?= Yii::$app->params['server_status'] ?>
