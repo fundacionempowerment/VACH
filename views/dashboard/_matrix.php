@@ -12,11 +12,11 @@ use yii\helpers\Json;
 /* @var $model app\models\ContactForm */
 
 if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Potential Matrix');
+    $title = Yii::t('dashboard', 'Group Performance Matrix');
 else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Potential Matrix');
+    $title = Yii::t('dashboard', 'Organizational Performance Matrix');
 else
-    $title = Yii::t('dashboard', 'Individual Potential Matrix');
+    $title = Yii::t('dashboard', 'Individual Performance Matrix');
 
 $linealWidth = 800;
 $linealHeight = 400;

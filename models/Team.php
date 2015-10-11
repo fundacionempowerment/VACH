@@ -51,6 +51,11 @@ class Team extends ActiveRecord {
         parent::afterFind();
     }
 
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        $this->afterFind();
+    }
+
     public static function browse() {
         return Team::find()->where(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
     }

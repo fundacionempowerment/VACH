@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
     var relationsData = new Array();
 </script>
 <div class="dashboard">
-    <script src="<?= yii\helpers\Url::to('@web/js/Chart.min.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/matrix.js') ?>"></script>
-    <script src="<?= yii\helpers\Url::to('@web/js/relations.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+    <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
     echo $this->render('_filter', [
@@ -86,10 +86,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
 
-    // group
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
-            'wheel' => $gauges,
+            'gauges' => $gauges,
             'type' => $filter->wheelType,
         ]);
 
@@ -105,7 +104,12 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_relation', [
             'data' => $relationsMatrix,
             'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
+            'type' => $filter->wheelType,
+            'memberId' => $filter->memberId,
+        ]);
+        echo $this->render('_relation_table', [
+            'data' => $relationsMatrix,
+            'members' => $members,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);
@@ -113,7 +117,6 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_number_matrix', [
             'data' => $relationsMatrix,
             'members' => $members,
-            'memberRelationMatrix' => $memberRelationMatrix,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
         ]);
@@ -133,13 +136,12 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 </div>
 <script>
-
     window.onload = function() {
         for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15});
+            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});
         }
         for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, bezierCurve: false});
+            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
         }
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);

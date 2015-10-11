@@ -10,12 +10,19 @@ use app\models\Assessment;
 use app\models\DashboardFilter;
 use app\models\Wheel;
 
-class AssessmentController extends Controller {
+class AssessmentController extends BaseController {
 
     public $layout = 'inner';
 
     public function actionIndex() {
-        return $this->redirect(['/team']);
+        if (Yii::$app->user->isGuest)
+            return $this->redirect(['/site']);
+
+        $assessments = Assessment::browse();
+
+        return $this->render('index', [
+                    'assessments' => $assessments,
+        ]);
     }
 
     public function actionView($id) {
@@ -68,7 +75,7 @@ class AssessmentController extends Controller {
                     $newWheel->save();
                 }
             }
-            \Yii::$app->session->addFlash('success', \Yii::t('team', 'Assessment has been succesfully created.'));
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $assessment->fullname]));
             return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
         } else {
             SiteController::FlashErrors($assessment);
@@ -83,7 +90,7 @@ class AssessmentController extends Controller {
         $assessment = Assessment::findOne(['id' => $id]);
         $teamId = $assessment->team->id;
         if ($assessment->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Assessment deleted.'));
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $assessment->fullname]));
         } else {
             SiteController::FlashErrors($assessment);
         }
@@ -169,19 +176,20 @@ class AssessmentController extends Controller {
     }
 
     private function sendWheel($wheel) {
-        $type_text = Wheel::getWheelTypes()[$wheel->type];
+        $wheel_type = Wheel::getWheelTypes()[$wheel->type];
         Yii::$app->mailer->compose('wheel', [
                     'wheel' => $wheel,
                 ])
-                ->setSubject(Yii::t('assessment', 'CPC: access to {wheel} of assessment {assessment}', [
-                            'wheel' => $type_text,
+                ->setSubject(Yii::t('assessment', 'CPC: access to {wheel_type} of assessment {assessment}', [
+                            'wheel_type' => $wheel_type,
                             'assessment' => $wheel->assessment->name,
                 ]))
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($wheel->observer->email)
+                ->setBcc(Yii::$app->params['adminEmail'])
                 ->send();
 
-        \Yii::$app->session->addFlash('success', \Yii::t('assessment', 'Wheel sent to {user}.', ['user' => $wheel->observer->fullname]));
+        SiteController::addFlash('success', \Yii::t('assessment', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
     }
 
 }

@@ -13,14 +13,14 @@ use kartik\widgets\Select2;
 <div class="clearfix"></div>
 <script type="text/javascript">
     function lockAndSubmit(form) {
+        var filter = $("#filter-div").css('opacity', 0.3);
         form.submit();
     }
 </script>
-<div class="col-lg-12">
+<div id="filter-div" class="col-md-12">
     <?php
     $form = ActiveForm::begin([
                 'id' => 'dashboard-form',
-                'layout' => 'horizontal',
                 'fieldConfig' => [
                     'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
                     'horizontalCssClasses' => [
@@ -30,63 +30,81 @@ use kartik\widgets\Select2;
                         'error' => '',
                         'hint' => '',
                     ],
-                    'options' => ['class' => 'col-md-6']
                 ],
     ]);
     ?>
     <div class="form-group">
-        <?=
-        $form->field($filter, 'companyId')->widget(Select2::classname(), [
-            'data' => $companies,
-            'hideSearch' => true,
-            'options' => ['placeholder' => Yii::t('dashboard', 'Select company ...'), 'onchange' => 'lockAndSubmit(this.form);'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])
-        ?>
-        <?=
-        $form->field($filter, 'teamId')->widget(Select2::classname(), [
-            'data' => $teams,
-            'hideSearch' => true,
-            'options' => ['placeholder' => Yii::t('dashboard', 'Select team ...'), 'onchange' => 'lockAndSubmit(this.form);',],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])
-        ?>
-        <?=
-        $form->field($filter, 'assessmentId')->widget(Select2::classname(), [
-            'data' => $assessments,
-            'hideSearch' => true,
-            'options' => ['placeholder' => Yii::t('dashboard', 'Select assesment ...'), 'onchange' => 'lockAndSubmit(this.form);',],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])
-        ?>
+        <div class="col-md-4">
+            <?=
+            $form->field($filter, 'companyId')->widget(Select2::classname(), [
+                'data' => $companies,
+                'hideSearch' => true,
+                'options' => ['placeholder' => Yii::t('dashboard', 'Select company ...'), 'onchange' => 'lockAndSubmit(this.form);'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ])
+            ?>
+        </div>
+        <div class="col-md-4">
+            <?=
+            $form->field($filter, 'teamId')->widget(Select2::classname(), [
+                'data' => $teams,
+                'hideSearch' => true,
+                'options' => ['placeholder' => Yii::t('dashboard', 'Select team ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ])
+            ?>
+        </div>
+        <div class="col-md-4">
+            <?=
+            $form->field($filter, 'assessmentId')->widget(Select2::classname(), [
+                'data' => $assessments,
+                'hideSearch' => true,
+                'options' => ['placeholder' => Yii::t('dashboard', 'Select assesment ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ])
+            ?>
+        </div>
     </div>
     <div class="form-group">
-        <?=
-        $form->field($filter, 'memberId')->widget(Select2::classname(), [
-            'data' => $members,
-            'hideSearch' => true,
-            'options' => ['placeholder' => Yii::t('dashboard', 'Select member ...'), 'onchange' => 'lockAndSubmit(this.form);',],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])
-        ?>
-        <?=
-        $form->field($filter, 'wheelType')->widget(Select2::classname(), [
-            'data' => Wheel::getWheelTypes(),
-            'hideSearch' => true,
-            'options' => ['placeholder' => Yii::t('dashboard', 'Select wheel type ...'), 'onchange' => "lockAndSubmit(this.form);",],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])
-        ?>
+        <div class="col-md-offset-2 col-md-4">
+            <?=
+            $form->field($filter, 'wheelType')->widget(Select2::classname(), [
+                'data' => Wheel::getWheelTypes(),
+                'hideSearch' => true,
+                'options' => ['placeholder' => Yii::t('dashboard', 'Select wheel type ...'), 'onchange' => "lockAndSubmit(this.form);",],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ])
+            ?>
+        </div>
+        <div class="col-md-4">
+            <?=
+            $form->field($filter, 'memberId')->widget(Select2::classname(), [
+                'data' => $members,
+                'hideSearch' => true,
+                'options' => ['placeholder' => Yii::t('dashboard', 'Select member ...'), 'onchange' => 'lockAndSubmit(this.form);',],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ])
+            ?>
+        </div>
+        <div class="col-md-2 text-right">
+            <?php
+            if ($filter->assessmentId > 0)
+                echo Html::a(\Yii::t('assessment', 'Go to report...'), Url::to(['report/view', 'id' => $filter->assessmentId]), [
+                    'class' => 'btn btn-default'
+                ])
+                ?>
+        </div>
+
     </div>
     <?php ActiveForm::end(); ?>
 </div>

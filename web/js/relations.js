@@ -30,7 +30,7 @@ function doRelations(context, data)
     var image_text_height = imageSize + text_height;
 
     var imageObj = new Image();
-    imageObj.src = '../images/protoMale.png';
+    imageObj.src = '/images/protoMale.png';
     imageObj.onload = function() {
         context.font = '11pt Helvetica';
 

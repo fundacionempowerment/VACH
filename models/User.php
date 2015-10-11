@@ -108,6 +108,11 @@ class User extends ActiveRecord implements IdentityInterface {
         parent::afterFind();
     }
 
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        $this->afterFind();
+    }
+
     /**
      * Finds out if password reset token is valid
      *

@@ -11,7 +11,7 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser
+        - WebDriver
         - Db
 # you can use WebDriver instead of PhpBrowser to test javascript and ajax.
 # This will require you to install selenium. See http://codeception.com/docs/04-AcceptanceTests#Selenium
@@ -19,17 +19,15 @@ modules:
 # it is useful if you want to login in your app in each test.
 #        - WebDriver
     config:
-        PhpBrowser:
-# PLEASE ADJUST IT TO THE ACTUAL ENTRY POINT WITHOUT PATH INFO
-            url: http://localhost:8080
-#        WebDriver:
-#            url: http://localhost:8080
-#            browser: firefox
-#            restart: true
+        WebDriver:
+            url: 'http://localhost:8080/'
+            browser: firefox
+            window_size: maximize
+            restart: true
         Db:
             dsn: 'mysql:host=localhost;dbname=vach_test'
             user: 'vach'
             password: ''
             dump: codeception/_data/dump.sql
             populate: true
-            cleanup: false
+            cleanup: true

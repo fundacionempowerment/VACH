@@ -34,6 +34,9 @@ class Assessment extends ActiveRecord {
         return [
             'name' => Yii::t('app', 'Name'),
             'team_id' => Yii::t('team', 'Team'),
+            'IndividualWheelStatus' => Yii::t('wheel', 'Individual Wheels'),
+            'GroupWheelStatus' => Yii::t('wheel', 'Group Wheels'),
+            'OrganizationalWheelStatus' => Yii::t('wheel', 'Organizational Wheels'),
         ];
     }
 
@@ -51,18 +54,55 @@ class Assessment extends ActiveRecord {
         parent::afterFind();
     }
 
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        $this->afterFind();
+    }
+
+    public static function browse() {
+        return Assessment::find()
+                        ->select('assessment.*')
+                        ->innerJoin('team', '`team`.`id` = `assessment`.`team_id`')
+                        ->where(['team.coach_id' => Yii::$app->user->id])
+                        ->orderBy('assessment.id desc');
+    }
+
     public function getTeam() {
         return $this->hasOne(Team::className(), ['id' => 'team_id']);
     }
 
+    public function getReport() {
+        return $this->hasOne(Report::className(), ['assessment_id' => 'id']);
+    }
+
     public function wheelStatus($type) {
-        return (new Query)->select('wheel.observer_id, wheel.token, user.name, user.surname, count(wheel_answer.id) as count')
+        return (new Query)->select('count(wheel_answer.id) as count')
                         ->from('wheel')
                         ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
                         ->where(['assessment_id' => $this->id, 'type' => $type])
-                        ->innerJoin('user', 'user.id = wheel.observer_id')
-                        ->groupBy('wheel.observer_id, wheel.token, user.name, user.surname')
-                        ->all();
+                        ->scalar();
+        ;
+    }
+
+    public function getIndividualWheelStatus() {
+        $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
+        $members = count($this->team->members);
+        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        return round($answers / $questions * 100, 1) . ' %';
+    }
+
+    public function getGroupWheelStatus() {
+        $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
+        $members = count($this->team->members);
+        $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        return round($answers / $questions * 100, 1) . ' %';
+    }
+
+    public function getOrganizationalWheelStatus() {
+        $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
+        $members = count($this->team->members);
+        $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        return round($answers / $questions * 100, 1) . ' %';
     }
 
     public function getIndividualWheels() {

@@ -15,7 +15,7 @@ use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 
-class WheelController extends Controller {
+class WheelController extends BaseController {
 
     public $layout = 'inner';
 
@@ -71,14 +71,15 @@ class WheelController extends Controller {
         $token = Yii::$app->request->get('token');
 
         if (Yii::$app->request->isGet) {
-            if ($token == null)
-                $this->redirect(['/site']);
+            if ($token == null) {
+                return $this->redirect(['/site', 'nowheel' => 1]);
+            }
 
             $wheels = Wheel::findAll(['token' => $token]);
 
-            if (count($wheels) == 0)
-                $this->redirect(['/site']);
-
+            if (count($wheels) == 0) {
+                return $this->redirect(['/site', 'nowheel' => 1]);
+            }
             $current_wheel = null;
 
             foreach ($wheels as $wheel)
@@ -139,6 +140,13 @@ class WheelController extends Controller {
             if ($current_wheel->validate()) {
                 $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
+                    if (Yii::$app->params['send_wheel_answers'] == true)
+                        $this->sendAnswers($current_wheel);
+
+                    $type_text = Wheel::getWheelTypes()[$current_wheel->type];
+
+                    $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);
+                    LogController::log($text, $current_wheel->coach->id);
                     return $this->redirect(['/wheel/run', 'token' => $token]);
                 }
             }
@@ -162,10 +170,9 @@ class WheelController extends Controller {
     public function actionDelete($id) {
         $wheel = Wheel::findOne(['id' => $id]);
         if ($wheel->delete()) {
-            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel deleted.'));
+            SiteController::addFlash('success', Yii::t('wheel', 'Wheel deleted.'));
         } else {
-            \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Wheel not delete:')
-                    . $wheel->getErrors());
+            SiteController::FlashErrors($wheel);
         }
         return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
     }
@@ -195,8 +202,7 @@ class WheelController extends Controller {
                 $question->save();
             }
 
-            \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
-
+            SiteController::addFlash('success', Yii::t('wheel', 'Wheel questions saved.'));
             return $this->redirect(['/site']);
         }
 
@@ -253,8 +259,10 @@ class WheelController extends Controller {
                 }
             }
             if (count($invalids) == 0) {
-                \Yii::$app->session->addFlash('success', \Yii::t('wheel', 'Wheel questions saved.'));
+                SiteController::addFlash('success', Yii::t('wheel', 'Wheel answers saved.'));
                 return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+            } else {
+                \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
             }
         }
 
@@ -264,5 +272,31 @@ class WheelController extends Controller {
         ]);
     }
 
-}
+    public function sendAnswers($wheel) {
+        $type_text = Wheel::getWheelTypes()[$wheel->type];
+        $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
 
+        Yii::$app->mailer->compose('answers', [
+                    'wheel' => $wheel,
+                    'questions' => $questions,
+                ])
+                ->setSubject(Yii::t('wheel', 'CPC: {wheel} answers', [
+                            'wheel' => $type_text
+                ]))
+                ->setFrom($wheel->coach->email)
+                ->setTo($wheel->observer->email)
+                ->send();
+
+        Yii::$app->mailer->compose('answers', [
+                    'wheel' => $wheel,
+                    'questions' => $questions,
+                ])
+                ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
+                            'wheel' => $type_text, 'person' => $wheel->observer->fullname
+                ]))
+                ->setFrom($wheel->observer->email)
+                ->setTo($wheel->coach->email)
+                ->send();
+    }
+
+}
