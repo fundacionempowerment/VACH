@@ -114,28 +114,43 @@ function doMatrix(context, matrixData)
 
     context.textAlign = 'center';
     context.textBaseline = 'top';
-    for (i in matrixData) {
-        context.beginPath();
-        if (matrixData[i][3] === memberId)
-            context.lineWidth = 5;
-        else
-            context.lineWidth = 1;
-        context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
+    context.lineWidth = 1;
+    context.font = '11pt Helvetica';
 
-        if (Math.abs(data[i]['consciousness']) < stardarDeviation)
-            context.fillStyle = '#5bc0de';
-        else
-            context.fillStyle = '#f0ad4e';
-        context.fill();
-        context.strokeStyle = '#5a9bbc';
-        context.stroke();
+    for (i in matrixData)
+        if (matrixData[i][3] != memberId) {
+            context.beginPath();
 
-        if (matrixData[i][3] === memberId)
-            context.font = 'bold 11pt Helvetica';
-        else
-            context.font = '11pt Helvetica';
+            context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
 
-        context.fillStyle = '#496987';
-        context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 16);
-    }
+            if (Math.abs(data[i]['consciousness']) < stardarDeviation)
+                context.fillStyle = '#5bc0de';
+            else
+                context.fillStyle = '#f0ad4e';
+            context.fill();
+            context.strokeStyle = '#5a9bbc';
+            context.stroke();
+            context.fillStyle = '#496987';
+            context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 16);
+        }
+
+    context.lineWidth = 5;
+    context.font = 'bold 11pt Helvetica';
+    for (i in matrixData)
+        if (matrixData[i][3] == memberId)
+        {
+            context.beginPath();
+
+            context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
+
+            if (Math.abs(data[i]['consciousness']) < stardarDeviation)
+                context.fillStyle = '#5bc0de';
+            else
+                context.fillStyle = '#f0ad4e';
+            context.fill();
+            context.strokeStyle = '#5a9bbc';
+            context.stroke();
+            context.fillStyle = '#496987';
+            context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 16);
+        }
 }

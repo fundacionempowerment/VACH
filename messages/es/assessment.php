@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -21,19 +20,17 @@ return [
     'Assessment' => 'Relevamiento',
     'Assessments' => 'Relevamientos',
     'CPC: access to {wheel_type} of assessment {assessment}' => 'CPC: acceso a {wheel_type} del relevamiento {assessment}',
+    'Email to send' => 'Correo electrónico a enviar',
     'Go to dashboard...' => 'Ir al tablero...',
+    'Go to report...' => 'Ir a reporte...',
     'Group wheels' => 'Ruedas grupales',
-    'In order to run this wheel via smartphone, please ask' => 'Para poder ejecutar esta rueda en un teléfono celular, por favor pida a',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',
     'Once you click \'Save\' button, team is locked, new member are not allowed and new assessment is created.' => 'Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos y un relevamiento es creado.',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Please ask the audience to enter this site and token in his/her phone browser' => 'Por favor pida al público que ingrese este sitio e indentificador en su teléfono',
-    'Run on smartphone' => 'Ejecutar en teléfono celular',
+    'Please send this email' => 'Por favor envíe este correo electrónico',
     'Run on smartphones' => 'Ejectuar en teléfonos celulares',
     'Wheel already fullfilled. Email not sent.' => 'Rueda ya completada. Correo electrónico no enviado.',
-    'and click over "Run" button' => 'y presione el botón "Ejecutar"',
-    'and enter this token in "Wheel Token" field' => 'e ingrese este indentificador en el campo "Identificador de rueda"',
-    'to enter this site in his/her phone browser' => 'que ingrese este sitio en el navegador de su celular',
     '{wheel_type} sent to {user}.' => '{wheel_type} enviada a {user}',
 ];

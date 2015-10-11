@@ -13,11 +13,11 @@ use app\controllers\Utils;
 /* @var $model app\models\ContactForm */
 
 if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Conciousness and Responsability Matrix');
+    $title = Yii::t('dashboard', 'Group Consciousness and Responsability Matrix');
 else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Conciousness and Responsability Matrix');
+    $title = Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix');
 else
-    $title = Yii::t('dashboard', 'Individual conciousness and Responsability Matrix');
+    $title = Yii::t('dashboard', 'Individual Consciousness and Responsability Matrix');
 
 $howISeeMe = [];
 foreach ($members as $id => $member)
@@ -59,7 +59,7 @@ $standar_deviation = Utils::standard_deviation($gaps);
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-md-12">
+<div class="row col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
             <td>

@@ -10,7 +10,7 @@ $this->title = 'VACH';
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
+        <?= Html::img('@web/images/logo.png') ?>
         <?php if (Yii::$app->params['server_status'] != 'online') { ?>
             <h5 class="text-info">
                 <?= Yii::$app->params['server_status'] ?>
@@ -27,7 +27,7 @@ $this->title = 'VACH';
                     <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
                 <div class="text-right">
-                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-success']) ?>
+                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

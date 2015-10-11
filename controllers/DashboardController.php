@@ -95,14 +95,12 @@ class DashboardController extends BaseController {
         $reflectedGroupWheel = [];
         $reflectedOrganizationalWheel = [];
 
-        $gauges = [];
-
         $individualPerformanceMatrix = [];
         $performanceMatrix = [];
 
-        $memberRelationMatrix = [];
         $relationsMatrix = [];
 
+        $gauges = [];
         $emergents = [];
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
@@ -121,11 +119,6 @@ class DashboardController extends BaseController {
             if ($filter->memberId > 0) {
                 $gauges = Wheel::getMemberGauges($filter->assessmentId, $filter->memberId, $filter->wheelType);
                 $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, $filter->wheelType);
-
-                foreach ($relationsMatrix as $relation)
-                    if ($relation['observed_id'] == $filter->memberId) {
-                        $memberRelationMatrix[] = $relation;
-                    }
             } else {
                 $gauges = Wheel::getGauges($filter->assessmentId, $filter->wheelType);
                 $emergents = Wheel::getEmergents($filter->assessmentId, $filter->wheelType);
@@ -156,7 +149,6 @@ class DashboardController extends BaseController {
                     'performanceMatrix' => $performanceMatrix,
                     'gauges' => $gauges,
                     'relationsMatrix' => $relationsMatrix,
-                    'memberRelationMatrix' => $memberRelationMatrix,
                     'emergents' => $emergents,
         ]);
     }

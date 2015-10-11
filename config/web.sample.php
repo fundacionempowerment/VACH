@@ -48,7 +48,6 @@ $config = [
             ],
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
             'rules' => [
                 '<a:\d+>-<b:\d+>-<c:\d+>' => 'run',
             ],

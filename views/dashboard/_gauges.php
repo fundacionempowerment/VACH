@@ -11,36 +11,36 @@ use yii\bootstrap\Progress;
 /* @var $model app\models\ContactForm */
 
 if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Indicators');
+    $title = Yii::t('dashboard', 'Group Competence Matrix');
 else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Indicators');
+    $title = Yii::t('dashboard', 'Organizational Competence Matrix');
 else
-    $title = Yii::t('dashboard', 'Individual Indicators');
-
-$gaugeRadio = 200;
-$token = rand(100000, 999999);
+    $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
 $dimensions = WheelQuestion::getDimensionNames($type);
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php for ($i = 0; $i < 8; $i++) { ?>
-    <div class="col-md-3" >
+    <div class="col-xs-3" >
         <label><?= $dimensions[$i] ?></label>
         <?php
-        if ($wheel[$i] > Yii::$app->params['good_consciousness'])
-            $class = 'progress-bar-success';
-        else if ($wheel[$i] < Yii::$app->params['minimal_consciousness'])
-            $class = 'progress-bar-danger';
+        if ($gauges[$i] > Yii::$app->params['good_consciousness'])
+            $color = 'dff0d8';
+        else if ($gauges[$i] < Yii::$app->params['minimal_consciousness'])
+            $color = 'f2dede';
         else
-            $class = 'progress-bar-warning';
-
-        echo Progress::widget([
-            'percent' => $wheel[$i] / 4 * 100,
-            'label' => floor($wheel[$i] / 4 * 100) . ' %',
-            'barOptions' => ['class' => $class],
-        ]);
+            $color = 'faf2cc';
+        $percentage = $gauges[$i] / 4 * 100;
+        if ($percentage < 5)
+            $width = 5;
+        else
+            $width = $percentage;
         ?>
+        <div style='position:relative;' class="table table-bordered">
+            <div style='font-size:0px;  border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</DIV>
+            <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</DIV>
+        </div>
     </div>
 <?php } ?>
 <div class="clearfix"></div>

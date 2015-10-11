@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "010d9d1ff42ec8c8e8d4d756a21527db",
-    "content-hash": "b0a44a266079aff812c2e45efe4bb093",
+    "hash": "1a7713aa94837b526ce9adbb9a3ab1ba",
+    "content-hash": "01f829c527a4ef3a268b590c5bf03185",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -318,6 +318,50 @@
             "time": "2013-11-30 08:25:19"
         },
         {
+            "name": "franciscomaya/yii2-sceditor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/franciscomaya/yii2-sceditor.git",
+                "reference": "949328707498004a9fd3b77f595d2d5af2da074f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/franciscomaya/yii2-sceditor/zipball/949328707498004a9fd3b77f595d2d5af2da074f",
+                "reference": "949328707498004a9fd3b77f595d2d5af2da074f",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "franciscomaya\\sceditor\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Francisco Maya Sarasty",
+                    "email": "sarasty@gmail.com"
+                }
+            ],
+            "description": "SCEditor, a lightweight WYSIWYG BBCode & HTML editor extension for Yii 2.0 Framework",
+            "keywords": [
+                "bbcode",
+                "extension",
+                "sceditor",
+                "xhtml",
+                "yii",
+                "yii2"
+            ],
+            "time": "2015-09-02 21:27:48"
+        },
+        {
             "name": "kartik-v/bootstrap-fileinput",
             "version": "v4.2.7",
             "source": {
@@ -449,6 +493,49 @@
             "time": "2015-07-14 09:54:25"
         },
         {
+            "name": "kartik-v/mpdf",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/mpdf.git",
+                "reference": "6ab0ae3a82673e514f168c8e6da02289e6d95f2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/mpdf/zipball/6ab0ae3a82673e514f168c8e6da02289e6d95f2c",
+                "reference": "6ab0ae3a82673e514f168c8e6da02289e6d95f2c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=4.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "mpdf.php",
+                    "classes"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-1.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ian N Back"
+                }
+            ],
+            "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support. This is a fork of the official mPDF library.",
+            "homepage": "http://www.mpdf1.com/mpdf/index.php",
+            "keywords": [
+                "pdf",
+                "php",
+                "utf-8"
+            ],
+            "time": "2015-05-05 07:34:49"
+        },
+        {
             "name": "kartik-v/yii2-krajee-base",
             "version": "v1.7.7",
             "source": {
@@ -493,6 +580,53 @@
                 "yii2"
             ],
             "time": "2015-06-16 05:19:57"
+        },
+        {
+            "name": "kartik-v/yii2-mpdf",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-mpdf.git",
+                "reference": "4599a1d95d7e0afb3279322e302717b7e4f52dd3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-mpdf/zipball/4599a1d95d7e0afb3279322e302717b7e4f52dd3",
+                "reference": "4599a1d95d7e0afb3279322e302717b7e4f52dd3",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/mpdf": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\mpdf\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "A Yii2 wrapper component for the mPDF library which generates PDF files from UTF-8 encoded HTML.",
+            "homepage": "https://github.com/kartik-v/yii2-mpdf",
+            "keywords": [
+                "component",
+                "extension",
+                "html",
+                "mpdf",
+                "pdf",
+                "utf8",
+                "yii2"
+            ],
+            "time": "2014-11-10 18:09:37"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -1440,43 +1574,6 @@
             "time": "2014-11-09 19:54:17"
         },
         {
-            "name": "mercadopago/sdk",
-            "version": "v0.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mercadopago/sdk-php.git",
-                "reference": "4e76a2b1d1dafa9ec58f42629b9192e82900cbe7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/4e76a2b1d1dafa9ec58f42629b9192e82900cbe7",
-                "reference": "4e76a2b1d1dafa9ec58f42629b9192e82900cbe7",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "lib/mercadopago.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Horacio Casatti",
-                    "email": "horacio.casatti@mercadolibre.com"
-                }
-            ],
-            "description": "MercadoPago SDK module for Payments integration.",
-            "keywords": [
-                "mercadopago",
-                "sdk"
-            ],
-            "time": "2015-08-24 20:12:20"
-        },
-        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.1",
             "source": {
@@ -1619,21 +1716,21 @@
         },
         {
             "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0"
+                "reference": "1464f93834b1d5edb1f5625f7ffd6c3723fa4923"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0",
-                "reference": "1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/1464f93834b1d5edb1f5625f7ffd6c3723fa4923",
+                "reference": "1464f93834b1d5edb1f5625f7ffd6c3723fa4923",
                 "shasum": ""
             },
             "require": {
                 "bower-asset/bootstrap": "3.3.* | 3.2.* | 3.1.*",
-                "yiisoft/yii2": ">=2.0.4"
+                "yiisoft/yii2": ">=2.0.6"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1665,7 +1762,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2015-05-10 22:08:17"
+            "time": "2015-09-23 17:48:24"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -2074,7 +2171,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "franciscomaya/yii2-sceditor": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
