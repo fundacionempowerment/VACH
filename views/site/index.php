@@ -27,6 +27,7 @@ $this->title = 'VACH';
                     <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
                 <div class="text-right">
+                    <?= Html::a(Yii::t('app', 'Password reset'), ['site/request-password-reset'], ['class' => 'btn btn-default']) ?>
                     <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
