@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    2 - Matrices de Efectividad Grupal y Organizacional
+    Matrices de Efectividad Grupal y Organizacional
 </h3>
 <?php
 if (count($groupRelationsMatrix) > 0) {

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    4 - Matrices de Competencias grupales y organizacionales
+    Matrices de Competencias grupales y organizacionales
 </h3>
 <?php
 if (count($groupGauges) > 0) {

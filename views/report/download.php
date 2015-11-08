@@ -77,7 +77,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Introduction') ?>
+            1. <?= Yii::t('report', 'Introduction') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->introduction ?>
@@ -89,13 +89,8 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            Desempeño grupal y organizacional
+            3. <?= Yii::t('report', 'Group and organizational performance') ?>
         </h2>
-        <?=
-        $this->render('_relations', [
-            'assessment' => $assessment,
-        ])
-        ?>
         <?=
         $this->render('_effectiveness', [
             'assessment' => $assessment,
@@ -129,6 +124,9 @@ $this->title = Yii::t('report', 'Report');
         ])
         ?>
     </div>
+    <h2>
+        4. <?= Yii::t('report', 'Individual perferformance') ?>
+    </h2>
     <div class="col-lg-12">
         <?php
         foreach ($assessment->report->individualReports as $individualReport) {
@@ -187,7 +185,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Summary') ?>
+            5. <?= Yii::t('report', 'Summary') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->summary ?>
@@ -195,7 +193,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Action Plan') ?>
+            6. <?= Yii::t('report', 'Action Plan') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->action_plan ?>

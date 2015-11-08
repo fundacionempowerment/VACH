@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    5 - Matrices de Emergentes grupales y organizacionales
+    Matrices de Emergentes grupales y organizacionales
 </h3>
 <?php
 if (count($groupEmergents) > 0) {
