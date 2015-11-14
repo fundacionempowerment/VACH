@@ -12,9 +12,7 @@ use franciscomaya\sceditor\SCEditor;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-
-
-$this->title = Yii::t('report', 'Effectiveness Matrix');
+$this->title = Yii::t('report', 'Relations Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
@@ -22,30 +20,30 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
-    var matrixes = new Array();
-    var matrixesData = new Array();
+    var relations = new Array();
+    var relationsData = new Array();
 </script>
-<script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+<script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical">
 
-    <h1><?= $this->title ?></h1>
+    <h1>
+        <?= Yii::t('report', 'Relations Matrix of {member}', ['member' => $report->member->fullname]) ?>
+    </h1>
     <?php
     if (count($groupRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_number_matrix', [
+        echo $this->render('../dashboard/_relation', [
             'data' => $groupRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
-            'memberId' => 0,
+            'memberId' => $report->member->id,
         ]);
     }
-    ?>
-    <?php
     if (count($organizationalRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_number_matrix', [
+        echo $this->render('../dashboard/_relation', [
             'data' => $organizationalRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'memberId' => 0,
+            'memberId' => $report->member->id,
         ]);
     }
     ?>
@@ -59,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             SCEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->effectiveness,
+                'value' => $report->relations,
                 'options' => ['rows' => 10],
                 'clientOptions' => [
                     'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
@@ -76,8 +74,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script>
     window.onload = function() {
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
+        for (var i in relations) {
+            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
         }
     }
 </script>

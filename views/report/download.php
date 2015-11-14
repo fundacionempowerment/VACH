@@ -68,8 +68,8 @@ $this->title = Yii::t('report', 'Report');
             <ol>
                 <li><?= Yii::t('report', 'Introduction') ?></li>
                 <li><?= Yii::t('report', 'Fundaments') ?></li>
-                <li><?= Yii::t('report', 'Group and organizational performance') ?></li>
-                <li><?= Yii::t('report', 'Individual perferformance') ?></li>
+                <li><?= Yii::t('report', 'Group and Organizational Analysis') ?></li>
+                <li><?= Yii::t('report', 'Individual Analysis') ?></li>
                 <li><?= Yii::t('report', 'Summary') ?></li>
                 <li><?= Yii::t('report', 'Action Plan') ?></li>
             </ol>
@@ -89,7 +89,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            3. <?= Yii::t('report', 'Group and organizational performance') ?>
+            3. <?= Yii::t('report', 'Group and Organizational Analysis') ?>
         </h2>
         <?=
         $this->render('_effectiveness', [
@@ -104,6 +104,14 @@ $this->title = Yii::t('report', 'Report');
             'assessment' => $assessment,
             'groupPerformanceMatrix' => $groupPerformanceMatrix,
             'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
+        ])
+        ?>
+        <?=
+        $this->render('_relations', [
+            'assessment' => $assessment,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
         ])
         ?>
@@ -125,7 +133,7 @@ $this->title = Yii::t('report', 'Report');
         ?>
     </div>
     <h2>
-        4. <?= Yii::t('report', 'Individual perferformance') ?>
+        4. <?= Yii::t('report', 'Individual Analysis') ?>
     </h2>
     <div class="col-lg-12">
         <?php
@@ -201,7 +209,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
 </div>
 <script>
-    window.onload = function() {
+    window.onload = function () {
         for (var i in radars) {
             new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, animation: false});
         }

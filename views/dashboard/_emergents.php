@@ -61,11 +61,11 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
                 <label><?= $emergent['question'] ?></label>
                 <?php
                 if ($emergent['value'] > Yii::$app->params['good_consciousness'])
-                    $color = 'dff0d8';
+                    $color = '5cb85c';
                 else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
-                    $color = 'f2dede';
+                    $color = 'd9534f';
                 else
-                    $color = 'faf2cc';
+                    $color = 'f0ad4e';
 
                 $percentage = $emergent['value'] / 4 * 100;
                 if ($percentage < 6)
@@ -73,9 +73,9 @@ for ($current_dimension = 0; $current_dimension < 8; $current_dimension++) {
                 else
                     $width = $percentage;
                 ?>
-                <div style='position:relative;' class="table table-bordered">
-                    <div style='font-size:0px;  border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</DIV>
-                    <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</DIV>
+                <div style='position:relative; color: white; font-size: 20px;' class="table table-bordered">
+                    <div style='font-size:0px; border-top: 28px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
+                    <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
                 </div>
                 <?php
             }

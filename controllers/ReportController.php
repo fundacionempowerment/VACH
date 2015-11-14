@@ -61,7 +61,7 @@ class ReportController extends Controller {
             $assessment->report->introduction = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'introduction']);
         }
 
         return $this->render('introduction', [
@@ -78,7 +78,7 @@ class ReportController extends Controller {
             $assessment->report->effectiveness = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'effectiveness']);
         }
 
         $members = [];
@@ -111,7 +111,7 @@ class ReportController extends Controller {
             $assessment->report->performance = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'performance']);
         }
 
         $members = [];
@@ -135,6 +135,39 @@ class ReportController extends Controller {
         ]);
     }
 
+    public function actionRelations($id) {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $assessment->report->relations = $analysis;
+            $assessment->report->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'relations']);
+        }
+
+        $members = [];
+
+        $groupRelationsMatrix = [];
+        $organizationalRelationsMatrix = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('relations', [
+                    'assessment' => $assessment,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+                    'members' => $members,
+        ]);
+    }
+
     public function actionCompetences($id) {
         $assessment = Assessment::findOne(['id' => $id]);
 
@@ -144,7 +177,7 @@ class ReportController extends Controller {
             $assessment->report->competences = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
         }
 
         $members = [];
@@ -176,7 +209,7 @@ class ReportController extends Controller {
             $assessment->report->emergents = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'emergents']);
         }
 
         $members = [];
@@ -199,7 +232,43 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionPerception($id) {
+    public function actionIndividualPerformance($id) {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $assessment = $individualReport->report->assessment;
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $individualReport->performance = $analysis;
+            $individualReport->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'performance-' . $individualReport->id]);
+        }
+
+        $members = [];
+
+        $groupPerformanceMatrix = [];
+        $organizationalPerformanceMatrix = [];
+
+        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+            $members[$teamMember->user_id] = $teamMember->member->fullname;
+
+        $members[0] = Yii::t('app', 'All');
+
+        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
+        return $this->render('individual_performance', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'members' => $members,
+        ]);
+    }
+
+    public function actionIndividualPerception($id) {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -210,7 +279,7 @@ class ReportController extends Controller {
             $individualReport->perception = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id]);
+            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'perception-' . $individualReport->id]);
         }
 
         $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->user_id);
@@ -218,7 +287,7 @@ class ReportController extends Controller {
         $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->user_id);
         $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->user_id);
 
-        return $this->render('perception', [
+        return $this->render('individual_perception', [
                     'report' => $individualReport,
                     'assessment' => $assessment,
                     'projectedGroupWheel' => $projectedGroupWheel,
@@ -228,7 +297,7 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionRelations($id) {
+    public function actionIndividualRelations($id) {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -239,7 +308,7 @@ class ReportController extends Controller {
             $individualReport->relations = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id]);
+            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'relations-' . $individualReport->id]);
         }
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
@@ -250,7 +319,7 @@ class ReportController extends Controller {
         $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
 
-        return $this->render('relations', [
+        return $this->render('individual_relations', [
                     'report' => $individualReport,
                     'assessment' => $assessment,
                     'members' => $members,
@@ -270,7 +339,7 @@ class ReportController extends Controller {
             $individualReport->competences = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id]);
+            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-competences-' . $individualReport->id]);
         }
 
         $members = [];
@@ -305,7 +374,7 @@ class ReportController extends Controller {
             $individualReport->emergents = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id]);
+            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-emergents-' . $individualReport->id]);
         }
 
         $members = [];
@@ -338,7 +407,7 @@ class ReportController extends Controller {
             $assessment->report->summary = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'summary']);
         }
 
         return $this->render('summary', [
@@ -355,7 +424,7 @@ class ReportController extends Controller {
             $assessment->report->action_plan = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id]);
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'action-plan']);
         }
 
         return $this->render('action_plan', [
@@ -403,4 +472,3 @@ class ReportController extends Controller {
     }
 
 }
-

@@ -14,7 +14,7 @@ use franciscomaya\sceditor\SCEditor;
 
 
 
-$this->title = Yii::t('report', 'Effectiveness Matrix');
+$this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
@@ -28,24 +28,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
 <div class="report-technical">
 
-    <h1><?= $this->title ?></h1>
+    <h1>
+        <?= Yii::t('report', 'Performance Matrix of {member}', ['member' => $report->member->fullname]) ?>
+    </h1>
     <?php
-    if (count($groupRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_number_matrix', [
-            'data' => $groupRelationsMatrix,
+    if (count($groupPerformanceMatrix) > 0) {
+        echo $this->render('../dashboard/_matrix', [
+            'data' => $groupPerformanceMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
-            'memberId' => 0,
+            'memberId' => $report->member->id,
         ]);
     }
     ?>
     <?php
-    if (count($organizationalRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_number_matrix', [
-            'data' => $organizationalRelationsMatrix,
+    if (count($organizationalPerformanceMatrix) > 0) {
+        echo $this->render('../dashboard/_matrix', [
+            'data' => $organizationalPerformanceMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'memberId' => 0,
+            'memberId' => $report->member->id,
         ]);
     }
     ?>
@@ -59,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             SCEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->effectiveness,
+                'value' => $report->performance,
                 'options' => ['rows' => 10],
                 'clientOptions' => [
                     'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
@@ -75,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script>
-    window.onload = function() {
+    window.onload = function () {
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
         }
