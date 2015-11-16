@@ -39,11 +39,15 @@ if (count($drawing_data) < 4)
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php if (count($drawing_data) > 0) { ?>
-    <div class="col-xs-12 col-md-push-1 col-md-10" >
+    <div id="div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10" >
         <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
     </div>
 <?php } ?>
+<div class="col-md-12 text-center">
+    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+</div>
 <div class="clearfix"></div>
+<br>
 <?php if (count($drawing_data) > 0) { ?>
     <script>
         var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;

@@ -29,8 +29,11 @@ $matrix_data['memberId'] = $memberId;
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-xs-12 col-md-push-1 col-md-10" >
+<div id="div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive center-block"></canvas>
+</div>
+<div class="col-md-12 text-center">
+    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
 </div>
 <div class="clearfix"></div>
 <script>

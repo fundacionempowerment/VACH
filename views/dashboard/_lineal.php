@@ -30,7 +30,7 @@ for ($i = 0; $i < count($dimensions); $i++) {
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="col-sm-12 col-md-push-2 col-md-8 text-center" >
+<div id="div<?= $token ?>" class="col-sm-12 col-md-push-2 col-md-8 text-center" >
     <canvas id="canvas<?= $token ?>" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive"></canvas><br />
     <p>
         <span style="color: red;"><?= $comparedWheelName ?></span>
@@ -38,6 +38,9 @@ for ($i = 0; $i < count($dimensions); $i++) {
             <span style="color: blue;"><?= $wheelName ?></span>
         <?php } ?>
     </p>
+</div>
+<div class="col-md-12 text-center">
+    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
 </div>
 <div class="clearfix"></div>
 <script>

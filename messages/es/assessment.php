@@ -22,7 +22,7 @@ return [
     'CPC: access to {wheel_type} of assessment {assessment}' => 'CPC: acceso a {wheel_type} del relevamiento {assessment}',
     'Email to send' => 'Correo electrónico a enviar',
     'Go to dashboard...' => 'Ir al tablero...',
-    'Go to report...' => 'Ir a reporte...',
+    'Go to report...' => 'Ir al informe...',
     'Group wheels' => 'Ruedas grupales',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',

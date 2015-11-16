@@ -37,6 +37,6 @@ return [
     'Performance Matrix of {member}' => 'Matriz de desempeño de {member}',
     'Relations Matrix' => 'Matriz de relaciones',
     'Relations Matrix of {member}' => 'Matriz de relaciones de {member}',
-    'Report' => 'Reporte',
+    'Report' => 'Informe',
     'Summary' => 'Síntesis',
 ];

@@ -56,10 +56,11 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
 }
 
 $standar_deviation = Utils::standard_deviation($gaps);
+$token = rand(100000, 999999);
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div class="row col-md-12">
+<div id="div<?= $token ?>" class="row col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
             <td>
@@ -149,5 +150,8 @@ $standar_deviation = Utils::standard_deviation($gaps);
             <?php } ?>
         </tr> 
     </table>
+</div>
+<div class="col-md-12 text-center">
+    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
 </div>
 <div class="clearfix"></div>

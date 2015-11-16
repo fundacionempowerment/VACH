@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 </div>
 <script>
-    window.onload = function() {
+    window.onload = function () {
         for (var i in radars) {
             new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});
         }
@@ -151,4 +151,18 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     }
 </script>
+<script src="<?= Url::to('@web/js/html2canvas/html2canvas.js') ?>"></script>
+<script src="<?= Url::to('@web/js/FileSaver.js') ?>"></script>
+<script>
+    function printDiv(div)
+    {
+        html2canvas(document.querySelector("#" + div)).then(function (canvas) {
+            canvas.toBlob(function (blob) {
+                saveAs(blob, "image.png");
+            }, "image/png");
+        });
+
+    }
+</script>
+
 
