@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($team->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

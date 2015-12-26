@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -20,7 +19,7 @@ use yii\bootstrap\ActiveForm;
     <?= $form->field($person, 'email') ?>
     <?= $form->field($person, 'phone') ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($person->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

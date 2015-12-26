@@ -42,5 +42,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('company', 'New company'), Url::to(['company/new']), ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('company', 'New company'), Url::to(['company/new']), ['class' => 'btn btn-success']) ?>
 </div>

@@ -60,10 +60,7 @@ class Assessment extends ActiveRecord {
     }
 
     public function beforeDelete() {
-        foreach ($this->wheels as $wheel) {
-            $wheel->delete();
-        }
-
+        Wheel::deleteAll(['assessment_id' => $this->id]);
         return parent::beforeDelete();
     }
 

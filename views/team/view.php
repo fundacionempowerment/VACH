@@ -24,6 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
+        <p>
+            <?=
+            Html::a(Yii::t('app', 'Edit'), ['team/edit', 'id' => $team->id], [
+                'title' => Yii::t('yii', 'Edit'),
+                'class' => 'btn btn-primary',
+            ])
+            ?>
+        </p>
     </div>
     <div class="col-md-4 thumbnail" style="padding: 10px; margin-right: 20px;" >
         <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Members') ?></h3>
@@ -89,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-method' => 'post',])
                     ?>
                     <?php ActiveForm::end(); ?>
-                <?php } ?>
+        <?php } ?>
             </div>
             <div class="col-md-4 thumbnail" style="padding: 10px;">
                 <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Assessments') ?></h3>
@@ -124,6 +132,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ]);
                         ?>
-                        <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled'])) ?>
+                <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled'])) ?>
     </div>
 </div>
