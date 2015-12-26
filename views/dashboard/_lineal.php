@@ -39,37 +39,39 @@ for ($i = 0; $i < count($dimensions); $i++) {
         <?php } ?>
     </p>
 </div>
-<div class="col-md-12 text-center">
-    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
-</div>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+    <div class="col-md-12 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    </div>
+<?php } ?>
 <div class="clearfix"></div>
 <script>
     var data<?= $token ?> = {
     labels: [<?= '"' . implode('", "', $dimensions) . '"' ?>],
             datasets: [
 <?php if (isset($comparedWheel)) { ?>
-        {
-        label: "<?= $comparedWheelName ?> ",
-                fillColor: "rgba(255,0,0,0.2)",
-                strokeColor: "rgba(255,0,0,1)",
-                pointColor: "rgba(255,0,0,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [<?= '"' . implode('", "', $comparedWheel) . '"' ?>]
-        },
+                {
+                label: "<?= $comparedWheelName ?> ",
+                        fillColor: "rgba(255,0,0,0.2)",
+                        strokeColor: "rgba(255,0,0,1)",
+                        pointColor: "rgba(255,0,0,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [<?= '"' . implode('", "', $comparedWheel) . '"' ?>]
+                },
 <?php } ?>
-    {
-    label: "<?= $wheelName ?>",
-            fillColor: "rgba(0,0,255,0.2)",
-            strokeColor: "rgba(0,0,255,1)",
-            pointColor: "rgba(0,0,255,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [<?= '"' . implode('", "', $wheel) . '"' ?>]
-    },
-    ]
+            {
+            label: "<?= $wheelName ?>",
+                    fillColor: "rgba(0,0,255,0.2)",
+                    strokeColor: "rgba(0,0,255,1)",
+                    pointColor: "rgba(0,0,255,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [<?= '"' . implode('", "', $wheel) . '"' ?>]
+            },
+            ]
     };
             lineals.push("<?= $token ?>");
             linealsData.push(data<?= $token ?>);

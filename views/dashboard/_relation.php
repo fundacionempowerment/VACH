@@ -43,9 +43,11 @@ if (count($drawing_data) < 4)
         <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
     </div>
 <?php } ?>
-<div class="col-md-12 text-center">
-    <?= Html::button(Yii::t('app','Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
-</div>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false && $memberId > 0) { ?>
+    <div class="col-md-12 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    </div>
+<?php } ?>
 <div class="clearfix"></div>
 <br>
 <?php if (count($drawing_data) > 0) { ?>
