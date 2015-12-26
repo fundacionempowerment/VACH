@@ -45,13 +45,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ];
                 if (!$team->blocked) {
-                    $columns [] = ['class' => 'app\components\grid\ActionColumn',
-                        'template' => '{delete}',
+                    $columns [] = [
+                        'format' => 'html',
                         'options' => ['width' => '60px'],
-                        'urlCreator' => function( $action, $model, $key, $index ) {
-                    switch ($action) {
-                        case 'delete' : return Url::to(['team/delete-member', 'id' => $model['id']]);
-                    };
+                        'value' => function( $data ) {
+                    return
+                            Html::a('<span class="glyphicon glyphicon-trash"></span>', ['team/delete-member', 'id' => $data['id']], [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                'data-method' => 'post',
+                                'data-pjax' => '0',
+                                'class' => 'btn btn-danger',
+                    ]);
                 }
                     ];
                 }
@@ -119,6 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ]);
                         ?>
-                        <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-success disabled'])) ?>
+                        <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled'])) ?>
     </div>
 </div>

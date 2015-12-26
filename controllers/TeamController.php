@@ -36,6 +36,10 @@ class TeamController extends BaseController {
     public function actionView($id) {
         $team = Team::findOne($id);
 
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         if (Yii::$app->request->isPost) {
             $new_member_id = Yii::$app->request->post('new_member');
 
@@ -75,6 +79,10 @@ class TeamController extends BaseController {
     public function actionEdit($id) {
         $team = Team::findOne(['id' => $id]);
 
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         Yii::$app->session->set('team_id', $id);
 
         if ($team->load(Yii::$app->request->post()) && $team->save()) {
@@ -97,6 +105,11 @@ class TeamController extends BaseController {
 
     public function actionDelete($id) {
         $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         if ($team->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $team->name]));
         } else {
@@ -107,6 +120,11 @@ class TeamController extends BaseController {
 
     public function actionFullfilled($id) {
         $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         $team->blocked = true;
         $team->save();
 
@@ -115,6 +133,10 @@ class TeamController extends BaseController {
 
     public function actionNewMember($id) {
         $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
 
         $member = new Person();
 
