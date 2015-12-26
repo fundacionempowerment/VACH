@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'html',
                                     'options' => ['width' => '60px'],
                                     'value' => function ($data) {
-                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['assessment/delete', 'id' => $data['id']]), [
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['team/delete-assessment', 'id' => $data['id']]), [
                                             'title' => Yii::t('yii', 'Delete'),
                                             'class' => 'btn btn-danger',
                                 ]);

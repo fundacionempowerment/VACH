@@ -59,6 +59,14 @@ class Assessment extends ActiveRecord {
         $this->afterFind();
     }
 
+    public function beforeDelete() {
+        foreach ($this->wheels as $wheel) {
+            $wheel->delete();
+        }
+
+        return parent::beforeDelete();
+    }
+
     public static function browse() {
         return Assessment::find()
                         ->select('assessment.*')
@@ -110,6 +118,10 @@ class Assessment extends ActiveRecord {
         if ($questions == 0)
             $questions = 1;
         return round($answers / $questions * 100, 1) . ' %';
+    }
+
+    public function getWheels() {
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id']);
     }
 
     public function getIndividualWheels() {

@@ -109,7 +109,7 @@ class TeamController extends BaseController {
         $team = Team::findOne($id);
         $team->blocked = true;
         $team->save();
-        
+
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
@@ -161,6 +161,26 @@ class TeamController extends BaseController {
             SiteController::FlashErrors($teamMember);
         }
         return $this->redirect(['/team/view', 'id' => $team->id]);
+    }
+
+    public function actionDeleteAssessment($id) {
+        $assessment = Assessment::findOne($id);
+        $team = $assessment->team;
+
+        if (Yii::$app->request->post('delete')) {
+            if ($assessment->delete()) {
+
+                SiteController::addFlash('success', Yii::t('app', 'Assessment has been successfully deleted.'));
+                return $this->redirect(['/team/view', 'id' => $team->id]);
+            } else {
+                SiteController::FlashErrors($assessment);
+            }
+        }
+
+        return $this->render('delete_assessment', [
+                    'assessment' => $assessment,
+                    'team' => $team,
+        ]);
     }
 
     private function getCompanies() {
