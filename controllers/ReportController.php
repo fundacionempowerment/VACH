@@ -22,6 +22,13 @@ class ReportController extends Controller {
 
     public $layout = 'inner';
 
+    private function sanitize($string) {
+        $string = strip_tags($string, '<b><i><p><ul><li><ol><br>');
+        $string = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $string);
+        $string = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $string);
+        return $string;
+    }
+
     public function actionView($id) {
         $assessment = Assessment::findOne(['id' => $id]);
 
@@ -57,7 +64,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->introduction = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -74,7 +81,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->effectiveness = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -107,7 +114,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->performance = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -140,7 +147,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->relations = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -173,7 +180,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->competences = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -205,7 +212,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->emergents = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -239,7 +246,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $individualReport->performance = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -275,7 +282,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $individualReport->perception = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -304,7 +311,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $individualReport->relations = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -335,7 +342,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $individualReport->competences = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -370,7 +377,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $individualReport->emergents = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -403,7 +410,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->summary = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -420,7 +427,7 @@ class ReportController extends Controller {
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
-            $analysis = strip_tags($analysis, '<b><i><p><ul><li><ol><br>');
+            $analysis = $this->sanitize($analysis);
             $assessment->report->action_plan = $analysis;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));

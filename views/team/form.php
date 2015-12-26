@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=
     $form->field($team, 'sponsor_id')->widget(Select2::classname(), [
         'data' => $persons,
-        'hideSearch' => true,
     ]);
     ?>
     <div class="form-group">

@@ -88,6 +88,9 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
         $members = count($this->team->members);
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        if ($questions == 0)
+            $questions = 1;
+
         return round($answers / $questions * 100, 1) . ' %';
     }
 
@@ -95,6 +98,8 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
         $members = count($this->team->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        if ($questions == 0)
+            $questions = 1;
         return round($answers / $questions * 100, 1) . ' %';
     }
 
@@ -102,6 +107,8 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
         $members = count($this->team->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
         return round($answers / $questions * 100, 1) . ' %';
     }
 

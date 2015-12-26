@@ -23,6 +23,7 @@ return [
     'Member' => 'Miembro',
     'Members' => 'Miembros',
     'New assessment' => 'Nuevo relevamiento',
+    'New assessment (requires team fullfilled)' => 'Nuevo relevamiento (requiere equipo completado)',
     'New member' => 'Nuevo miembro',
     'New team' => 'Nuevo equipo',
     'Please fill out the following fields with team data:' => 'Por favor, complete los campos con los datos del equipo',
@@ -30,5 +31,6 @@ return [
     'Sponsor' => 'Patrocinador',
     'Team' => 'Equipo',
     'Team data' => 'Datos del equipo',
+    'Team fullfilled' => 'Equipo completado',
     'Teams' => 'Equipos',
 ];

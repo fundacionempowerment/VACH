@@ -19,22 +19,24 @@ $this->title = 'VACH';
     </div>
     <div class="body-content">
         <div class="row">
-            <div class="col-sm-push-4 col-sm-4">
+            <div class="col-xs-push-2 col-xs-8 col-sm-push-2 col-sm-8 col-md-push-3 col-md-6">
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
-                <div class="row col-xs-2">
-                    <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-                <div class="text-right">
-                    <?= Html::a(Yii::t('app', 'Password reset'), ['site/request-password-reset'], ['class' => 'btn btn-default']) ?>
-                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) ?>
-                </div>
+                <table width="100%">
+                    <tr>
+                        <td width="0%" style="vertical-align: top;"><?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?></td>
+                        <td style="text-align: right;">
+                           <?= Html::a(Yii::t('app', 'Password reset'), ['site/request-password-reset'], ['class' => 'btn btn-default']) ?>
+                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) ?> 
+                        </td>
+                    </tr>
+                </table>
                 <?php ActiveForm::end(); ?>
             </div>
             <div class="clearfix" >
             </div>
-            <div class="col-sm-push-5 col-sm-2 text-center" style="margin-top: 30px;">    
+            <div class="col-xs-push-3 col-xs-6 col-sm-push-4 col-sm-3 col-md-push-4 col-md-4 text-center" style="margin-top: 30px;">    
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
                 <?= $wheelForm->field($wheel, 'token') ?>
                 <div class="form-group">

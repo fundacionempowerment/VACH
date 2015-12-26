@@ -26,7 +26,7 @@ return [
     'Group wheels' => 'Ruedas grupales',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',
-    'Once you click \'Save\' button, team is locked, new member are not allowed and new assessment is created.' => 'Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos y un relevamiento es creado.',
+    'Once you click \'Save\' button, team is locked, new member are not allowed and new assessment is created.' => '@@Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos y un relevamiento es creado.@@',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Please ask the audience to enter this site and token in his/her phone browser' => 'Por favor pida al público que ingrese este sitio e indentificador en su teléfono',
     'Please send this email' => 'Por favor envíe este correo electrónico',

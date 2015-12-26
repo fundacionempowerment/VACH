@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
     </div>
-    <div class="row col-md-4" style="margin-right: 0px;">
-        <h3><?= Yii::t('team', 'Members') ?></h3>
+    <div class="col-md-4 thumbnail" style="padding: 10px; margin-right: 20px;" >
+        <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Members') ?></h3>
         <?php
         $membersDataProvider = new ArrayDataProvider([
             'allModels' => $team->members,
@@ -34,71 +34,91 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pageSize' => 20,
             ],
         ]);
-        echo GridView::widget([
-            'dataProvider' => $membersDataProvider,
-            'summary' => '',
-            'columns' => [
-                [
-                    'attribute' => 'member.fullname',
-                    'format' => 'html',
-                    'value' => function ($data) {
-                        return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
-                    },
-                ],
-                ['class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
-                    'options' => ['width' => '60px'],
-                    'urlCreator' => function( $action, $model, $key, $index ) {
-                        switch ($action) {
-                            case 'update':return Url::to(['team/edit-member', 'id' => $model['id']]);
-                            case 'delete' : return Url::to(['team/delete-member', 'id' => $model['id']]);
-                        };
-                    }
-                ]
-            ],
-        ]);
-        ?>
-        <?php if (count($team->assessments) == 0) { ?>
-            <?php $form = ActiveForm::begin([ 'id' => 'addmember-form', 'options' => [ 'class' => 'form-inline']]);
-            ?>
-            <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-primary', 'style' => 'margin-bottom: 10px;']) ?>
-            <?=
-            Select2::widget([
-                'name' => 'new_member',
-                'data' => $persons,
-                'hideSearch' => true,
-                'options' => [
-                    'placeholder' => Yii::t('team', 'Select new member ...'),
-                ],
-            ])
-            ?>
-            <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
-            <?php ActiveForm::end(); ?>
-        <?php } ?>
-    </div>
-    <div class="row col-md-4">
-        <h3><?= Yii::t('team', 'Assessments') ?></h3>
-        <?php
-        $assessmentsDataProvider = new ArrayDataProvider([
-            'allModels' => $team->assessments,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-        echo GridView::widget([
-            'dataProvider' => $assessmentsDataProvider,
-            'summary' => '',
-            'columns' => [
-                [
-                    'attribute' => 'name',
-                    'format' => 'html',
-                    'value' => function ($data) {
-                        return Html::a($data->name, Url::to(['assessment/view', 'id' => $data['id']]));
-                    },
-                ],
-            ],
-        ]);
-        ?>
-        <?= Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-primary']) ?>
+
+        $columns = [
+            [
+                'attribute' => 'member.fullname',
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
+                },
+                    ]
+                ];
+                if (!$team->blocked) {
+                    $columns [] = ['class' => 'app\components\grid\ActionColumn',
+                        'template' => '{delete}',
+                        'options' => ['width' => '60px'],
+                        'urlCreator' => function( $action, $model, $key, $index ) {
+                    switch ($action) {
+                        case 'delete' : return Url::to(['team/delete-member', 'id' => $model['id']]);
+                    };
+                }
+                    ];
+                }
+                echo GridView::widget([
+                    'dataProvider' => $membersDataProvider,
+                    'summary' => '',
+                    'columns' => $columns,
+                ]);
+                ?>
+                <?php if (!$team->blocked) { ?>
+                    <?php $form = ActiveForm::begin([ 'id' => 'addmember-form', 'options' => [ 'class' => 'form-inline']]);
+                    ?>
+                    <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-success', 'style' => 'margin-bottom: 10px;']) ?>                    
+                    <?=
+                    Select2::widget([
+                        'name' => 'new_member',
+                        'data' => $persons,
+                        'options' => [
+                            'placeholder' => Yii::t('team', 'Select new member ...'),
+                        ],
+                    ])
+                    ?>
+                    <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'margin-bottom: 10px;']) ?>
+                    <br>
+                    <?=
+                    Html::a(Yii::t('team', 'Team fullfilled'), Url::to(['team/fullfilled', 'id' => $team->id]), [
+                        'class' => 'btn btn-warning',
+                        'style' => 'margin-bottom: 10px;',
+                        'data-confirm' => Yii::t('app', 'Are you sure?'),
+                        'data-method' => 'post',])
+                    ?>
+                    <?php ActiveForm::end(); ?>
+                <?php } ?>
+            </div>
+            <div class="col-md-4 thumbnail" style="padding: 10px;">
+                <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Assessments') ?></h3>
+                <?php
+                $assessmentsDataProvider = new ArrayDataProvider([
+                    'allModels' => $team->assessments,
+                    'pagination' => [
+                        'pageSize' => 20,
+                    ],
+                ]);
+                echo GridView::widget([
+                    'dataProvider' => $assessmentsDataProvider,
+                    'summary' => '',
+                    'columns' => [
+                        [
+                            'attribute' => 'name',
+                            'format' => 'html',
+                            'value' => function ($data) {
+                                return Html::a($data->name, Url::to(['assessment/view', 'id' => $data['id']]));
+                            },
+                                ],
+                                [
+                                    'format' => 'html',
+                                    'options' => ['width' => '60px'],
+                                    'value' => function ($data) {
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['assessment/delete', 'id' => $data['id']]), [
+                                            'title' => Yii::t('yii', 'Delete'),
+                                            'class' => 'btn btn-danger',
+                                ]);
+                            },
+                                ],
+                            ],
+                        ]);
+                        ?>
+                        <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-success disabled'])) ?>
     </div>
 </div>

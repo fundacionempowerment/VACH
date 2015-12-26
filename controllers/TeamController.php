@@ -45,8 +45,7 @@ class TeamController extends BaseController {
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
-            }
-            else
+            } else
                 SiteController::FlashErrors($teamMember);
         }
 
@@ -106,6 +105,14 @@ class TeamController extends BaseController {
         return $this->redirect(['/team']);
     }
 
+    public function actionFullfilled($id) {
+        $team = Team::findOne($id);
+        $team->blocked = true;
+        $team->save();
+        
+        return $this->redirect(['/team/view', 'id' => $team->id]);
+    }
+
     public function actionNewMember($id) {
         $team = Team::findOne($id);
 
@@ -118,8 +125,7 @@ class TeamController extends BaseController {
             $teamMember->save();
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $member->fullname]));
             return $this->redirect(['/team/view', 'id' => $team->id]);
-        }
-        else
+        } else
             SiteController::FlashErrors($member);
 
         return $this->render('member-form', [

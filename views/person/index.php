@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data['fullname'], Url::to(['person/edit', 'id' => $data['id'],])); // $data['name'] for array data, e.g. using SqlDataProvider.
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '60px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
