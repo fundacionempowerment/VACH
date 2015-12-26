@@ -18,6 +18,7 @@
  */
 return [
     'Assessment' => 'Relevamiento',
+    'Assessment has been successfully deleted.' => 'Relevamiento ha sido eliminado con éxito',
     'Assessments' => 'Relevamientos',
     'CPC: access to {wheel_type} of assessment {assessment}' => 'CPC: acceso a {wheel_type} del relevamiento {assessment}',
     'Email to send' => 'Correo electrónico a enviar',

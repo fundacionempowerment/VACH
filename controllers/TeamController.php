@@ -170,7 +170,7 @@ class TeamController extends BaseController {
         if (Yii::$app->request->post('delete')) {
             if ($assessment->delete()) {
 
-                SiteController::addFlash('success', Yii::t('app', 'Assessment has been successfully deleted.'));
+                SiteController::addFlash('success', Yii::t('assessment', 'Assessment has been successfully deleted.'));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             } else {
                 SiteController::FlashErrors($assessment);

@@ -17,9 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Are you sure that you want to delete this assessment?' => '¿Estás seguro que quiere eliminar este relevamiento?',
     'Assessments' => 'Relevamientos',
     'Coach' => 'Coach',
     'Company' => 'Empresa',
+    'Deleting assessment' => 'Eliminando relevamiento',
     'Member' => 'Miembro',
     'Members' => 'Miembros',
     'New assessment' => 'Nuevo relevamiento',

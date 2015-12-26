@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
     <div class='text-center'>
-        <h3 class='alert alert-danger'><?= Yii::t('team', 'This action cannot be reverted.') ?></h3>
+        <h3 class='alert alert-danger'><?= Yii::t('app', 'This action cannot be reverted.') ?></h3>
         <h3><?= Yii::t('team', 'Are you sure that you want to delete this assessment?') ?></h3>
         <div class="form-group">
             <?= Html::hiddenInput('delete', 1) ?>
