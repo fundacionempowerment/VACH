@@ -12,8 +12,6 @@ use franciscomaya\sceditor\SCEditor;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-
-
 $this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
@@ -35,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
     if (count($groupPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
             'data' => $groupPerformanceMatrix,
-            'members' => $members,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => $report->member->id,
         ]);
@@ -45,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
     if (count($organizationalPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
             'data' => $organizationalPerformanceMatrix,
-            'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => $report->member->id,
         ]);

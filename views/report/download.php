@@ -151,7 +151,15 @@ $this->title = Yii::t('report', 'Report');
             ?>
             <h1>
                 <?= $individualReport->member->fullname ?>
-            </h1>             
+            </h1>
+            <?=
+            $this->render('_individual_performance', [
+                'report' => $individualReport,
+                'assessment' => $assessment,
+                'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            ])
+            ?>
             <?=
             $this->render('_individual_perception', [
                 'report' => $individualReport,
