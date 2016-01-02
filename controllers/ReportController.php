@@ -231,11 +231,17 @@ class ReportController extends Controller {
         $groupEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_GROUP);
         $organizationalEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
 
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
         return $this->render('emergents', [
                     'assessment' => $assessment,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+                    'memberId' => 0,
         ]);
     }
 
@@ -266,12 +272,17 @@ class ReportController extends Controller {
         $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
         $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
 
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
         return $this->render('individual_performance', [
                     'report' => $individualReport,
                     'assessment' => $assessment,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
                     'members' => $members,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
@@ -396,12 +407,18 @@ class ReportController extends Controller {
         $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
         $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
 
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+
         return $this->render('individual_emergents', [
                     'report' => $individualReport,
                     'assessment' => $assessment,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+                    'memberId' => $individualReport->user_id,
         ]);
     }
 

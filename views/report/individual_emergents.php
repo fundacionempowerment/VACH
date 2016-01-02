@@ -29,6 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupEmergents) > 0) {
         echo $this->render('../dashboard/_emergents', [
+            'data' => $groupRelationsMatrix,
+            'members' => $members,
+            'memberId' => $memberId,
             'emergents' => $groupEmergents,
             'type' => Wheel::TYPE_GROUP,
         ]);
@@ -37,6 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($organizationalEmergents) > 0) {
         echo $this->render('../dashboard/_emergents', [
+            'data' => $organizationalRelationsMatrix,
+            'members' => $members,
+            'memberId' => $memberId,
             'emergents' => $organizationalEmergents,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
         ]);

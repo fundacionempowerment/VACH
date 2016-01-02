@@ -124,12 +124,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($emergents))
         echo $this->render('_emergents', [
-            'emergents' => $emergents,
-            'type' => $filter->wheelType,
-        ]);
-
-    if (count($emergents))
-        echo $this->render('_emergents_detailed', [
+            'data' => $relationsMatrix,
+            'members' => $members,
+            'memberId' => $filter->memberId,
             'emergents' => $emergents,
             'type' => $filter->wheelType,
         ]);

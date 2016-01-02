@@ -1,35 +1,34 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use app\models\Wheel;
-use app\models\WheelQuestion;
-use yii\bootstrap\Progress;
-use yii\helpers\Json;
 use app\controllers\Utils;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if ($type == Wheel::TYPE_GROUP)
+if ($type == Wheel::TYPE_GROUP) {
     $title = Yii::t('dashboard', 'Group Consciousness and Responsability Matrix');
-else if ($type == Wheel::TYPE_ORGANIZATIONAL)
+} else if ($type == Wheel::TYPE_ORGANIZATIONAL) {
     $title = Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix');
-else
+} else {
     $title = Yii::t('dashboard', 'Individual Consciousness and Responsability Matrix');
+}
 
 $howISeeMe = [];
-foreach ($members as $id => $member)
-    if ($id > 0)
+foreach ($members as $id => $member) {
+    if ($id > 0) {
         foreach ($data as $datum) {
             if ($datum['observer_id'] == $id && $datum['observed_id'] == $id) {
                 $howISeeMe[] = $datum['value'];
             }
         }
+    }
+}
 
 $howTheySeeMe = [];
-foreach ($members as $id => $member)
+foreach ($members as $id => $member) {
     if ($id > 0) {
         $sum = 0;
         foreach ($data as $datum) {
@@ -39,13 +38,16 @@ foreach ($members as $id => $member)
         }
         $howTheySeeMe[] = $sum / (count($members) - 2);
     }
+}
 
-if (count($howISeeMe) != count($howTheySeeMe))
+if (count($howISeeMe) != count($howTheySeeMe)) {
     return;
+}
 
 $sum = 0;
-for ($i = 0; $i < count($howTheySeeMe); $i++)
+for ($i = 0; $i < count($howTheySeeMe); $i++) {
     $sum += $howTheySeeMe[$i];
+}
 $allTheySee = $sum / (count($members) - 1);
 
 $sum = 0;
@@ -67,13 +69,14 @@ $token = rand(100000, 999999);
                 <?= Yii::t('app', 'Description') ?>
             </td>
             <?php
-            foreach ($members as $id => $member)
+            foreach ($members as $id => $member) {
                 if ($id > 0) {
                     ?>
                     <td>
                         <?= $member ?>
                     </td>
                 <?php } ?>
+            <?php } ?>
         </tr>
         <tr>
             <td>
