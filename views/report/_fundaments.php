@@ -3,8 +3,14 @@
 use yii\helpers\Html;
 ?>
 <h2>
-    Fundamentos de CPC
+    2. Fundamentos de CPC
 </h2>
+<h3>
+    ¿Qué es el Coaching por Competencias (CPC)?
+</h3>
+<p>
+    El Coaching por Competencias® es un método de gestión práctico y eficaz para alinear el desempeño individual con el Performance Management de la Organización, dejando emerger el inconsciente de los equipos naturales, promoviendo la conciencia y la responsabilidad, y con ello la eficiencia y productividad de las personas.
+</p>
 <p>
     Para nosotros, encontrar una forma económica, eficiente y humana de valorar el Capital Humano es un propósito coherente con lo que predicamos, reconociendo que los Valores humanos, en términos de conciencia y responsabilidad, generan y consolidan vínculos; entendiendo como vínculo a la misma productividad, que se apoya en lo que hace cada persona participante de un proceso y de las relaciones complejas que se establecen en el ámbito donde se desempeñan, para satisfacer sus propias necesidades, las del Grupo al que pertenece, y las necesidades mismas de la Organización, con un impacto en el ámbito social, que esto también conlleva; y por ello, nuestro objetivo primordial de trabajo, será siempre: 
 </p>
@@ -14,11 +20,19 @@ use yii\helpers\Html;
 <p>
     Es decir, construir una herramienta para que la Organización se vea a sí misma a partir de las personas que consolidan su Cultura Organizacional, permitiéndole a ellas mismas, a sus grupos de pertenencia y a la propia Organización, distinguir los impactos organizacionales con un máximo nivel de interpretación, aplicando un mismo instrumento replicable y confiable, en un modelo de gestión sistémico, integral y sostenible. 
 </p>
+<h3>
+    ¿Por qué sistémico?
+</h3>
 <p>
-    ¿Por qué sistémico? Porque hace referencia a las relaciones intra e intersubjetivas de las Organizaciones, donde grupos de personas en interacción constituyen subsistemas basados en los encuentros con ellos mismos, que reciben inputs de otros subsistemas y en los que, a su vez, sus outputs, alimentan a otros sistemas; y así cada cual hace su trabajo, desde su ámbito de acción, desde lo que comprende que hace (Conciencia), y desde lo que sabe que tiene que hacerse cargo y responder (Responsabilidad).
+    Porque hace referencia a las relaciones intra e intersubjetivas de las Organizaciones, donde grupos de personas en interacción constituyen subsistemas basados en los encuentros con ellos mismos, que reciben inputs de otros subsistemas y en los que, a su vez, sus outputs, alimentan a otros sistemas; y así cada cual hace su trabajo, desde su ámbito de acción, desde lo que comprende que hace (Conciencia), y desde lo que sabe que tiene que hacerse cargo y responder (Responsabilidad).
 </p>
 <p>
     En esta dinámica, ajustar la forma en la que cada integrante se relaciona, a partir de la manera cómo percibe a cada Individuo en interacción, a su Grupo y a la Organización en su conjunto, facilitará el desempeño en cada uno de los tres planos de impacto (Individual/Grupal/Organizacional) de la herramienta. Estas redes de interacciones interpersonales (Subsistemas) conforman el macrosistema organizacional, donde será preciso identificar el nivel de complejidad vincular de una problemática determinada. El encuadre con el que identificamos dicha problemática y trabajamos sobre ella es lo que reconocemos como impactos organizacionales.
+</p>
+<h3>
+    ¿Por qué integral y sostenible?
+</h3>
+<p>
     Medir el desempeño desde una visión integral y sistémica, permitirá obtener máxima asertividad en los procesos de cualificación del capital humano, en la medida que la herramienta permite obtener cualitativa y cuantitativamente, el grado de conciencia y el nivel de responsabilidad de cada Subsistema, desde la percepción de su propia realidad; y esto, desde la perspectiva del trabajo con el 
     capital humano organizacional, permite en forma fáctica y precisa: 
 </p>

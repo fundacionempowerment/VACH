@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data['fullname'], Url::to(['person/edit', 'id' => $data['id'],])); // $data['name'] for array data, e.g. using SqlDataProvider.
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '60px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
@@ -42,5 +42,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('user', 'New person'), Url::to(['person/new']), ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('user', 'New person'), Url::to(['person/new']), ['class' => 'btn btn-success']) ?>
 </div>

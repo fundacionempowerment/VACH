@@ -35,9 +35,9 @@ $width = 800;
 $height = 400;
 if (count($drawing_data) < 4)
     $height = 150;
+$token = rand(100000, 999999);
 ?>
-<div class="clearfix"></div>
-<div class="col-md-12">
+<div id="div<?= $token ?>" class="row col-md-12">
     <table class="table table-bordered table-hover">
         <tr>
             <td>
@@ -52,7 +52,7 @@ if (count($drawing_data) < 4)
                     </td>
                 <?php } ?>
             <td>
-                <?= Yii::t('app', 'Average') ?>
+                <?= Yii::t('app', 'Avg.') ?>
             </td>
         </tr>
         <?php
@@ -102,7 +102,7 @@ if (count($drawing_data) < 4)
             <?php } ?>
         <tr>
             <td>
-                <?= Yii::t('app', 'Average') ?>
+                <?= Yii::t('app', 'Avg.') ?>
             </td>
             <?php
             if ($observer_count > 0)
@@ -120,4 +120,9 @@ if (count($drawing_data) < 4)
         </tr>
     </table>
 </div>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+    <div class="col-md-12 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    </div>
+<?php } ?>
 <div class="clearfix"></div>

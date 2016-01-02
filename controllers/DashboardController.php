@@ -31,6 +31,12 @@ class DashboardController extends BaseController {
         $members = [];
 
         $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
+        if (count($companies) == 1) {
+            foreach ($companies as $id => $fullname) {
+                $filter->companyId = $id;
+                break;
+            }
+        }
 
         if ($filter->companyId > 0) {
             $teamQuery = Team::find()
@@ -154,4 +160,3 @@ class DashboardController extends BaseController {
     }
 
 }
-

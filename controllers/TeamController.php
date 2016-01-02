@@ -36,6 +36,10 @@ class TeamController extends BaseController {
     public function actionView($id) {
         $team = Team::findOne($id);
 
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         if (Yii::$app->request->isPost) {
             $new_member_id = Yii::$app->request->post('new_member');
 
@@ -45,14 +49,18 @@ class TeamController extends BaseController {
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
-            }
-            else
+            } else
                 SiteController::FlashErrors($teamMember);
+        }
+
+        $persons = [];
+        if (!$team->blocked) {
+            $persons = $this->getPersons();
         }
 
         return $this->render('view', [
                     'team' => $team,
-                    'persons' => $this->getPersons(),
+                    'persons' => $persons,
         ]);
     }
 
@@ -76,6 +84,10 @@ class TeamController extends BaseController {
     public function actionEdit($id) {
         $team = Team::findOne(['id' => $id]);
 
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         Yii::$app->session->set('team_id', $id);
 
         if ($team->load(Yii::$app->request->post()) && $team->save()) {
@@ -98,6 +110,11 @@ class TeamController extends BaseController {
 
     public function actionDelete($id) {
         $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
         if ($team->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $team->name]));
         } else {
@@ -106,8 +123,25 @@ class TeamController extends BaseController {
         return $this->redirect(['/team']);
     }
 
+    public function actionFullfilled($id) {
+        $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
+
+        $team->blocked = true;
+        $team->save();
+
+        return $this->redirect(['/team/view', 'id' => $team->id]);
+    }
+
     public function actionNewMember($id) {
         $team = Team::findOne($id);
+
+        if (!isset($team)) {
+            return $this->redirect(['/team']);
+        }
 
         $member = new Person();
 
@@ -118,8 +152,7 @@ class TeamController extends BaseController {
             $teamMember->save();
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $member->fullname]));
             return $this->redirect(['/team/view', 'id' => $team->id]);
-        }
-        else
+        } else
             SiteController::FlashErrors($member);
 
         return $this->render('member-form', [
@@ -155,6 +188,26 @@ class TeamController extends BaseController {
             SiteController::FlashErrors($teamMember);
         }
         return $this->redirect(['/team/view', 'id' => $team->id]);
+    }
+
+    public function actionDeleteAssessment($id) {
+        $assessment = Assessment::findOne($id);
+        $team = $assessment->team;
+
+        if (Yii::$app->request->post('delete')) {
+            if ($assessment->delete()) {
+
+                SiteController::addFlash('success', Yii::t('assessment', 'Assessment has been successfully deleted.'));
+                return $this->redirect(['/team/view', 'id' => $team->id]);
+            } else {
+                SiteController::FlashErrors($assessment);
+            }
+        }
+
+        return $this->render('delete_assessment', [
+                    'assessment' => $assessment,
+                    'team' => $team,
+        ]);
     }
 
     private function getCompanies() {

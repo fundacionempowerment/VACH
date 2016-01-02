@@ -10,7 +10,6 @@ use kartik\widgets\Select2;
 
 /* @var $this yii\web\View */
 ?>
-<div class="clearfix"></div>
 <script type="text/javascript">
     function lockAndSubmit(form) {
         var filter = $("#filter-div").css('opacity', 0.3);
@@ -108,3 +107,4 @@ use kartik\widgets\Select2;
     </div>
     <?php ActiveForm::end(); ?>
 </div>
+<div class="clearfix"></div>

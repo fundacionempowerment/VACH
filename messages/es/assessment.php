@@ -18,15 +18,15 @@
  */
 return [
     'Assessment' => 'Relevamiento',
+    'Assessment has been successfully deleted.' => 'Relevamiento ha sido eliminado con éxito',
     'Assessments' => 'Relevamientos',
     'CPC: access to {wheel_type} of assessment {assessment}' => 'CPC: acceso a {wheel_type} del relevamiento {assessment}',
     'Email to send' => 'Correo electrónico a enviar',
     'Go to dashboard...' => 'Ir al tablero...',
-    'Go to report...' => 'Ir a reporte...',
+    'Go to report...' => 'Ir al informe...',
     'Group wheels' => 'Ruedas grupales',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',
-    'Once you click \'Save\' button, team is locked, new member are not allowed and new assessment is created.' => 'Una vez que presione el botón \'Guardar\', el equipo es bloqueado, nuevos miembros no son permitidos y un relevamiento es creado.',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Please ask the audience to enter this site and token in his/her phone browser' => 'Por favor pida al público que ingrese este sitio e indentificador en su teléfono',
     'Please send this email' => 'Por favor envíe este correo electrónico',

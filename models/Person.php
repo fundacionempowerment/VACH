@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 class Person extends ActiveRecord {
 
     public $fullname;
+    public $deletable;
 
     /**
      * @inheritdoc
@@ -48,13 +49,23 @@ class Person extends ActiveRecord {
             'surname' => Yii::t('user', 'Surname'),
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
+            'phone' => Yii::t('app', 'Phone'),
         ];
     }
 
     public function afterFind() {
         $this->fullname = $this->name . ' ' . $this->surname;
+
+        $sponsored_teams = $this->hasMany(Team::className(), ['sponsor_id' => 'id'])->count();
+        $wheels_as_observed = $this->hasMany(Wheel::className(), ['observed_id' => 'id'])->count();
+        $wheels_as_observer = $this->hasMany(Wheel::className(), ['observer_id' => 'id'])->count();
+        $coaching = $this->hasMany(User::className(), ['coach_id' => 'id'])->count();
+
+        $this->deletable = $sponsored_teams == 0 && $wheels_as_observed == 0 && $wheels_as_observer == 0 && $coaching == 0;
+
+        parent::afterFind();
     }
-    
+
     public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
         $this->afterFind();

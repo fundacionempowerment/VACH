@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
 class Team extends ActiveRecord {
 
     public $fullname;
+    public $deletable;
 
     /**
      * @return array the validation rules.
@@ -48,6 +49,10 @@ class Team extends ActiveRecord {
 
     public function afterFind() {
         $this->fullname = $this->company->name . ' ' . $this->name;
+
+        $assessments = $this->hasMany(Assessment::className(), ['team_id' => 'id']);
+        $this->deletable = $assessments->count() == 0;
+
         parent::afterFind();
     }
 

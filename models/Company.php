@@ -8,6 +8,8 @@ use yii\db\ActiveRecord;
 
 class Company extends ActiveRecord {
 
+    public $deletable;
+
     /**
      * @inheritdoc
      */
@@ -43,6 +45,13 @@ class Company extends ActiveRecord {
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
         ];
+    }
+
+    public function afterFind() {
+        $teams = $this->hasMany(Team::className(), ['company_id' => 'id']);
+        $this->deletable = $teams->count() == 0;
+
+        parent::afterFind();
     }
 
     public function beforeValidate() {

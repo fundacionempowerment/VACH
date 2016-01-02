@@ -59,6 +59,11 @@ class Assessment extends ActiveRecord {
         $this->afterFind();
     }
 
+    public function beforeDelete() {
+        Wheel::deleteAll(['assessment_id' => $this->id]);
+        return parent::beforeDelete();
+    }
+
     public static function browse() {
         return Assessment::find()
                         ->select('assessment.*')
@@ -88,6 +93,9 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
         $members = count($this->team->members);
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        if ($questions == 0)
+            $questions = 1;
+
         return round($answers / $questions * 100, 1) . ' %';
     }
 
@@ -95,6 +103,8 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
         $members = count($this->team->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        if ($questions == 0)
+            $questions = 1;
         return round($answers / $questions * 100, 1) . ' %';
     }
 
@@ -102,7 +112,13 @@ class Assessment extends ActiveRecord {
         $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
         $members = count($this->team->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
         return round($answers / $questions * 100, 1) . ' %';
+    }
+
+    public function getWheels() {
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id']);
     }
 
     public function getIndividualWheels() {
