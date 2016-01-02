@@ -18,12 +18,11 @@
  */
 return [
     'Avg. mon. prod.' => 'Prod. mono. promedio',
+    'Best emergents' => 'Mejores emergentes',
     'Cons. gap' => 'Brecha de con.',
     'Consciousness' => 'Conciencia',
+    'Consciousness gap emergents' => 'Emergentes por brecha de conciencia',
     'Dashboard' => 'Tablero',
-    'Detailed Group Emergents Matrix' => 'Matriz detallada de emergentes grupales',
-    'Detailed Individual Emergents Matrix' => 'Matriz detallada de emergentes individuales',
-    'Detailed Organizational Emergents Matrix' => 'Matriz detallada de emergentes organizacionales',
     'Group Competence Matrix' => 'Matriz de competencias grupales',
     'Group Consciousness and Responsability Matrix' => 'Matriz de conciencia y responsabilidad grupal',
     'Group Emergents Matrix' => 'Matriz de emergentes grupales',
@@ -58,4 +57,5 @@ return [
     'Select wheel type ...' => 'Elija tipo de rueda ...',
     'Show' => 'Mostrar',
     'St. dev.' => 'Desv. est.',
+    'Worst emergents' => 'Peores emergentes',
 ];

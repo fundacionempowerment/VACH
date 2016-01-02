@@ -17,49 +17,6 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Emergents Matrix');
 
-$howISeeMe = [];
-foreach ($members as $id => $member) {
-    if ($id > 0) {
-        foreach ($data as $datum) {
-            if ($datum['observer_id'] == $id && $datum['observed_id'] == $id) {
-                $howISeeMe[] = $datum['value'];
-            }
-        }
-    }
-}
-
-$howTheySeeMe = [];
-foreach ($members as $id => $member) {
-    if ($id > 0) {
-        $sum = 0;
-        foreach ($data as $datum) {
-            if ($datum['observer_id'] != $id && $datum['observed_id'] == $id) {
-                $sum += $datum['value'];
-            }
-        }
-        $howTheySeeMe[] = $sum / (count($members) - 2);
-    }
-}
-
-if (count($howISeeMe) != count($howTheySeeMe)) {
-    return;
-}
-
-$sum = 0;
-for ($i = 0; $i < count($howTheySeeMe); $i++) {
-    $sum += $howTheySeeMe[$i];
-}
-$allTheySee = $sum / (count($members) - 1);
-
-$sum = 0;
-$gaps = [];
-for ($i = 0; $i < count($howTheySeeMe); $i++) {
-    $sum += $howTheySeeMe[$i] - $howISeeMe[$i];
-    $gaps [] = $howTheySeeMe[$i] - $howISeeMe[$i];
-}
-
-$standar_deviation = Utils::standard_deviation($gaps);
-
 $dimensions = WheelQuestion::getDimensionNames($type);
 $questionCount = WheelQuestion::getQuestionCount($type) / 8;
 

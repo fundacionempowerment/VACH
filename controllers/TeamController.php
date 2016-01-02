@@ -53,9 +53,14 @@ class TeamController extends BaseController {
                 SiteController::FlashErrors($teamMember);
         }
 
+        $persons = [];
+        if (!$team->blocked) {
+            $persons = $this->getPersons();
+        }
+
         return $this->render('view', [
                     'team' => $team,
-                    'persons' => $this->getPersons(),
+                    'persons' => $persons,
         ]);
     }
 

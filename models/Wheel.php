@@ -244,7 +244,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getEmergents($assessmentId, $type) {
-        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question , avg(wheel_answer.answer_value) as value')
+        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question ,'
+                . ' avg( case when wheel.observed_id <> wheel.observer_id then wheel_answer.answer_value else null end) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')

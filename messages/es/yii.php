@@ -19,6 +19,6 @@
 return [
     'Are you sure you want to delete this item?' => '¿Está seguro que quiere eliminar este ítem?',
     'Delete' => 'Eliminar',
-    'Update' => 'Actualizar',
+    'Edit' => 'Editar',
     'View' => 'Ver',
 ];

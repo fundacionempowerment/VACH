@@ -6,7 +6,7 @@ use yii\db\Migration;
 class m151114_013636_add_individual_performance_analisys extends Migration {
 
     public function up() {
-        $this->addColumn('{{%individual_report}}', 'performance', Schema::TYPE_TEXT . ' NULL');
+        $this->addColumn('{{%individual_report}}', 'performance', Schema::TYPE_TEXT);
     }
 
     public function down() {
