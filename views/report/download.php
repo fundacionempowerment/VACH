@@ -148,56 +148,60 @@ $this->title = Yii::t('report', 'Report');
             $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
             $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
             $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+            $subtitle_number = 97; // letter 'a'
             ?>
             <h1>
                 <?= $individualReport->member->fullname ?>
             </h1>
-            <?=
-            $this->render('_individual_performance', [
-                'report' => $individualReport,
-                'assessment' => $assessment,
-                'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_perception', [
+            <?php
+            if ($individualReport->performance != '') {
+                echo $this->render('_individual_performance', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'subtitle_letter' => chr($subtitle_number),
+                ]);
+                $subtitle_number++;
+            }
+            echo $this->render('_individual_perception', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'projectedGroupWheel' => $projectedGroupWheel,
                 'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
                 'reflectedGroupWheel' => $reflectedGroupWheel,
                 'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_relations', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_relations', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupRelationsMatrix' => $groupRelationsMatrix,
                 'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                 'members' => $members,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_competences', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_competences', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupGauges' => $groupGauges,
                 'organizationalGauges' => $organizationalGauges,
                 'members' => $members,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_emergents', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_emergents', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupEmergents' => $groupEmergents,
                 'organizationalEmergents' => $organizationalEmergents,
                 'members' => $members,
-            ])
-            ?>
-        <?php } ?>
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+        }
+        ?>
     </div>
     <div class="col-lg-12">
         <h2>

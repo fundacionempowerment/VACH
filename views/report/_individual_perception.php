@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    a - Matriz de Percepción, grupal y organizacional
+    <?= $subtitle_letter ?> - Matriz de Percepción, grupal y organizacional de <?= $report->member->fullname ?>
 </h3>
 <?php
 if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)

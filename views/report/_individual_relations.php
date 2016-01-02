@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    b - Matriz de Relaciones grupales y organizacionales
+    <?= $subtitle_letter ?> - Matriz de Relaciones grupales y organizacionales de <?= $report->member->fullname ?>
 </h3>
 <?php
 if (count($groupRelationsMatrix) > 0) {

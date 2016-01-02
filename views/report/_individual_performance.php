@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    a - Matriz de Desempeño, grupal y organizacional
+    <?= $subtitle_letter ?> - Matriz de Desempeño, grupal y organizacional de <?= $report->member->fullname ?>
 </h3>
 <?php
 if (count($groupPerformanceMatrix) > 0) {
