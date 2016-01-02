@@ -23,6 +23,10 @@ if (count($organizationalEmergents) > 0) {
 }
 ?>
 <h3>
+    Descripción
+</h3>
+<?= $this->render('descriptions/individual_emergents') ?>
+<h3>
     Análisis
 </h3>
 <p>

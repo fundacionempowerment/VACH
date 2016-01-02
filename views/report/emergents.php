@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
-
     <h1>
         <?= Yii::t('report', 'Emergents Matrix') ?>
     </h1>
@@ -43,6 +42,19 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <div class="row col-md-12">
+        <h3>
+            Descripción <a class="collapsed btn btn-default" aria-controls="collapsedDiv" aria-expanded="false" href="#collapsedDiv" data-toggle="collapse" role="button">
+                <?= Yii::t('dashboard', 'Show') ?>
+            </a>
+        </h3>
+    </div>
+    <div id="collapsedDiv" class="panel-collapse collapse row col-md-12" aria-expanded="false">
+        <?= $this->render('descriptions/emergents') ?>
+    </div>
+    <div class="row col-md-12">
+        <h3>
+            Análisis
+        </h3>
         <p>
             <?php
             $form = ActiveForm::begin([

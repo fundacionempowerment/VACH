@@ -27,11 +27,7 @@ if (count($organizationalRelationsMatrix) > 0) {
 <h3>
     Descripción
 </h3>
-<p>
-    La Matriz inserta en este ítem corresponde a cómo son —inconscientemente— las proyecciones, en cuanto a las relaciones interpersonales del Grupo: ¿Cómo funciona su lectura e interpretación? Cada uno de los integrantes estará situado en el centro del grupo. Y de él salen flechas hacia los otros integrantes, que podrán ser de tres colores, según sea la relación establecida, esto es, qué le proyecta esta persona a los demás integrantes.</p>
-<p> 
-    Si el valor promedio es inferior a 40% se establece una Relación Conflictiva (rojo); si es mayor a 40% y menor a 70% hay una relación Normal (amarillo), y si es superior a 70% hay una relación Buena (verde).
-</p>
+<?= $this->render('descriptions/individual_relations') ?>
 <h3>
     Análisis
 </h3>

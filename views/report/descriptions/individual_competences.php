@@ -1,0 +1,3 @@
+<p>
+    El gráfico representa el porcentaje obtenido por cada integrante, sólo considerando el “cómo me ven”, en relación a cada una de las competencias grupales: Legitimación, Liderazgo, Comunicación, Flexibilidad, Trabajo en Equipo, Pertinencia e Iniciativa y Organizacionales: Identidad, Visión Estratégica, Resolución de Conflictos, Gestión del Cambio, Orientación a la Calidad, Orientación al Cliente, Orientación  los Resultados y Creatividad.
+</p>

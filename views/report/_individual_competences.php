@@ -23,6 +23,10 @@ if (count($organizationalGauges) > 0) {
 }
 ?>
 <h3>
+    Descripción
+</h3>
+<?= $this->render('descriptions/individual_competences') ?>
+<h3>
     Análisis
 </h3>
 <p>
