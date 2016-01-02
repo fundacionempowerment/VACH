@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\models\Wheel;
 ?>
 <h3>
-    c - Matriz de Competencias grupales y organizacionales
+    <?= $subtitle_letter ?> - Matriz de Competencias grupales y organizacionales de <?= $report->member->fullname ?>
 </h3>
 <?php
 if (count($groupGauges) > 0) {
@@ -22,6 +22,10 @@ if (count($organizationalGauges) > 0) {
     ]);
 }
 ?>
+<h3>
+    Descripción
+</h3>
+<?= $this->render('descriptions/individual_competences') ?>
 <h3>
     Análisis
 </h3>

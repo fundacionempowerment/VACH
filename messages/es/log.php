@@ -19,6 +19,6 @@
 return [
     'Coach' => 'Coach',
     'Date Time' => 'Fecha y hora',
-    'Event Log' => 'Bitácora de eventos',
+    'Event Log' => 'Historial de eventos',
     'Text' => 'Texto',
 ];

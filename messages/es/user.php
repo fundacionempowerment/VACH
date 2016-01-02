@@ -21,7 +21,6 @@ return [
     'Coach' => 'Coach',
     'Email already used.' => 'Correo electrónico ya usado.',
     'I\'m coach' => 'Soy coach',
-    'If you forgot your password you can ' => '@@Si olvidó su contraseña puede @@',
     'Is administrator' => 'Es administrador',
     'My Account' => 'Mi cuenta',
     'My account' => 'Mi cuenta',
@@ -44,5 +43,4 @@ return [
     'Users' => 'Usuarios',
     'Wrong old password.' => 'Antigua contraseña incorrecta',
     'Your personal data has been successfully saved.' => 'Sus datos personales han sido salvado con éxito.',
-    'reset it' => '@@resetearlo@@',
 ];

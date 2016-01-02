@@ -19,35 +19,46 @@ $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var relations = new Array();
-    var relationsData = new Array();
-</script>
-<script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical">
-
     <h1>
-        <?= Yii::t('report', 'Relations Matrix of {member}', ['member' => $report->member->fullname]) ?>
+        <?= Yii::t('report', 'Relations Matrix') ?>
     </h1>
+    <h3><?= Yii::t('dashboard', 'Group Relations Matrix') ?></h3>
     <?php
     if (count($groupRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_relation', [
+        echo $this->render('../dashboard/_relation_table', [
             'data' => $groupRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
-            'memberId' => $report->member->id,
+            'memberId' => 0,
         ]);
     }
+    ?>
+    <h3><?= Yii::t('dashboard', 'Organizational Relations Matrix') ?></h3>
+    <?php
     if (count($organizationalRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_relation', [
+        echo $this->render('../dashboard/_relation_table', [
             'data' => $organizationalRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'memberId' => $report->member->id,
+            'memberId' => 0,
         ]);
     }
     ?>
     <div class="row col-md-12">
+        <h3>
+            Descripción <a class="collapsed btn btn-default" aria-controls="collapsedDiv" aria-expanded="false" href="#collapsedDiv" data-toggle="collapse" role="button">
+                <?= Yii::t('dashboard', 'Show') ?>
+            </a>
+        </h3>
+    </div>
+    <div id="collapsedDiv" class="panel-collapse collapse row col-md-12" aria-expanded="false">
+        <?= $this->render('descriptions/relations') ?>
+    </div>
+    <div class="row col-md-12">
+        <h3>
+            Análisis
+        </h3>
         <p>
             <?php
             $form = ActiveForm::begin([
@@ -57,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             SCEditor::widget([
                 'name' => 'analysis',
-                'value' => $report->relations,
+                'value' => $assessment->report->relations,
                 'options' => ['rows' => 10],
                 'clientOptions' => [
                     'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
@@ -72,10 +83,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function() {
-        for (var i in relations) {
-            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
-        }
-    }
-</script>

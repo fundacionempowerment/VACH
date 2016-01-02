@@ -32,11 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=
     $form->field($team, 'sponsor_id')->widget(Select2::classname(), [
         'data' => $persons,
-        'hideSearch' => true,
     ]);
     ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($team->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -124,7 +124,7 @@ function doMatrix(context, matrixData)
             context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
 
             if (Math.abs(data[i]['consciousness']) < stardarDeviation)
-                context.fillStyle = '#5bc0de';
+                context.fillStyle = '#5cb85c';
             else
                 context.fillStyle = '#f0ad4e';
             context.fill();
@@ -134,7 +134,7 @@ function doMatrix(context, matrixData)
             context.fillText(matrixData[i][0], matrixData[i][1], matrixData[i][2] + 16);
         }
 
-    context.lineWidth = 5;
+    context.lineWidth = 6;
     context.font = 'bold 11pt Helvetica';
     for (i in matrixData)
         if (matrixData[i][3] == memberId)
@@ -144,7 +144,7 @@ function doMatrix(context, matrixData)
             context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
 
             if (Math.abs(data[i]['consciousness']) < stardarDeviation)
-                context.fillStyle = '#5bc0de';
+                context.fillStyle = '#5cb85c';
             else
                 context.fillStyle = '#f0ad4e';
             context.fill();

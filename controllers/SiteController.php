@@ -9,6 +9,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterModel;
 use app\models\Wheel;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
 
 class SiteController extends BaseController {
 
@@ -139,6 +141,48 @@ class SiteController extends BaseController {
         ]);
     }
 
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset() {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Check your email for further instructions.'));
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, we are unable to reset password for email provided.'));
+            }
+        }
+        return $this->render('requestPasswordResetToken', [
+                    'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token) {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'New password was saved.'));
+            return $this->goHome();
+        }
+        return $this->render('resetPassword', [
+                    'model' => $model,
+        ]);
+    }
+
     public function actionCoach() {
         return $this->render('coachIntro', [
         ]);
@@ -174,7 +218,7 @@ class SiteController extends BaseController {
     }
 
     public function actionMigrateUp() {
-        // https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
+// https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
         defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 

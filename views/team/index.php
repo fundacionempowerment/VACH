@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->fullname, Url::to(['team/view', 'id' => $data['id'],]));
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{update} {delete}',
-                'options' => ['width' => '60px'],
+                'options' => ['width' => '110px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
                     switch ($action) {
                         case 'update' : return Url::to(['team/edit', 'id' => $model['id']]);
@@ -43,5 +43,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('team', 'New team'), Url::to(['team/new']), ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('team', 'New team'), Url::to(['team/new']), ['class' => 'btn btn-success']) ?>
 </div>

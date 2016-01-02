@@ -51,13 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row col-md-12" style="margin-right: 0px;">
         <h4><?= Yii::t('assessment', 'Assessment') ?></h4>
         <?= $form->field($assessment, 'name') ?>
-        <div class="alert alert-warning">
-            <?= Yii::t('app', "This action cannot be reverted.") ?>
-            <br />
-            <?= Yii::t('assessment', "Once you click 'Save' button, team is locked, new member are not allowed and new assessment is created.") ?>
-            <br />
-            <?= Yii::t('app', 'Are you sure to continue?') ?>
-        </div>
         <div class="form-group">
             <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
         </div>

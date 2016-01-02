@@ -24,23 +24,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'name',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
-                'value' => function ($data) {
-                    return Html::a($data->fullname, Url::to(['assessment/view', 'id' => $data['id'],]));
+                'value' => function($data) {
+                    return Html::a($data->fullname, Url::to(['assessment/view', 'id' => $data['id']]));
                 },
             ],
             [
                 'attribute' => 'IndividualWheelStatus',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
-                'value' => function ($data) {
+                'value' => function($data) {
                     return Html::a($data->IndividualWheelStatus, Url::to(['assessment/view', 'id' => $data['id'],]));
                 },
             ],
             [
                 'attribute' => 'GroupWheelStatus',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
                 'value' => function ($data) {
                     return Html::a($data->GroupWheelStatus, Url::to(['assessment/view', 'id' => $data['id'],]));
@@ -48,13 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'OrganizationalWheelStatus',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
-                'value' => function ($data) {
+                'value' => function($data) {
                     return Html::a($data->OrganizationalWheelStatus, Url::to(['assessment/view', 'id' => $data['id'],]));
                 },
             ],
-        ],
-    ]);
-    ?>
+            [
+                'format' => 'html',
+                'value' => function($data) {
+                    $dashboard = Html::a(Yii::t('dashboard', 'Dashboard'), Url::to(['assessment/go-to-dashboard', 'id' => $data['id']]), ['class' => 'btn btn-default']);
+                    $report =Html::a(Yii::t('report', 'Report'), Url::to(['report/view', 'id' => $data['id']]), ['class' => 'btn btn-default']);
+                    return  "$dashboard $report";
+                },
+            ]
+        ]
+    ]); ?> 
 </div>

@@ -68,8 +68,8 @@ $this->title = Yii::t('report', 'Report');
             <ol>
                 <li><?= Yii::t('report', 'Introduction') ?></li>
                 <li><?= Yii::t('report', 'Fundaments') ?></li>
-                <li><?= Yii::t('report', 'Group and organizational performance') ?></li>
-                <li><?= Yii::t('report', 'Individual perferformance') ?></li>
+                <li><?= Yii::t('report', 'Group and Organizational Analysis') ?></li>
+                <li><?= Yii::t('report', 'Individual Analysis') ?></li>
                 <li><?= Yii::t('report', 'Summary') ?></li>
                 <li><?= Yii::t('report', 'Action Plan') ?></li>
             </ol>
@@ -77,7 +77,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Introduction') ?>
+            1. <?= Yii::t('report', 'Introduction') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->introduction ?>
@@ -89,13 +89,8 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            Desempeño grupal y organizacional
+            3. <?= Yii::t('report', 'Group and Organizational Analysis') ?>
         </h2>
-        <?=
-        $this->render('_relations', [
-            'assessment' => $assessment,
-        ])
-        ?>
         <?=
         $this->render('_effectiveness', [
             'assessment' => $assessment,
@@ -109,6 +104,14 @@ $this->title = Yii::t('report', 'Report');
             'assessment' => $assessment,
             'groupPerformanceMatrix' => $groupPerformanceMatrix,
             'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
+        ])
+        ?>
+        <?=
+        $this->render('_relations', [
+            'assessment' => $assessment,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
         ])
         ?>
@@ -129,6 +132,9 @@ $this->title = Yii::t('report', 'Report');
         ])
         ?>
     </div>
+    <h2>
+        4. <?= Yii::t('report', 'Individual Analysis') ?>
+    </h2>
     <div class="col-lg-12">
         <?php
         foreach ($assessment->report->individualReports as $individualReport) {
@@ -142,52 +148,64 @@ $this->title = Yii::t('report', 'Report');
             $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
             $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
             $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+            $subtitle_number = 97; // letter 'a'
             ?>
             <h1>
                 <?= $individualReport->member->fullname ?>
-            </h1>             
-            <?=
-            $this->render('_individual_perception', [
+            </h1>
+            <?php
+            if ($individualReport->performance != '') {
+                echo $this->render('_individual_performance', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'subtitle_letter' => chr($subtitle_number),
+                ]);
+                $subtitle_number++;
+            }
+            echo $this->render('_individual_perception', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'projectedGroupWheel' => $projectedGroupWheel,
                 'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
                 'reflectedGroupWheel' => $reflectedGroupWheel,
                 'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_relations', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_relations', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupRelationsMatrix' => $groupRelationsMatrix,
                 'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                 'members' => $members,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_competences', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_competences', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupGauges' => $groupGauges,
                 'organizationalGauges' => $organizationalGauges,
                 'members' => $members,
-            ])
-            ?>
-            <?=
-            $this->render('_individual_emergents', [
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+            $subtitle_number++;
+            echo $this->render('_individual_emergents', [
                 'report' => $individualReport,
                 'assessment' => $assessment,
                 'groupEmergents' => $groupEmergents,
                 'organizationalEmergents' => $organizationalEmergents,
                 'members' => $members,
-            ])
-            ?>
-        <?php } ?>
+                'subtitle_letter' => chr($subtitle_number),
+            ]);
+        }
+        ?>
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Summary') ?>
+            5. <?= Yii::t('report', 'Summary') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->summary ?>
@@ -195,7 +213,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h2>
-            <?= Yii::t('report', 'Action Plan') ?>
+            6. <?= Yii::t('report', 'Action Plan') ?>
         </h2>
         <div id="view-introduction">
             <?= $assessment->report->action_plan ?>
@@ -203,7 +221,7 @@ $this->title = Yii::t('report', 'Report');
     </div>
 </div>
 <script>
-    window.onload = function() {
+    window.onload = function () {
         for (var i in radars) {
             new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, animation: false});
         }
