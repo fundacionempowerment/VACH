@@ -160,6 +160,7 @@ class WheelController extends BaseController {
                         'current_dimension' => $current_dimension,
             ]);
 
+        Yii::$app->session->set('instructions_shown', true);
         return $this->render('form', [
                     'wheel' => $current_wheel,
                     'current_dimension' => $current_dimension,

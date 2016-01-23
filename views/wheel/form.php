@@ -58,21 +58,23 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     <?php } ?>
-    <br/>
-    <?php
-    if ($current_dimension < 7)
-        echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-primary']);
-    else
-        echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']);
-    echo "<br/><br/>";
-    if (isset(Yii::$app->user))
-        if (isset(Yii::$app->user->identity))
-            if (Yii::$app->user->identity->is_coach) {
-                echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
-            }
-    ?>
-    <?php ActiveForm::end(); ?>
-    <br />
+    <div class="clearfix"></div>
+    <div>
+        <br/><br/>
+        <?php
+        if ($current_dimension < 7)
+            echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-lg btn-primary']);
+        else
+            echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-lg btn-success']);
+        echo "<br/><br/>";
+        if (isset(Yii::$app->user))
+            if (isset(Yii::$app->user->identity))
+                if (Yii::$app->user->identity->is_coach) {
+                    echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+                }
+        ?>
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>
 <?php
 Modal::begin([
