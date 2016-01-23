@@ -54,9 +54,14 @@ class WheelQuestion extends ActiveRecord {
         ];
     }
 
-    public static function getDimensionNames($wheelType) {
-        if ($wheelType == Wheel::TYPE_INDIVIDUAL)
-            return [
+    public static function getDimentionName($dimensionOrder, $wheelType, $short = false) {
+        $dimensions = self::getDimensionNames($wheelType, $short);
+        return $dimensions[$dimensionOrder];
+    }
+
+    public static function getDimensionNames($wheelType, $short = false) {
+        if ($wheelType == Wheel::TYPE_INDIVIDUAL) {
+            $dimensions = [
                 Yii::t('wheel', 'Free time'),
                 Yii::t('wheel', 'Work'),
                 Yii::t('wheel', 'Family'),
@@ -66,8 +71,8 @@ class WheelQuestion extends ActiveRecord {
                 Yii::t('wheel', 'Existential Dimension'),
                 Yii::t('wheel', 'Spiritual Dimension'),
             ];
-        else if ($wheelType == Wheel::TYPE_GROUP)
-            return [
+        } else if ($wheelType == Wheel::TYPE_GROUP) {
+            $dimensions = [
                 Yii::t('wheel', 'Initiative'),
                 Yii::t('wheel', 'Appropriateness'),
                 Yii::t('wheel', 'Belonging'),
@@ -77,8 +82,8 @@ class WheelQuestion extends ActiveRecord {
                 Yii::t('wheel', 'Leadership'),
                 Yii::t('wheel', 'Legitimation'),
             ];
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            return [
+        } else {
+            $dimensions = [
                 Yii::t('wheel', 'Creativity'),
                 Yii::t('wheel', 'Results guidance'),
                 Yii::t('wheel', 'Client guidance'),
@@ -88,6 +93,17 @@ class WheelQuestion extends ActiveRecord {
                 Yii::t('wheel', 'Strategic vision'),
                 Yii::t('wheel', 'Identity'),
             ];
+        }
+        if ($short) {
+            for ($i = 0; $i < count($dimensions); $i++) {
+                $dimensions[$i] = str_replace('Orientación', 'O.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Orientation', 'O.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Resolución', 'Res.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Dimensión', 'D.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Gestión', 'G.', $dimensions[$i]);
+            }
+        }
+        return $dimensions;
     }
 
     public static function getQuestions($wheelType) {

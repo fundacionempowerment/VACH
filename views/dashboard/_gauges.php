@@ -16,14 +16,23 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
-$dimensions = WheelQuestion::getDimensionNames($type);
 $token = rand(100000, 999999);
 ?>
 <h3><?= $title ?></h3>
-<div id="div<?= $token ?>" class="row col-md-push-1 col-md-10">
+<div id="div<?= $token ?>" class="row col-md-12">
     <?php for ($i = 0; $i < 8; $i++) { ?>
         <div class="col-xs-4" >
-            <label><?= $dimensions[$i] ?></label>
+            <?= $type == Wheel::TYPE_INDIVIDUAL ? '<b>' : '' ?>
+            <?= WheelQuestion::getDimentionName($i, Wheel::TYPE_INDIVIDUAL, true) ?>
+            <?= $type == Wheel::TYPE_INDIVIDUAL ? '</b>' : '' ?>
+            -
+            <?= $type == Wheel::TYPE_GROUP ? '<b>' : '' ?>
+            <?= WheelQuestion::getDimentionName($i, Wheel::TYPE_GROUP, true) ?>
+            <?= $type == Wheel::TYPE_GROUP ? '</b>' : '' ?>
+            -
+            <?= $type == Wheel::TYPE_ORGANIZATIONAL ? '<b>' : '' ?>
+            <?= WheelQuestion::getDimentionName($i, Wheel::TYPE_ORGANIZATIONAL, true) ?>
+            <?= $type == Wheel::TYPE_ORGANIZATIONAL ? '</b>' : '' ?>
             <?php
             if ($gauges[$i] > Yii::$app->params['good_consciousness'])
                 $color = '5cb85c';

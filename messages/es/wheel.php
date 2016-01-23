@@ -45,6 +45,7 @@ return [
     'Individual Wheel' => 'Rueda individual',
     'Individual Wheels' => 'Ruedas individuales',
     'Initiative' => 'Iniciativa',
+    'Instructions' => 'Instrucciones',
     'Leadership' => 'Liderazgo',
     'Legitimation' => 'Legitimación',
     'Manual email' => 'Correo eletrónico manual',
