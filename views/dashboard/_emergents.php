@@ -28,25 +28,27 @@ $maxValue = -100;
 $minValue = 100;
 $maxGap = -100;
 
+$index = $type == Wheel::TYPE_INDIVIDUAL ? 'mine_value' : 'value';
+
 foreach ($emergents as $emergent)
     if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
-        if ($emergent['value'] > $maxValue)
-            $maxValue = $emergent['value'];
-        if ($emergent['value'] < $minValue)
-            $minValue = $emergent['value'];
+        if ($emergent[$index] > $maxValue)
+            $maxValue = $emergent[$index];
+        if ($emergent[$index] < $minValue)
+            $minValue = $emergent[$index];
     }
 
 foreach ($emergents as $emergent) {
-    if ($emergent['value'] == $maxValue)
+    if ($emergent[$index] == $maxValue)
         $max_emergents[] = $emergent;
-    if ($emergent['value'] == $minValue)
+    if ($emergent[$index] == $minValue)
         $min_emergents[] = $emergent;
 }
 
 if ($type > Wheel::TYPE_INDIVIDUAL && $memberId > 0) {
     foreach ($emergents as $emergent) {
         $gap = abs($emergent['mine_value'] - $emergent['value']);
-        if ($gap > $standar_deviation && $gap > $maxGap)
+        if ($gap > $maxGap)
             $maxGap = $gap;
     }
 
@@ -66,14 +68,14 @@ $token = rand(100000, 999999);
     <?php foreach ($max_emergents as $emergent) { ?>
         <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
         <?php
-        if ($emergent['value'] > Yii::$app->params['good_consciousness'])
+        if ($emergent[$index] > Yii::$app->params['good_consciousness'])
             $color = '5cb85c';
-        else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
+        else if ($emergent[$index] < Yii::$app->params['minimal_consciousness'])
             $color = 'd9534f';
         else
             $color = 'f0ad4e';
 
-        $percentage = $emergent['value'] / 4 * 100;
+        $percentage = $emergent[$index] / 4 * 100;
         if ($percentage < 6)
             $width = 6;
         else
@@ -88,14 +90,14 @@ $token = rand(100000, 999999);
     <?php foreach ($min_emergents as $emergent) { ?>
         <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
         <?php
-        if ($emergent['value'] > Yii::$app->params['good_consciousness'])
+        if ($emergent[$index] > Yii::$app->params['good_consciousness'])
             $color = '5cb85c';
-        else if ($emergent['value'] < Yii::$app->params['minimal_consciousness'])
+        else if ($emergent[$index] < Yii::$app->params['minimal_consciousness'])
             $color = 'd9534f';
         else
             $color = 'f0ad4e';
 
-        $percentage = $emergent['value'] / 4 * 100;
+        $percentage = $emergent[$index] / 4 * 100;
         if ($percentage < 6)
             $width = 6;
         else
