@@ -20,41 +20,59 @@ else
 
 $token = rand(100000, 999999);
 
-$drawing_data = [];
+$forwardData = [];
 foreach ($data as $datum) {
     if ($datum['observer_id'] == $memberId && $datum['observed_id'] == $memberId)
-        $drawing_data[] = $datum;
+        $forwardData[] = $datum;
 }
 
 foreach ($data as $datum) {
     if ($datum['observer_id'] != $memberId && $datum['observed_id'] == $memberId)
-        $drawing_data[] = $datum;
+        $forwardData[] = $datum;
 }
 
-$width = 800;
-$height = 400;
-if (count($drawing_data) < 4)
+$backwardData = [];
+foreach ($data as $datum) {
+    if ($datum['observer_id'] == $memberId && $datum['observed_id'] == $memberId)
+        $backwardData[] = $datum;
+}
+
+foreach ($data as $datum) {
+    if ($datum['observer_id'] == $memberId && $datum['observed_id'] != $memberId)
+        $backwardData[] = $datum;
+}
+
+$width = 500;
+$height = 350;
+if (count($forwardData) < 4)
     $height = 150;
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<?php if (count($drawing_data) > 0) { ?>
-    <div id="div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10" >
-        <canvas id="canvas<?= $token ?>" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+<?php if (count($forwardData) > 0) { ?>
+    <div id="fdiv<?= $token ?>" class="col-xs-12 col-md-6" >
+        <canvas id="canvas<?= $token ?>f" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+    </div>
+    <div id="bdiv<?= $token ?>" class="col-xs-12 col-md-6" >
+        <canvas id="canvas<?= $token ?>b" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
     </div>
 <?php } ?>
 <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false && $memberId > 0) { ?>
-    <div class="col-md-12 text-center">
-        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    <div class="col-md-6 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('fdiv$token')"]) ?>
+    </div>
+<div class="col-md-6 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('bdiv$token')"]) ?>
     </div>
 <?php } ?>
 <div class="clearfix"></div>
 <br>
-<?php if (count($drawing_data) > 0) { ?>
+<?php if (count($forwardData) > 0) { ?>
     <script>
-        var data<?= $token ?> = <?= Json::encode($drawing_data) ?>;
-
+        var forwardData<?= $token ?> = <?= Json::encode($forwardData) ?>;
+        var backwardData<?= $token ?> = <?= Json::encode($backwardData) ?>;
         relations.push("<?= $token ?>");
-        relationsData.push(data<?= $token ?>);
+        forwardRelationsData.push(forwardData<?= $token ?>);
+        backwardRelationsData.push(backwardData<?= $token ?>);
     </script>
 <?php } ?>

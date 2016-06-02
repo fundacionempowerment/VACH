@@ -21,7 +21,8 @@ $this->title = Yii::t('report', 'Report');
     var matrixes = new Array();
     var matrixesData = new Array();
     var relations = new Array();
-    var relationsData = new Array();
+    var forwardRelationsData = new Array();
+    var backwardRelationsData = new Array();
 </script>
 <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
@@ -232,7 +233,8 @@ $this->title = Yii::t('report', 'Report');
             doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
         }
         for (var i in relations) {
-            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
+            doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
+            doBackwardRelations(document.getElementById("canvas" + relations[i] + 'b').getContext("2d"), backwardRelationsData[i]);
         }
     }
 </script>

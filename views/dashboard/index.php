@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
     var matrixes = new Array();
     var matrixesData = new Array();
     var relations = new Array();
-    var relationsData = new Array();
+    var forwardRelationsData = new Array();
+    var backwardRelationsData = new Array();
 </script>
 <div class="dashboard">
     <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
@@ -144,7 +145,8 @@ $this->params['breadcrumbs'][] = $this->title;
             doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
         }
         for (var i in relations) {
-            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
+            doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
+            doBackwardRelations(document.getElementById("canvas" + relations[i] + 'b').getContext("2d"), backwardRelationsData[i]);
         }
     }
 </script>

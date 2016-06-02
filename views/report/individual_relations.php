@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
     var relations = new Array();
-    var relationsData = new Array();
+    var forwardRelationsData = new Array();
+    var backwardRelationsData = new Array();
 </script>
 <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical">
@@ -88,7 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     window.onload = function () {
         for (var i in relations) {
-            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
+            doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
+            doBackwardRelations(document.getElementById("canvas" + relations[i] + 'b').getContext("2d"), backwardRelationsData[i]);
         }
     }
 </script>

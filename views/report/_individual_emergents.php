@@ -11,6 +11,7 @@ if (count($groupEmergents) > 0) {
     echo $this->render('../dashboard/_emergents', [
         'emergents' => $groupEmergents,
         'type' => Wheel::TYPE_GROUP,
+        'memberId' => $report->member->id,
     ]);
 }
 ?>
@@ -19,6 +20,7 @@ if (count($organizationalEmergents) > 0) {
     echo $this->render('../dashboard/_emergents', [
         'emergents' => $organizationalEmergents,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'memberId' => $report->member->id,
     ]);
 }
 ?>
