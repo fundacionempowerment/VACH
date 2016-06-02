@@ -39,12 +39,11 @@ function doMatrix(context, matrixData)
     sumConsciousness = 0;
 
     for (var i in data) {
-        current_value = data[i]['consciousness'];
-        sumConsciousness = sumConsciousness + Math.pow((current_value - avgConsciousness), 2);
+        sumConsciousness = sumConsciousness + Math.abs(data[i]['consciousness']);
     }
-    var stardarDeviation = Math.sqrt(sumConsciousness / (data.length - 1)); //standar deviation
+    var stardarDeviation = sumConsciousness / (data.length);
 
-    var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1) * 10;
+    var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1.1) * 10;
 
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minProductivity) / deltaProductivity * deltax + minx);

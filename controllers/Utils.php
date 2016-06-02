@@ -16,6 +16,19 @@ class Utils {
         return sqrt(array_sum(array_map("self::square", $array, array_fill(0, count($array), (array_sum($array) / count($array))))) / (count($array) - 1));
     }
 
+    public static function absolute_mean($array) {
+        if (count($array) == 0) {
+            return 0;
+        }
+
+        $sum = 0;
+        foreach ($array as $element) {
+            $sum += abs($element);
+        }
+
+        return $sum / count($array);
+    }
+
 }
 
 ?>

@@ -57,7 +57,7 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
     $gaps [] = $howTheySeeMe[$i] - $howISeeMe[$i];
 }
 
-$standar_deviation = Utils::standard_deviation($gaps);
+$mean_gap = Utils::absolute_mean($gaps);
 $token = rand(100000, 999999);
 ?>
 <div class="clearfix"></div>
@@ -129,7 +129,7 @@ $token = rand(100000, 999999);
                 <?= Yii::t('dashboard', 'St. dev.') ?>
             </td>
             <td>
-                <?= round($standar_deviation / 4 * 100, 1) . ' %' ?>
+                <?= round($mean_gap / 4 * 100, 1) . ' %' ?>
             </td>
         </tr> 
         <tr>
@@ -147,8 +147,8 @@ $token = rand(100000, 999999);
                 <?= Yii::t('dashboard', 'Consciousness') ?>
             </td>
             <?php for ($i = 0; $i < count($howTheySeeMe); $i++) { ?>
-                <td class="<?= abs($gaps[$i]) > $standar_deviation ? 'warning' : 'success' ?>">
-                    <?= abs($gaps[$i]) > $standar_deviation ? Yii::t('app', 'Low') : Yii::t('app', 'High') ?>
+                <td class="<?= abs($gaps[$i]) > $mean_gap ? 'warning' : 'success' ?>">
+                    <?= abs($gaps[$i]) > $mean_gap ? Yii::t('app', 'Low') : Yii::t('app', 'High') ?>
                 </td>
             <?php } ?>
         </tr> 
