@@ -90,7 +90,7 @@ function doForwardRelations(context, data)
 function doBackwardRelations(context, data)
 {
     var imageObj = new Image();
-    imageObj.src = path + '/images/protoMale.png';
+    imageObj.src = path + 'images/protoMale.png';
     imageObj.onload = function () {
         context.font = '11pt Helvetica';
 
