@@ -16,12 +16,27 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
+$minValue = 1000;
+$maxValue = -1000;
+
+foreach ($gauges as $gauge) {
+    if ($gauge < $minValue) {
+        $minValue = $gauge;
+    }
+    if ($gauge > $maxValue) {
+        $maxValue = $gauge;
+    }
+}
+
+$maxShadow = "box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #67b168";
+$minShadow = "box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #ce8483";
+
 $token = rand(100000, 999999);
 ?>
 <h3><?= $title ?></h3>
 <div id="div<?= $token ?>" class="row col-md-12">
     <?php for ($i = 0; $i < 8; $i++) { ?>
-        <div class="col-xs-4" >
+        <div class="col-xs-4 active"">
             <?= $type == Wheel::TYPE_INDIVIDUAL ? '<b>' : '' ?>
             <?= WheelQuestion::getDimentionName($i, Wheel::TYPE_INDIVIDUAL, true) ?>
             <?= $type == Wheel::TYPE_INDIVIDUAL ? '</b>' : '' ?>
@@ -46,7 +61,13 @@ $token = rand(100000, 999999);
             else
                 $width = $percentage;
             ?>
-            <div style='position:relative; color: white; font-size: 20px;' class="table table-bordered">
+            <div style='position:relative; color: white; font-size: 20px; <?php
+            if ($gauges[$i] == $minValue) {
+                echo $minShadow;
+            } else if ($gauges[$i] == $maxValue) {
+                echo $maxShadow;
+            }
+            ?>' class="table table-bordered">
                 <div style='font-size:0px; border-top: 28px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
                 <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
             </div>
