@@ -12,6 +12,7 @@ if (count($groupPerformanceMatrix) > 0) {
         'data' => $groupPerformanceMatrix,
         'type' => Wheel::TYPE_GROUP,
         'memberId' => $report->member->id,
+        'member' => $report->member,
     ]);
 }
 if (count($organizationalPerformanceMatrix) > 0) {
@@ -19,6 +20,7 @@ if (count($organizationalPerformanceMatrix) > 0) {
         'data' => $organizationalPerformanceMatrix,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
         'memberId' => $report->member->id,
+        'member' => $report->member,
     ]);
 }
 ?>

@@ -11,6 +11,7 @@ if (count($groupGauges) > 0) {
     echo $this->render('../dashboard/_gauges', [
         'gauges' => $groupGauges,
         'type' => Wheel::TYPE_GROUP,
+        'member' => $report->member,
     ]);
 }
 ?>
@@ -19,6 +20,7 @@ if (count($organizationalGauges) > 0) {
     echo $this->render('../dashboard/_gauges', [
         'gauges' => $organizationalGauges,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'member' => $report->member,
     ]);
 }
 ?>

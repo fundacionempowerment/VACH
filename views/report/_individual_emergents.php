@@ -13,6 +13,7 @@ use app\models\Wheel;
             'emergents' => $groupEmergents,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     ?>
@@ -24,6 +25,7 @@ use app\models\Wheel;
             'emergents' => $organizationalEmergents,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     ?>

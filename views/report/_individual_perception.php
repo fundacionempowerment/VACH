@@ -15,6 +15,7 @@ if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
         'comparedWheel' => $projectedGroupWheel,
         'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
         'type' => Wheel::TYPE_GROUP,
+        'member' => $report->member,
     ]);
 if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
     echo $this->render('../dashboard/_lineal', [
@@ -24,6 +25,7 @@ if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWh
         'comparedWheel' => $projectedOrganizationalWheel,
         'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
         'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'member' => $report->member,
     ]);
 ?>
 <h3>
