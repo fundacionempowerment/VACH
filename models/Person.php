@@ -14,6 +14,10 @@ class Person extends ActiveRecord {
     public $fullname;
     public $deletable;
 
+    const GENDER_MALE = 0;
+    const GENDER_FEMALE = 1;
+    const GENDER_OTHER = 2;
+
     /**
      * @inheritdoc
      */
@@ -26,8 +30,8 @@ class Person extends ActiveRecord {
      */
     public function rules() {
         return [
-            // username and password are both required
-            [['name', 'surname', 'email', 'username', 'password_hash', 'coach_id'], 'required'],
+// username and password are both required
+            [['name', 'surname', 'email', 'username', 'password_hash', 'coach_id', 'gender'], 'required'],
             [['phone'], 'safe'],
             [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
@@ -50,6 +54,7 @@ class Person extends ActiveRecord {
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
+            'gender' => Yii::t('app', 'Gender'),
         ];
     }
 
@@ -97,6 +102,14 @@ class Person extends ActiveRecord {
     public function getWheels() {
         return $this->hasMany(Wheel::className(), ['observed_id' => 'id'])
                         ->where(['type' => '0']);
+    }
+
+    public function getGenders() {
+        return [
+            self::GENDER_MALE => Yii::t('app', 'Male'),
+            self::GENDER_FEMALE => Yii::t('app', 'Female'),
+            self::GENDER_OTHER => Yii::t('app', 'Other'),
+        ];
     }
 
 }
