@@ -13,6 +13,7 @@ if (count($groupRelationsMatrix) > 0) {
         'members' => $members,
         'type' => Wheel::TYPE_GROUP,
         'memberId' => 0,
+        'member' => null,
     ]);
 }
 ?>
@@ -23,6 +24,7 @@ if (count($organizationalRelationsMatrix) > 0) {
         'members' => $members,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
         'memberId' => 0,
+        'member' => null,
     ]);
 }
 ?>

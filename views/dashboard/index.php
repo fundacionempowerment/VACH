@@ -10,6 +10,12 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+if (!empty($assessment) && $assessment->version == 2) {
+    $version = 2;
+} else {
+    $version = 1;
+}
+
 $this->title = Yii::t('dashboard', 'Dashboard');
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -27,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </script>
 <div class="dashboard">
     <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
-    <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+    <script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
     <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
@@ -107,6 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
             'member' => $member,
+            'assessment' => $assessment,
         ]);
     }
 

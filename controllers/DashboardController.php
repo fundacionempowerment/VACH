@@ -29,7 +29,9 @@ class DashboardController extends BaseController {
         $companies = [];
         $teams = [];
         $assessments = [];
+        $assessment = null;
         $members = [];
+        $member = null;
 
         $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
         if (count($companies) == 1) {
@@ -39,7 +41,6 @@ class DashboardController extends BaseController {
             }
         }
 
-        $member = null;
         if ($filter->memberId > 0) {
             $member = Person::findOne(['id' => $filter->memberId]);
         }
@@ -81,6 +82,7 @@ class DashboardController extends BaseController {
             if (count($assessments) == 1) {
                 foreach ($assessments as $id => $fullname) {
                     $filter->assessmentId = $id;
+                    $assessment = Assessment::findOne(['id' => $filter->assessmentId]);
                     break;
                 }
             } else {
@@ -146,11 +148,12 @@ class DashboardController extends BaseController {
 
         return $this->render('index', [
                     'filter' => $filter,
-                    'member' => $member,
                     'companies' => $companies,
                     'teams' => $teams,
                     'assessments' => $assessments,
+                    'assessment' => $assessment,
                     'members' => $members,
+                    'member' => $member,
                     // Indivudual wheel
                     'projectedIndividualWheel' => $projectedIndividualWheel,
                     'projectedGroupWheel' => $projectedGroupWheel,

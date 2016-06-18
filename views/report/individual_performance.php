@@ -12,6 +12,12 @@ use franciscomaya\sceditor\SCEditor;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
+if (!empty($assessment) && $assessment->version == 2) {
+    $version = 2;
+} else {
+    $version = 1;
+}
+
 $this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
@@ -23,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     var matrixes = new Array();
     var matrixesData = new Array();
 </script>
-<script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+<script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
 <div class="report-technical">
 
     <h1>

@@ -11,6 +11,12 @@ use app\models\Wheel;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
+if (!empty($assessment) && $assessment->version == 2) {
+    $version = 2;
+} else {
+    $version = 1;
+}
+
 $this->title = Yii::t('report', 'Report');
 ?>
 <script>
@@ -25,7 +31,7 @@ $this->title = Yii::t('report', 'Report');
     var backwardRelationsData = new Array();
 </script>
 <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
-<script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
+<script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
 <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical row">
     <div class="jumbotron">

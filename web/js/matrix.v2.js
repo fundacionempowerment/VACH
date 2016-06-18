@@ -33,10 +33,9 @@ function doMatrix(context, matrixData, absolute)
     if (absolute == true) {
         minProductivity = 0;
         maxProductivity = 100;
-        avgProductivity = 50;
-    } else {
-        avgProductivity = sumProductivity / data.length;
     }
+
+    avgProductivity = sumProductivity / data.length;
 
     var deltax = maxx - minx;
     var deltaProductivity = maxProductivity - minProductivity;

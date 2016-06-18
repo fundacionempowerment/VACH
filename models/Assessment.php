@@ -18,6 +18,7 @@ class Assessment extends ActiveRecord {
 
     public function __construct() {
         $this->name = date("Y-m");
+        $this->version = 2;
     }
 
     /**
@@ -25,7 +26,7 @@ class Assessment extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'team_id'], 'required'],
+            [['name', 'team_id', 'version'], 'required'],
             [['name'], 'filter', 'filter' => 'trim'],
         ];
     }

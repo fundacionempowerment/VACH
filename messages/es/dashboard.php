@@ -65,7 +65,7 @@ return [
     'Select team ...' => 'Elija equipo ...',
     'Select wheel type ...' => 'Elija tipo de rueda ...',
     'Show' => 'Mostrar',
-    'St. dev.' => '@@Desv. est.@@',
+    'St. dev.' => 'Desv. est.',
     'Value' => 'Valor',
     'Worst emergents' => 'Peores emergentes',
 ];
