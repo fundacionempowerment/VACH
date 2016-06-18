@@ -142,7 +142,8 @@ $this->params['breadcrumbs'][] = $this->title;
             new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
         }
         for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
+            doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
+            doMatrix(document.getElementById("canvas" + matrixes[i] + 'a').getContext("2d"), matrixesData[i], true);
         }
         for (var i in relations) {
             doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
@@ -163,5 +164,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
     }
 </script>
-
-
