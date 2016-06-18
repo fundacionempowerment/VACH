@@ -16,8 +16,14 @@ if ($type == Wheel::TYPE_GROUP) {
     $title = Yii::t('dashboard', 'Individual Consciousness and Responsability Matrix');
 }
 
+if (!empty($member)) {
+    $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+} else {
+    $title .= ' ' . Yii::t('app', 'of the team');
+}
+
 $howISeeMe = [];
-foreach ($members as $id => $member) {
+foreach ($members as $id => $name) {
     if ($id > 0) {
         foreach ($data as $datum) {
             if ($datum['observer_id'] == $id && $datum['observed_id'] == $id) {
@@ -28,7 +34,7 @@ foreach ($members as $id => $member) {
 }
 
 $howTheySeeMe = [];
-foreach ($members as $id => $member) {
+foreach ($members as $id => $name) {
     if ($id > 0) {
         $sum = 0;
         foreach ($data as $datum) {
@@ -69,11 +75,11 @@ $token = rand(100000, 999999);
                 <?= Yii::t('app', 'Description') ?>
             </td>
             <?php
-            foreach ($members as $id => $member) {
+            foreach ($members as $id => $name) {
                 if ($id > 0) {
                     ?>
                     <td>
-                        <?= $member ?>
+                        <?= $name ?>
                     </td>
                 <?php } ?>
             <?php } ?>
@@ -125,8 +131,8 @@ $token = rand(100000, 999999);
             <td>
                 <?= round($allTheySee / 4 * 100, 1) . ' %' ?>
             </td>
-            <td>
-                <?= Yii::t('dashboard', 'St. dev.') ?>
+            <td colspan="2">
+                <?= Yii::t('dashboard', 'Avg. conc. gap') ?>
             </td>
             <td>
                 <?= round($mean_gap / 4 * 100, 1) . ' %' ?>
@@ -160,3 +166,16 @@ $token = rand(100000, 999999);
     </div>
 <?php } ?>
 <div class="clearfix"></div>
+<?=
+$this->render('_ranking', [
+    'type' => $type,
+    'memberId' => $memberId,
+    'member' => $member,
+    'members' => $members,
+    'howISeeMe' => $howISeeMe,
+    'howTheySeeMe' => $howTheySeeMe,
+    'gaps' => $gaps,
+    'mean_gap' => round($mean_gap / 4 * 100, 1),
+    'allTheySee' => round($allTheySee / 4 * 100, 1),
+]);
+?>

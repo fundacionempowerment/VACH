@@ -44,6 +44,13 @@ $show_instructions = $instructions_shown == true ? false : true;
                 <li>
                     Toda percepción no es la Realidad, pero sí nos abre la Comunicación para
                     acercarnos a Ella.
+                    <br/><br/>
+                </li>
+                <li>
+                    En cada respuesta, los valores usados son<br/>
+                    0 = nunca, 1 = casi nunca, 2 = regularmente, 3 = casi siempre, 4 = siempre<br/>
+                    0 = totalmente en desacuerdo, 1 = algo de acuerdo, 2 = de acuerdo, 3 = muy de acuerdo, 4 = totalmente de acuerdo.
+                    <br/><br/>
                 </li>
             </ol>
         </h4>
@@ -63,6 +70,7 @@ $show_instructions = $instructions_shown == true ? false : true;
                 echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
             }
     ?>
+    <?php ActiveForm::end(); ?>
 </div>
 <?php
 Modal::begin([
