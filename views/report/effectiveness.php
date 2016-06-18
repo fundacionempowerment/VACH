@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => 0,
+            'member' => null,
         ]);
     }
     ?>
@@ -46,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => 0,
+            'member' => null,
         ]);
     }
     ?>

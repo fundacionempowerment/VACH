@@ -22,32 +22,37 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
-
     <h1>
         <?= Yii::t('report', 'Emergents Matrix of {member}', ['member' => $report->member->fullname]) ?>
     </h1>
-    <?php
-    if (count($groupEmergents) > 0) {
-        echo $this->render('../dashboard/_emergents', [
-            'data' => $groupRelationsMatrix,
-            'members' => $members,
-            'memberId' => $memberId,
-            'emergents' => $groupEmergents,
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-    }
-    ?>
-    <?php
-    if (count($organizationalEmergents) > 0) {
-        echo $this->render('../dashboard/_emergents', [
-            'data' => $organizationalRelationsMatrix,
-            'members' => $members,
-            'memberId' => $memberId,
-            'emergents' => $organizationalEmergents,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-    }
-    ?>
+    <div class="col-md-6 ">
+        <?php
+        if (count($groupEmergents) > 0) {
+            echo $this->render('../dashboard/_emergents', [
+                'data' => $groupRelationsMatrix,
+                'members' => $members,
+                'memberId' => $memberId,
+                'emergents' => $groupEmergents,
+                'type' => Wheel::TYPE_GROUP,
+                'member' => $report->member,
+            ]);
+        }
+        ?>
+    </div>
+    <div class="col-md-6">
+        <?php
+        if (count($organizationalEmergents) > 0) {
+            echo $this->render('../dashboard/_emergents', [
+                'data' => $organizationalRelationsMatrix,
+                'members' => $members,
+                'memberId' => $memberId,
+                'emergents' => $organizationalEmergents,
+                'type' => Wheel::TYPE_ORGANIZATIONAL,
+                'member' => $report->member,
+            ]);
+        }
+        ?>
+    </div>
     <div class="row col-md-12">
         <h3>
             Descripción <a class="collapsed btn btn-default" aria-controls="collapsedDiv" aria-expanded="false" href="#collapsedDiv" data-toggle="collapse" role="button">

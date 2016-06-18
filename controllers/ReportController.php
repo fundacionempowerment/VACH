@@ -106,6 +106,7 @@ class ReportController extends Controller {
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'members' => $members,
+                    'member' => null,
         ]);
     }
 

@@ -16,6 +16,12 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Competence Matrix');
 
+if (!empty($member)) {
+    $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+} else {
+    $title .= ' ' . Yii::t('app', 'of the team');
+}
+
 $minValue = 1000;
 $maxValue = -1000;
 
@@ -69,12 +75,12 @@ $token = rand(100000, 999999);
             }
             ?>' class="table table-bordered">
                 <div style='font-size:0px; border-top: 28px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
-                <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
+                <div style='position:absolute; top:0px; left: 5px;'><?= round($percentage * 10) / 10 ?>%</div>
             </div>
         </div>
     <?php } ?>
 </div>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'dashboard') === true) { ?>
     <div class="col-md-12 text-center">
         <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>

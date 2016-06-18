@@ -13,6 +13,7 @@ use app\models\Team;
 use app\models\Assessment;
 use app\models\Company;
 use app\models\DashboardFilter;
+use app\models\Person;
 
 class DashboardController extends BaseController {
 
@@ -36,6 +37,11 @@ class DashboardController extends BaseController {
                 $filter->companyId = $id;
                 break;
             }
+        }
+
+        $member = null;
+        if ($filter->memberId > 0) {
+            $member = Person::findOne(['id' => $filter->memberId]);
         }
 
         if ($filter->companyId > 0) {
@@ -140,6 +146,7 @@ class DashboardController extends BaseController {
 
         return $this->render('index', [
                     'filter' => $filter,
+                    'member' => $member,
                     'companies' => $companies,
                     'teams' => $teams,
                     'assessments' => $assessments,

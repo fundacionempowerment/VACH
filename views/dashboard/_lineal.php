@@ -17,6 +17,12 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
 
+if (!empty($member)) {
+    $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+} else {
+    $title .= ' ' . Yii::t('app', 'of the team');
+}
+
 $linealWidth = 350 * 1.5;
 $linealHeight = 200;
 $token = rand(100000, 999999);
@@ -34,7 +40,7 @@ $dimensions = WheelQuestion::getDimensionNames($type, true);
         <?php } ?>
     </p>
 </div>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'dashboard') === true) { ?>
     <div class="col-md-12 text-center">
         <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>

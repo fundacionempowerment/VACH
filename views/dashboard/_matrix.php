@@ -18,6 +18,12 @@ else if ($type == Wheel::TYPE_ORGANIZATIONAL)
 else
     $title = Yii::t('dashboard', 'Individual Performance Matrix');
 
+if (!empty($member)) {
+    $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+} else {
+    $title .= ' ' . Yii::t('app', 'of the team');
+}
+
 $linealWidth = 800;
 $linealHeight = 400;
 $token = rand(100000, 999999);

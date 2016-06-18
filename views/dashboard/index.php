@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'wheel' => $projectedIndividualWheel,
             'wheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_INDIVIDUAL,
+            'member' => $member,
         ]);
 
     if (count($projectedIndividualWheel) > 0 && count($projectedGroupWheel) > 0)
@@ -55,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedGroupWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
             'type' => Wheel::TYPE_GROUP,
+            'member' => $member,
         ]);
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
@@ -65,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedGroupWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_GROUP,
+            'member' => $member,
         ]);
 
     if (count($projectedIndividualWheel) > 0 && count($projectedOrganizationalWheel) > 0)
@@ -75,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedOrganizationalWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
             'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'member' => $member,
         ]);
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
@@ -85,19 +89,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedOrganizationalWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'member' => $member,
         ]);
 
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
             'gauges' => $gauges,
             'type' => $filter->wheelType,
+            'member' => $member,
         ]);
+
+
+    if (count($relationsMatrix) > 0) {
+        echo $this->render('_number_matrix', [
+            'data' => $relationsMatrix,
+            'members' => $members,
+            'type' => $filter->wheelType,
+            'memberId' => $filter->memberId,
+            'member' => $member,
+        ]);
+    }
 
     if (count($performanceMatrix) > 0) {
         echo $this->render('_matrix', [
             'data' => $performanceMatrix,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
+            'member' => $member,
         ]);
     }
 
@@ -107,19 +125,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'members' => $members,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
+            'member' => $member,
         ]);
         echo $this->render('_relation_table', [
             'data' => $relationsMatrix,
             'members' => $members,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
-        ]);
-
-        echo $this->render('_number_matrix', [
-            'data' => $relationsMatrix,
-            'members' => $members,
-            'type' => $filter->wheelType,
-            'memberId' => $filter->memberId,
+            'member' => $member,
         ]);
     }
 
@@ -130,6 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'memberId' => $filter->memberId,
             'emergents' => $emergents,
             'type' => $filter->wheelType,
+            'member' => $member,
         ]);
     ?>
 </div>

@@ -98,7 +98,7 @@ $this->title = Yii::t('report', 'Report');
             'groupRelationsMatrix' => $groupRelationsMatrix,
             'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
-        ])
+            ])
         ?>
         <?=
         $this->render('_performance', [
@@ -162,6 +162,7 @@ $this->title = Yii::t('report', 'Report');
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
                     'subtitle_letter' => chr($subtitle_number),
+                    'member' => $individualReport->member,
                 ]);
                 $subtitle_number++;
             }

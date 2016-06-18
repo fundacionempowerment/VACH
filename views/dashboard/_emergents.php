@@ -13,9 +13,15 @@ use app\controllers\Utils;
 if ($type == Wheel::TYPE_GROUP)
     $title = Yii::t('dashboard', 'Group Emergents Matrix');
 else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Emergents Matrix');
+    $title = Yii::t('dashboard', 'Organiz. Emergents Matrix');
 else
     $title = Yii::t('dashboard', 'Individual Emergents Matrix');
+
+if (!empty($member)) {
+    $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+} else {
+    $title .= ' ' . Yii::t('app', 'of the team');
+}
 
 $dimensions = WheelQuestion::getDimensionNames($type);
 $questionCount = WheelQuestion::getQuestionCount($type) / 8;
@@ -140,7 +146,7 @@ $token = rand(100000, 999999);
         <?php } ?>
     <?php } ?>
 </div>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'dashboard') === true) { ?>
     <div class="col-md-12 text-center">
         <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>

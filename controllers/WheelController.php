@@ -82,7 +82,7 @@ class WheelController extends BaseController {
             }
             $current_wheel = null;
 
-            foreach ($wheels as $wheel)
+            foreach ($wheels as $wheel) {
                 if ($wheel->AnswerStatus == '0%') {
                     $current_dimension = -1;
                     $current_wheel = $wheel;
@@ -94,6 +94,7 @@ class WheelController extends BaseController {
                     $current_wheel = $wheel;
                     break;
                 }
+            }
         } else if (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
