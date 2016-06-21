@@ -68,9 +68,9 @@ $token = rand(100000, 999999);
                 $width = $percentage;
             ?>
             <div style='position:relative; color: white; font-size: 20px; <?php
-            if ($gauges[$i] == $minValue) {
+            if (round($gauges[$i] * 100 / 4, 1) == round($minValue * 100 / 4, 1)) {
                 echo $minShadow;
-            } else if ($gauges[$i] == $maxValue) {
+            } else if (round($gauges[$i] * 100 / 4, 1) == round($maxValue * 100 / 4, 1)) {
                 echo $maxShadow;
             }
             ?>' class="table table-bordered">
