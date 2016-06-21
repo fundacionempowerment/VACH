@@ -83,20 +83,20 @@ function doMatrix(context, matrixData, absolute)
     context.fillStyle = 'red';
     context.textAlign = 'left';
     context.textBaseline = 'top';
-    context.fillText('BC/BP+', 5, 5);
+    context.fillText('BP/BC+', 5, 5);
     context.textBaseline = 'bottom';
-    context.fillText('AC/BP', 5, goodConsciousnessYAxe - 2);
+    context.fillText('BP/AC', 5, goodConsciousnessYAxe - 2);
     context.textAlign = 'left';
     context.textBaseline = 'bottom';
-    context.fillText('BC/BP-', 5, height - 5);
+    context.fillText('BP/BC-', 5, height - 5);
     context.textAlign = 'right';
     context.textBaseline = 'top';
-    context.fillText('BC/AP+', width - 5, 5);
+    context.fillText('AP/BC+', width - 5, 5);
     context.textBaseline = 'bottom';
-    context.fillText('AC/AP', width - 5, goodConsciousnessYAxe - 2);
+    context.fillText('AP/AC', width - 5, goodConsciousnessYAxe - 2);
     context.textAlign = 'right';
     context.textBaseline = 'bottom';
-    context.fillText('BC/AP-', width - 5, height - 5);
+    context.fillText('AP/BC-', width - 5, height - 5);
 
     //axes
     posx = (avgProductivity - minProductivity) / deltaProductivity * deltax + minx;
