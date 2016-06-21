@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'data' => $groupPerformanceMatrix,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     ?>
@@ -50,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'data' => $organizationalPerformanceMatrix,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     ?>

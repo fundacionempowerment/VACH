@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedGroupWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_GROUP,
+            'member' => $report->member,
         ]);
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
         echo $this->render('../dashboard/_lineal', [
@@ -49,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'comparedWheel' => $projectedOrganizationalWheel,
             'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
             'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'member' => $report->member,
         ]);
     ?>
     <div class="row col-md-12">

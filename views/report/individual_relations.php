@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     if (count($organizationalRelationsMatrix) > 0) {
@@ -45,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => $report->member->id,
+            'member' => $report->member,
         ]);
     }
     ?>
