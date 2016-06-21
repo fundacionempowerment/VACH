@@ -12,13 +12,13 @@ function doMatrix(context, matrixData, absolute)
     var maxx = width - horizontalMargin;
     var maxProductivity = -10000;
     var maxConsciousness = -100000;
-
     var avgProductivity = 0;
+    var avgDeltaProductivity = 0;
     var avgConsciousness = 0;
     var current_value = 0;
     var sumConsciousness = 0;
     var sumProductivity = 0;
-
+    var sumDeltaProductivity = 0;
     for (var i in data) {
         if (data[i]['productivity'] < minProductivity)
             minProductivity = data[i]['productivity'];
@@ -26,30 +26,25 @@ function doMatrix(context, matrixData, absolute)
             maxProductivity = data[i]['productivity'];
         if (Math.abs(data[i]['consciousness']) > maxConsciousness)
             maxConsciousness = Math.abs(data[i]['consciousness']);
-
-        sumConsciousness = sumConsciousness + data[i]['consciousness'];
+        sumConsciousness = sumConsciousness + Math.abs(data[i]['consciousness']);
         sumProductivity = sumProductivity + data[i]['productivity'];
     }
+
     if (absolute == true) {
         minProductivity = 0;
         maxProductivity = 100;
     }
 
+    avgConsciousness = sumConsciousness / data.length;
     avgProductivity = sumProductivity / data.length;
-
     var deltax = maxx - minx;
     var deltaProductivity = maxProductivity - minProductivity;
-
-    avgConsciousness = sumConsciousness / data.length;
     sumConsciousness = 0;
-
     for (var i in data) {
-        sumConsciousness = sumConsciousness + Math.abs(data[i]['consciousness']);
+        sumDeltaProductivity = sumDeltaProductivity + Math.abs(data[i]['productivity'] - avgProductivity);
     }
-    var stardarDeviation = sumConsciousness / (data.length);
-
+    var avgDeltaProductivity = sumDeltaProductivity / (data.length);
     var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1.1) * 10;
-
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minProductivity) / deltaProductivity * deltax + minx);
         var posy = Math.floor((maxy - data[i]['consciousness']) * (height - bottomMargin) / 2 / maxy);
@@ -61,10 +56,18 @@ function doMatrix(context, matrixData, absolute)
         matrixData.push(valueToPush);
     }
 
-    var goodConsciousnessY1 = Math.floor((maxy - stardarDeviation) * (height - bottomMargin) / 2 / maxy);
-    var goodConsciousnessY2 = Math.floor((maxy + stardarDeviation) * (height - bottomMargin) / 2 / maxy);
+    var goodConsciousnessY1 = Math.floor((maxy - avgConsciousness) * (height - bottomMargin) / 2 / maxy);
+    var goodConsciousnessY2 = Math.floor((maxy + avgConsciousness) * (height - bottomMargin) / 2 / maxy);
     var goodConsciousnessYAxe = Math.floor((height - bottomMargin) / 2);
-
+    var goodProductivityX1 = (avgProductivity - avgDeltaProductivity - minProductivity) / deltaProductivity * deltax + minx;
+    var goodProductivityX2 = (avgProductivity + avgDeltaProductivity - minProductivity) / deltaProductivity * deltax + minx;
+    //high productivity zone
+    context.beginPath();
+    context.rect(goodProductivityX1, 0, goodProductivityX2 - goodProductivityX1, height - bottomMargin);
+    context.fillStyle = '#d9edf7';
+    context.fill();
+    context.strokeStyle = '#5a9bbc';
+    context.stroke();
     //high conciouness zone
     context.beginPath();
     if (absolute) {
@@ -72,11 +75,21 @@ function doMatrix(context, matrixData, absolute)
     } else {
         context.rect(0, goodConsciousnessY1, width, goodConsciousnessY2 - goodConsciousnessY1);
     }
-    context.fillStyle = '#d9edf7';
+    context.fillStyle = '#aad9edf7';
     context.fill();
     context.strokeStyle = '#5a9bbc';
     context.stroke();
-
+    //high conciouness and productivity zone
+    context.beginPath();
+    if (absolute) {
+        context.rect(goodProductivityX1, goodConsciousnessY1, goodProductivityX2 - goodProductivityX1, goodConsciousnessY2 - goodConsciousnessY1);
+    } else {
+        context.rect(goodProductivityX1, goodConsciousnessY1, goodProductivityX2 - goodProductivityX1, goodConsciousnessY2 - goodConsciousnessY1);
+    }
+    context.fillStyle = '#aad9edf7';
+    context.fill();
+    context.strokeStyle = '#5a9bbc';
+    context.stroke();
     // do cool things with the context
     context.font = '12pt Helvetica';
     context.fillStyle = 'red';
@@ -96,7 +109,6 @@ function doMatrix(context, matrixData, absolute)
     context.textAlign = 'right';
     context.textBaseline = 'bottom';
     context.fillText('BC/AP-', width - 5, height - 5);
-
     //axes
     posx = (avgProductivity - minProductivity) / deltaProductivity * deltax + minx;
     context.strokeStyle = '#5a9bbc';
@@ -109,13 +121,12 @@ function doMatrix(context, matrixData, absolute)
         context.lineTo(width, goodConsciousnessYAxe);
     }
     context.moveTo(posx, 0);
-    context.lineTo(posx, height - 26);
+    context.lineTo(posx, height - bottomMargin);
     context.moveTo(minx, 0);
-    context.lineTo(minx, height - 26);
+    context.lineTo(minx, height - bottomMargin);
     context.moveTo(maxx, 0);
-    context.lineTo(maxx, height - 26);
+    context.lineTo(maxx, height - bottomMargin);
     context.stroke();
-
     //axes values
     context.font = '11pt Helvetica';
     context.fillStyle = '#496987';
@@ -124,22 +135,25 @@ function doMatrix(context, matrixData, absolute)
     context.fillText('Min: ' + Math.round(minProductivity * 10) / 10 + ' %', minx, height - 5);
     context.fillText('Max: ' + Math.round(maxProductivity * 10) / 10 + ' %', maxx, height - 5);
     context.fillText('Prom: ' + Math.round(avgProductivity * 10) / 10 + ' %', posx, height - 5);
-
     context.textAlign = 'center';
     context.textBaseline = 'top';
     context.lineWidth = 1;
     context.font = '11pt Helvetica';
-
     for (i in matrixData)
         if (matrixData[i][3] != memberId) {
             context.beginPath();
-
             context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
 
-            if (Math.abs(data[i]['consciousness']) < stardarDeviation)
+            var highConsciousness = Math.abs(data[i]['consciousness']) < avgConsciousness;
+            var highProductivity = data[i]['productivity'] > (avgProductivity - avgDeltaProductivity) && data[i]['productivity'] < (avgProductivity + avgDeltaProductivity);
+
+            if (highConsciousness && highProductivity)
                 context.fillStyle = '#5cb85c';
-            else
+            else if (highConsciousness || highProductivity)
                 context.fillStyle = '#f0ad4e';
+            else
+                context.fillStyle = '#d9534f';
+
             context.fill();
             context.strokeStyle = '#5a9bbc';
             context.stroke();
@@ -153,13 +167,17 @@ function doMatrix(context, matrixData, absolute)
         if (matrixData[i][3] == memberId)
         {
             context.beginPath();
-
             context.arc(matrixData[i][1], matrixData[i][2], 12, 0, 2 * Math.PI, false);
+            var highConsciousness = Math.abs(data[i]['consciousness']) < avgConsciousness;
+            var highProductivity = data[i]['productivity'] > (avgProductivity - avgDeltaProductivity) && data[i]['productivity'] < (avgProductivity + avgDeltaProductivity);
 
-            if (Math.abs(data[i]['consciousness']) < stardarDeviation)
+            if (highConsciousness && highProductivity)
                 context.fillStyle = '#5cb85c';
-            else
+            else if (highConsciousness || highProductivity)
                 context.fillStyle = '#f0ad4e';
+            else
+                context.fillStyle = '#d9534f';
+
             context.fill();
             context.strokeStyle = '#5a9bbc';
             context.stroke();

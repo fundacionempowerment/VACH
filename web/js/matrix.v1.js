@@ -110,11 +110,11 @@ function doMatrix(context, matrixData, absolute)
         context.lineTo(width, goodConsciousnessYAxe);
     }
     context.moveTo(posx, 0);
-    context.lineTo(posx, height - 26);
+    context.lineTo(posx, height - bottomMargin);
     context.moveTo(minx, 0);
-    context.lineTo(minx, height - 26);
+    context.lineTo(minx, height - bottomMargin);
     context.moveTo(maxx, 0);
-    context.lineTo(maxx, height - 26);
+    context.lineTo(maxx, height - bottomMargin);
     context.stroke();
 
     //axes values
