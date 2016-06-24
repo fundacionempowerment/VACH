@@ -61,14 +61,12 @@ function doMatrix(context, matrixData, absolute)
     var goodConsciousnessYAxe = Math.floor((height - bottomMargin) / 2);
     var goodProductivityX1 = (avgProductivity - avgDeltaProductivity - minProductivity) / deltaProductivity * deltax + minx;
     var goodProductivityX2 = (avgProductivity + avgDeltaProductivity - minProductivity) / deltaProductivity * deltax + minx;
-    //high productivity zone
-    context.beginPath();
-    context.rect(goodProductivityX1, 0, goodProductivityX2 - goodProductivityX1, height - bottomMargin);
+
+    //high conciouness zone
     context.fillStyle = '#d9edf7';
     context.fill();
     context.strokeStyle = '#5a9bbc';
     context.stroke();
-    //high conciouness zone
     context.beginPath();
     if (absolute) {
         context.rect(horizontalMargin, goodConsciousnessY1, width - horizontalMargin * 2, goodConsciousnessY2 - goodConsciousnessY1);
@@ -79,17 +77,7 @@ function doMatrix(context, matrixData, absolute)
     context.fill();
     context.strokeStyle = '#5a9bbc';
     context.stroke();
-    //high conciouness and productivity zone
-    context.beginPath();
-    if (absolute) {
-        context.rect(goodProductivityX1, goodConsciousnessY1, goodProductivityX2 - goodProductivityX1, goodConsciousnessY2 - goodConsciousnessY1);
-    } else {
-        context.rect(goodProductivityX1, goodConsciousnessY1, goodProductivityX2 - goodProductivityX1, goodConsciousnessY2 - goodConsciousnessY1);
-    }
-    context.fillStyle = '#aad9edf7';
-    context.fill();
-    context.strokeStyle = '#5a9bbc';
-    context.stroke();
+
     // do cool things with the context
     context.font = '12pt Helvetica';
     context.fillStyle = 'red';
@@ -127,6 +115,14 @@ function doMatrix(context, matrixData, absolute)
     context.moveTo(maxx, 0);
     context.lineTo(maxx, height - bottomMargin);
     context.stroke();
+
+    //high productivity zone
+    context.moveTo(goodProductivityX1, 0);
+    context.lineTo(goodProductivityX1, height - bottomMargin);
+    context.moveTo(goodProductivityX2, 0);
+    context.lineTo(goodProductivityX2, height - bottomMargin);
+    context.stroke();
+
     //axes values
     context.font = '11pt Helvetica';
     context.fillStyle = '#496987';
@@ -147,12 +143,10 @@ function doMatrix(context, matrixData, absolute)
             var highConsciousness = Math.abs(data[i]['consciousness']) < avgConsciousness;
             var highProductivity = data[i]['productivity'] > (avgProductivity - avgDeltaProductivity) && data[i]['productivity'] < (avgProductivity + avgDeltaProductivity);
 
-            if (highConsciousness && highProductivity)
+            if (highConsciousness)
                 context.fillStyle = '#5cb85c';
-            else if (highConsciousness || highProductivity)
-                context.fillStyle = '#f0ad4e';
             else
-                context.fillStyle = '#d9534f';
+                context.fillStyle = '#f0ad4e';
 
             context.fill();
             context.strokeStyle = '#5a9bbc';
@@ -171,12 +165,10 @@ function doMatrix(context, matrixData, absolute)
             var highConsciousness = Math.abs(data[i]['consciousness']) < avgConsciousness;
             var highProductivity = data[i]['productivity'] > (avgProductivity - avgDeltaProductivity) && data[i]['productivity'] < (avgProductivity + avgDeltaProductivity);
 
-            if (highConsciousness && highProductivity)
+            if (highConsciousness)
                 context.fillStyle = '#5cb85c';
-            else if (highConsciousness || highProductivity)
-                context.fillStyle = '#f0ad4e';
             else
-                context.fillStyle = '#d9534f';
+                context.fillStyle = '#f0ad4e';
 
             context.fill();
             context.strokeStyle = '#5a9bbc';

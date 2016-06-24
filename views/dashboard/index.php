@@ -164,7 +164,6 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
-            doMatrix(document.getElementById("canvas" + matrixes[i] + 'a').getContext("2d"), matrixesData[i], true);
         }
         for (var i in relations) {
             doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);

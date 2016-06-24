@@ -70,8 +70,25 @@ for ($i = 0; $i < count($howTheySeeMe); $i++) {
 }
 
 $standar_deviation = Utils::standard_deviation($gaps);
+$productivityDelta = Utils::variance($howTheySeeMe);
 $mean_gap = Utils::absolute_mean($gaps);
 $token = rand(100000, 999999);
+
+function productivityText($productivity, $meanProductivity, $deltaProductivity, $version) {
+    if ($productivity < $meanProductivity) {
+        if ($productivity < $meanProductivity - $deltaProductivity || $version == 1) {
+            return 'Baja';
+        } else {
+            return 'Media baja';
+        }
+    } else {
+        if ($productivity <= $meanProductivity + $deltaProductivity && $version == 2) {
+            return 'Media alta';
+        } else {
+            return 'Alta';
+        }
+    }
+}
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
@@ -127,7 +144,7 @@ $token = rand(100000, 999999);
             </td>
             <?php foreach ($howTheySeeMe as $value) { ?>
                 <td class="<?= $value < $allTheySee ? 'warning' : 'success' ?>">
-                    <?= $value < $allTheySee ? Yii::t('app', 'Low') : Yii::t('app', 'High') ?>
+                    <?= productivityText($value, $allTheySee, $productivityDelta, $version) ?>
                 </td>
             <?php } ?>
         </tr> 
@@ -138,13 +155,15 @@ $token = rand(100000, 999999);
             <td>
                 <?= round($allTheySee / 4 * 100, 1) . ' %' ?>
             </td>
-            <td colspan="2">
-                <?= (!empty($assessment) && $assessment->version == 2 ? Yii::t('dashboard', 'Avg. conc. gap') : Yii::t('dashboard', 'St. dev.')) ?>
-            </td>
-            <td>
-                <?= ( $version == 2 ? round($mean_gap / 4 * 100, 1) : round($standar_deviation / 4 * 100, 1)) . ' %' ?>
-            </td>
-        </tr> 
+            <?php if ($version == 2) { ?>
+                <td colspan="2">
+                    <?= Yii::t('dashboard', 'Avg. prod. gap') ?>
+                </td>
+                <td>
+                    <?= ( round($productivityDelta / 4 * 100, 1)) . ' %' ?>
+                </td>
+            <?php } ?>
+        </tr>
         <tr>
             <td>
                 <?= Yii::t('dashboard', 'Cons. gap') ?>
@@ -165,6 +184,15 @@ $token = rand(100000, 999999);
                 </td>
             <?php } ?>
         </tr> 
+        <tr>
+            <td>
+                <?= (!empty($assessment) && $assessment->version == 2 ? Yii::t('dashboard', 'Avg. conc. gap') : Yii::t('dashboard', 'St. dev.')) ?>
+            </td>
+            <td>
+                <?= ( $version == 2 ? round($mean_gap / 4 * 100, 1) : round($standar_deviation / 4 * 100, 1)) . ' %' ?>
+            </td>
+
+        </tr>
     </table>
 </div>
 <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
