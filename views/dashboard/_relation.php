@@ -63,7 +63,7 @@ if (count($forwardData) < 4)
         <canvas id="canvas<?= $token ?>b" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
     </div>
 <?php } ?>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'dashboard') === true && $memberId > 0) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false && $memberId > 0) { ?>
     <div class="col-md-6 text-center">
         <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('fdiv$token')"]) ?>
     </div>

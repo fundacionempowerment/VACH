@@ -40,7 +40,7 @@ $dimensions = WheelQuestion::getDimensionNames($type, true);
         <?php } ?>
     </p>
 </div>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'dashboard') === true) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
     <div class="col-md-12 text-center">
         <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>

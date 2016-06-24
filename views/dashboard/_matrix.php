@@ -35,13 +35,12 @@ $matrix_data['memberId'] = $memberId;
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
-<div id="a-div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10" >
-    <canvas id="canvas<?= $token ?>a" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive center-block"></canvas>
+<div id="r-div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10" >
     <canvas id="canvas<?= $token ?>r" height="<?= $linealHeight ?>" width="<?= $linealWidth ?>" class="img-responsive center-block"></canvas>
 </div>
 <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
     <div class="col-md-12 text-center">
-        <?= Html::button(Yii::t('app', 'Export relative'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('r-div$token')"]) ?>
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('r-div$token')"]) ?>
     </div>
 <?php } ?>
 <div class="clearfix"></div>
