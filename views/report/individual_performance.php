@@ -97,7 +97,6 @@ $this->params['breadcrumbs'][] = $this->title;
     window.onload = function () {
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
-            doMatrix(document.getElementById("canvas" + matrixes[i] + 'a').getContext("2d"), matrixesData[i], true);
         }
     }
 </script>
