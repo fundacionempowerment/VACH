@@ -152,6 +152,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => $filter->wheelType,
             'member' => $member,
         ]);
+        echo $this->render('_detailed_emergents', [
+            'data' => $relationsMatrix,
+            'members' => $members,
+            'memberId' => $filter->memberId,
+            'emergents' => $emergents,
+            'type' => $filter->wheelType,
+            'member' => $member,
+        ]);
     ?>
 </div>
 <script>

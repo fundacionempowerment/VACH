@@ -45,23 +45,29 @@ foreach ($emergents as $emergent)
     }
 
 foreach ($emergents as $emergent) {
-    if ($emergent[$index] == $maxValue)
-        $max_emergents[] = $emergent;
-    if ($emergent[$index] == $minValue)
-        $min_emergents[] = $emergent;
+    if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
+        if ($emergent[$index] == $maxValue)
+            $max_emergents[] = $emergent;
+        if ($emergent[$index] == $minValue)
+            $min_emergents[] = $emergent;
+    }
 }
 
 if ($type > Wheel::TYPE_INDIVIDUAL && $memberId > 0) {
     foreach ($emergents as $emergent) {
-        $gap = abs($emergent['mine_value'] - $emergent['value']);
-        if ($gap > $maxGap)
-            $maxGap = $gap;
+        if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
+            $gap = abs($emergent['mine_value'] - $emergent['value']);
+            if ($gap > $maxGap)
+                $maxGap = $gap;
+        }
     }
 
     foreach ($emergents as $emergent) {
-        $gap = abs($emergent['mine_value'] - $emergent['value']);
-        if ($gap == $maxGap)
-            $gap_emergents[] = $emergent;
+        if ($emergent['answer_order'] % $questionCount != $questionCount - 1) {
+            $gap = abs($emergent['mine_value'] - $emergent['value']);
+            if ($gap == $maxGap)
+                $gap_emergents[] = $emergent;
+        }
     }
 }
 
@@ -71,7 +77,8 @@ $token = rand(100000, 999999);
 <h3><?= $title ?></h3>
 <div id="div<?= $token ?>" class="row col-md-12">
     <h4><?= Yii::t('dashboard', 'Best emergents') ?></h4>
-    <?php foreach ($max_emergents as $emergent) { ?>
+    <?php foreach ($max_emergents as $emergent) {
+        ?>
         <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
         <?php
         if ($emergent[$index] > Yii::$app->params['good_consciousness'])
@@ -143,12 +150,12 @@ $token = rand(100000, 999999);
                 <div style='font-size:0px; border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
                 <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How I see me') . ' ' . floor($percentage) ?>%</div>
             </div>
-        <?php } ?>
     <?php } ?>
+<?php } ?>
 </div>
-<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+    <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
     <div class="col-md-12 text-center">
-        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>
 <?php } ?>
 <div class="clearfix"></div>
