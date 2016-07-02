@@ -65,10 +65,9 @@ $show_instructions = $instructions_shown == true ? false : true;
     <br/><br/>
     <?php
     if (isset(Yii::$app->user))
-        if (isset(Yii::$app->user->identity))
-            if (Yii::$app->user->identity->is_coach) {
-                echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
-            }
+        if (isset(Yii::$app->user->identity)) {
+            echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+        }
     ?>
     <?php ActiveForm::end(); ?>
 </div>

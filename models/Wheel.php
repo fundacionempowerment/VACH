@@ -191,11 +191,11 @@ class Wheel extends ActiveRecord {
                 ->groupBy('wheel.observed_id')
                 ->all();
 
-        $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, user.name, user.surname')
+        $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, person.name, person.surname')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('user', 'user.id = wheel.observed_id')
+                ->innerJoin('person', 'person.id = wheel.observed_id')
                 ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id = wheel.observed_id")
                 ->groupBy('wheel.observed_id')
                 ->all();
@@ -279,8 +279,8 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('user as observer', 'observer.id = wheel.observer_id')
-                ->innerJoin('user as observed', 'observed.id = wheel.observed_id')
+                ->innerJoin('person as observer', 'observer.id = wheel.observer_id')
+                ->innerJoin('person as observed', 'observed.id = wheel.observed_id')
                 ->where("assessment.id = $assessmentId and wheel.type = " . $type)
                 ->groupBy('wheel.observer_id, wheel.observed_id, observer.name, observer.surname, observed.name, observed.surname')
                 ->all();

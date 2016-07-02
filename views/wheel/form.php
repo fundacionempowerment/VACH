@@ -68,10 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-lg btn-success']);
         echo "<br/><br/>";
         if (isset(Yii::$app->user))
-            if (isset(Yii::$app->user->identity))
-                if (Yii::$app->user->identity->is_coach) {
-                    echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
-                }
+            if (isset(Yii::$app->user->identity)) {
+                echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+            }
         ?>
         <?php ActiveForm::end(); ?>
     </div>

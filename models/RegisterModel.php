@@ -77,7 +77,6 @@ class RegisterModel extends Model {
             'email' => $this->email,
             'username' => $this->username,
             'password_hash' => $encryptedPassword,
-            'is_coach' => $this->isCoach,
         ])->execute();
 
         return true;

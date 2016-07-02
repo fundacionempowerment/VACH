@@ -15,13 +15,13 @@ class TeamMember extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'team_id'], 'required'],
+            [['person_id', 'team_id'], 'required'],
         ];
     }
 
     public function attributeLabels() {
         return [
-            'user_id' => Yii::t('team', 'Member'),
+            'person_id' => Yii::t('team', 'Member'),
             'team_id' => Yii::t('team', 'Team'),
         ];
     }
@@ -36,7 +36,7 @@ class TeamMember extends ActiveRecord {
     }
 
     public function getMember() {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
 
     public function getTeam() {

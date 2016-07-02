@@ -11,21 +11,14 @@ class Company extends ActiveRecord {
     public $deletable;
 
     /**
-     * @inheritdoc
-     */
-    public static function tableName() {
-        return '{{%user}}';
-    }
-
-    /**
      * @return array the validation rules.
      */
     public function rules() {
         return [
             // username and password are both required
-            [['name', 'email', 'username', 'password_hash', 'coach_id'], 'required'],
+            [['name', 'email', 'coach_id'], 'required'],
             [['phone'], 'safe'],
-            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['name', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
         ];
     }
@@ -55,25 +48,14 @@ class Company extends ActiveRecord {
     }
 
     public function beforeValidate() {
-        if (!isset($this->username))
-            $this->username = strtolower($this->name) . '.' . strtolower($this->surname);
-
-        if (!isset($this->password_hash)) {
-            $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash('123456');
-            $this->password_hash = $encryptedPassword;
-        }
-
         if (!isset($this->coach_id))
             $this->coach_id = Yii::$app->user->id;
-
-        if (!isset($this->is_company))
-            $this->is_company = true;
 
         return parent::beforeValidate();
     }
 
     public static function browse() {
-        return Company::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => true]);
+        return Company::find()->where(['coach_id' => Yii::$app->user->id]);
     }
 
     public function getCoach() {

@@ -68,11 +68,11 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
 
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
                                 <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
@@ -86,7 +86,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     <td>
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 echo $wheel->answerStatus . '&nbsp;';
                                 echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                             }
@@ -119,10 +119,10 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->groupWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
                                 <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
@@ -137,7 +137,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                         <td>
                             <?php
                             foreach ($assessment->groupWheels as $wheel)
-                                if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
+                                if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                     echo $wheel->answerStatus . '&nbsp;';
                                     echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                                 }
@@ -171,10 +171,10 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->user_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->organizationalWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
                                 <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
@@ -189,7 +189,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                         <td>
                             <?php
                             foreach ($assessment->organizationalWheels as $wheel)
-                                if ($wheel->observer_id == $observerMember->user_id && $wheel->observed_id == $observedMember->user_id) {
+                                if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                     echo $wheel->answerStatus . '&nbsp;';
                                     echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
                                 }
@@ -260,7 +260,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     <td>
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 echo $wheel->token;
                                 break;
                             }
@@ -290,7 +290,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     <td>
                         <?php
                         foreach ($assessment->groupWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 echo $wheel->token;
                                 break;
                             }
@@ -320,7 +320,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     <td>
                         <?php
                         foreach ($assessment->organizationalWheels as $wheel)
-                            if ($wheel->observer_id == $observerMember->user_id) {
+                            if ($wheel->observer_id == $observerMember->person_id) {
                                 echo $wheel->token;
                                 break;
                             }

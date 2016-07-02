@@ -102,7 +102,7 @@ class AssessmentController extends BaseController {
 
         $sent = false;
         foreach ($assessment->team->members as $teamMember) {
-            if ($teamMember->user_id == $memberId) {
+            if ($teamMember->person_id == $memberId) {
                 $wheels = [];
                 switch ($type) {
                     case Wheel::TYPE_INDIVIDUAL:

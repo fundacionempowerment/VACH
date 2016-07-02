@@ -44,7 +44,7 @@ class TeamController extends BaseController {
             $new_member_id = Yii::$app->request->post('new_member');
 
             $teamMember = new TeamMember();
-            $teamMember->user_id = $new_member_id;
+            $teamMember->person_id = $new_member_id;
             $teamMember->team_id = $team->id;
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
@@ -147,7 +147,7 @@ class TeamController extends BaseController {
 
         if ($member->load(Yii::$app->request->post()) && $member->save()) {
             $teamMember = new TeamMember();
-            $teamMember->user_id = $member->id;
+            $teamMember->person_id = $member->id;
             $teamMember->team_id = $team->id;
             $teamMember->save();
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $member->fullname]));

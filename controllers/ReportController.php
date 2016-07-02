@@ -41,7 +41,7 @@ class ReportController extends Controller {
             $exists = false;
             if (count($assessment->report->individualReports) > 0) {
                 foreach ($assessment->report->individualReports as $individualReport)
-                    if ($individualReport->user_id == $teamMember->user_id) {
+                    if ($individualReport->person_id == $teamMember->person_id) {
                         $exists = true;
                         break;
                     }
@@ -49,7 +49,7 @@ class ReportController extends Controller {
 
             if (!$exists) {
                 $newIndividualReport = new IndividualReport();
-                $newIndividualReport->user_id = $teamMember->user_id;
+                $newIndividualReport->person_id = $teamMember->person_id;
                 $assessment->report->link('individualReports', $newIndividualReport);
             }
         }
@@ -94,7 +94,7 @@ class ReportController extends Controller {
         $organizationalRelationsMatrix = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -128,7 +128,7 @@ class ReportController extends Controller {
         $organizationalPerformanceMatrix = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -161,7 +161,7 @@ class ReportController extends Controller {
         $organizationalRelationsMatrix = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -193,7 +193,7 @@ class ReportController extends Controller {
         $organizationalGauges = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -225,7 +225,7 @@ class ReportController extends Controller {
         $organizationalEmergents = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -266,7 +266,7 @@ class ReportController extends Controller {
         $organizationalPerformanceMatrix = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -331,7 +331,7 @@ class ReportController extends Controller {
         }
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -366,7 +366,7 @@ class ReportController extends Controller {
         $organizationalGauges = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -401,7 +401,7 @@ class ReportController extends Controller {
         $organizationalEmergents = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -468,7 +468,7 @@ class ReportController extends Controller {
         $organizationalRelationsMatrix = [];
 
         foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
 
         $members[0] = Yii::t('app', 'All');
 

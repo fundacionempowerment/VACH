@@ -50,7 +50,7 @@ class SiteController extends BaseController {
 
     public function actionIndex() {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirectIfCoach();
+            return $this->redirect(['/assessment']);
         }
 
         $model = new LoginForm();
@@ -83,31 +83,19 @@ class SiteController extends BaseController {
 
     public function actionLogin() {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirectIfCoach();
+            return $this->redirect(['/assessment']);
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             LogController::log(Yii::t('app', 'Logged in as {username}.', ['username' => Yii::$app->user->identity->username]));
-            return $this->redirectIfCoach();
+            return $this->redirect(['/assessment']);
         } else {
             $wheel = new Wheel();
             return $this->render('index', [
                         'model' => $model,
                         'wheel' => $wheel,
             ]);
-        }
-    }
-
-    private function redirectIfCoach() {
-        $isCoach = Yii::$app->user->identity->is_coach;
-        Yii::$app->session->set('is_coach', $isCoach);
-
-        if ($isCoach)
-            return $this->redirect(['/assessment']);
-        else {
-            Yii::$app->user->logout();
-            return $this->redirect(['/site']);
         }
     }
 
@@ -130,11 +118,9 @@ class SiteController extends BaseController {
                     \Yii::$app->session->addFlash('success', \Yii::t('register', 'Sign up successfull. Welcome to VACH!'));
                     return $this->goHome();
                 }
-            }
-            else
+            } else
                 \Yii::$app->session->addFlash('error', \Yii::t('register', 'Username already used.'));
-        }
-        else
+        } else
             SiteController::FlashErrors($model);
         return $this->render('register', [
                     'model' => $model,

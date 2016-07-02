@@ -45,7 +45,7 @@ class UserController extends Controller {
 
     public function actionIndex() {
 
-        $user = User::find()->where(['is_coach' => 1]);
+        $user = User::find();
 
         return $this->render('index', [
                     'user' => $user,

@@ -19,19 +19,12 @@ class Person extends ActiveRecord {
     const GENDER_OTHER = 2;
 
     /**
-     * @inheritdoc
-     */
-    public static function tableName() {
-        return '{{%user}}';
-    }
-
-    /**
      * @return array the validation rules.
      */
     public function rules() {
         return [
 // username and password are both required
-            [['name', 'surname', 'email', 'username', 'password_hash', 'coach_id', 'gender'], 'required'],
+            [['name', 'surname', 'email', 'coach_id', 'gender'], 'required'],
             [['phone'], 'safe'],
             [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
@@ -64,9 +57,8 @@ class Person extends ActiveRecord {
         $sponsored_teams = $this->hasMany(Team::className(), ['sponsor_id' => 'id'])->count();
         $wheels_as_observed = $this->hasMany(Wheel::className(), ['observed_id' => 'id'])->count();
         $wheels_as_observer = $this->hasMany(Wheel::className(), ['observer_id' => 'id'])->count();
-        $coaching = $this->hasMany(User::className(), ['coach_id' => 'id'])->count();
 
-        $this->deletable = $sponsored_teams == 0 && $wheels_as_observed == 0 && $wheels_as_observer == 0 && $coaching == 0;
+        $this->deletable = $sponsored_teams == 0 && $wheels_as_observed == 0 && $wheels_as_observer == 0;
 
         parent::afterFind();
     }
@@ -77,22 +69,15 @@ class Person extends ActiveRecord {
     }
 
     public function beforeValidate() {
-        if (!isset($this->username))
-            $this->username = strtolower($this->name) . '.' . strtolower($this->surname);
-
-        if (!isset($this->password_hash)) {
-            $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash('123456');
-            $this->password_hash = $encryptedPassword;
-        }
-
-        if (!isset($this->coach_id))
+        if (!isset($this->coach_id)) {
             $this->coach_id = Yii::$app->user->id;
-
+        }
+        
         return parent::beforeValidate();
     }
 
     public static function browse() {
-        return Person::find()->where(['coach_id' => Yii::$app->user->id, 'is_company' => 0]);
+        return Person::find()->where(['coach_id' => Yii::$app->user->id]);
     }
 
     public function getCoach() {

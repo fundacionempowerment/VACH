@@ -30,7 +30,6 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
             <?= $form->field($user, 'username') ?>
             <?= $form->field($user, 'password')->passwordInput() ?>
             <?= $form->field($user, 'password_confirm')->passwordInput() ?>
-            <?= $isAdministrator ? $form->field($user, 'is_coach')->checkbox() : '' ?>
             <?= $isAdministrator ? $form->field($user, 'is_administrator')->checkbox() : '' ?>
             <div class="form-group">
                 <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>

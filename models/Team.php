@@ -70,11 +70,11 @@ class Team extends ActiveRecord {
     }
 
     public function getCompany() {
-        return $this->hasOne(User::className(), ['id' => 'company_id']);
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
     public function getSponsor() {
-        return $this->hasOne(User::className(), ['id' => 'sponsor_id']);
+        return $this->hasOne(Person::className(), ['id' => 'sponsor_id']);
     }
 
     public function getMembers() {

@@ -98,7 +98,7 @@ class DashboardController extends BaseController {
             }
 
             foreach (TeamMember::find()->where(['team_id' => $filter->teamId])->all() as $teamMember)
-                $members[$teamMember->user_id] = $teamMember->member->fullname;
+                $members[$teamMember->person_id] = $teamMember->member->fullname;
         }
 
         $members[0] = Yii::t('app', 'All');

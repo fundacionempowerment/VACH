@@ -20,10 +20,11 @@ class IndividualReport extends ActiveRecord {
     }
 
     public function getMember() {
-        return $this->hasOne(Person::className(), ['id' => 'user_id']);
+        return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
-    
+
     public function getReport() {
         return $this->hasOne(Report::className(), ['id' => 'report_id']);
     }
+
 }
