@@ -145,16 +145,16 @@ $this->title = Yii::t('report', 'Report');
     <div class="col-lg-12">
         <?php
         foreach ($assessment->report->individualReports as $individualReport) {
-            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->user_id);
-            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->user_id);
-            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->user_id);
-            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->user_id);
+            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->person_id);
+            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->person_id);
+            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->person_id);
+            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->person_id);
             $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
             $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
-            $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-            $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
-            $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-            $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+            $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+            $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+            $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+            $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
             $subtitle_number = 97; // letter 'a'
             ?>
             <h1>

@@ -15,7 +15,7 @@ class IndividualReport extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['report_id', 'user_id'], 'required'],
+            [['report_id', 'person_id'], 'required'],
         ];
     }
 
