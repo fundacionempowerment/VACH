@@ -50,25 +50,25 @@ foreach ($data as $datum) {
 
 $width = 500;
 $height = 350;
-if (count($forwardData) < 4)
+if (count($forwardData) < 4) {
     $height = 150;
+}
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <?php if (count($forwardData) > 0) { ?>
-    <div id="fdiv<?= $token ?>" class="col-xs-12 col-md-6" >
-        <canvas id="canvas<?= $token ?>f" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
-    </div>
-    <div id="bdiv<?= $token ?>" class="col-xs-12 col-md-6" >
-        <canvas id="canvas<?= $token ?>b" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+    <div id="div<?= $token ?>" class="col-xs-12 col-md-12" >
+        <div class="col-xs-12 col-md-6" >
+            <canvas id="canvas<?= $token ?>f" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+        </div>
+        <div class="col-xs-12 col-md-6" >
+            <canvas id="canvas<?= $token ?>b" height="<?= $height ?>" width="<?= $width ?>" class="img-responsive center-block"></canvas>
+        </div>
     </div>
 <?php } ?>
 <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false && $memberId > 0) { ?>
-    <div class="col-md-6 text-center">
-        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('fdiv$token')"]) ?>
-    </div>
-<div class="col-md-6 text-center">
-        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('bdiv$token')"]) ?>
+    <div class="col-md-12 text-center">
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>
 <?php } ?>
 <div class="clearfix"></div>
