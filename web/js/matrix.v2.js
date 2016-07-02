@@ -39,11 +39,12 @@ function doMatrix(context, matrixData, absolute)
     avgProductivity = sumProductivity / data.length;
     var deltax = maxx - minx;
     var deltaProductivity = maxProductivity - minProductivity;
-    sumConsciousness = 0;
     for (var i in data) {
-        sumDeltaProductivity = sumDeltaProductivity + Math.abs(data[i]['productivity'] - avgProductivity);
+        current_value = data[i]['productivity'];
+        sumDeltaProductivity = sumDeltaProductivity + Math.pow((current_value - avgProductivity), 2);
     }
-    var avgDeltaProductivity = sumDeltaProductivity / (data.length);
+    var avgDeltaProductivity = Math.sqrt(sumDeltaProductivity / data.length); //standar deviation
+
     var maxy = (Math.floor((maxConsciousness + 1) / 10) + 1.1) * 10;
     for (var i in data) {
         var posx = Math.floor((data[i]['productivity'] - minProductivity) / deltaProductivity * deltax + minx);

@@ -73,22 +73,6 @@ $standar_deviation = Utils::standard_deviation($gaps);
 $productivityDelta = Utils::variance($howTheySeeMe);
 $mean_gap = Utils::absolute_mean($gaps);
 $token = rand(100000, 999999);
-
-function productivityText($productivity, $meanProductivity, $deltaProductivity, $version) {
-    if ($productivity < $meanProductivity) {
-        if ($productivity < $meanProductivity - $deltaProductivity || $version == 1) {
-            return 'Baja';
-        } else {
-            return 'Media baja';
-        }
-    } else {
-        if ($productivity <= $meanProductivity + $deltaProductivity && $version == 2) {
-            return 'Media alta';
-        } else {
-            return 'Alta';
-        }
-    }
-}
 ?>
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
@@ -144,7 +128,7 @@ function productivityText($productivity, $meanProductivity, $deltaProductivity, 
             </td>
             <?php foreach ($howTheySeeMe as $value) { ?>
                 <td class="<?= $value < $allTheySee ? 'warning' : 'success' ?>">
-                    <?= productivityText($value, $allTheySee, $productivityDelta, $version) ?>
+                    <?= Utils::productivityText($value, $allTheySee, $productivityDelta, $version) ?>
                 </td>
             <?php } ?>
         </tr> 
