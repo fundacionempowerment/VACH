@@ -89,7 +89,7 @@ class Person extends ActiveRecord {
                         ->where(['type' => '0']);
     }
 
-    public function getGenders() {
+    static public function getGenders() {
         return [
             self::GENDER_MALE => Yii::t('app', 'Male'),
             self::GENDER_FEMALE => Yii::t('app', 'Female'),
