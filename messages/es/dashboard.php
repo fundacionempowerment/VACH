@@ -59,6 +59,7 @@ return [
     'Organizational Rankings' => 'Rankings organizacionales',
     'Organizational Relations Matrix' => 'Matriz de relaciones organizacionales',
     'Person' => 'Persona',
+    'Prod. x Cons. Ranking' => 'Ranking prod. x conc.',
     'Productivity Ranking' => 'Ranking de productividad',
     'Responsability' => 'Responsabilidad',
     'Select assesment ...' => 'Elija relevamiento ...',
