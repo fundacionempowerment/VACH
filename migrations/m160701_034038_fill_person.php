@@ -30,7 +30,7 @@ class m160701_034038_fill_person extends Migration {
             from
                 `user`
             where
-                `user`.`is_coach` = 0
+                (`user`.`is_coach` = 0 and `user`.`is_company` = 0)
                 or `user`.`id` in (select team_member.user_id from team_member)
                 or `user`.`id` in (select individual_report.user_id from individual_report)
                 or `user`.`id` in (select team.sponsor_id from team)
