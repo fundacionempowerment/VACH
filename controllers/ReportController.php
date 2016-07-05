@@ -301,10 +301,10 @@ class ReportController extends Controller {
             return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'perception-' . $individualReport->id]);
         }
 
-        $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->user_id);
-        $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->user_id);
-        $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->user_id);
-        $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->user_id);
+        $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->person_id);
+        $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->person_id);
+        $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->person_id);
+        $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->person_id);
 
         return $this->render('individual_perception', [
                     'report' => $individualReport,
@@ -370,8 +370,8 @@ class ReportController extends Controller {
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_competences', [
                     'report' => $individualReport,
@@ -405,8 +405,8 @@ class ReportController extends Controller {
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-        $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
@@ -419,7 +419,7 @@ class ReportController extends Controller {
                     'members' => $members,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => $individualReport->user_id,
+                    'memberId' => $individualReport->person_id,
         ]);
     }
 
