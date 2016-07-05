@@ -141,10 +141,10 @@ $token = rand(100000, 999999);
             </td>
             <?php if ($version == 2) { ?>
                 <td colspan="2">
-                    <?= Yii::t('dashboard', 'Avg. prod. gap') ?>
+                    <?= Yii::t('dashboard', 'Prod. deviation') ?>
                 </td>
                 <td>
-                    <?= ( round($productivityDelta / 4 * 100, 1)) . ' %' ?>
+                    <?= (round($productivityDelta / 4 * 100, 1)) . ' %' ?>
                 </td>
             <?php } ?>
         </tr>
