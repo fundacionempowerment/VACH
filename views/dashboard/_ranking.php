@@ -50,7 +50,7 @@ $token = rand(100000, 999999);
 ?>
 <h3><?= $title ?></h3>
 <div id="div<?= $token ?>" class="row col-md-12">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h4><?= Yii::t('dashboard', 'Consciouness Ranking') ?></h4>
         <table class="table table-bordered table-hover">
             <tr>
@@ -83,7 +83,7 @@ $token = rand(100000, 999999);
 
         </table>        
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h4><?= Yii::t('dashboard', 'Productivity Ranking') ?></h4>
         <table class="table table-bordered table-hover">
             <tr>
@@ -102,39 +102,6 @@ $token = rand(100000, 999999);
             foreach ($ranking_productivity as $name => $value) {
                 ?>
                 <tr class="<?= !empty($member) && ($member->fullname == $name) ? ($value >= $allTheySee ? 'success' : 'warning' ) : '' ?>">
-                    <td>
-                        <?= $i++ ?>                        
-                    </td>                    
-                    <td>
-                        <?= $name ?>                        
-                    </td>
-                    <td>
-                        <?= $value . ' %' ?>
-                    </td>
-                </tr>
-            <?php } ?>
-
-        </table>        
-    </div>
-    <div class="col-md-4">
-        <h4><?= Yii::t('dashboard', 'Prod. x Cons. Ranking') ?></h4>
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th>
-                    <?= Yii::t('dashboard', '#') ?>
-                </th>
-                <th>
-                    <?= Yii::t('dashboard', 'Person') ?>
-                </th>
-                <th>
-                    <?= Yii::t('dashboard', 'Value') ?>
-                </th>
-            </tr>
-            <?php
-            $i = 1;
-            foreach ($ranking_both as $name => $value) {
-                ?>
-                <tr class="<?= !empty($member) && ($member->fullname == $name) ? 'info' : '' ?>">
                     <td>
                         <?= $i++ ?>                        
                     </td>                    
