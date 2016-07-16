@@ -39,5 +39,5 @@ use app\models\Wheel;
     Análisis
 </h3>
 <p>
-    <?= $report->emergents ?>
+    <?= empty($report->emergents) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $report->emergents ?>
 </p>

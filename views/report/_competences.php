@@ -30,5 +30,5 @@ if (count($organizationalGauges) > 0) {
     Análisis
 </h3>
 <p>
-    <?= $assessment->report->competences ?>
+    <?= empty($assessment->report->competences) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $assessment->report->competences ?>
 </p>

@@ -36,5 +36,5 @@ if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWh
     Análisis
 </h3>
 <p>
-    <?= $report->perception ?>
+    <?= empty($report->perception) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $report->perception ?>
 </p>

@@ -34,5 +34,5 @@ if (count($organizationalRelationsMatrix) > 0) {
     Análisis
 </h3>
 <p>
-    <?= $report->relations ?>
+    <?= empty($report->relations) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $report->relations ?>
 </p>

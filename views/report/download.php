@@ -35,7 +35,11 @@ $this->title = Yii::t('report', 'Report');
 <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical row">
     <div class="jumbotron">
-        <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
+        <p>
+            <?= Html::img('@web/images/logo_cpc.png', ['class' => 'image-responsive']) ?>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <?= Html::img('@web/images/logo_vach.png', ['class' => 'image-responsive']) ?>
+        </p>
         <h2>
             <?= Html::label($assessment->team->company->name) ?>
             <?= Html::label($assessment->team->name) ?>
@@ -104,7 +108,7 @@ $this->title = Yii::t('report', 'Report');
             'groupRelationsMatrix' => $groupRelationsMatrix,
             'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
-            ])
+        ])
         ?>
         <?=
         $this->render('_performance', [

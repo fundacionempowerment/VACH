@@ -34,5 +34,5 @@ if (count($organizationalPerformanceMatrix) > 0) {
     Análisis
 </h3>
 <p>
-    <?= $assessment->report->performance ?>
+    <?= empty($assessment->report->performance) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $assessment->report->performance ?>
 </p>
