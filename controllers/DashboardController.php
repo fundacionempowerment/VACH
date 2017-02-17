@@ -97,7 +97,7 @@ class DashboardController extends BaseController {
                     $filter->assessmentId = 0;
             }
 
-            foreach (TeamMember::find()->where(['team_id' => $filter->teamId])->all() as $teamMember)
+            foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember)
                 $members[$teamMember->person_id] = $teamMember->member->fullname;
         }
 

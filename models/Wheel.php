@@ -139,7 +139,11 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
                 ->all();
         $answers = [];
@@ -165,7 +169,11 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("wheel.observer_id <> $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
                 ->all();
         $answers = [];
@@ -187,7 +195,13 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id <> wheel.observed_id")
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
+                ->where("assessment.id = $assessmentId")
+                ->andWhere("wheel.type = $type")
+                ->andWhere("wheel.observer_id <> wheel.observed_id")
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel.observed_id')
                 ->all();
 
@@ -196,7 +210,11 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
                 ->innerJoin('person', 'person.id = wheel.observed_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id = wheel.observed_id")
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel.observed_id')
                 ->all();
 
@@ -220,7 +238,11 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("assessment.id = $assessmentId and wheel.type = " . $type)
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
                 ->all();
         $answers = [];
@@ -234,7 +256,11 @@ class Wheel extends ActiveRecord {
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = " . $type)
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
                 ->all();
         $answers = [];
@@ -250,8 +276,12 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("assessment.id = $assessmentId and wheel.type = $type")
-                ->groupBy('wheel_answer.answer_order, wheel_question.question')
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
+                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, wheel_question.question')
                 ->orderBy('avg(wheel_answer.answer_value) desc')
                 ->all();
 
@@ -266,7 +296,11 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.answer_order, wheel_question.question')
                 ->orderBy('avg(wheel_answer.answer_value) desc')
                 ->all();
@@ -281,7 +315,11 @@ class Wheel extends ActiveRecord {
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
                 ->innerJoin('person as observer', 'observer.id = wheel.observer_id')
                 ->innerJoin('person as observed', 'observed.id = wheel.observed_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
                 ->where("assessment.id = $assessmentId and wheel.type = " . $type)
+                ->andWhere("m_observed.active = 1")
+                ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel.observer_id, wheel.observed_id, observer.name, observer.surname, observed.name, observed.surname')
                 ->all();
 

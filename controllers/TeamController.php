@@ -18,11 +18,13 @@ use app\models\Company;
 use app\models\Person;
 use app\models\Assessment;
 
-class TeamController extends BaseController {
+class TeamController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (Yii::$app->user->isGuest)
             return $this->redirect(['/site']);
 
@@ -33,7 +35,8 @@ class TeamController extends BaseController {
         ]);
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
         $team = Team::findOne($id);
 
         if (!isset($team)) {
@@ -64,7 +67,8 @@ class TeamController extends BaseController {
         ]);
     }
 
-    public function actionNew() {
+    public function actionNew()
+    {
         $team = new Team();
 
         if ($team->load(Yii::$app->request->post()) && $team->save()) {
@@ -81,7 +85,8 @@ class TeamController extends BaseController {
         ]);
     }
 
-    public function actionEdit($id) {
+    public function actionEdit($id)
+    {
         $team = Team::findOne(['id' => $id]);
 
         if (!isset($team)) {
@@ -104,11 +109,13 @@ class TeamController extends BaseController {
         ]);
     }
 
-    private function save($team) {
+    private function save($team)
+    {
         
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $team = Team::findOne($id);
 
         if (!isset($team)) {
@@ -123,7 +130,8 @@ class TeamController extends BaseController {
         return $this->redirect(['/team']);
     }
 
-    public function actionFullfilled($id) {
+    public function actionFullfilled($id)
+    {
         $team = Team::findOne($id);
 
         if (!isset($team)) {
@@ -136,7 +144,8 @@ class TeamController extends BaseController {
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
-    public function actionNewMember($id) {
+    public function actionNewMember($id)
+    {
         $team = Team::findOne($id);
 
         if (!isset($team)) {
@@ -161,7 +170,8 @@ class TeamController extends BaseController {
         ]);
     }
 
-    public function actionEditMember($id) {
+    public function actionEditMember($id)
+    {
         $teamMember = TeamMember::findOne($id);
 
         $team = $teamMember->team;
@@ -177,7 +187,8 @@ class TeamController extends BaseController {
         ]);
     }
 
-    public function actionDeleteMember($id) {
+    public function actionDeleteMember($id)
+    {
         $teamMember = TeamMember::findOne($id);
         $team = $teamMember->team;
         $member = $teamMember->member;
@@ -190,7 +201,8 @@ class TeamController extends BaseController {
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
-    public function actionDeleteAssessment($id) {
+    public function actionDeleteAssessment($id)
+    {
         $assessment = Assessment::findOne($id);
         $team = $assessment->team;
 
@@ -210,11 +222,29 @@ class TeamController extends BaseController {
         ]);
     }
 
-    private function getCompanies() {
+    public function actionActivateMember()
+    {
+        $id = Yii::$app->request->get("id");
+        $isActive = Yii::$app->request->get("isActive");
+
+        $teamMember = TeamMember::findOne(['id' => $id]);
+
+        if ($teamMember) {
+            $teamMember->active = $isActive;
+            $teamMember->save(false);
+            return 'ok';
+        }
+
+        return 'error';
+    }
+
+    private function getCompanies()
+    {
         return $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
     }
 
-    private function getPersons() {
+    private function getPersons()
+    {
         $persons = [];
         foreach (Person::browse()->all() as $person)
             $persons[$person->id] = $person->fullname;
