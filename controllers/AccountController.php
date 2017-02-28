@@ -11,38 +11,36 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\AccountModel;
+use app\models\Account;
+use app\models\Currency;
 
-class AccountController extends BaseController {
+class AccountController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $model = new AccountModel();
-        $model->id = Yii::$app->user->id;
-
-        if (Yii::$app->request->isPost) {
-            $data = \Yii::$app->request->post('AccountModel' , []);
-            $model->attributes = $data;
-            $model->oldPassword = isset($data['oldPassword']) ? $data['oldPassword'] : null;
-            $model->password = isset($data['password']) ? $data['password'] : null;
-            $model->confirm = isset($data['confirm']) ? $data['confirm'] : null;
-            if ($model->validate()) {
-                $model->save();
-                return $this->goHome();
-            }
-        }
-        else
-            $model->read();
+        $models = Account::browse();
 
         return $this->render('index', [
-                    'model' => $model,
+                    'models' => $models,
+        ]);
+    }
+
+    public function actionAdd($amount = null)
+    {
+        if (!$amount) {
+            $amount = Yii::$app->params['licence_cost'] * 10 * Currency::lastValue();
+        }
+
+        return $this->render('add', [
+                    'amount' => $amount,
         ]);
     }
 
 }
-

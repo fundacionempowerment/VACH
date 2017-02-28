@@ -24,6 +24,8 @@ return [
     'Is administrator' => 'Es administrador',
     'My Account' => 'Mi cuenta',
     'My account' => 'Mi cuenta',
+    'My Data' => 'Mis datos',
+    'My Money' => 'Mi dinero',
     'New password' => 'Nueva contraseña',
     'New person' => 'Nueva persona',
     'New user' => 'Nuevo usuario',

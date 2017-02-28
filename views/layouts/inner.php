@@ -7,6 +7,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\widgets\Alert;
+use app\components\Icons;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -35,10 +36,12 @@ $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty organizational wheel form
 $assisstanceMenu[] = ['label' => Yii::t('log', 'Event Log'), 'url' => ['/log']];
 $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 
-$items[] = ['label' => Yii::t('user', 'My account'), 'url' => ['/user/my-account']];
-$items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
+$userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account']];
+$userMenu[] = ['label' => Yii::t('user', 'My Money'), 'url' => ['/account']];
+$userMenu[] = ['label' => Yii::t('app', 'Logout'),
     'url' => ['/site/logout'],
     'linkOptions' => ['data-method' => 'post']];
+$items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username . ')', 'items' => $userMenu];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -66,6 +69,8 @@ $items[] = ['label' => Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identit
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => $items,
+                'encodeLabels' => false,
+                'activateParents' => true
             ]);
             NavBar::end();
             ?>

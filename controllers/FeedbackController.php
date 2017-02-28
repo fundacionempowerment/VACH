@@ -11,7 +11,6 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\AccountModel;
 use app\models\Feedback;
 
 class FeedbackController extends BaseController {
