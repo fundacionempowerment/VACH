@@ -6,20 +6,30 @@ use Yii;
 use yii\web\Controller;
 use app\models\Log;
 
-class LogController extends BaseController {
+class LogController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $logs = Log::browse();
         return $this->render('index', [
                     'logs' => $logs,
         ]);
     }
 
-    public static function log($text, $coach_id = null) {
+    public static function log($text, $coach_id = null)
+    {
+        echo $text . "\n";
         $log = new Log();
-        $log->coach_id = $coach_id ? : Yii::$app->user->id;
+
+        if ($coach_id) {
+            $log->coach_id = $coach_id;
+        } else if (isset(Yii::$app->user)) {
+            $log->coach_id = Yii::$app->user->id;
+        }
+
         $log->text = $text;
         return $log->save();
     }
