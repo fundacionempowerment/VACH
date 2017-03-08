@@ -51,7 +51,7 @@ return [
     'Organiz. Emergents Matrix' => 'Matriz de emergentes organiz.',
     'Organizational Competence Matrix' => 'Matriz de competencias organizacionales',
     'Organizational Consciousness and Responsability Matrix' => 'Matriz de conciencia y responsabilidad organizacional',
-    'Organizational Emergents Matrix' => '@@Matriz de emergentes organizacionales@@',
+    'Organizational Emergents Matrix' => 'Matriz de emergentes organizacionales',
     'Organizational Perception Adjustment Matrix' => 'Matriz de ajuste perceptual organizacional',
     'Organizational Perception Matrix' => 'Matriz de percepcion organizacional',
     'Organizational Performance Matrix' => 'Matriz de desempeño organizacional',

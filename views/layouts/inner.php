@@ -37,7 +37,8 @@ $assisstanceMenu[] = ['label' => Yii::t('log', 'Event Log'), 'url' => ['/log']];
 $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 
 $userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account']];
-$userMenu[] = ['label' => Yii::t('user', 'My Money'), 'url' => ['/account']];
+$userMenu[] = ['label' => Yii::t('stock', 'My Licences'), 'url' => ['/stock']];
+$userMenu[] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
 $userMenu[] = ['label' => Yii::t('app', 'Logout'),
     'url' => ['/site/logout'],
     'linkOptions' => ['data-method' => 'post']];

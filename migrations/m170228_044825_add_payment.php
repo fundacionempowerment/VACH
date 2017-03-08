@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m170226_044825_add_payment extends Migration
+class m170228_044825_add_payment extends Migration
 {
 
     public function up()
@@ -15,8 +15,9 @@ class m170226_044825_add_payment extends Migration
 
         $this->createTable('{{%payment}}', [
             'id' => $this->primaryKey(),
-            'coach_id' => $this->integer()->notNull(),
             'uuid' => $this->string(50)->notNull(),
+            'coach_id' => $this->integer()->notNull(),
+            'stock_id' => $this->integer()->notNull(),
             'concept' => $this->string(255)->notNull(),
             'amount' => $this->decimal(10, 2)->notNull(),
             'status' => "enum('init','pending','paid','partial','error') NOT NULL DEFAULT 'init'",
@@ -25,6 +26,7 @@ class m170226_044825_add_payment extends Migration
                 ], $tableOptions);
 
         $this->addForeignKey('fk_payment_coach', 'payment', 'coach_id', 'user', 'id');
+        $this->addForeignKey('fk_payment_stock', 'payment', 'stock_id', 'stock', 'id');
 
         $this->createTable('{{%payment_log}}', [
             'id' => $this->primaryKey(),
@@ -42,7 +44,9 @@ class m170226_044825_add_payment extends Migration
     {
         $this->dropForeignKey('fk_payment_log_payment', 'payment_log');
         $this->dropTable('{{%payment_log}}');
+
         $this->dropForeignKey('fk_payment_coach', 'payment');
+        $this->dropForeignKey('fk_payment_stock', 'payment');
         $this->dropTable('{{%payment}}');
     }
 

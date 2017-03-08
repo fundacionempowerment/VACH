@@ -16,5 +16,7 @@ class Icons
     const MINUS = '<span class="glyphicon glyphicon-minus"></span>';
     const CHECK = '<span class="glyphicon glyphicon-check"></span>';
     const USER = '<span class="glyphicon glyphicon-user"></span>';
+    const EURO = '<span class="glyphicon glyphicon-euro"></span>';
+    const EYE = '<span class="glyphicon glyphicon-eye-open"></span>';
 
 }

@@ -27,8 +27,8 @@ $this->title = 'VACH';
                     <tr>
                         <td width="0%" style="vertical-align: top;"><?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?></td>
                         <td style="text-align: right;">
-                           <?= Html::a(Yii::t('app', 'Password reset'), ['site/request-password-reset'], ['class' => 'btn btn-default']) ?>
-                    <?= Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) ?> 
+                            <?= Html::a(Yii::t('app', 'Password reset'), ['site/request-password-reset'], ['class' => 'btn btn-default']) ?>
+                            <?= Yii::$app->params['allow_register'] ? Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) : '' ?> 
                         </td>
                     </tr>
                 </table>
