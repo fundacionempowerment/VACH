@@ -301,7 +301,7 @@ class Wheel extends ActiveRecord {
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
-                ->groupBy('wheel_answer.answer_order, wheel_question.question')
+                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, wheel_question.question')
                 ->orderBy('avg(wheel_answer.answer_value) desc')
                 ->all();
 

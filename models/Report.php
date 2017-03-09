@@ -18,6 +18,15 @@ class Report extends ActiveRecord {
             [['assessment_id'], 'required'],
         ];
     }
+      /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
 
     public function getIndividualReports() {
         return $this->hasMany(IndividualReport::className(), ['report_id' => 'id']);

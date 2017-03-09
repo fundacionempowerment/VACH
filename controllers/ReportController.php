@@ -467,8 +467,12 @@ class ReportController extends Controller {
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where([
+            'team_id' => $assessment->team->id,
+            'active' => true,
+        ])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 

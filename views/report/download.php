@@ -149,69 +149,71 @@ $this->title = Yii::t('report', 'Report');
     <div class="col-lg-12">
         <?php
         foreach ($assessment->report->individualReports as $individualReport) {
-            $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->person_id);
-            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->person_id);
-            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->person_id);
-            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->person_id);
-            $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-            $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
-            $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-            $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
-            $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-            $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
-            $subtitle_number = 97; // letter 'a'
-            ?>
-            <h1>
-                <?= $individualReport->member->fullname ?>
-            </h1>
-            <?php
-            if ($individualReport->performance != '') {
-                echo $this->render('_individual_performance', [
+            if ($individualReport->teamMember->active) {
+                $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->person_id);
+                $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->person_id);
+                $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->person_id);
+                $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->person_id);
+                $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
+                $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+                $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+                $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+                $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+                $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+                $subtitle_number = 97; // letter 'a'
+                ?>
+                <h1>
+                    <?= $individualReport->member->fullname ?>
+                </h1>
+                <?php
+                if ($individualReport->performance != '') {
+                    echo $this->render('_individual_performance', [
+                        'report' => $individualReport,
+                        'assessment' => $assessment,
+                        'groupPerformanceMatrix' => $groupPerformanceMatrix,
+                        'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                        'subtitle_letter' => chr($subtitle_number),
+                        'member' => $individualReport->member,
+                    ]);
+                    $subtitle_number++;
+                }
+                echo $this->render('_individual_perception', [
                     'report' => $individualReport,
                     'assessment' => $assessment,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+                    'projectedGroupWheel' => $projectedGroupWheel,
+                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                    'reflectedGroupWheel' => $reflectedGroupWheel,
+                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
                     'subtitle_letter' => chr($subtitle_number),
-                    'member' => $individualReport->member,
                 ]);
                 $subtitle_number++;
+                echo $this->render('_individual_relations', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+                    'members' => $members,
+                    'subtitle_letter' => chr($subtitle_number),
+                ]);
+                $subtitle_number++;
+                echo $this->render('_individual_competences', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupGauges' => $groupGauges,
+                    'organizationalGauges' => $organizationalGauges,
+                    'members' => $members,
+                    'subtitle_letter' => chr($subtitle_number),
+                ]);
+                $subtitle_number++;
+                echo $this->render('_individual_emergents', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupEmergents' => $groupEmergents,
+                    'organizationalEmergents' => $organizationalEmergents,
+                    'members' => $members,
+                    'subtitle_letter' => chr($subtitle_number),
+                ]);
             }
-            echo $this->render('_individual_perception', [
-                'report' => $individualReport,
-                'assessment' => $assessment,
-                'projectedGroupWheel' => $projectedGroupWheel,
-                'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
-                'reflectedGroupWheel' => $reflectedGroupWheel,
-                'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
-                'subtitle_letter' => chr($subtitle_number),
-            ]);
-            $subtitle_number++;
-            echo $this->render('_individual_relations', [
-                'report' => $individualReport,
-                'assessment' => $assessment,
-                'groupRelationsMatrix' => $groupRelationsMatrix,
-                'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                'members' => $members,
-                'subtitle_letter' => chr($subtitle_number),
-            ]);
-            $subtitle_number++;
-            echo $this->render('_individual_competences', [
-                'report' => $individualReport,
-                'assessment' => $assessment,
-                'groupGauges' => $groupGauges,
-                'organizationalGauges' => $organizationalGauges,
-                'members' => $members,
-                'subtitle_letter' => chr($subtitle_number),
-            ]);
-            $subtitle_number++;
-            echo $this->render('_individual_emergents', [
-                'report' => $individualReport,
-                'assessment' => $assessment,
-                'groupEmergents' => $groupEmergents,
-                'organizationalEmergents' => $organizationalEmergents,
-                'members' => $members,
-                'subtitle_letter' => chr($subtitle_number),
-            ]);
         }
         ?>
     </div>
