@@ -18,7 +18,6 @@ class Payment extends ActiveRecord
     const STATUS_PARTIAL = 'partial';
     const STATUS_ERROR = 'error';
 
-    public $external_id;
     public $external_data;
 
     public function init()

@@ -9,12 +9,15 @@ use yii\filters\VerbFilter;
 use app\models\Assessment;
 use app\models\DashboardFilter;
 use app\models\Wheel;
+use app\models\Stock;
 
-class AssessmentController extends BaseController {
+class AssessmentController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (Yii::$app->user->isGuest)
             return $this->redirect(['/site']);
 
@@ -25,7 +28,8 @@ class AssessmentController extends BaseController {
         ]);
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
         $assessment = Assessment::find()
                 ->where(['id' => $id])
                 ->with(['individualWheels', 'groupWheels', 'organizationalWheels'])
@@ -36,57 +40,81 @@ class AssessmentController extends BaseController {
         ]);
     }
 
-    public function actionNew($teamId) {
+    public function actionNew($teamId)
+    {
         $assessment = new Assessment();
         $assessment->team_id = $teamId;
 
-        if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
-            foreach ($assessment->team->members as $observerMember) {
-                $token = $this->newToken();
-                $newWheel = new Wheel();
+        $balance = Stock::getStock(1);
+        $licences_required = count($assessment->team->members);
+        $licences_diff = $licences_required - $balance;
 
-                $newWheel->observer_id = $observerMember->member->id;
-                $newWheel->observed_id = $observerMember->member->id;
-                $newWheel->type = Wheel::TYPE_INDIVIDUAL;
-                $newWheel->token = $token;
-                $newWheel->assessment_id = $assessment->id;
-
-                $newWheel->save();
-
-                $token = $this->newToken();
-                foreach ($assessment->team->members as $observedMember) {
+        if ($licences_diff <= 0) {
+            if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
+                foreach ($assessment->team->members as $observerMember) {
+                    $token = $this->newToken();
                     $newWheel = new Wheel();
+
                     $newWheel->observer_id = $observerMember->member->id;
-                    $newWheel->observed_id = $observedMember->member->id;
-                    $newWheel->type = Wheel::TYPE_GROUP;
+                    $newWheel->observed_id = $observerMember->member->id;
+                    $newWheel->type = Wheel::TYPE_INDIVIDUAL;
                     $newWheel->token = $token;
                     $newWheel->assessment_id = $assessment->id;
-                    $newWheel->save();
-                }
 
-                $token = $this->newToken();
-                foreach ($assessment->team->members as $observedMember) {
-                    $newWheel = new Wheel();
-                    $newWheel->observer_id = $observerMember->member->id;
-                    $newWheel->observed_id = $observedMember->member->id;
-                    $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
-                    $newWheel->token = $token;
-                    $newWheel->assessment_id = $assessment->id;
                     $newWheel->save();
+
+                    $token = $this->newToken();
+                    foreach ($assessment->team->members as $observedMember) {
+                        $newWheel = new Wheel();
+                        $newWheel->observer_id = $observerMember->member->id;
+                        $newWheel->observed_id = $observedMember->member->id;
+                        $newWheel->type = Wheel::TYPE_GROUP;
+                        $newWheel->token = $token;
+                        $newWheel->assessment_id = $assessment->id;
+                        $newWheel->save();
+                    }
+
+                    $token = $this->newToken();
+                    foreach ($assessment->team->members as $observedMember) {
+                        $newWheel = new Wheel();
+                        $newWheel->observer_id = $observerMember->member->id;
+                        $newWheel->observed_id = $observedMember->member->id;
+                        $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
+                        $newWheel->token = $token;
+                        $newWheel->assessment_id = $assessment->id;
+                        $newWheel->save();
+                    }
                 }
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $assessment->fullname]));
+
+                $product = \app\models\Product::findOne(['id' => 1]);
+
+                $stock = new Stock();
+                $stock->coach_id = Yii::$app->user->id;
+                $stock->product_id = 1;
+                $stock->quantity = -$licences_required;
+                $stock->price = $product->price;
+                $stock->total = $licences_required * $product->price;
+                $stock->status = Stock::STATUS_VALID;
+                if (!$stock->save()) {
+                    \app\controllers\SiteController::FlashErrors($stock);
+                }
+                return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
+            } else {
+                SiteController::FlashErrors($assessment);
             }
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $assessment->fullname]));
-            return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-        } else {
-            SiteController::FlashErrors($assessment);
         }
 
         return $this->render('form', [
                     'assessment' => $assessment,
+                    'balance' => $balance,
+                    'licences_required' => $licences_required,
+                    'licences_diff' => $licences_diff,
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
         $teamId = $assessment->team->id;
         if ($assessment->delete()) {
@@ -97,7 +125,8 @@ class AssessmentController extends BaseController {
         return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
-    public function actionSendWheel($id, $memberId, $type) {
+    public function actionSendWheel($id, $memberId, $type)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         $sent = false;
@@ -130,7 +159,8 @@ class AssessmentController extends BaseController {
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
-    public function actionDetailView($id, $type) {
+    public function actionDetailView($id, $type)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         return $this->render('detail_view', [
@@ -139,7 +169,8 @@ class AssessmentController extends BaseController {
         ]);
     }
 
-    public function actionToggleAutofill($id) {
+    public function actionToggleAutofill($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         $assessment->autofill_answers = !$assessment->autofill_answers;
@@ -148,7 +179,8 @@ class AssessmentController extends BaseController {
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
-    public function actionGoToDashboard($id) {
+    public function actionGoToDashboard($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
         $filter = new DashboardFilter();
 
@@ -161,7 +193,8 @@ class AssessmentController extends BaseController {
         $this->redirect(['/dashboard']);
     }
 
-    private static function newToken() {
+    private static function newToken()
+    {
         $token_exists = true;
         while ($token_exists) {
             $number = rand(1000000000, 1999999999);
@@ -175,7 +208,8 @@ class AssessmentController extends BaseController {
         return $newToken;
     }
 
-    private function sendWheel($wheel) {
+    private function sendWheel($wheel)
+    {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
         Yii::$app->mailer->compose('wheel', [
                     'wheel' => $wheel,
@@ -193,4 +227,3 @@ class AssessmentController extends BaseController {
     }
 
 }
-

@@ -37,7 +37,7 @@ class m170227_044825_add_product_and_stock extends Migration
             'quantity' => $this->integer()->notNull(),
             'price' => $this->decimal(10, 2)->notNull(),
             'total' => $this->decimal(10, 2)->notNull(),
-            'status' => "enum('pending','paid','gifted','discarded','error') NOT NULL DEFAULT 'pending'",
+            'status' => "enum('invalid','valid','error') NOT NULL DEFAULT 'invalid'",
             'stamp' => $this->dateTime()->notNull(),
                 ], $tableOptions);
 
@@ -49,7 +49,6 @@ class m170227_044825_add_product_and_stock extends Migration
     {
         $this->dropForeignKey('fk_stock_coach', '{{%stock}}');
         $this->dropForeignKey('fk_stock_product', '{{%stock}}');
-        $this->dropForeignKey('fk_stock_payment', '{{%stock}}');
         $this->dropTable('{{%stock}}');
         $this->dropTable('{{%product}}');
     }

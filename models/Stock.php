@@ -12,10 +12,8 @@ use yii\behaviors\TimestampBehavior;
 class Stock extends ActiveRecord
 {
 
-    const STATUS_PENDING = 'pending';
-    const STATUS_PAID = 'paid';
-    const STATUS_GIFTED = 'gifted';
-    const STATUS_DISCARDED = 'discarded';
+    const STATUS_INVALID = 'invalid';
+    const STATUS_VALID = 'valid';
     const STATUS_ERROR = 'error';
 
     public function init()
@@ -46,6 +44,7 @@ class Stock extends ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
+            'payments' => Yii::t('payment', 'Payments'),
         ];
     }
 
@@ -71,7 +70,7 @@ class Stock extends ActiveRecord
     {
         return Stock::find()->where([
                     'coach_id' => Yii::$app->user->id,
-                    'status' => 'paid',
+                    'status' => self::STATUS_VALID,
                 ])->orderBy('id desc');
     }
 
@@ -93,10 +92,8 @@ class Stock extends ActiveRecord
     public static function getStatusList()
     {
         $list = [
-            self::STATUS_PENDING => Yii::t('app', self::STATUS_PENDING),
-            self::STATUS_PAID => Yii::t('app', self::STATUS_PAID),
-            self::STATUS_GIFTED => Yii::t('app', self::STATUS_GIFTED),
-            self::STATUS_DISCARDED => Yii::t('app', self::STATUS_DISCARDED),
+            self::STATUS_INVALID => Yii::t('app', self::STATUS_INVALID),
+            self::STATUS_VALID => Yii::t('app', self::STATUS_VALID),
             self::STATUS_ERROR => Yii::t('app', self::STATUS_ERROR),
         ];
 
@@ -114,10 +111,11 @@ class Stock extends ActiveRecord
 
         $balance = $query->select(new Expression('sum(quantity) as balance'))
                 ->from('stock')
-                ->where(['coach_id' => Yii::$app->user->id,
+                ->where([
+                    'coach_id' => Yii::$app->user->id,
                     'product_id' => $product_id,
+                    'status' => self::STATUS_VALID,
                 ])
-                ->andWhere(['in', 'status', ['paid', 'gifted']])
                 ->one();
 
         if ($balance && $balance['balance']) {

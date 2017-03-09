@@ -1,6 +1,6 @@
 <?php
-if ($model->status == Payment::STATUS_INIT) {
-    $this->registerJs("setTimeout(function(){ window.location.reload(1); }, 5000);", View::POS_END, 'refresh-page');
+if ($model->status == app\models\Payment::STATUS_INIT) {
+    $this->registerJs("setTimeout(function(){ window.location.reload(1); }, 5000);", \yii\web\View::POS_END, 'refresh-page');
 }
 ?>
 

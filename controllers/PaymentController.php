@@ -67,22 +67,27 @@ class PaymentController extends BaseController
         $stock = $model->stock;
 
         $model->external_id = Yii::$app->request->post('reference_pol');
-        $model->external_data = print_r(Yii::$app->request->post());
+        $model->external_data = serialize($_POST);
 
         $state_pol = Yii::$app->request->post('state_pol');
 
         switch ($state_pol) {
             case 4:
                 $model->status = Payment::STATUS_PAID;
-                $stock->status = Stock::STATUS_PAID;
+                $stock->status = Stock::STATUS_VALID;
                 break;
             default :
                 $model->status = Payment::STATUS_ERROR;
                 $stock->status = Stock::STATUS_ERROR;
+                break;
         }
 
-        $model->save();
-        $stock->save();
+        if (!$model->save()) {
+            SiteController::FlashErrors($model);
+        }
+        if (!$stock->save()) {
+            SiteController::FlashErrors($stock);
+        }
     }
 
 }

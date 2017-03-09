@@ -75,9 +75,9 @@ class StockController extends BaseController
             $stock->coach_id = Yii::$app->user->id;
             $stock->product_id = $model->product_id;
             $stock->quantity = $model->quantity;
-            $stock->total = $model->quantity * $product->price;
             $stock->price = $product->price;
-            $stock->status = Stock::STATUS_PENDING;
+            $stock->total = $model->quantity * $product->price;
+            $stock->status = Stock::STATUS_INVALID;
             if (!$stock->save()) {
                 \app\controllers\SiteController::FlashErrors($stock);
             }

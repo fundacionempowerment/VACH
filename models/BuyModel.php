@@ -64,6 +64,7 @@ class BuyModel extends Model
         return [
             // username and password are both required
             [['amount', 'uuid'], 'required'],
+            [['product_id', 'quantity'], 'safe'],
             ['amount', 'number', 'min' => 10],
         ];
     }

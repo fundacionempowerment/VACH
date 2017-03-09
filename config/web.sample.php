@@ -22,6 +22,18 @@ $config = [
                 ],
             ],
         ],
+        'formatter' => [
+            'locale' => 'en-US',
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'php:d-m-Y',
+            'datetimeFormat' => 'php:H:i:s d-m-Y',
+            'timeFormat' => 'php:H:i:s',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => '.',
+            'numberFormatterSymbols' => [
+                NumberFormatter::CURRENCY_SYMBOL => 'USD $',
+            ]
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
