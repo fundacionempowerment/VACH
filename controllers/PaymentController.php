@@ -63,27 +63,27 @@ class PaymentController extends BaseController
     {
         $referenceCode = Yii::$app->request->post('reference_sale');
 
-        $model = Payment::findOne(['uuid' => $referenceCode]);
-        $stock = $model->stock;
+        $payment = Payment::findOne(['uuid' => $referenceCode]);
+        $stock = $payment->stock;
 
-        $model->external_id = Yii::$app->request->post('reference_pol');
-        $model->external_data = serialize($_POST);
+        $payment->external_id = Yii::$app->request->post('reference_pol');
+        $payment->external_data = serialize($_POST);
 
         $state_pol = Yii::$app->request->post('state_pol');
 
         switch ($state_pol) {
             case 4:
-                $model->status = Payment::STATUS_PAID;
+                $payment->status = Payment::STATUS_PAID;
                 $stock->status = Stock::STATUS_VALID;
                 break;
             default :
-                $model->status = Payment::STATUS_ERROR;
+                $payment->status = Payment::STATUS_ERROR;
                 $stock->status = Stock::STATUS_ERROR;
                 break;
         }
 
-        if (!$model->save()) {
-            SiteController::FlashErrors($model);
+        if (!$payment->save()) {
+            SiteController::FlashErrors($payment);
         }
         if (!$stock->save()) {
             SiteController::FlashErrors($stock);
