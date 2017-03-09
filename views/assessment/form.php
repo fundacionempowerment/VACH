@@ -52,7 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <h4><?= Yii::t('assessment', 'Assessment') ?></h4>
         <?= $form->field($assessment, 'name') ?>
         <div class="form-group">
-            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary ', 'disabled' => $licences_diff > 0, 'name' => 'save-button']) ?>
+            <?php if ($licences_diff > 0) { ?>
+                <?= Yii::t('assessment', 'You need {count} more licence', ['count' => $licences_diff]) ?>
+                <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
+            <?php } ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
