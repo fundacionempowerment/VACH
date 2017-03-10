@@ -21,6 +21,7 @@ return [
     'Begin payment' => 'Comenzar pago',
     'Buy licences' => 'Comprar licencias',
     'Go to My Licences' => 'Ir a Mis licencias',
+    'Licences' => 'Licencias',
     'My Licences' => 'Mis licencias',
     'Price' => 'Precio',
     'Product' => 'Producto',

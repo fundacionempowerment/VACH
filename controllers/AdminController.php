@@ -12,17 +12,50 @@ use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
 use app\models\Feedback;
+use app\models\Stock;
+use app\models\Payment;
 
-class AdminController extends BaseController {
+class AdminController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionFeedback() {
+    public function actionFeedback()
+    {
+        if (!Yii::$app->user->identity->is_administrator) {
+            return $this->goHome();
+        }
+
         $feedbacks = Feedback::find()->orderby('id desc');
         return $this->render('feedback', [
                     'feedbacks' => $feedbacks,
         ]);
     }
 
-}
+    public function actionStock()
+    {
+        if (!Yii::$app->user->identity->is_administrator) {
+            return $this->goHome();
+        }
 
+        $models = Stock::adminBrowse();
+
+        return $this->render('stock', [
+                    'models' => $models,
+        ]);
+    }
+
+    public function actionPayment()
+    {
+        if (!Yii::$app->user->identity->is_administrator) {
+            return $this->goHome();
+        }
+
+        $models = Payment::adminBrowse();
+
+        return $this->render('payment', [
+                    'models' => $models,
+        ]);
+    }
+
+}

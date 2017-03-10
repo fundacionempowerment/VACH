@@ -16,12 +16,7 @@ AppAsset::register($this);
 $isAdministrator = Yii::$app->user->identity->is_administrator;
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
-if ($isAdministrator) {
-    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
-    $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
-    $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
-    $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
-}
+
 $coachMenu[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
 $coachMenu[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
 $coachMenu[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
@@ -35,6 +30,15 @@ $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty group wheel form'), 'url'
 $assisstanceMenu[] = ['label' => Yii::t('help', 'Empty organizational wheel form'), 'url' => Url::to('@web/docs/oganizational.wheel.form.es.pdf')];
 $assisstanceMenu[] = ['label' => Yii::t('log', 'Event Log'), 'url' => ['/log']];
 $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
+
+if ($isAdministrator) {
+    $admininistratorMenu[] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
+    $admininistratorMenu[] = ['label' => Yii::t('payment', 'Payments'), 'url' => ['/admin/payment']];
+    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
+    $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
+    $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
+    $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
+}
 
 $userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account']];
 $userMenu[] = ['label' => Yii::t('stock', 'My Licences'), 'url' => ['/stock']];

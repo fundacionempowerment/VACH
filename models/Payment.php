@@ -91,6 +91,11 @@ class Payment extends ActiveRecord
         return Payment::find()->where(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
     }
 
+    public static function adminBrowse()
+    {
+        return Payment::find()->orderBy('id desc');
+    }
+
     public static function getStatusList()
     {
         $list = [

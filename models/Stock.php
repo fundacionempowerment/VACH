@@ -74,6 +74,11 @@ class Stock extends ActiveRecord
                 ])->orderBy('id desc');
     }
 
+    public static function adminBrowse()
+    {
+        return Stock::find()->orderBy('id desc');
+    }
+
     public function getCoach()
     {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
