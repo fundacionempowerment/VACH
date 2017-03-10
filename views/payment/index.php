@@ -31,11 +31,6 @@ $dataProvider = new ActiveDataProvider([
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],
-                'urlCreator' => function( $action, $model, $key, $index ) {
-                    switch ($action) {
-                        case 'view' : return Url::to(['view', 'id' => $model['id']]);
-                    };
-                }
             ]
         ],
     ]);

@@ -31,7 +31,6 @@ $dataProvider = new ActiveDataProvider([
             'price:currency',
             'total:currency',
             'stamp:datetime',
-            'statusName',
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],

@@ -31,6 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->fullname, Url::to(['/user/edit', 'id' => $data['id'],]));
                 },
             ],
+            'username',
+            'email',
+            'phone',
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '40px'],
