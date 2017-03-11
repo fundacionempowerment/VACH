@@ -23,6 +23,7 @@ class TeamMember extends ActiveRecord {
         return [
             'person_id' => Yii::t('team', 'Member'),
             'team_id' => Yii::t('team', 'Team'),
+            'active' => Yii::t('app', 'Active'),
         ];
     }
 

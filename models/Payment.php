@@ -48,7 +48,7 @@ class Payment extends ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
-            'logs' => Yii::t('app', 'Log'),
+            'log' => Yii::t('app', 'Log'),
         ];
     }
 

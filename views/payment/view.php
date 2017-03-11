@@ -11,7 +11,7 @@ use yii\grid\GridView;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = Yii::$app->formatter->asDatetime($model->stamp) . ' - ' . $model->concept;
+$this->title = $model->concept . ' - ' . Yii::$app->formatter->asDatetime($model->stamp);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
 $this->params['breadcrumbs'][] = $this->title;
 

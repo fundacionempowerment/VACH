@@ -10,7 +10,8 @@ use app\models\WheelAnswer;
 /**
  * LoginForm is the model behind the login form.
  */
-class WheelAnswer extends ActiveRecord {
+class WheelAnswer extends ActiveRecord
+{
 
     const ANSWER_NUMBERS_0_TO_4 = 0;
     const ANSWER_WORST_TO_OPTIMAL = 1;
@@ -25,30 +26,41 @@ class WheelAnswer extends ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%wheel_answer}}';
     }
 
     /**
      * @return array the validation rules.
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['answer_order', 'answer_value'], 'required'],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 
     /**
      * @return array customized attribute labels
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'answer_order' => Yii::t('wheel', 'Order'),
             'answer_value' => Yii::t('wheel', 'Value'),
         ];
     }
 
-    public static function getAnswerTypes() {
+    public static function getAnswerTypes()
+    {
         return[
             self::ANSWER_NUMBERS_0_TO_4 => implode(', ', self::getAnswerLabels(self::ANSWER_NUMBERS_0_TO_4)),
             self::ANSWER_WORST_TO_OPTIMAL => implode(', ', self::getAnswerLabels(self::ANSWER_WORST_TO_OPTIMAL)),
@@ -62,7 +74,8 @@ class WheelAnswer extends ActiveRecord {
         ];
     }
 
-    public static function getAnswerLabels($setName) {
+    public static function getAnswerLabels($setName)
+    {
         switch ($setName) {
             case WheelAnswer::ANSWER_NUMBERS_0_TO_4:
                 return ['0', '1', '2', '3', '4'];

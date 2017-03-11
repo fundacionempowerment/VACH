@@ -18,6 +18,7 @@
  */
 return [
     'Access denied' => 'Acceso denegado',
+    'Active' => 'Activo',
     'Add' => 'Agregar',
     'Admin' => 'Admin',
     'All' => 'Todos',

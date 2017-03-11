@@ -21,7 +21,6 @@ class LogController extends BaseController
 
     public static function log($text, $coach_id = null)
     {
-        echo $text . "\n";
         $log = new Log();
 
         if ($coach_id) {
