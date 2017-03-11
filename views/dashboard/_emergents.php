@@ -76,7 +76,7 @@ $token = rand(100000, 999999);
 <div class="clearfix"></div>
 <h3><?= $title ?></h3>
 <div id="div<?= $token ?>" class="row col-md-12">
-    <h4><?= Yii::t('dashboard', 'Best emergents') ?></h4>
+    <h4><?= Yii::t('dashboard', 'Strengths') ?></h4>
     <?php foreach ($max_emergents as $emergent) {
         ?>
         <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
@@ -99,7 +99,7 @@ $token = rand(100000, 999999);
             <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
         </div>
     <?php } ?>
-    <h4><?= Yii::t('dashboard', 'Worst emergents') ?></h4>
+    <h4><?= Yii::t('dashboard', 'Weaknesses') ?></h4>
     <?php foreach ($min_emergents as $emergent) { ?>
         <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
         <?php

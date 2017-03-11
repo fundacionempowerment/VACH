@@ -21,7 +21,6 @@ return [
     'All emergents' => 'Todos los emergentes',
     'Avg. conc. gap' => 'Brecha conc. promedio',
     'Avg. mon. prod.' => 'Prod. mono. promedio',
-    'Best emergents' => 'Mejores emergentes',
     'Cons. gap' => 'Brecha de con.',
     'Consciouness Ranking' => 'Ranking de conciencia',
     'Consciousness' => 'Conciencia',
@@ -69,6 +68,7 @@ return [
     'Select wheel type ...' => 'Elija tipo de rueda ...',
     'Show' => 'Mostrar',
     'St. dev.' => 'Desv. est.',
+    'Strengths' => 'Fortalezas',
     'Value' => 'Valor',
-    'Worst emergents' => 'Peores emergentes',
+    'Weaknesses' => 'Debilidades',
 ];
