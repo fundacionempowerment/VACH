@@ -65,7 +65,7 @@ class BuyModel extends Model
             // username and password are both required
             [['amount', 'uuid'], 'required'],
             [['product_id', 'quantity'], 'safe'],
-            ['amount', 'number', 'min' => 10],
+            ['quantity', 'number', 'min' => 1, 'max' => 100],
         ];
     }
 
@@ -75,7 +75,7 @@ class BuyModel extends Model
     public function attributeLabels()
     {
         return [
-            'amount' => Yii::t('payment', 'Money to add'),
+            'quantity' => Yii::t('stock', 'Quantity'),
         ];
     }
     
