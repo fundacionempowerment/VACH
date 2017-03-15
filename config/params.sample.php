@@ -9,6 +9,7 @@ return [
     'send_wheel_answers' => true,
     'user.passwordResetTokenExpire' => 3600,
     //
+    'monetize' => true,
     'default_product_id' => 1,
     'default_quantity' => 10,
     //

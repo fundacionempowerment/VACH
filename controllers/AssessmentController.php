@@ -49,7 +49,7 @@ class AssessmentController extends BaseController
         $licences_required = count($assessment->team->members);
         $licences_diff = $licences_required - $balance;
 
-        if ($licences_diff <= 0) {
+        if (!Yii::$app->params['monetize'] || $licences_diff <= 0) {
             if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
                 foreach ($assessment->team->members as $observerMember) {
                     $token = $this->newToken();
@@ -89,15 +89,17 @@ class AssessmentController extends BaseController
 
                 $product = \app\models\Product::findOne(['id' => 1]);
 
-                $stock = new Stock();
-                $stock->coach_id = Yii::$app->user->id;
-                $stock->product_id = 1;
-                $stock->quantity = -$licences_required;
-                $stock->price = $product->price;
-                $stock->total = $licences_required * $product->price;
-                $stock->status = Stock::STATUS_VALID;
-                if (!$stock->save()) {
-                    \app\controllers\SiteController::FlashErrors($stock);
+                if (Yii::$app->params['monetize']) {
+                    $stock = new Stock();
+                    $stock->coach_id = Yii::$app->user->id;
+                    $stock->product_id = 1;
+                    $stock->quantity = -$licences_required;
+                    $stock->price = $product->price;
+                    $stock->total = $licences_required * $product->price;
+                    $stock->status = Stock::STATUS_VALID;
+                    if (!$stock->save()) {
+                        \app\controllers\SiteController::FlashErrors($stock);
+                    }
                 }
                 return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
             } else {
