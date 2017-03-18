@@ -12,6 +12,8 @@ use yii\grid\GridView;
 $this->title = $assessment->id == 0 ? Yii::t('assessment', 'New assessment') : $assessment->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$lock_button = Yii::$app->params['monetize'] && $licences_diff > 0;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -52,8 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <h4><?= Yii::t('assessment', 'Assessment') ?></h4>
         <?= $form->field($assessment, 'name') ?>
         <div class="form-group">
-            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary ', 'disabled' => $licences_diff > 0, 'name' => 'save-button']) ?>
-            <?php if ($licences_diff > 0) { ?>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary ', 'disabled' => $lock_button, 'name' => 'save-button']) ?>
+            <?php if ($lock_button) { ?>
                 <?= Yii::t('assessment', 'You need {count} more licence', ['count' => $licences_diff]) ?>
                 <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
             <?php } ?>
