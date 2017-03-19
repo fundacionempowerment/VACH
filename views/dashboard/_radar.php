@@ -19,12 +19,11 @@ $token = rand(100000, 999999);
     Html::img(Url::toRoute(["/graph/radar",
                 'assessmentId' => $filter->assessmentId,
                 'memberId' => $filter->memberId,
-                'wheelType' => $wheelType])
-    )
+                'wheelType' => $wheelType]), ['class' => 'img-responsive'])
     ?>
 </div>
 <div class="col-md-12 text-center">
-<?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+    <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
 </div>
 <div class="clearfix"></div>
 <script>
