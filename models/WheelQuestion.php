@@ -101,6 +101,8 @@ class WheelQuestion extends ActiveRecord {
                 $dimensions[$i] = str_replace('Resolución', 'Res.', $dimensions[$i]);
                 $dimensions[$i] = str_replace('Dimensión', 'D.', $dimensions[$i]);
                 $dimensions[$i] = str_replace('Gestión', 'G.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Visión', 'V.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('estratégica', 'estrat.', $dimensions[$i]);
             }
         }
         return $dimensions;

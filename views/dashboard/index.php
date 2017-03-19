@@ -21,8 +21,6 @@ $this->title = Yii::t('dashboard', 'Dashboard');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
-    var radars = new Array();
-    var radarsData = new Array();
     var lineals = new Array();
     var linealsData = new Array();
     var matrixes = new Array();
@@ -45,25 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'members' => $members,
     ]);
 
-    if (count($projectedIndividualWheel) > 0)
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual Wheel'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_INDIVIDUAL,
-            'member' => $member,
+            'filter' => $filter,
+            'wheelType' => Wheel::TYPE_INDIVIDUAL,
         ]);
+    }
 
-    if (count($projectedIndividualWheel) > 0 && count($projectedGroupWheel) > 0)
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual projection toward the group'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
-            'type' => Wheel::TYPE_GROUP,
-            'member' => $member,
+            'filter' => $filter,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
+    }
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
         echo $this->render('_lineal', [
@@ -76,16 +68,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'member' => $member,
         ]);
 
-    if (count($projectedIndividualWheel) > 0 && count($projectedOrganizationalWheel) > 0)
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual projection toward the organization'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'member' => $member,
+            'filter' => $filter,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
+    }
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
         echo $this->render('_lineal', [
@@ -152,21 +140,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => $filter->wheelType,
             'member' => $member,
         ]);
-        echo $this->render('_detailed_emergents', [
-            'data' => $relationsMatrix,
-            'members' => $members,
-            'memberId' => $filter->memberId,
-            'emergents' => $emergents,
-            'type' => $filter->wheelType,
-            'member' => $member,
-        ]);
+    echo $this->render('_detailed_emergents', [
+        'data' => $relationsMatrix,
+        'members' => $members,
+        'memberId' => $filter->memberId,
+        'emergents' => $emergents,
+        'type' => $filter->wheelType,
+        'member' => $member,
+    ]);
     ?>
 </div>
 <script>
     window.onload = function () {
-        for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});
-        }
         for (var i in lineals) {
             new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
         }
