@@ -85,6 +85,7 @@ class GraphController extends BaseController
         $redPlot = new \RadarPlot($redWheel);
         $redPlot->SetLegend(Yii::t('dashboard', 'How I see me'));
         $redPlot->SetColor('red');
+        $redPlot->SetFillColor('lightred@0.5');
         $redPlot->SetLineWeight(3);
 
         $graph->Add($redPlot);
@@ -93,6 +94,7 @@ class GraphController extends BaseController
             $bluePlot = new \RadarPlot($blueWheel);
             $bluePlot->SetLegend(Yii::t('dashboard', 'How they see me'));
             $bluePlot->SetColor('blue');
+            $bluePlot->SetFillColor('lightblue@0.5');
             $bluePlot->SetLineWeight(3);
 
             $graph->Add($bluePlot);
