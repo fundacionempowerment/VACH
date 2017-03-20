@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c70f98c6e652fda964277cae94ddb2f6",
+    "content-hash": "ac0fa7a54cb3ae61c7c3417d04072a60",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -351,46 +351,6 @@
                 "yii2"
             ],
             "time": "2015-09-02 21:27:48"
-        },
-        {
-            "name": "jpgraph/jpgraph",
-            "version": "4.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ztec/JpGraph.git",
-                "reference": "e82db7da6a546d3926c24c9a346226da7aa49094"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ztec/JpGraph/zipball/e82db7da6a546d3926c24c9a346226da7aa49094",
-                "reference": "e82db7da6a546d3926c24c9a346226da7aa49094",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "lib/JpGraph.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "QPL 1.0"
-            ],
-            "authors": [
-                {
-                    "name": "JpGraph team"
-                }
-            ],
-            "description": "jpGraph, library to make graphs and charts",
-            "homepage": "http://jpgraph.net/",
-            "keywords": [
-                "chart",
-                "data",
-                "graph",
-                "jpgraph",
-                "pie"
-            ],
-            "time": "2017-02-23T09:44:15+00:00"
         },
         {
             "name": "kartik-v/bootstrap-checkbox-x",
@@ -2269,11 +2229,11 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "franciscomaya/yii2-sceditor": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.4.0"
