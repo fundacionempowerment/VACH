@@ -10,7 +10,6 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-$radarDiameter = 350;
 $token = rand(100000, 999999);
 ?>
 <div class="clearfix"></div>
@@ -25,6 +24,3 @@ $token = rand(100000, 999999);
 <div class="col-md-12 text-center">
     <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
 </div>
-<div class="clearfix"></div>
-<script>
-</script>

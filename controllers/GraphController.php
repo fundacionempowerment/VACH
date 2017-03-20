@@ -57,16 +57,18 @@ class GraphController extends BaseController
             $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
         }
 
-        \JpGraph\JpGraph::load();
-        \JpGraph\JpGraph::module('radar');
+        require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
+        require Yii::getAlias("@app/components/jpgraph/jpgraph_radar.php");
 
         $graph = new \RadarGraph(700, 400);
-        $graph->SetScale('lin', 0, 4);
-        $graph->yscale->ticks->Set(4, 1);
+        $graph->title->Set($title);
+        $graph->title->SetFont(FF_DV_SANSSERIF, FS_BOLD, 16);
         $graph->SetColor('white');
-        $graph->frame_weight = 0;
         $graph->SetSize(0.65);
         $graph->SetCenter(0.5, 0.55);
+        $graph->SetScale('lin', 0, 4);
+        $graph->yscale->ticks->Set(4, 1);
+        $graph->SetFrame(false);
 
         $graph->axis->SetFont(FF_DV_SANSSERIF, FS_BOLD);
         $graph->axis->SetWeight(1);
@@ -77,9 +79,7 @@ class GraphController extends BaseController
         $graph->grid->Show();
 
         $graph->ShowMinorTickMarks();
-        $graph->title->Set($title);
 
-        $graph->title->SetFont(FF_DV_SANSSERIF, FS_BOLD, 16);
         $graph->SetTitles($dimensions);
 
         $redPlot = new \RadarPlot($redWheel);
@@ -99,6 +99,76 @@ class GraphController extends BaseController
 
             $graph->Add($bluePlot);
         }
+
+        $graph->Stroke();
+    }
+
+    public function actionLineal($assessmentId, $memberId, $wheelType)
+    {
+        switch ($wheelType) {
+            case Wheel::TYPE_GROUP:
+                $redLine = Wheel::getProjectedGroupWheel($assessmentId, $memberId);
+                $blueLine = Wheel::getReflectedGroupWheel($assessmentId, $memberId);
+                break;
+            case Wheel::TYPE_ORGANIZATIONAL:
+                $redLine = Wheel::getProjectedOrganizationalWheel($assessmentId, $memberId);
+                $blueLine = Wheel::getReflectedOrganizationalWheel($assessmentId, $memberId);
+                break;
+        }
+
+        $dimensions = WheelQuestion::getDimensionNames($wheelType, true);
+
+        switch ($wheelType) {
+            case Wheel::TYPE_INDIVIDUAL:
+                $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
+                break;
+            case Wheel::TYPE_GROUP:
+                $title = Yii::t('dashboard', 'Group Perception Adjustment Matrix');
+                break;
+            case Wheel::TYPE_ORGANIZATIONAL:
+                $title = Yii::t('dashboard', 'Organizational Perception Adjustment Matrix');
+                break;
+        }
+
+        $member = Person::findOne(['id' => $memberId]);
+
+        if (!empty($member)) {
+            $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+        }
+
+        require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
+        require Yii::getAlias("@app/components/jpgraph/jpgraph_line.php");
+
+        $graph = new \Graph(900, 400);
+
+        $graph->title->Set($title);
+        $graph->title->SetFont(FF_DV_SANSSERIF, FS_BOLD, 16);
+        $graph->SetScale('textlin', 0, 4);
+        $graph->SetColor('white');
+        $graph->SetFrame(false);
+        $graph->xgrid->Show();
+        $graph->xaxis->SetTickLabels($dimensions);
+        $graph->legend->SetPos(0.5, 0.93, 'center', 'bottom');
+        $graph->SetTickDensity(TICKD_SPARSE);
+        $graph->xaxis->SetFont(FF_DV_SANSSERIF);
+        //$graph->xaxis->SetLabelAngle(10);
+
+        $redPlot = new \LinePlot($redLine);
+        $graph->Add($redPlot);
+
+        $redPlot->SetLegend(Yii::t('dashboard', 'How I see me'));
+        $redPlot->SetColor('red');
+        $redPlot->SetFillColor('lightred@0.5');
+        $redPlot->SetWeight(3);
+        $redPlot->SetCenter();
+
+        $bluePlot = new \LinePlot($blueLine);
+        $graph->Add($bluePlot);
+        $bluePlot->SetLegend(Yii::t('dashboard', 'How they see me'));
+        $bluePlot->SetColor('blue');
+        $bluePlot->SetFillColor('lightblue@0.5');
+        $bluePlot->SetWeight(3);
+        $bluePlot->SetCenter();
 
         $graph->Stroke();
     }

@@ -21,8 +21,6 @@ $this->title = Yii::t('dashboard', 'Dashboard');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
-    var lineals = new Array();
-    var linealsData = new Array();
     var matrixes = new Array();
     var matrixesData = new Array();
     var relations = new Array();
@@ -57,16 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
     }
 
-    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
+    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('_lineal', [
-            'title' => Yii::t('dashboard', 'Group Perception Matrix'),
-            'wheel' => $reflectedGroupWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_GROUP,
-            'member' => $member,
+            'filter' => $filter,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
+    }
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
@@ -75,16 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
     }
 
-    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
+    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('_lineal', [
-            'title' => Yii::t('dashboard', 'Organizational Perception Matrix'),
-            'wheel' => $reflectedOrganizationalWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'member' => $member,
+            'filter' => $filter,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
+    }
 
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
@@ -152,9 +142,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script>
     window.onload = function () {
-        for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
-        }
         for (var i in matrixes) {
             doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
         }
