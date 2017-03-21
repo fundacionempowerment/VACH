@@ -16,8 +16,8 @@ $token = rand(100000, 999999);
 <div id="div<?= $token ?>" class="col-sm-12 col-md-push-1 col-md-10 text-center" >
     <?=
     Html::img(Url::toRoute(["/graph/lineal",
-                'assessmentId' => $filter->assessmentId,
-                'memberId' => $filter->memberId,
+                'assessmentId' => $assessmentId,
+                'memberId' => $memberId,
                 'wheelType' => $wheelType]), ['class' => 'img-responsive'])
     ?>
 </div>

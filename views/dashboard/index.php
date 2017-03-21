@@ -43,35 +43,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'filter' => $filter,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_INDIVIDUAL,
         ]);
     }
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'filter' => $filter,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('_lineal', [
-            'filter' => $filter,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'filter' => $filter,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
 
-    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
+    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
         echo $this->render('_lineal', [
-            'filter' => $filter,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
