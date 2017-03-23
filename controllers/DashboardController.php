@@ -139,13 +139,6 @@ class DashboardController extends BaseController {
             }
         }
 
-        $selected_member_index = 0;
-        foreach ($members as $id => $name) {
-            if ($id == $filter->memberId)
-                break;
-            $selected_member_index++;
-        }
-
         return $this->render('index', [
                     'filter' => $filter,
                     'companies' => $companies,

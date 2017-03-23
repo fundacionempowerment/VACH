@@ -21,11 +21,6 @@ $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var lineals = new Array();
-    var linealsData = new Array();
-</script>
-<script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
 <div class="report-technical">
 
     <h1>
@@ -85,10 +80,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
-        }
-    }
-</script>
