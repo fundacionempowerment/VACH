@@ -12,12 +12,6 @@ use franciscomaya\sceditor\SCEditor;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-if (!empty($assessment) && $assessment->version == 2) {
-    $version = 2;
-} else {
-    $version = 1;
-}
-
 $this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
@@ -25,11 +19,6 @@ $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var matrixes = new Array();
-    var matrixesData = new Array();
-</script>
-<script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
 <div class="report-technical">
 
     <h1>
@@ -38,20 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $groupPerformanceMatrix,
-            'members' => $members,
-            'type' => Wheel::TYPE_GROUP,
+            'assessmentId' => $assessment->id,
             'memberId' => 0,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     ?>
     <?php
     if (count($organizationalPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $organizationalPerformanceMatrix,
-            'members' => $members,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'assessmentId' => $assessment->id,
             'memberId' => 0,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
     ?>
@@ -93,10 +80,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
-        }
-    }
-</script>

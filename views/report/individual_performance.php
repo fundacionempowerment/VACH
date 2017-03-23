@@ -25,11 +25,6 @@ $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var matrixes = new Array();
-    var matrixesData = new Array();
-</script>
-<script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
 <div class="report-technical">
 
     <h1>
@@ -38,20 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $groupPerformanceMatrix,
-            'type' => Wheel::TYPE_GROUP,
+            'assessmentId' => $assessment->id,
             'memberId' => $report->member->id,
-            'member' => $report->member,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     ?>
     <?php
     if (count($organizationalPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $organizationalPerformanceMatrix,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'assessmentId' => $assessment->id,
             'memberId' => $report->member->id,
-            'member' => $report->member,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
     ?>
@@ -93,10 +86,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
-        }
-    }
-</script>
