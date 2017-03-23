@@ -9,20 +9,16 @@ use app\models\Wheel;
 <?php
 if (count($groupRelationsMatrix) > 0) {
     echo $this->render('../dashboard/_relation', [
-        'data' => $groupRelationsMatrix,
-        'members' => $members,
-        'type' => Wheel::TYPE_GROUP,
+        'assessmentId' => $assessment->id,
         'memberId' => $report->member->id,
-        'member' => $report->member,
+        'wheelType' => Wheel::TYPE_GROUP,
     ]);
 }
 if (count($organizationalRelationsMatrix) > 0) {
     echo $this->render('../dashboard/_relation', [
-        'data' => $organizationalRelationsMatrix,
-        'members' => $members,
-        'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'assessmentId' => $assessment->id,
         'memberId' => $report->member->id,
-        'member' => $report->member,
+        'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
     ]);
 }
 ?>

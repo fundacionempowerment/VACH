@@ -309,7 +309,8 @@ class Wheel extends ActiveRecord {
     }
 
     public static function getRelationsMatrix($assessmentId, $type) {
-        $rawAnswers = (new Query())->select('wheel.observer_id, wheel.observed_id, avg(wheel_answer.answer_value) as value, observer.name as observer_name, observer.surname as observer_surname, observed.name as observed_name, observed.surname as observed_surname')
+        $rawAnswers = (new Query())->select('wheel.observer_id, wheel.observed_id, avg(wheel_answer.answer_value) as value, observer.name as observer_name, observer.surname as observer_surname, observed.name as observed_name, observed.surname as observed_surname,'
+                . 'observer.gender as observer_gender, observed.gender as observed_gender')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
