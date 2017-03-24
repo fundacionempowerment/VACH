@@ -39,4 +39,9 @@ class GraphController extends BaseController
         \app\components\graph\Relations::draw($assessmentId, $memberId, $wheelType);
     }
 
+    public function actionGauges($assessmentId, $memberId, $wheelType)
+    {
+        \app\components\graph\Gauges::draw($assessmentId, $memberId, $wheelType);
+    }
+
 }

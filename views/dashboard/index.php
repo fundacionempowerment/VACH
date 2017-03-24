@@ -20,11 +20,6 @@ $this->title = Yii::t('dashboard', 'Dashboard');
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var relations = new Array();
-    var forwardRelationsData = new Array();
-    var backwardRelationsData = new Array();
-</script>
 <div class="dashboard">
     <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
@@ -79,9 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
-            'gauges' => $gauges,
-            'type' => $filter->wheelType,
-            'member' => $member,
+            'assessmentId' => $filter->assessmentId,
+            'memberId' => $filter->memberId,
+            'wheelType' => $filter->wheelType,
         ]);
 
 
@@ -138,14 +133,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in relations) {
-            doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
-            doBackwardRelations(document.getElementById("canvas" + relations[i] + 'b').getContext("2d"), backwardRelationsData[i]);
-        }
-    }
-</script>
 <script src="<?= Url::to('@web/js/html2canvas/html2canvas.js') ?>"></script>
 <script src="<?= Url::to('@web/js/FileSaver.js') ?>"></script>
 <script>

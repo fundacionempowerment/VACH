@@ -19,20 +19,6 @@ if (!empty($assessment) && $assessment->version == 2) {
 
 $this->title = Yii::t('report', 'Report');
 ?>
-<script>
-    var radars = new Array();
-    var radarsData = new Array();
-    var lineals = new Array();
-    var linealsData = new Array();
-    var matrixes = new Array();
-    var matrixesData = new Array();
-    var relations = new Array();
-    var forwardRelationsData = new Array();
-    var backwardRelationsData = new Array();
-</script>
-<script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
-<script src="<?= Url::to("@web/js/matrix.v$version.js") ?>"></script>
-<script src="<?= Url::to('@web/js/relations.js') ?>"></script>
 <div class="report-technical row">
     <div class="jumbotron">
         <p>
@@ -234,20 +220,3 @@ $this->title = Yii::t('report', 'Report');
         </div>  
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, animation: false});
-        }
-        for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false, animation: false});
-        }
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i] + 'r').getContext("2d"), matrixesData[i], false);
-        }
-        for (var i in relations) {
-            doForwardRelations(document.getElementById("canvas" + relations[i] + 'f').getContext("2d"), forwardRelationsData[i]);
-            doBackwardRelations(document.getElementById("canvas" + relations[i] + 'b').getContext("2d"), backwardRelationsData[i]);
-        }
-    }
-</script>
