@@ -3,9 +3,11 @@
 namespace app\components\graph;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use app\models\Person;
 use app\models\Wheel;
 use app\models\WheelQuestion;
+use app\controllers\Utils;
 
 class Matrix
 {
@@ -43,7 +45,6 @@ class Matrix
         $current_value = 0;
         $sumConsciousness = 0;
         $sumProductivity = 0;
-        $sumDeltaProductivity = 0;
         foreach ($performanceMatrix as $data) {
             if ($data['productivity'] < $minProductivity) {
                 $minProductivity = $data['productivity'];
@@ -62,11 +63,8 @@ class Matrix
         $avgProductivity = $sumProductivity / count($performanceMatrix);
         $deltax = $maxx - $minx;
         $deltaProductivity = $maxProductivity - $minProductivity;
-        foreach ($performanceMatrix as $data) {
-            $current_value = $data['productivity'];
-            $sumDeltaProductivity += pow($current_value - $avgProductivity, 2);
-        }
-        $avgDeltaProductivity = sqrt($sumDeltaProductivity / count($performanceMatrix)); //standar deviation
+        
+        $avgDeltaProductivity = Utils::variance(ArrayHelper::getColumn($performanceMatrix, 'productivity'));
 
         $maxy = (floor(($maxConsciousness + 1) / 10) + 1.1) * 10;
 
