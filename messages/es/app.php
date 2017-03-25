@@ -38,6 +38,7 @@ return [
     'Date and Time' => 'Fecha y hora',
     'Delete' => 'Eliminar',
     'Description' => 'Descripción',
+    'Download Presentation' => 'Descargar Presentación',
     'Edit' => 'Editar',
     'Email' => 'Correo electrónico',
     'Empowerment Foundation' => 'Fundación Empowerment',

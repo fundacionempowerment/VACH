@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-md-6 text-right">
         <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(\Yii::t('app', 'Download Presentation'), Url::to(['report/presentation', 'id' => $assessment->id]), ['class' => 'btn btn-info']) ?>
     </div>
     <div class="clearfix"></div>
     <h3>
