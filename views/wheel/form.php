@@ -38,6 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
     <div class="row col-md-12">
         <h3><?= $dimensions[$current_dimension] ?></h3>
+        <h5>
+            <b><?= Yii::t('app', 'Description') ?>:</b> <?= app\components\Dimensions::descriptions[$wheel->type][$current_dimension] ?>
+        </h5>
     </div>
     <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
     <?= Html::hiddenInput('id', $wheel->id) ?>
