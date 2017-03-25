@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use app\models\Wheel;
-use app\controllers\Utils;
+use app\components\Utils;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */

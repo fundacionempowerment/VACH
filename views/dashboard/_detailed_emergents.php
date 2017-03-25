@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Wheel;
 use app\models\WheelQuestion;
-use app\controllers\Utils;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
