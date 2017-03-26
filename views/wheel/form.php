@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++) {
         ?>
         <div class="row col-md-12" style="margin-top: 10px;">
-            <label class="control-label" for="loginmodel-email"><?= $questions[$i]['question'] ?></label>
+            <label class="control-label" for="loginmodel-email"><?= $questions[$i]->question->text ?></label>
         </div>
         <div class="row col-md-12 <?= $showMissingAnswers && !isset($answers[$i]) ? 'alert-danger' : '' ?>">
             <div class="btn-group btn-group-lg" data-toggle="buttons">

@@ -36,12 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <p>
-                <?= Html::input('text', 'question' . $question->id, $question->question, ['class' => 'col-md-12']) ?>
-            </p>
-            <p>
-                <?=
-                Html::dropDownList('answer' . $question->id, $question->answer_type, WheelAnswer::getAnswerTypes(), ['class' => 'col-md-12'])
-                ?>
+                <?= Html::input('text', 'question' . $question->id, $question->question->text, ['class' => 'col-md-12']) ?>
             </p>
         <?php } ?>
         <?= '</div>' ?>

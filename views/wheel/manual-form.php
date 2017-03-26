@@ -18,8 +18,12 @@ $setQuantity = count($questions) / 8;
 for ($i = 0; $i < count($questions); $i++)
     $answers[$i] = null;
 
-foreach ($wheel->answers as $answer)
-    $answers[$answer->answer_order] = $answer->answer_value;
+foreach ($wheel->answers as $answer) {
+    $answers[$answer->answer_order] = [
+        'value' => $answer->answer_value,
+        'question' => $answer->question->text
+    ];
+}
 
 $this->title = Yii::t('wheel', 'Manual form');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
@@ -52,8 +56,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-bordered">
                 <?php } ?>
                 <tr>
-                    <td style="text-align: right;"><?= $questions[$i]['question'] ?></td>
-                    <td><?= Html::textInput('answer' . $i, $answers[$i], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
+                    <td style="text-align: right;"><?= empty($answers[$i]['value']) ? $questions[$i]->question->text : $answers[$i]['question'] ?></td>
+                    <td><?= Html::textInput('answer' . $i, $answers[$i]['value'], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
                 </tr>
                 <?php if ($i % $setQuantity == $setQuantity - 1) { ?>
                 </table>
@@ -65,16 +69,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php ActiveForm::end(); ?>
 </div>
 <script type="text/javascript">
-                                function setValues(dimension, value)
-                                {
-                                    var inputs = document.getElementsByTagName('input');
-                                    for (i = dimension * <?= $setQuantity ?>; i < (dimension + 1) * <?= $setQuantity ?>; i++) {
-                                        for (var j in inputs) {
-                                            if (inputs[j].name === 'answer' + i) {
-                                                inputs[j].value = value;
-                                            }
-                                        }
-                                    }
-                                }
+    function setValues(dimension, value)
+    {
+        var inputs = document.getElementsByTagName('input');
+        for (i = dimension * <?= $setQuantity ?>; i < (dimension + 1) * <?= $setQuantity ?>; i++) {
+            for (var j in inputs) {
+                if (inputs[j].name === 'answer' + i) {
+                    inputs[j].value = value;
+                }
+            }
+        }
+    }
 </script>
 

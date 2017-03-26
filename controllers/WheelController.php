@@ -10,16 +10,18 @@ use app\models\LoginModel;
 use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
-use app\models\ClientModel;
+use app\models\Question;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 
-class WheelController extends BaseController {
+class WheelController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (Yii::$app->request->get('person_id')) {
             Yii::$app->session->set('person_id', Yii::$app->request->get('person_id'));
             Yii::$app->session->set('wheelid', null);
@@ -64,7 +66,8 @@ class WheelController extends BaseController {
             ]);
     }
 
-    public function actionRun() {
+    public function actionRun()
+    {
         $this->layout = 'printable';
         $showMissingAnswers = false;
         $current_dimension = 0;
@@ -99,7 +102,8 @@ class WheelController extends BaseController {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
             $current_wheel = Wheel::findOne(['id' => $id]);
-            $questionCount = WheelQuestion::getQuestionCount($current_wheel->type);
+            $questions = WheelQuestion::getQuestions($current_wheel->type);
+            $questionCount = count($questions);
             $setSize = $questionCount / 8;
 
             $count = 0;
@@ -126,6 +130,7 @@ class WheelController extends BaseController {
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
                         $new_answer->dimension = $current_dimension;
+                        $new_answer->question_id = $questions[$i]->question_id;
                         $current_wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }
                 }
@@ -169,7 +174,8 @@ class WheelController extends BaseController {
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $wheel = Wheel::findOne(['id' => $id]);
         if ($wheel->delete()) {
             SiteController::addFlash('success', Yii::t('wheel', 'Wheel deleted.'));
@@ -179,29 +185,16 @@ class WheelController extends BaseController {
         return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
     }
 
-    public function actionAnswers($id) {
-        $wheel = Wheel::findOne(['id' => $id]);
-        $questions = WheelQuestion::find()->asArray()->all();
-
-        if (Yii::$app->request->get('printable') != null)
-            $this->layout = 'printable';
-
-        return $this->render('answers', [
-                    'wheel' => $wheel,
-        ]);
-    }
-
-    public function actionQuestions() {
-        $questions = WheelQuestion::find()->orderBy('type, dimension, order')->all();
+    public function actionQuestions()
+    {
+        $wheelQuestions = WheelQuestion::find()->orderBy('type, dimension, order')->all();
 
         if (Yii::$app->request->isPost) {
-            foreach ($questions as $question) {
-                $new_question_text = Yii::$app->request->post('question' . $question->id);
-                $new_answer_type = Yii::$app->request->post('answer' . $question->id);
-
-                $question->question = $new_question_text;
-                $question->answer_type = $new_answer_type;
-                $question->save();
+            foreach ($wheelQuestions as $wheelQuestion) {
+                $questionText = Yii::$app->request->post('question' . $wheelQuestion->id);
+                $questionId = Question::getId($questionText);
+                $wheelQuestion->question_id = $questionId;
+                $wheelQuestion->save();
             }
 
             SiteController::addFlash('success', Yii::t('wheel', 'Wheel questions saved.'));
@@ -209,11 +202,12 @@ class WheelController extends BaseController {
         }
 
         return $this->render('questions', [
-                    'questions' => $questions
+                    'questions' => $wheelQuestions
         ]);
     }
 
-    public function actionManualForm($id) {
+    public function actionManualForm($id)
+    {
         $wheel = Wheel::findOne(['id' => $id]);
         $invalids = [];
 
@@ -274,7 +268,8 @@ class WheelController extends BaseController {
         ]);
     }
 
-    public function sendAnswers($wheel) {
+    public function sendAnswers($wheel)
+    {
         $type_text = Wheel::getWheelTypes()[$wheel->type];
         $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
 
