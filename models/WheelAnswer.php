@@ -59,68 +59,9 @@ class WheelAnswer extends ActiveRecord
         ];
     }
 
-    public static function getAnswerTypes()
+    public function getQuestion()
     {
-        return[
-            self::ANSWER_NUMBERS_0_TO_4 => implode(', ', self::getAnswerLabels(self::ANSWER_NUMBERS_0_TO_4)),
-            self::ANSWER_WORST_TO_OPTIMAL => implode(', ', self::getAnswerLabels(self::ANSWER_WORST_TO_OPTIMAL)),
-            self::ANSWER_NEVER_TO_ALWAYS => implode(', ', self::getAnswerLabels(self::ANSWER_NEVER_TO_ALWAYS)),
-            self::ANSWER_NONE_TO_ALL => implode(', ', self::getAnswerLabels(self::ANSWER_NONE_TO_ALL)),
-            self::ANSWER_NOTHING_TO_ABSOLUTLY => implode(', ', self::getAnswerLabels(self::ANSWER_NOTHING_TO_ABSOLUTLY)),
-            self::ANSWER_OPTIMAL_TO_WORST => implode(', ', self::getAnswerLabels(self::ANSWER_OPTIMAL_TO_WORST)),
-            self::ANSWER_ALWAYS_TO_NEVER => implode(', ', self::getAnswerLabels(self::ANSWER_ALWAYS_TO_NEVER)),
-            self::ANSWER_ALL_TO_NONE => implode(', ', self::getAnswerLabels(self::ANSWER_ALL_TO_NONE)),
-            self::ANSWER_ABSOLUTLY_TO_NOTHING => implode(', ', self::getAnswerLabels(self::ANSWER_ABSOLUTLY_TO_NOTHING)),
-        ];
-    }
-
-    public static function getAnswerLabels($setName)
-    {
-        switch ($setName) {
-            case WheelAnswer::ANSWER_NUMBERS_0_TO_4:
-                return ['0', '1', '2', '3', '4'];
-            case WheelAnswer::ANSWER_WORST_TO_OPTIMAL:
-                return [
-                    Yii::t('wheel', 'worst'),
-                    Yii::t('wheel', 'bad'),
-                    Yii::t('wheel', 'fair'),
-                    Yii::t('wheel', 'good'),
-                    Yii::t('wheel', 'optimal')
-                ];
-            case WheelAnswer::ANSWER_OPTIMAL_TO_WORST:
-                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_WORST_TO_OPTIMAL));
-            case WheelAnswer::ANSWER_NONE_TO_ALL:
-                return [
-                    Yii::t('wheel', 'none'),
-                    Yii::t('wheel', 'few'),
-                    Yii::t('wheel', 'some'),
-                    Yii::t('wheel', 'many'),
-                    Yii::t('wheel', 'all')
-                ];
-            case WheelAnswer::ANSWER_ALL_TO_NONE:
-                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NONE_TO_ALL));
-            case WheelAnswer::ANSWER_NEVER_TO_ALWAYS:
-                return [
-                    Yii::t('wheel', 'never'),
-                    Yii::t('wheel', 'sometimes'),
-                    Yii::t('wheel', 'often'),
-                    Yii::t('wheel', 'usually'),
-                    Yii::t('wheel', 'always')
-                ];
-            case WheelAnswer::ANSWER_ALWAYS_TO_NEVER:
-                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NEVER_TO_ALWAYS));
-
-            case WheelAnswer::ANSWER_NOTHING_TO_ABSOLUTLY:
-                return [
-                    Yii::t('wheel', 'nothing'),
-                    Yii::t('wheel', 'rarely'),
-                    Yii::t('wheel', 'regularly'),
-                    Yii::t('wheel', 'mostly'),
-                    Yii::t('wheel', 'absolutly')
-                ];
-            case WheelAnswer::ANSWER_ABSOLUTLY_TO_NOTHING:
-                return array_reverse(WheelAnswer::getAnswerLabels(WheelAnswer::ANSWER_NOTHING_TO_ABSOLUTLY));
-        }
+        return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
 
 }
