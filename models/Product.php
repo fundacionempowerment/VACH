@@ -50,4 +50,9 @@ class Product extends ActiveRecord
         return Product::find()->orderBy('id desc');
     }
 
+    public static function getList()
+    {
+        return \yii\helpers\ArrayHelper::map(static::browse()->all(), 'id', 'name');
+    }
+
 }

@@ -87,15 +87,14 @@ class AssessmentController extends BaseController
                 }
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $assessment->fullname]));
 
-                $product = \app\models\Product::findOne(['id' => 1]);
-
                 if (Yii::$app->params['monetize']) {
                     $stock = new Stock();
                     $stock->coach_id = Yii::$app->user->id;
+                    $stock->creator_id = Yii::$app->user->id;
                     $stock->product_id = 1;
                     $stock->quantity = -$licences_required;
-                    $stock->price = $product->price;
-                    $stock->total = $licences_required * $product->price;
+                    $stock->price = 0;
+                    $stock->total = 0;
                     $stock->status = Stock::STATUS_VALID;
                     if (!$stock->save()) {
                         \app\controllers\SiteController::FlashErrors($stock);

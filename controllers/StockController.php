@@ -16,6 +16,8 @@ use app\models\Payment;
 use app\models\Stock;
 use app\models\Product;
 use app\models\BuyModel;
+use app\models\AddModel;
+use app\models\RemoveModel;
 
 class StockController extends BaseController
 {
@@ -73,6 +75,7 @@ class StockController extends BaseController
             // Register new stock
             $stock = new Stock();
             $stock->coach_id = Yii::$app->user->id;
+            $stock->creator_id = Yii::$app->user->id;
             $stock->product_id = $model->product_id;
             $stock->quantity = $model->quantity;
             $stock->price = $product->price;
@@ -102,6 +105,113 @@ class StockController extends BaseController
         }
 
         return $this->render('new', [
+                    'model' => $model,
+        ]);
+    }
+
+    public function actionAdd()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        if (!Yii::$app->user->identity->is_administrator) {
+            return $this->goHome();
+        }
+
+        $product_id = Yii::$app->params['default_product_id'];
+        $quantity = Yii::$app->params['default_quantity'];
+
+        $product = Product::findOne(['id' => $product_id]);
+
+        $model = new AddModel([
+            'product_id' => $product_id,
+            'quantity' => $quantity,
+            'price' => $product->price,
+        ]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $success = true;
+            // Register new stock
+            $stock = new Stock();
+            $stock->coach_id = $model->coach_id;
+            $stock->creator_id = Yii::$app->user->id;
+            $stock->product_id = $model->product_id;
+            $stock->quantity = $model->quantity;
+            $stock->price = $model->price;
+            $stock->total = $model->quantity * $model->price;
+            $stock->status = Stock::STATUS_VALID;
+            if (!$stock->save()) {
+                $success = false;
+                \app\controllers\SiteController::FlashErrors($stock);
+            }
+
+            $payment = new Payment();
+            $payment->coach_id = $model->coach_id;
+            $payment->creator_id = Yii::$app->user->id;
+            $payment->stock_id = $stock->id;
+            $payment->concept = $model->quantity . ' ' . $product->name;
+            $payment->amount = $stock->total;
+            $payment->status = Payment::STATUS_PAID;
+            if (!$payment->save()) {
+                $success = false;
+                \app\controllers\SiteController::FlashErrors($payment);
+            }
+
+            if ($success) {
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $model->quantity . ' ' . $product->name]));
+                return $this->redirect(['/admin/stock']);
+            }
+        }
+
+        return $this->render('add', [
+                    'model' => $model,
+        ]);
+    }
+
+    public function actionRemove()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        if (!Yii::$app->user->identity->is_administrator) {
+            return $this->goHome();
+        }
+
+        $product_id = Yii::$app->params['default_product_id'];
+        $quantity = Yii::$app->params['default_quantity'];
+
+        $product = Product::findOne(['id' => $product_id]);
+
+        $model = new RemoveModel([
+            'product_id' => $product_id,
+            'quantity' => $quantity,
+        ]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $success = true;
+            // Register new stock
+            $stock = new Stock();
+            $stock->coach_id = $model->coach_id;
+            $stock->creator_id = Yii::$app->user->id;
+            $stock->product_id = $model->product_id;
+            $stock->quantity = -$model->quantity;
+            $stock->price = 0;
+            $stock->total = 0;
+            $stock->status = Stock::STATUS_VALID;
+            if (!$stock->save()) {
+                $success = false;
+                \app\controllers\SiteController::FlashErrors($stock);
+            }
+
+            if ($success) {
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $model->quantity . ' ' . $product->name]));
+                return $this->redirect(['/admin/stock']);
+            }
+        }
+
+        return $this->render('remove', [
                     'model' => $model,
         ]);
     }

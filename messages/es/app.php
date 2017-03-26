@@ -34,6 +34,7 @@ return [
     'Concept' => 'Concepto',
     'Contact administrator' => 'Contactar administrador',
     'Create' => 'Crear',
+    'Creator' => 'Creador',
     'Date' => 'Fecha',
     'Date and Time' => 'Fecha y hora',
     'Delete' => 'Eliminar',

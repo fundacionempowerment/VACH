@@ -18,14 +18,17 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Add licences' => 'Agregar licencias',
     'Begin payment' => 'Comenzar pago',
     'Buy licences' => 'Comprar licencias',
     'Go to My Licences' => 'Ir a Mis licencias',
     'Licences' => 'Licencias',
     'My Licences' => 'Mis licencias',
     'Price' => 'Precio',
+    'Price in USD $' => 'Precio es USD $',
     'Product' => 'Producto',
     'Quantity' => 'Cantidad',
+    'Remove licences' => 'Quitar licencias',
     'Total' => 'Total',
     'Your balance' => 'Su saldo',
 ];

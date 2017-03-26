@@ -23,10 +23,14 @@ $dataProvider = new ActiveDataProvider([
     GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            'stamp:datetime',
             'concept',
             'amount:currency',
+            'stamp:datetime',
             'statusName',
+            [
+                'attribute' => 'creator.fullname',
+                'label' => Yii::t('app', 'Creator')
+            ],
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],

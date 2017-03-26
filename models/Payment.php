@@ -119,6 +119,11 @@ class Payment extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }
 
+    public function getCreator()
+    {
+        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+    }
+
     public function getLogs()
     {
         return $this->hasMany(PaymentLog::className(), ['payment_id' => 'id']);

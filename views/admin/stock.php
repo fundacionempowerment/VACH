@@ -20,16 +20,29 @@ $dataProvider = new ActiveDataProvider([
 ?>
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a(Yii::t('stock', 'Add licences'), Url::to(['stock/add']), ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('stock', 'Remove licences'), Url::to(['stock/remove']), ['class' => 'btn btn-danger']) ?>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            'product.name',
+            [
+                'attribute' => 'coach.fullname',
+                'label' => Yii::t('app', 'Coach')
+            ],
+            [
+                'attribute' => 'product.name',
+                'label' => Yii::t('stock', 'Product')
+            ],
             'quantity',
             'price:currency',
             'total:currency',
             'stamp:datetime',
             'statusName',
+            [
+                'attribute' => 'creator.fullname',
+                'label' => Yii::t('app', 'Creator')
+            ],
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],
