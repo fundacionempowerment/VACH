@@ -21,37 +21,26 @@ $this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var lineals = new Array();
-    var linealsData = new Array();
-</script>
-<script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
 <div class="report-technical">
 
     <h1>
         <?= Yii::t('report', 'Perception Matrix of {member}', ['member' => $report->member->fullname]) ?>
     </h1>
     <?php
-    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
+    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'title' => Yii::t('dashboard', 'Group Perception Matrix'),
-            'wheel' => $reflectedGroupWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_GROUP,
-            'member' => $report->member,
+            'assessmentId' => $assessment->id,
+            'memberId' => $report->member->id,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
-    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
+    }
+    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'title' => Yii::t('dashboard', 'Organizational Perception Matrix'),
-            'wheel' => $reflectedOrganizationalWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-            'member' => $report->member,
+            'assessmentId' => $assessment->id,
+            'memberId' => $report->member->id,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
+    }
     ?>
     <div class="row col-md-12">
         <h3>
@@ -91,10 +80,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
-        }
-    }
-</script>

@@ -16,20 +16,22 @@ use app\models\Report;
 use app\models\IndividualReport;
 use app\models\Wheel;
 use app\models\TeamMember;
-use kartik\mpdf\Pdf;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
     public $layout = 'inner';
 
-    private function sanitize($string) {
+    private function sanitize($string)
+    {
         $string = strip_tags($string, '<b><i><p><ul><li><ol><br>');
         $string = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $string);
         $string = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $string);
         return $string;
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if ($assessment->report == null) {
@@ -59,7 +61,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIntroduction($id) {
+    public function actionIntroduction($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -76,7 +79,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionEffectiveness($id) {
+    public function actionEffectiveness($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -110,7 +114,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionPerformance($id) {
+    public function actionPerformance($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -143,7 +148,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionRelations($id) {
+    public function actionRelations($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -176,7 +182,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionCompetences($id) {
+    public function actionCompetences($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -208,7 +215,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionEmergents($id) {
+    public function actionEmergents($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -246,7 +254,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualPerformance($id) {
+    public function actionIndividualPerformance($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -287,7 +296,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualPerception($id) {
+    public function actionIndividualPerception($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -316,7 +326,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualRelations($id) {
+    public function actionIndividualRelations($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -347,7 +358,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualCompetences($id) {
+    public function actionIndividualCompetences($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -382,7 +394,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualEmergents($id) {
+    public function actionIndividualEmergents($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
@@ -423,7 +436,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionSummary($id) {
+    public function actionSummary($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -440,7 +454,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionActionPlan($id) {
+    public function actionActionPlan($id)
+    {
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (Yii::$app->request->isPost) {
@@ -457,7 +472,8 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionDownload($id) {
+    public function actionDownload($id)
+    {
         $this->layout = 'printable';
 
         $assessment = Assessment::findOne(['id' => $id]);
@@ -498,6 +514,20 @@ class ReportController extends Controller {
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
         ]);
+    }
+
+    public function actionPresentation($id)
+    {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        $ppt = \app\components\presentation\Presentation::create($assessment);
+
+        $oWriterPPTX = \PhpOffice\PhpPresentation\IOFactory::createWriter($ppt, 'PowerPoint2007');
+
+        $uuid = uniqid('', true);
+        $oWriterPPTX->save("/tmp/$uuid.pptx");
+
+        return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $assessment->fullname . '.' . date('Y-m-d') . '.pptx');
     }
 
 }
