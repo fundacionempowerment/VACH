@@ -297,7 +297,7 @@ class Wheel extends ActiveRecord
 
     public static function getEmergents($assessmentId, $type)
     {
-        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question ,'
+        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, question.`text` as question ,'
                         . ' avg( case when wheel.observed_id <> wheel.observer_id then wheel_answer.answer_value else null end) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
@@ -305,10 +305,11 @@ class Wheel extends ActiveRecord
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
                 ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
+                ->innerJoin('question', 'question.id = wheel_question.question_id')
                 ->where("assessment.id = $assessmentId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
-                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, wheel_question.question')
+                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, question.`text`')
                 ->orderBy('avg(wheel_answer.answer_value) desc')
                 ->all();
 
@@ -317,7 +318,7 @@ class Wheel extends ActiveRecord
 
     public static function getMemberEmergents($assessmentId, $memberId, $type)
     {
-        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, wheel_question.question ,'
+        $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, question.`text` as question ,'
                         . ' avg( case when wheel.observed_id <> wheel.observer_id then wheel_answer.answer_value else null end) as value,'
                         . 'avg( case when wheel.observed_id = wheel.observer_id then wheel_answer.answer_value else null end) as mine_value')
                 ->from('wheel_answer')
@@ -326,10 +327,11 @@ class Wheel extends ActiveRecord
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
                 ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
                 ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
+                ->innerJoin('question', 'question.id = wheel_question.question_id')
                 ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
-                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, wheel_question.question')
+                ->groupBy('wheel_answer.answer_order, wheel_question.dimension, question.`text`')
                 ->orderBy('avg(wheel_answer.answer_value) desc')
                 ->all();
 
