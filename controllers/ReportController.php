@@ -16,7 +16,6 @@ use app\models\Report;
 use app\models\IndividualReport;
 use app\models\Wheel;
 use app\models\TeamMember;
-use kartik\mpdf\Pdf;
 
 class ReportController extends Controller
 {
@@ -519,8 +518,16 @@ class ReportController extends Controller
 
     public function actionPresentation($id)
     {
-        return $this->render('presentation', [
-        ]);
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        $ppt = \app\components\presentation\Presentation::create($assessment);
+
+        $oWriterPPTX = \PhpOffice\PhpPresentation\IOFactory::createWriter($ppt, 'PowerPoint2007');
+
+        $uuid = uniqid('', true);
+        $oWriterPPTX->save("/tmp/$uuid.pptx");
+
+        return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $assessment->fullname . '.' . date('Y-m-d') . '.pptx');
     }
 
 }
