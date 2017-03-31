@@ -21,6 +21,6 @@ return [
     'payu_tax_return_base' => '0',
     'payu_currency' => 'USD',
     'payu_action_url' => 'https://sandbox.gateway.payulatam.com/ppp-web-gateway',
-    'payu_response_url' => 'http://**********:8080/vach/web/index.php?r=account%2Fresponse',
-    'payu_confirmation_url' => 'http://**********:8080/vach/web/index.php?r=account%2Fconfirmation',
+    'payu_response_url' => 'http://**********:8080/vach/web/index.php?r=payment%2Fresponse',
+    'payu_confirmation_url' => 'http://**********:8080/vach/web/index.php?r=payment%2Fconfirmation',
 ];
