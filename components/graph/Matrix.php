@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Person;
 use app\models\Wheel;
 use app\models\WheelQuestion;
-use app\controllers\Utils;
+use app\components\Utils;
 
 class Matrix
 {
