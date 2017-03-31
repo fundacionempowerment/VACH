@@ -44,4 +44,8 @@ class GraphController extends BaseController
         \app\components\graph\Gauges::draw($assessmentId, $memberId, $wheelType);
     }
 
+    public function actionEmergents($assessmentId, $memberId, $wheelType)
+    {
+        \app\components\graph\Emergents::draw($assessmentId, $memberId, $wheelType);
+    }
 }
