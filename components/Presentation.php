@@ -1,6 +1,6 @@
 <?php
 
-namespace app\components\presentation;
+namespace app\components;
 
 use Yii;
 use PhpOffice\PhpPresentation\PhpPresentation;
@@ -13,7 +13,7 @@ use app\models\Wheel;
 use app\models\WheelQuestion;
 use app\models\TeamMember;
 use app\components\Downloader;
-use app\controllers\Utils;
+use app\components\Utils;
 use yii\helpers\ArrayHelper;
 
 class Presentation
@@ -424,7 +424,7 @@ class Presentation
             $cell->createTextRun(round($data['steem'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
-// How they see me
+        // How they see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How they see me'))->getFont()->setSize(8);
@@ -534,7 +534,41 @@ class Presentation
 
     static private function addTeamEmergentsSlide()
     {
-        
+        $currentSlide = self::$ppt->createSlide();
+
+        $assessmentId = self::$assessment->id;
+
+        $shape = $currentSlide->createDrawingShape();
+
+        $path = Downloader::download(\yii\helpers\Url::toRoute([
+                            '/graph/emergents',
+                            'assessmentId' => $assessmentId,
+                            'memberId' => 0,
+                            'wheelType' => Wheel::TYPE_GROUP], true));
+
+        $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(50);
+
+        $shape = $currentSlide->createDrawingShape();
+
+        $path = Downloader::download(\yii\helpers\Url::toRoute([
+                            '/graph/emergents',
+                            'assessmentId' => $assessmentId,
+                            'memberId' => 0,
+                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+
+        $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(350);
+
+        self::addCPCLogo($currentSlide);
     }
 
     static private function addMembersTitleSlide()
@@ -739,7 +773,42 @@ class Presentation
 
     static private function addMemberEmergentsSlide($member)
     {
-        
+        $currentSlide = self::$ppt->createSlide();
+
+        $assessmentId = self::$assessment->id;
+        $memberId = $member->person_id;
+
+        $shape = $currentSlide->createDrawingShape();
+
+        $path = Downloader::download(\yii\helpers\Url::toRoute([
+                            '/graph/emergents',
+                            'assessmentId' => $assessmentId,
+                            'memberId' => $memberId,
+                            'wheelType' => Wheel::TYPE_GROUP], true));
+
+        $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(50);
+
+        $shape = $currentSlide->createDrawingShape();
+
+        $path = Downloader::download(\yii\helpers\Url::toRoute([
+                            '/graph/emergents',
+                            'assessmentId' => $assessmentId,
+                            'memberId' => $memberId,
+                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+
+        $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(350);
+
+        self::addCPCLogo($currentSlide);
     }
 
     static private function addThankYouSlide()

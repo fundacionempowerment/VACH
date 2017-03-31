@@ -520,7 +520,7 @@ class ReportController extends Controller
     {
         $assessment = Assessment::findOne(['id' => $id]);
 
-        $ppt = \app\components\presentation\Presentation::create($assessment);
+        $ppt = \app\components\Presentation::create($assessment);
 
         $oWriterPPTX = \PhpOffice\PhpPresentation\IOFactory::createWriter($ppt, 'PowerPoint2007');
 
