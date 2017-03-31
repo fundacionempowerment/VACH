@@ -27,6 +27,8 @@ class Emergents
             $title = Yii::t('dashboard', 'Organiz. Emergents Matrix');
         else
             $title = Yii::t('dashboard', 'Individual Emergents Matrix');
+        
+        $member = Person::findOne(['id' => $memberId]);
 
         if (!empty($member)) {
             $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
