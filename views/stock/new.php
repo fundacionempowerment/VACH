@@ -7,7 +7,7 @@ use kartik\slider\Slider;
 use app\models\Stock;
 use yii\web\View;
 
-$this->title = Yii::t('stock', 'Buy licences');
+$this->title = Yii::t('stock', 'Buy Licences');
 
 $this->registerJs("function updateTotal(quantity) {
     var quantity = $('#buymodel-quantity').val();

@@ -20,9 +20,10 @@
 return [
     'Add licences' => 'Agregar licencias',
     'Begin payment' => 'Comenzar pago',
-    'Buy licences' => 'Comprar licencias',
+    'Buy Licences' => 'Comprar licencias',
     'Go to My Licences' => 'Ir a Mis licencias',
     'Licences' => 'Licencias',
+    'Licences required' => 'Licencias requeridas',
     'My Licences' => 'Mis licencias',
     'Price' => 'Precio',
     'Price in USD $' => 'Precio es USD $',
@@ -30,5 +31,6 @@ return [
     'Quantity' => 'Cantidad',
     'Remove licences' => 'Quitar licencias',
     'Total' => 'Total',
+    'You need {count} more licences' => 'Necesita {count} licencias más',
     'Your balance' => 'Su saldo',
 ];

@@ -53,12 +53,25 @@ $lock_button = Yii::$app->params['monetize'] && $licences_diff > 0;
     <div class="row col-md-12" style="margin-right: 0px;">
         <h4><?= Yii::t('assessment', 'Assessment') ?></h4>
         <?= $form->field($assessment, 'name') ?>
+    </div>
+    <?php if (Yii::$app->params['monetize']) { ?>
         <div class="form-group">
-            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary ', 'disabled' => $lock_button, 'name' => 'save-button']) ?>
+            <h4><?= Yii::t('stock', 'Licences') ?></h4>
+            <p>
+                <?= Yii::t('stock', 'Your balance') ?>: <b><?= $balance ?></b>
+            </p>
+            <p>
+                <?= Yii::t('stock', 'Licences required') ?>: <b><?= $licences_required ?></b>
+            </p>
             <?php if ($lock_button) { ?>
-                <?= Yii::t('assessment', 'You need {count} more licence', ['count' => $licences_diff]) ?>
-                <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
+                <p>
+                    <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_diff]) ?>
+                    <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
+                </p>
             <?php } ?>
         </div>
+    <?php } ?>
+    <div class="form-group">
+        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-', ($lock_button ? 'default' : 'primary'), 'disabled' => $lock_button, 'name' => 'save-button']) ?>
         <?php ActiveForm::end(); ?>
     </div>
