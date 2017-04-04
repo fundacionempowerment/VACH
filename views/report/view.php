@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('assessment', 'Assessment') ?>: <?= Html::label($assessment->fullname) ?>
     </div>
     <div class="col-md-6 text-right">
-        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
-        <?= Html::a(\Yii::t('app', 'Download Presentation'), Url::to(['report/presentation', 'id' => $assessment->id]), ['class' => 'btn btn-info']) ?>
+        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $assessment->id]), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $assessment->id]), ['class' => 'btn btn-success']) ?>
     </div>
     <div class="clearfix"></div>
     <h3>

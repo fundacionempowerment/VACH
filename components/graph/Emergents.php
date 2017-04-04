@@ -15,6 +15,7 @@ class Emergents
     const margin_title = 34;
     const height_subtitle = 18;
     const margin_inner = 8;
+    const max_emergent_shown = 4;
 
     static private $dimensions;
     static private $value_key;
@@ -94,13 +95,13 @@ class Emergents
             }
         }
 
-        while (count($max_emergents) > 2) {
+        while (count($max_emergents) > self::max_emergent_shown) {
             array_shift($max_emergents);
         }
-        while (count($min_emergents) > 2) {
+        while (count($min_emergents) > self::max_emergent_shown) {
             array_shift($min_emergents);
         }
-        while (count($gap_emergents) > 2) {
+        while (count($gap_emergents) > self::max_emergent_shown) {
             array_shift($gap_emergents);
         }
 

@@ -33,9 +33,9 @@ class Presentation
         self::addCompetenceTableSlide();
         self::addTeamTitleSlide();
         self::addTeamCompentencesSlide();
-        self::addTeamNumberMatrixSlide();
-        self::addTeamMatrixSlide();
         self::addTeamEmergentsSlide();
+        self::addTeamMatrixSlide();
+        self::addTeamNumberMatrixSlide();
 
         self::addMembersTitleSlide();
 
@@ -43,9 +43,9 @@ class Presentation
             self::addMemberTitleSlide($member);
             self::addMemberPerceptionSlide($member);
             self::addMemberCompentencesSlide($member);
-            self::addMemberMatrixSlide($member);
-            self::addMemberRelationsSlide($member);
             self::addMemberEmergentsSlide($member);
+            self::addMemberRelationsSlide($member);
+            self::addMemberMatrixSlide($member);
         }
 
         self::addThankYouSlide();
@@ -791,7 +791,11 @@ class Presentation
                 ->setPath($path)
                 ->setWidth(800)
                 ->setOffsetX(70)
-                ->setOffsetY(50);
+                ->setOffsetY(100);
+
+        self::addCPCLogo($currentSlide);
+
+        $currentSlide = self::$ppt->createSlide();
 
         $shape = $currentSlide->createDrawingShape();
 
@@ -806,7 +810,7 @@ class Presentation
                 ->setPath($path)
                 ->setWidth(800)
                 ->setOffsetX(70)
-                ->setOffsetY(350);
+                ->setOffsetY(100);
 
         self::addCPCLogo($currentSlide);
     }
