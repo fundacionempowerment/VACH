@@ -9,6 +9,8 @@ use app\models\Assessment;
 use app\models\Wheel;
 use app\models\WheelQuestion;
 use yii\bootstrap\Modal;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -46,6 +48,24 @@ if ($wheels_completed)
 
 $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>';
 $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>';
+
+$coachesProvider = new ArrayDataProvider([
+    'allModels' => $assessment->assessmentCoaches,
+        ]);
+
+$pluginOptions = [
+    'allowClear' => true,
+    'minimumInputLength' => 3,
+    'ajax' => [
+        'url' => Url::to(['/user/find-by-name']),
+        'dataType' => 'json',
+        'data' => new JsExpression('function(params) { return {name:params.term, id:$(this).val()}; }')
+    ],
+    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+    'templateResult' => new JsExpression('function(user) { return user.userFullname; }'),
+    'templateSelection' => new JsExpression('function (user) { return user.userFullname; }'),
+    'cache' => true
+];
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -56,7 +76,48 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?>
     </div>
     <div class="clearfix"></div>
-    <div class="row col-md-5">
+    <div class="row col-md-6">
+        <h2><?= $assessment->getAttributeLabel('coaches') ?></h2>
+        <?=
+        GridView::widget([
+            'dataProvider' => $coachesProvider,
+            'columns' => [
+                'coach.fullname',
+                ['class' => 'app\components\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'options' => ['width' => '60px'],
+                    'buttons' => [
+                        'delete' => function ($url, $model, $key) {
+                            if ($model['coach_id'] == Yii::$app->user->identity->id) {
+                                return '';
+                            } else {
+
+                                return Html::a(app\components\Icons::REMOVE, Url::to(['remove-coach', 'id' => $model['id']]), [
+                                            'title' => Yii::t('assessment', 'Remove access'),
+                                            'class' => 'btn btn-danger',
+                                ]);
+                            }
+                        },
+                    ]
+                ]
+            ],
+        ]);
+        ?>
+        <?php $form = ActiveForm::begin(['id' => 'addcoach-form', 'action' => ['grant-coach', 'id' => $assessment->id], 'options' => ['class' => 'form-inline']]);
+        ?>
+        <?=
+        Select2::widget([
+            'name' => 'coach_id',
+            'options' => [
+                'placeholder' => Yii::t('team', 'Select coach ...'),
+            ],
+            'pluginOptions' => $pluginOptions,
+        ])
+        ?>
+        <?= Html::submitButton(\Yii::t('assessment', 'Grant access'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'margin-bottom: 10px;']) ?>
+        <?php ActiveForm::end(); ?>
+    </div>
+    <div class="col-md-6">
         <h2>
             <?= Yii::t('assessment', 'Individual wheels') ?>
             <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('individual_modal');" >
@@ -333,16 +394,16 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
     <?php Modal::end(); ?>
 </div>
 <script type="text/javascript">
-                function showEmail(member, email, url, token)
-                {
-                    $('#email_modal').modal('show');
-                    $('#member').html(member);
-                    $('#member_email').html(email);
-                    $('#url').html(url);
-                }
+    function showEmail(member, email, url, token)
+    {
+        $('#email_modal').modal('show');
+        $('#member').html(member);
+        $('#member_email').html(email);
+        $('#url').html(url);
+    }
 
-                function showTokens(modal)
-                {
-                    $('#' + modal).modal('show');
-                }
+    function showTokens(modal)
+    {
+        $('#' + modal).modal('show');
+    }
 </script>

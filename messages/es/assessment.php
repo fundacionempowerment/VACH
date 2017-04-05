@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Access granted' => 'Acceso concedido',
+    'Access removed' => 'Acceso quitado',
     'Assessment' => 'Relevamiento',
     'Assessment has been successfully deleted.' => 'Relevamiento ha sido eliminado con éxito',
     'Assessments' => 'Relevamientos',
@@ -24,12 +26,14 @@ return [
     'Email to send' => 'Correo electrónico a enviar',
     'Go to dashboard...' => 'Ir al tablero...',
     'Go to report...' => 'Ir al informe...',
+    'Grant access' => 'Permitir acceso',
     'Group wheels' => 'Ruedas grupales',
     'Individual wheels' => 'Ruedas individuales',
     'New assessment' => 'Nuevo relevamiento',
     'Organizational wheels' => 'Ruedas organizacionales',
     'Please ask the audience to enter this site and token in his/her phone browser' => 'Por favor pida al público que ingrese este sitio e indentificador en su teléfono',
     'Please send this email' => 'Por favor envíe este correo electrónico',
+    'Remove access' => 'Quitar acceso',
     'Run on smartphones' => 'Ejectuar en teléfonos celulares',
     'Wheel already fullfilled. Email not sent.' => 'Rueda ya completada. Correo electrónico no enviado.',
     '{wheel_type} sent to {user}.' => '{wheel_type} enviada a {user}',

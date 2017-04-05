@@ -80,8 +80,8 @@ class Assessment extends ActiveRecord
     {
         return Assessment::find()
                         ->select('assessment.*')
-                        ->innerJoin('team', '`team`.`id` = `assessment`.`team_id`')
-                        ->where(['team.coach_id' => Yii::$app->user->id])
+                        ->innerJoin('assessment_coach', '`assessment_coach`.`assessment_id` = `assessment`.`id`')
+                        ->where(['assessment_coach.coach_id' => Yii::$app->user->id])
                         ->orderBy('assessment.id desc');
     }
 
@@ -143,17 +143,31 @@ class Assessment extends ActiveRecord
 
     public function getIndividualWheels()
     {
-        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL]);
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL])->with('answers');
     }
 
     public function getGroupWheels()
     {
-        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP]);
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP])->with('answers');
     }
 
     public function getOrganizationalWheels()
     {
-        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL]);
+        return $this->hasMany(Wheel::className(), ['assessment_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL])->with('answers');
+    }
+
+    public function getAssessmentCoaches()
+    {
+        return $this->hasMany(AssessmentCoach::className(), ['assessment_id' => 'id']);
+    }
+
+    public function getAccessGranted()
+    {
+        return self::find()
+                        ->where([
+                            'assessment_id' => $this->id,
+                            'coach_id' => Yii::$app->user->identity->id,
+                        ])->exists();
     }
 
 }

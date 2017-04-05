@@ -10,19 +10,22 @@ use yii\filters\AccessControl;
 /**
  * User controller
  */
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     public $layout = 'inner';
 
     /**
      * @inheritdoc
      */
-    public function actions() {
+    public function actions()
+    {
         return [
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -33,7 +36,8 @@ class UserController extends Controller {
         ];
     }
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         if (!isset(Yii::$app->user->identity))
             $this->redirect(['/site']);
         else if ($action->id != 'my-account' && !Yii::$app->user->identity->is_administrator) {
@@ -43,7 +47,30 @@ class UserController extends Controller {
         return parent::beforeAction($action);
     }
 
-    public function actionIndex() {
+    public function actionFindByName($name = null)
+    {
+        Yii::$app->response->format = 'json';
+
+        $data['results'] = [];
+        if ($name) {
+
+            $users = User::findByName($name)->all();
+            foreach ($users as $user) {
+                $newElement['id'] = $user->id;
+                $newElement['name'] = $user->name;
+                $newElement['surname'] = $user->surname;
+                $newElement['fullname'] = $user->fullname;
+                $newElement['userFullname'] = $user->userFullname;
+                $newElement['email'] = $user->email;
+                $data['results'][] = $newElement;
+            }
+        }
+
+        return $data;
+    }
+
+    public function actionIndex()
+    {
 
         $user = User::find();
 
@@ -52,7 +79,8 @@ class UserController extends Controller {
         ]);
     }
 
-    public function actionNew($personId = null) {
+    public function actionNew($personId = null)
+    {
         $user = new User();
 
         if ($user->load(Yii::$app->request->post())) {
@@ -77,7 +105,8 @@ class UserController extends Controller {
         ]);
     }
 
-    public function actionEdit($id) {
+    public function actionEdit($id)
+    {
         $user = User::findOne(['id' => $id]);
 
         if ($user->load(Yii::$app->request->post())) {
@@ -102,7 +131,8 @@ class UserController extends Controller {
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $user = User::findOne(['id' => $id]);
         if ($user->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $user->fullname]));
@@ -113,7 +143,8 @@ class UserController extends Controller {
         return $this->redirect(['/user']);
     }
 
-    public function actionMyAccount() {
+    public function actionMyAccount()
+    {
         if (Yii::$app->user->isGuest)
             $this->goHome();
 
@@ -142,4 +173,3 @@ class UserController extends Controller {
     }
 
 }
-

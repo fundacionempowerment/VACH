@@ -10,6 +10,7 @@ use app\models\Assessment;
 use app\models\DashboardFilter;
 use app\models\Wheel;
 use app\models\Stock;
+use app\models\AssessmentCoach;
 
 class AssessmentController extends BaseController
 {
@@ -32,7 +33,6 @@ class AssessmentController extends BaseController
     {
         $assessment = Assessment::find()
                 ->where(['id' => $id])
-                ->with(['individualWheels', 'groupWheels', 'organizationalWheels'])
                 ->one();
 
         return $this->render('view', [
@@ -192,6 +192,37 @@ class AssessmentController extends BaseController
 
         Yii::$app->session->set('DashboardFilter', $filter);
         $this->redirect(['/dashboard']);
+    }
+
+    public function actionGrantCoach($id)
+    {
+        $assessment = Assessment::findOne(['id' => $id]);
+        $coach_id = Yii::$app->request->post('coach_id');
+
+        //if ($assessment->coach_id == Yii::$app->user->identity->id && $coach_id) {
+        if ($coach_id) {
+            if (AssessmentCoach::notGranted($id, $coach_id)) {
+                $model = new AssessmentCoach([
+                    'assessment_id' => $id,
+                    'coach_id' => $coach_id,
+                ]);
+                if ($model->save()) {
+                    SiteController::addFlash('success', Yii::t('assessment', 'Access granted'));
+                }
+            }
+        }
+
+        return $this->redirect(['/assessment/view', 'id' => $id]);
+    }
+
+    public function actionRemoveCoach($id)
+    {
+        $assessmentCoach = AssessmentCoach::findOne(['id' => $id]);
+        $assessmentCoach->delete();
+
+        SiteController::addFlash('success', Yii::t('assessment', 'Access removed'));
+
+        return $this->redirect(['/assessment/view', 'id' => $assessmentCoach->assessment_id]);
     }
 
     private static function newToken()
