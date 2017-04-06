@@ -30,13 +30,6 @@ if (count($organizationalRelationsMatrix) > 0) {
     ]);
 }
 ?>
-<h3>
-    Descripción
-</h3>
-<?= $this->render('descriptions/effectiveness') ?>
-<h3>
-    Análisis
-</h3>
 <p>
     <?= empty($assessment->report->effectiveness) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $assessment->report->effectiveness ?>
 </p>

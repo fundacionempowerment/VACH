@@ -2,9 +2,6 @@
 
 use yii\helpers\Html;
 ?>
-<h2>
-    2. Fundamentos de CPC
-</h2>
 <h3>
     ¿Qué es el Coaching por Competencias (CPC)?
 </h3>
@@ -78,8 +75,7 @@ use yii\helpers\Html;
     ¿Cómo se lograría esta meta?
 </h3>
 <p>
-    Al referirnos a una metodología de indagación Dialéctica-Proyectiva-Perceptiva,
-    nos referimos a:
+    Al referirnos a una metodología de indagación Dialéctica-Proyectiva-Perceptiva, nos referimos a:
 </p>
 <ul>
     <li>
@@ -142,9 +138,6 @@ use yii\helpers\Html;
 <h3>
     Escala
 </h3>
-<p>
-    En todos los casos la variable dependiente es el consenso —implícito— (Del lat. consensus. m. Acuerdo producido por consentimiento entre todos los miembros de un grupo o entre varios grupos. Microsoft® Encarta® 2006. © 1993-2005 Microsoft Corporation. Reservados todos los derechos). 
-</p>
 <p>
     Para medirlo, utilizamos una escala de 0 a 4, donde 0 indica Nunca y 4 siempre. Para poder interpretar los resultados, consideramos que un grado de consenso será Alto, o una Fortaleza, hablando en términos de competencias, cuando, en promedio, se obtengan valores iguales o superiores a 3. Consideraremos un grado de Consenso Bajo, o una Debilidad, cuando los valores obtenidos sean inferiores o iguales a 2.
 </p>

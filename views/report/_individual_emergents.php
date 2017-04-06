@@ -3,10 +3,7 @@
 use yii\helpers\Html;
 use app\models\Wheel;
 ?>
-<h3>
-    <?= $subtitle_letter ?> - Matriz de Emergentes grupales y organizacionales de <?= $report->member->fullname ?>
-</h3>
-<div class="col-md-6">
+<div class="col-xs-6">
     <?php
     if (count($groupEmergents) > 0) {
         echo $this->render('../dashboard/_emergents', [
@@ -18,7 +15,7 @@ use app\models\Wheel;
     }
     ?>
 </div>
-<div class="col-md-6">
+<div class="col-xs-6">
     <?php
     if (count($organizationalEmergents) > 0) {
         echo $this->render('../dashboard/_emergents', [
@@ -31,13 +28,6 @@ use app\models\Wheel;
     ?>
 </div>
 <div class="clearfix"></div>
-<h3>
-    Descripción
-</h3>
-<?= $this->render('descriptions/individual_emergents') ?>
-<h3>
-    Análisis
-</h3>
 <p>
     <?= empty($report->emergents) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $report->emergents ?>
 </p>
