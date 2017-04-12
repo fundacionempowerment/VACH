@@ -31,6 +31,7 @@ return [
     'Index' => 'Índice',
     'Individual Analysis' => 'Análisis Individual',
     'Introduction' => 'Introducción',
+    'Natural Team' => 'Equipo natural',
     'Perception Matrix' => 'Matriz de percepción',
     'Perception Matrix of {member}' => 'Matriz de percepción de {member}',
     'Performance Matrix' => 'Matriz de desempeño',

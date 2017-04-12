@@ -529,5 +529,17 @@ class ReportController extends Controller
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $assessment->fullname . '.' . date('Y-m-d') . '.pptx');
     }
+    
+    public function actionWord($id)
+    {
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        $phpWord = \app\components\Word::create($assessment);
+
+        $uuid = uniqid('', true);
+        $phpWord->save("/tmp/$uuid.docx", 'Word2007');
+
+        return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $assessment->fullname . '.' . date('Y-m-d') . '.docx');
+    }
 
 }
