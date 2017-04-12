@@ -124,6 +124,7 @@ class WheelController extends BaseController
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = $current_dimension;
+                        $answer->question_id = $questions[$i]->question_id;
                         $answer->save();
                     } else {
                         $new_answer = new WheelAnswer();
@@ -212,7 +213,8 @@ class WheelController extends BaseController
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
-            $questionCount = WheelQuestion::getQuestionCount($wheel->type);
+            $questions = WheelQuestion::getQuestions($wheel->type);
+            $questionCount = count($questions);
             $setSize = $questionCount / 8;
 
             for ($i = 0; $i < $questionCount; $i++) {
@@ -242,6 +244,7 @@ class WheelController extends BaseController
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = intval($i / $setSize);
+                        $answer->question_id = $questions[$i]->question_id;
                         if ($valid_answer)
                             $answer->save();
                     } else {
@@ -249,6 +252,7 @@ class WheelController extends BaseController
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
                         $new_answer->dimension = intval($i / $setSize);
+                        $new_answer->question_id = $questions[$i]->question_id;
                         if ($valid_answer)
                             $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }

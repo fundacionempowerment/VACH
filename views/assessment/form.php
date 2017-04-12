@@ -13,7 +13,7 @@ $this->title = $assessment->id == 0 ? Yii::t('assessment', 'New assessment') : $
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$lock_button = Yii::$app->params['monetize'] && $licences_diff > 0;
+$lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -63,20 +63,23 @@ $lock_button = Yii::$app->params['monetize'] && $licences_diff > 0;
             <p>
                 <?= Yii::t('stock', 'Licences required') ?>: <b><?= $licences_required ?></b>
             </p>
-            <?php if (Yii::$app->params['manual_mode']) { ?>
+            <?php
+            if ($lock_button) {
+                ?>
                 <p>
-                    <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_diff]) ?>
-                    <?= Html::a(Yii::t('app', 'Contact VACH administrator'), ['/site/contact', 'quantity' => $licences_diff], ['class' => 'btn btn-warning']) ?>
-                </p>
-            <?php } else if ($lock_button) { ?>
-                <p>
-                    <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_diff]) ?>
-                    <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
+                    <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_to_buy]) ?>
+                    <?php
+                    if (Yii::$app->params['manual_mode']) {
+                        echo Html::a(Yii::t('app', 'Contact VACH administrator'), ['/site/contact', 'quantity' => $licences_to_buy], ['class' => 'btn btn-warning']);
+                    } else {
+                        echo Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_to_buy], ['class' => 'btn btn-success', 'name' => 'buy-button']);
+                    }
+                    ?>
                 </p>
             <?php } ?>
         </div>
     <?php } ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-', ($lock_button ? 'default' : 'primary'), 'disabled' => $lock_button, 'name' => 'save-button']) ?>
+        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-' . ($lock_button ? 'default' : 'primary'), 'disabled' => $lock_button, 'name' => 'save-button']) ?>
         <?php ActiveForm::end(); ?>
     </div>

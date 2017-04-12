@@ -216,7 +216,7 @@ class SiteController extends BaseController
 
         if (Yii::$app->request->get('quantity') && empty($model->subject)) {
             $model->subject = Yii::t('stock', 'Requesting licences');
-            $model->body = Yii::t('stock', 'Dear admin, I\'m requesting {q} licences. Thanks.', ['q' => Yii::$app->request->get('quantity')]);
+            $model->body = Yii::t('stock', 'Dear administrator, I\'m requesting {q} licences. Thanks.', ['q' => Yii::$app->request->get('quantity')]);
         }
 
         return $this->render('contact', [

@@ -9,6 +9,10 @@ use yii\web\View;
 use kartik\widgets\Select2;
 
 $this->title = Yii::t('stock', 'Remove licences');
+
+$this->params['breadcrumbs'][] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="col-md-12">
     <h1><?= $this->title ?></h1>

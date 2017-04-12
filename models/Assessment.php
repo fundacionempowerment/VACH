@@ -72,6 +72,7 @@ class Assessment extends ActiveRecord
 
     public function beforeDelete()
     {
+        AssessmentCoach::deleteAll(['assessment_id' => $this->id]);
         Wheel::deleteAll(['assessment_id' => $this->id]);
         return parent::beforeDelete();
     }
