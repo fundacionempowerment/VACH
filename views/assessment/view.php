@@ -87,11 +87,10 @@ $pluginOptions = [
                     'template' => '{delete}',
                     'options' => ['width' => '60px'],
                     'buttons' => [
-                        'delete' => function ($url, $model, $key) {
-                            if ($model['coach_id'] == Yii::$app->user->identity->id) {
+                        'delete' => function ($url, $model, $key) use ($assessment) {
+                            if ($model['coach_id'] == Yii::$app->user->identity->id || $assessment->team->coach_id != Yii::$app->user->identity->id) {
                                 return '';
                             } else {
-
                                 return Html::a(app\components\Icons::REMOVE, Url::to(['remove-coach', 'id' => $model['id']]), [
                                             'title' => Yii::t('assessment', 'Remove access'),
                                             'class' => 'btn btn-danger',
@@ -103,19 +102,24 @@ $pluginOptions = [
             ],
         ]);
         ?>
-        <?php $form = ActiveForm::begin(['id' => 'addcoach-form', 'action' => ['grant-coach', 'id' => $assessment->id], 'options' => ['class' => 'form-inline']]);
+        <?php
+        if ($assessment->team->coach_id == Yii::$app->user->identity->id) {
+            $form = ActiveForm::begin(['id' => 'addcoach-form', 'action' => ['grant-coach', 'id' => $assessment->id], 'options' => ['class' => 'form-inline']]);
+            ?>
+            <?=
+            Select2::widget([
+                'name' => 'coach_id',
+                'options' => [
+                    'placeholder' => Yii::t('team', 'Select coach ...'),
+                ],
+                'pluginOptions' => $pluginOptions,
+            ])
+            ?>
+            <?= Html::submitButton(\Yii::t('assessment', 'Grant access'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'margin-bottom: 10px;']) ?>
+            <?php
+            ActiveForm::end();
+        }
         ?>
-        <?=
-        Select2::widget([
-            'name' => 'coach_id',
-            'options' => [
-                'placeholder' => Yii::t('team', 'Select coach ...'),
-            ],
-            'pluginOptions' => $pluginOptions,
-        ])
-        ?>
-        <?= Html::submitButton(\Yii::t('assessment', 'Grant access'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'margin-bottom: 10px;']) ?>
-        <?php ActiveForm::end(); ?>
     </div>
     <div class="col-md-6">
         <h2>

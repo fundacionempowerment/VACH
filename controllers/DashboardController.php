@@ -47,7 +47,11 @@ class DashboardController extends BaseController {
 
         if ($filter->companyId > 0) {
             $teamQuery = Team::find()
-                    ->where(['company_id' => $filter->companyId])
+                    ->innerJoin('assessment', 'assessment.team_id = team.id')
+                    ->innerJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                    ->where(['team.coach_id' => Yii::$app->user->id])
+                    ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
+                    ->andWhere(['team.company_id' => $filter->companyId])
                     ->with(['coach', 'company'])
                     ->all();
             $teams = ArrayHelper::map($teamQuery, 'id', 'fullname');
@@ -74,7 +78,9 @@ class DashboardController extends BaseController {
 
         if ($filter->teamId > 0) {
             $assessmentQuery = Assessment::find()
+                    ->innerJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
                     ->where(['team_id' => $filter->teamId])
+                    ->andWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
                     ->with(['team', 'team.company'])
                     ->all();
             $assessments = ArrayHelper::map($assessmentQuery, 'id', 'name');

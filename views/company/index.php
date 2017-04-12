@@ -27,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data['name'], Url::to(['company/edit', 'id' => $data['id']])); // $data['name'] for array data, e.g. using SqlDataProvider.
+                    if ($data['coach_id'] == Yii::$app->user->id) {
+                        return Html::a($data['name'], Url::to(['company/edit', 'id' => $data['id']]));
+                    } else {
+                        return $data['name'];
+                    }
                 },
             ],
             ['class' => 'app\components\grid\ActionColumn',
@@ -35,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['width' => '60px'],
                 'urlCreator' => function( $action, $model, $key, $index ) {
                     switch ($action) {
-                        case 'delete' : return Url::to(['company/delete', 'id' => $model['id'], 'delete' => '1']);
+                        case 'delete' : return $model['coach_id'] == Yii::$app->user->id ? Url::to(['company/delete', 'id' => $model['id'], 'delete' => '1']) : '';
                     };
                 }
             ]

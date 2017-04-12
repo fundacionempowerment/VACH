@@ -55,7 +55,12 @@ class Company extends ActiveRecord {
     }
 
     public static function browse() {
-        return Company::find()->where(['coach_id' => Yii::$app->user->id]);
+        return Company::find()
+                        ->innerJoin('team', 'team.company_id = company.id')
+                        ->innerJoin('assessment', 'assessment.team_id = team.id')
+                        ->innerJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                        ->where(['company.coach_id' => Yii::$app->user->id])
+                        ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id]);
     }
 
     public function getCoach() {
