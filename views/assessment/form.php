@@ -63,7 +63,12 @@ $lock_button = Yii::$app->params['monetize'] && $licences_diff > 0;
             <p>
                 <?= Yii::t('stock', 'Licences required') ?>: <b><?= $licences_required ?></b>
             </p>
-            <?php if ($lock_button) { ?>
+            <?php if (Yii::$app->params['manual_mode']) { ?>
+                <p>
+                    <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_diff]) ?>
+                    <?= Html::a(Yii::t('app', 'Contact VACH administrator'), ['/site/contact', 'quantity' => $licences_diff], ['class' => 'btn btn-warning']) ?>
+                </p>
+            <?php } else if ($lock_button) { ?>
                 <p>
                     <?= Yii::t('stock', 'You need {count} more licences', ['count' => $licences_diff]) ?>
                     <?= Html::a(\Yii::t('stock', 'Buy Licences'), ['/stock/new', 'id' => 1, 'quantity' => $licences_diff], ['class' => 'btn btn-success', 'name' => 'buy-button']) ?>
