@@ -159,6 +159,8 @@ class Relations
         $maleIcon->SetAnchor('center', 'bottom');
         $femaleIcon = new \IconPlot(Yii::getAlias("@app/web/images/protoFemale.png"));
         $femaleIcon->SetAnchor('center', 'bottom');
+        $otherIcon = new \IconPlot(Yii::getAlias("@app/web/images/protoOther.png"));
+        $otherIcon->SetAnchor('center', 'bottom');
 
         for ($i = 1; $i < count($data); $i++) {
             $current_angle = ($i - 1) * 2 * pi() / (count($data) - 1);
@@ -170,9 +172,12 @@ class Relations
             if ($data[$i][$who . '_gender'] == 0) {
                 $maleIcon->SetPos($x, $y);
                 $maleIcon->Stroke($g->img);
-            } else {
+            } elseif ($data[$i][$who . '_gender'] == 1) {
                 $femaleIcon->SetPos($x, $y);
                 $femaleIcon->Stroke($g->img);
+            } else {
+                $otherIcon->SetPos($x, $y);
+                $otherIcon->Stroke($g->img);
             }
 
             $t = new \Text($data[$i][$who . '_name'] . ' ' . $data[$i][$who . '_surname'], $x, $y + 4);
@@ -198,9 +203,12 @@ class Relations
         if ($data[0][$who . '_gender'] == 0) {
             $maleIcon->SetPos($x, $y);
             $maleIcon->Stroke($g->img);
-        } else {
+        } elseif ($data[0][$who . '_gender'] == 1) {
             $femaleIcon->SetPos($x, $y);
             $femaleIcon->Stroke($g->img);
+        } else {
+            $otherIcon->SetPos($x, $y);
+            $otherIcon->Stroke($g->img);
         }
 
         $t = new \Text($data[0][$who . '_name'] . ' ' . $data[0][$who . '_surname'], $x, $y + 4);
