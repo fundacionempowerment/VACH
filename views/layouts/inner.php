@@ -70,8 +70,9 @@ $items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username 
                     'class' => 'navbar-default navbar-fixed-top',
                 ],
             ]);
-            echo Html::img('@web/images/logo.png', ['alt' => 'logo',
-                'class' => 'image-responsive', 'height' => '35px', 'style' => 'margin-top: 6px',]);
+            $logo = Html::img('@web/images/logo.png', ['alt' => 'logo',
+                        'class' => 'image-responsive', 'height' => '35px', 'style' => 'margin-top: 6px',]);
+            echo Html::a($logo, ['/site/index']);
 
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
