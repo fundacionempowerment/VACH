@@ -10,7 +10,7 @@ use app\models\WheelQuestion;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('wheel', 'Editing wheel questions');
+$this->title = Yii::t('wheel', 'Wheel Questions');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-wheel">

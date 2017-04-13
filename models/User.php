@@ -45,6 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['name', 'surname', 'email'], 'required'],
             [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator'], 'safe'],
             [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            ['username', 'unique'],
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
@@ -129,6 +130,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserFullname()
     {
         return $this->name . ' ' . $this->surname . ' (' . $this->username . ')';
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!$this->authley) {
+            $this->generateAuthKey();
+        }
+        return parent::beforeSave($insert);
     }
 
     public function afterSave($insert, $changedAttributes)

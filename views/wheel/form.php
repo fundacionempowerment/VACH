@@ -65,9 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div>
         <br/><br/>
         <?php
-        if ($current_dimension < 7)
-            echo Html::submitButton(Yii::t('wheel', 'Save and next dimension...'), ['class' => 'btn btn-lg btn-primary']);
-        else
+        if ($current_dimension < 7) {
+            echo Html::submitButton(
+                    $wheel->type == Wheel::TYPE_INDIVIDUAL ?
+                            Yii::t('wheel', 'Save and next dimension...') :
+                            Yii::t('wheel', 'Save and next competence...')
+                    , ['class' => 'btn btn-lg btn-primary']);
+        } else
             echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-lg btn-success']);
         echo "<br/><br/>";
         if (isset(Yii::$app->user))

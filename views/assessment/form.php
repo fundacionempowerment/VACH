@@ -11,6 +11,7 @@ use yii\grid\GridView;
 
 $this->title = $assessment->id == 0 ? Yii::t('assessment', 'New assessment') : $assessment->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
+$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;

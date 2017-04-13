@@ -19,6 +19,7 @@
 return [
     'Access granted' => 'Acceso concedido',
     'Access removed' => 'Acceso quitado',
+    'Allowed coaches' => 'Coaches invitados',
     'Assessment' => 'Relevamiento',
     'Assessment has been successfully deleted.' => 'Relevamiento ha sido eliminado con éxito',
     'Assessments' => 'Relevamientos',

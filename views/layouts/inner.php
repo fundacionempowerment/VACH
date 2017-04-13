@@ -75,6 +75,7 @@ $items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username 
             echo Html::a($logo, ['/site/index']);
 
             echo Nav::widget([
+                'id' => 'navbar',
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => $items,
                 'encodeLabels' => false,

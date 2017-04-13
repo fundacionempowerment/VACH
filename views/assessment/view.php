@@ -76,8 +76,8 @@ $pluginOptions = [
         <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?>
     </div>
     <div class="clearfix"></div>
-    <div class="row col-md-6">
-        <h2><?= $assessment->getAttributeLabel('coaches') ?></h2>
+    <div class="col-md-6 col-md-push-6">
+        <h3><?= $assessment->getAttributeLabel('coaches') ?></h3>
         <?=
         GridView::widget([
             'dataProvider' => $coachesProvider,
@@ -121,7 +121,7 @@ $pluginOptions = [
         }
         ?>
     </div>
-    <div class="col-md-6">
+    <div class="row col-md-6 col-md-pull-6">
         <h2>
             <?= Yii::t('assessment', 'Individual wheels') ?>
             <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('individual_modal');" >
@@ -139,7 +139,7 @@ $pluginOptions = [
                         foreach ($assessment->individualWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
-                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
                                 </button>
                                 <?php
@@ -189,7 +189,7 @@ $pluginOptions = [
                         foreach ($assessment->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
-                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
                                 </button>
                                 <?php
@@ -241,7 +241,7 @@ $pluginOptions = [
                         foreach ($assessment->organizationalWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id) {
                                 ?>
-                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
                                     <?= $mail_icon ?>!
                                 </button>
                                 <?php
@@ -303,7 +303,10 @@ $pluginOptions = [
             <p>
                 <?= Yii::t('app', 'Empowerment Foundation') ?>
             </p>
-        </h3>        
+            <?php if (YII_ENV_TEST) { ?>
+                <span id="token"></span>
+            <?php } ?>
+        </h3>
     </div>
     <?php Modal::end(); ?>
     <?php
@@ -404,6 +407,9 @@ $pluginOptions = [
         $('#member').html(member);
         $('#member_email').html(email);
         $('#url').html(url);
+<?php if (YII_ENV_TEST) { ?>
+            $('#token').html(token);
+<?php } ?>
     }
 
     function showTokens(modal)

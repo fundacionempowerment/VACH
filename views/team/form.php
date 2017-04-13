@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=
     $form->field($team, 'company_id')->widget(Select2::classname(), [
         'data' => $companies,
-        'hideSearch' => true,
     ]);
     ?>
     <?=

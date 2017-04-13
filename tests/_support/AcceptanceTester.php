@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * Inherited Methods
+ * @method void wantToTest($text)
+ * @method void wantTo($text)
+ * @method void execute($callable)
+ * @method void expectTo($prediction)
+ * @method void expect($prediction)
+ * @method void amGoingTo($argumentation)
+ * @method void am($role)
+ * @method void lookForwardTo($achieveValue)
+ * @method void comment($description)
+ * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
+ *
+ * @SuppressWarnings(PHPMD)
+ */
+class AcceptanceTester extends \Codeception\Actor
+{
+
+    use _generated\AcceptanceTesterActions;
+
+    /**
+     * @param string $username
+     * @param string $password
+     */
+    public function login($username, $password)
+    {
+        $I = $this;
+
+        $this->amOnPage(Yii::$app->homeUrl);
+        $this->fillField('LoginForm[username]', $username);
+        $this->fillField('LoginForm[password]', $password);
+        $this->click('login-button');
+        $this->wait(1);
+    }
+
+    /**
+     * @param string $mainMenuItem Text of main menu entry
+     * @param string $secondaryMenuItem Text of menu entry child of main menu entry
+     * @param string $tercearyMenuItem Text of menu entry child of previous menu entry
+     */
+    public function clickMainMenu($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "")
+    {
+        if ($secondaryMenuItem === "") {
+            $mainAnchor = "//ul[@id='navbar']/li/a[contains(text(), '$mainMenuItem')]";
+            $this->click($mainAnchor);
+        } else {
+            $mainAnchor = "//ul[@id='navbar']/li/a[contains(@class, 'dropdown-toggle') and contains(text(), '$mainMenuItem')]";
+            $this->click($mainAnchor);
+
+            $secondaryAnchor = "$mainAnchor/../ul/li/a[contains(text(), '$secondaryMenuItem')]";
+            $this->click($secondaryAnchor);
+        }
+        if ($tercearyMenuItem !== "") {
+            $tercearyAnchor = "$secondaryAnchor/../ul/li/a[contains(text(), '$tercearyMenuItem')]";
+            $this->click($tercearyAnchor);
+        }
+    }
+
+    /**
+     * @param AcceptanceTester $I AcceptanceTester object used in codeception test
+     * @param string $mainMenuItem Text of main menu entry
+     * @param string $secondaryMenuItem Text of menu entry child of main menu entry
+     * @param string $tercearyMenuItem Text of menu entry grand child of main menu entry
+     * @param string $checkTitles string expected to be visible in title
+     * @param string $inPageTag Tag of string expected to be visible in page
+     */
+    function checkMenuItem($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "", $checkTitles = true, $inPageTag = 'h1')
+    {
+        $I = $this;
+
+        $I->clickMainMenu($mainMenuItem, $secondaryMenuItem, $tercearyMenuItem);
+        $this->wait(1);
+
+        if ($checkTitles) {
+            if ($tercearyMenuItem != '') {
+                $I->seeInTitle($tercearyMenuItem);
+                $I->see($tercearyMenuItem, $inPageTag);
+            } else if ($secondaryMenuItem != '') {
+                $I->seeInTitle($secondaryMenuItem);
+                $I->see($secondaryMenuItem, $inPageTag);
+            }
+        }
+    }
+
+    public function selectOptionForSelect2($select, $option)
+    {
+        $this->click("//select[@name='$select']/../span/span[@class='selection']/span/span[@class='select2-selection__arrow']");
+        $this->waitForElement('.select2-search__field');
+        $this->presskey('.select2-search__field', $option);
+        $this->wait(1);
+        $this->click("(//li[contains(@class, 'select2-results__option')])[1]");
+        $this->wait(1);
+    }
+
+}

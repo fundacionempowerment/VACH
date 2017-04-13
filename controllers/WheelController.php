@@ -147,9 +147,6 @@ class WheelController extends BaseController
             if ($current_wheel->validate()) {
                 $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
-                    if (Yii::$app->params['send_wheel_answers'] == true)
-                        $this->sendAnswers($current_wheel);
-
                     $type_text = Wheel::getWheelTypes()[$current_wheel->type];
 
                     $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);

@@ -45,6 +45,7 @@ class Assessment extends ActiveRecord
             'IndividualWheelStatus' => Yii::t('wheel', 'Individual Wheels'),
             'GroupWheelStatus' => Yii::t('wheel', 'Group Wheels'),
             'OrganizationalWheelStatus' => Yii::t('wheel', 'Organizational Wheels'),
+            'coaches' => Yii::t('assessment', 'Allowed coaches'),
         ];
     }
 
@@ -114,7 +115,7 @@ class Assessment extends ActiveRecord
         if ($questions == 0)
             $questions = 1;
 
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getGroupWheelStatus()
@@ -124,7 +125,7 @@ class Assessment extends ActiveRecord
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
         if ($questions == 0)
             $questions = 1;
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getOrganizationalWheelStatus()
@@ -134,7 +135,7 @@ class Assessment extends ActiveRecord
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
         if ($questions == 0)
             $questions = 1;
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getWheels()
