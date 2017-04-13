@@ -82,8 +82,10 @@ class Assessment extends ActiveRecord
     {
         return Assessment::find()
                         ->select('assessment.*')
-                        ->innerJoin('assessment_coach', '`assessment_coach`.`assessment_id` = `assessment`.`id`')
-                        ->where(['assessment_coach.coach_id' => Yii::$app->user->id])
+                        ->leftJoin('assessment_coach', '`assessment_coach`.`assessment_id` = `assessment`.`id`')
+                        ->leftJoin('team', '`team`.`id` = `assessment`.`team_id`')
+                        ->where(['team.coach_id' => Yii::$app->user->id])
+                        ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
                         ->orderBy('assessment.id desc');
     }
 
