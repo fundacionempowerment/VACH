@@ -29,11 +29,9 @@ for ($i = 0; $i < 3; $i++) {
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that assessment crud works');
 
-$I->login('admin', '123456');
-
-$I->see('(admin)');
-
 // Agrego licencias
+
+$I->loginAsAdmin();
 
 $I->clickMainMenu('Admin', 'Licencias');
 $I->wait(1);
@@ -41,13 +39,17 @@ $I->wait(1);
 $I->click('Agregar licencias');
 $I->wait(1);
 
-$I->selectOptionForSelect2('AddModel[coach_id]', 'Marcelo Briones');
+$I->selectOptionForSelect2('AddModel[coach_id]', 'Coach');
 $I->fillField('AddModel[quantity]', count($persons));
 
 $I->click('Guardar');
 $I->wait(1);
 
 // Creo empresa
+
+$I->logout();
+$I->loginAsCoach();
+
 $I->clickMainMenu('Clientes', 'Empresas');
 $I->wait(1);
 
@@ -147,10 +149,7 @@ for ($i = 0; $i < count($persons) * 3; $i++) {
 
 // Prepare to fill wheels
 
-$I->click('(admin)');
-$I->wait(1);
-$I->click('Salir');
-$I->wait(1);
+$I->logout();
 
 // Fill individual wheels
 for ($i = 0; $i < count($persons); $i++) {
@@ -222,3 +221,23 @@ for ($i = 3; $i < count($persons) * 3; $i++) {
     $I->click('Inicio');
     $I->wait(1);
 }
+
+// Delete this assessment
+
+$I->loginAsCoach();
+
+$I->see($assessment['name']);
+
+$I->click($assessment['name']);
+$I->wait(1);
+
+$I->click($team['name']);
+$I->wait(1);
+
+$I->click('(//a[@title="Eliminar"])[1]');
+$I->wait(1);
+
+$I->click('Eliminar');
+$I->wait(1);
+
+$I->dontSee($assessment['name']);

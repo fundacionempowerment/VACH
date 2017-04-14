@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email',
             'phone',
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '40px'],
                 'urlCreator' => function( $action, $data, $key, $index ) {

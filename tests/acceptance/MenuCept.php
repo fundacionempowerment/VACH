@@ -3,7 +3,41 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that main menu works in every item');
 
-$I->login('admin', '123456');
+$I->loginAsCoach();
+
+$I->checkMenuItem('Inicio');
+
+$I->checkMenuItem('Clientes', 'Empresas');
+$I->checkMenuItem('Clientes', 'Personas');
+$I->checkMenuItem('Clientes', 'Equipos');
+$I->checkMenuItem('Clientes', 'Relevamientos');
+$I->checkMenuItem('Clientes', 'Tablero');
+
+$I->checkMenuItem('Ayuda', 'Historial de eventos');
+
+$I->checkMenuItem('(coach)', 'Mis datos');
+$I->checkMenuItem('(coach)', 'Mis licencias');
+$I->checkMenuItem('(coach)', 'Mis pagos');
+
+$I->logout();
+$I->loginAsAssisstant();
+
+$I->checkMenuItem('Inicio');
+
+$I->checkMenuItem('Clientes', 'Empresas');
+$I->checkMenuItem('Clientes', 'Personas');
+$I->checkMenuItem('Clientes', 'Equipos');
+$I->checkMenuItem('Clientes', 'Relevamientos');
+$I->checkMenuItem('Clientes', 'Tablero');
+
+$I->checkMenuItem('Ayuda', 'Historial de eventos');
+
+$I->checkMenuItem('(assisstant)', 'Mis datos');
+$I->checkMenuItem('(assisstant)', 'Mis licencias');
+$I->checkMenuItem('(assisstant)', 'Mis pagos');
+
+$I->logout();
+$I->loginAsAdmin();
 
 $I->checkMenuItem('Inicio');
 

@@ -12,9 +12,7 @@ $phone = "($random)$random";
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that person crud works');
 
-$I->login('admin', '123456');
-
-$I->see('(admin)');
+$I->loginAsCoach();
 
 $I->clickMainMenu('Clientes', 'Personas');
 $I->wait(1);

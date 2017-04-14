@@ -10,9 +10,7 @@ $phone = "($random)$random";
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that company crud works');
 
-$I->login('admin', '123456');
-
-$I->see('(admin)');
+$I->loginAsCoach();
 
 $I->clickMainMenu('Clientes', 'Empresas');
 $I->wait(1);

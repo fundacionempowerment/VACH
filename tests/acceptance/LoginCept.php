@@ -1,8 +1,7 @@
 <?php
 
-use tests\codeception\_pages\HomePage;
-
-/* @var $scenario Codeception\Scenario */
+$random = rand(1111, 9999);
+$password = "password$random";
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that login works');
@@ -24,4 +23,22 @@ $I->see('Rueda no encontrada.');
 
 $I->amGoingTo('try to login with correct credentials');
 $I->login('admin', '123456');
+$I->see('(admin)');
+
+$I->clickMainMenu('(admin)', 'Mis datos');
+$I->wait(1);
+
+$I->fillField('User[password]', $password);
+$I->fillField('User[password_confirm]', $password);
+
+$I->click('Guardar');
+$I->wait(1);
+
+$I->see('éxito');
+
+$I->clickMainMenu('(admin)', 'Salir');
+$I->wait(1);
+
+$I->login('admin', $password);
+
 $I->see('(admin)');

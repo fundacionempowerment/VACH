@@ -19,6 +19,10 @@ CREATE TABLE `assessment` (
   `version` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `assessment` (`id`, `team_id`, `created_at`, `updated_at`, `individual_status`, `group_status`, `organizational_status`, `name`, `version`) VALUES
+(1, 1, 1492197123, 1492197123, 0, 0, 0, 'Inicial', 2),
+(2, 1, 1492197137, 1492197137, 0, 0, 0, 'Final', 2);
+
 CREATE TABLE `assessment_coach` (
   `id` int(11) NOT NULL,
   `assessment_id` int(11) NOT NULL,
@@ -34,6 +38,9 @@ CREATE TABLE `company` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `company` (`id`, `coach_id`, `name`, `email`, `phone`, `created_at`, `updated_at`) VALUES
+(1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895);
 
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
@@ -157,6 +164,12 @@ CREATE TABLE `person` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Ariel', 'A', 'ariel@a.com', '(123)4567890', 2, 1492196613, 1492196994),
+(2, 1, 'Beatriz', 'B', 'beatriz@b.com', '(123)4567890', 1, 1492196616, 1492196954),
+(3, 1, 'Carlos', 'C', 'carlos@c.com', '(123)4567890', 0, 1492196619, 1492196987),
+(4, 1, 'Patricio', 'P', 'patricio@p.com', '(234)12345678', 0, 1492197048, 1492197048);
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
@@ -404,6 +417,9 @@ CREATE TABLE `stock` (
   `creator_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`) VALUES
+(1, 2, 1, 100, '18.00', '0.00', 'valid', '2017-04-14 19:03:27', 1);
+
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -415,6 +431,9 @@ CREATE TABLE `team` (
   `blocked` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `team` (`id`, `name`, `coach_id`, `sponsor_id`, `company_id`, `created_at`, `updated_at`, `blocked`) VALUES
+(1, 'Núcleo', 2, 4, 1, 1492197030, 1492197079, 1);
+
 CREATE TABLE `team_member` (
   `id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
@@ -423,6 +442,11 @@ CREATE TABLE `team_member` (
   `updated_at` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `team_member` (`id`, `team_id`, `person_id`, `created_at`, `updated_at`, `active`) VALUES
+(1, 1, 1, 1492197064, 1492197064, 1),
+(2, 1, 2, 1492197067, 1492197067, 1),
+(3, 1, 3, 1492197070, 1492197070, 1);
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
@@ -440,12 +464,10 @@ CREATE TABLE `user` (
   `phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `is_administrator`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$YUfy9ndmBLQ0POZZS8c.uuj/SnPwyVe06MnhH6P1G3zMZVtJc2LLm', NULL, 'test@marcelobriones.com.ar', 'Marcelo', 'Briones', 1, 10, 1429313351, 1429313351),
-(2, 'coach.coach', '', '$2y$13$XBU4zVyRYShcj0E31Yz1EOITVTlI9rhQtIHCJ/rszdWPP1ZlLCrYm', NULL, 'coach@fake.com', 'Ana', 'Trota', 0, 10, 1430528713, 1433210035),
-(3, 'alice.alice', '', '$2y$13$8ET0fsIJ6Vp9n./ebVOfs.VRXMqJf7vjtsW/XEWppUTDDI9lnHBX.', NULL, 'alice@fake.com', 'Alice', 'Alice', 0, 10, 1430540056, 1433210055),
-(4, 'eve.eve', '', '$2y$13$NXv47NHK7GNlFCc.3yKejeZkciJipQyvv2FvFIuOPJHKlN/UXEirK', NULL, 'eve@fake.com', 'Eve', 'Eve', 0, 10, 0, 0),
-(5, 'bob.bob', '', '$2y$13$UCCeXcnNcfBgveI6Wsixb.kZ9lqPcLFRCgsvpb.H.TZgulrJc0Yqm', NULL, 'bob@fake.com', 'Bob', 'Bob', 0, 10, 1430579863, 1433210083);
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `status`, `created_at`, `updated_at`, `is_administrator`, `phone`) VALUES
+(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'admin@example.com', 'Administror', 'A', 10, 1429313351, 1492197214, 1, '(345)1234567'),
+(2, 'coach', 'bn7LboYGkEEvp2BIQtbhBF3qf8V4KL3-', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'coach@example.com', 'Coach', 'C', 10, 1430540056, 1492197337, 0, '(432)1098765'),
+(3, 'assisstant', 'Wb7v9hgzxjTrmiZ2NFxQhfoMN2oamovk', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'assisstant@example.com', 'Assisstant', 'A', 10, 0, 1492197406, 0, '(012)1234567');
 
 CREATE TABLE `wheel` (
   `id` int(11) NOT NULL,
@@ -458,6 +480,50 @@ CREATE TABLE `wheel` (
   `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `observed_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `wheel` (`id`, `observer_id`, `date`, `created_at`, `updated_at`, `assessment_id`, `type`, `token`, `observed_id`) VALUES
+(11, 1, '2017-04-14', 1492197123, 1492197123, 1, 0, '799-123-455', 1),
+(12, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 1),
+(13, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 2),
+(14, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 3),
+(15, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 1),
+(16, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 2),
+(17, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 3),
+(18, 2, '2017-04-14', 1492197123, 1492197123, 1, 0, '295-015-471', 2),
+(19, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 1),
+(20, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 2),
+(21, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 3),
+(22, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 1),
+(23, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 2),
+(24, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 3),
+(25, 3, '2017-04-14', 1492197123, 1492197123, 1, 0, '152-820-545', 3),
+(26, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 1),
+(27, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 2),
+(28, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 3),
+(29, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 1),
+(30, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 2),
+(31, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 3),
+(32, 1, '2017-04-14', 1492197137, 1492197137, 2, 0, '305-660-713', 1),
+(33, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 1),
+(34, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 2),
+(35, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 3),
+(36, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 1),
+(37, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 2),
+(38, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 3),
+(39, 2, '2017-04-14', 1492197137, 1492197137, 2, 0, '277-638-061', 2),
+(40, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 1),
+(41, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 2),
+(42, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 3),
+(43, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 1),
+(44, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 2),
+(45, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 3),
+(46, 3, '2017-04-14', 1492197137, 1492197137, 2, 0, '547-298-853', 3),
+(47, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 1),
+(48, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 2),
+(49, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 3),
+(50, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 1),
+(51, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 2),
+(52, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 3);
 
 CREATE TABLE `wheel_answer` (
   `id` int(11) NOT NULL,

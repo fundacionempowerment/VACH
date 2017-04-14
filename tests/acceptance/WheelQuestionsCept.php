@@ -3,9 +3,7 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that wheel question works');
 
-$I->login('admin', '123456');
-
-$I->see('(admin)');
+$I->loginAsAdmin();
 
 $I->clickMainMenu('Admin','Preguntas de ruedas');
 $I->wait(1);

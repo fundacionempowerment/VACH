@@ -32,7 +32,32 @@ class AcceptanceTester extends \Codeception\Actor
         $this->fillField('LoginForm[username]', $username);
         $this->fillField('LoginForm[password]', $password);
         $this->click('login-button');
-        $this->wait(1);
+        $this->wait(3);
+    }
+
+    public function loginAsAdmin()
+    {
+        $this->login('admin', '123456');
+    }
+
+    public function loginAsCoach()
+    {
+        $this->login('coach', '123456');
+    }
+
+    public function loginAsAssisstant()
+    {
+        $this->login('assisstant', '123456');
+    }
+
+    public function logout()
+    {
+        $I = $this;
+
+        $I->click(".//span[@class = 'glyphicon glyphicon-user']/..");
+        $I->wait(1);
+        $I->click('Salir');
+        $I->wait(1);
     }
 
     /**
@@ -73,6 +98,14 @@ class AcceptanceTester extends \Codeception\Actor
         $I->clickMainMenu($mainMenuItem, $secondaryMenuItem, $tercearyMenuItem);
         $this->wait(1);
 
+        $I->dontSee('#500');
+        $I->dontSee('#404');
+        $I->dontSee('error');
+        $I->dontSee('Error');
+        $I->dontSee('exception');
+        $I->dontSee('Exception');
+        $I->dontSee('Stack trace');
+
         if ($checkTitles) {
             if ($tercearyMenuItem != '') {
                 $I->seeInTitle($tercearyMenuItem);
@@ -82,6 +115,7 @@ class AcceptanceTester extends \Codeception\Actor
                 $I->see($secondaryMenuItem, $inPageTag);
             }
         }
+        
     }
 
     public function selectOptionForSelect2($select, $option)

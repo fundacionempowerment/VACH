@@ -134,7 +134,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
-        if (!$this->authley) {
+        if (!$this->authKey) {
             $this->generateAuthKey();
         }
         return parent::beforeSave($insert);
