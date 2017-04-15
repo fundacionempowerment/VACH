@@ -67,6 +67,7 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function clickMainMenu($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "")
     {
+        $this->wait(1);
         if ($secondaryMenuItem === "") {
             $mainAnchor = "//ul[@id='navbar']/li/a[contains(text(), '$mainMenuItem')]";
             $this->click($mainAnchor);

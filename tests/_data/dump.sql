@@ -166,10 +166,10 @@ CREATE TABLE `person` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Ariel', 'A', 'ariel@a.com', '(123)4567890', 2, 1492196613, 1492196994),
-(2, 1, 'Beatriz', 'B', 'beatriz@b.com', '(123)4567890', 1, 1492196616, 1492196954),
-(3, 1, 'Carlos', 'C', 'carlos@c.com', '(123)4567890', 0, 1492196619, 1492196987),
-(4, 1, 'Patricio', 'P', 'patricio@p.com', '(234)12345678', 0, 1492197048, 1492197048);
+(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)4567890', 2, 1492196613, 1492196994),
+(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(123)4567890', 1, 1492196616, 1492196954),
+(3, 2, 'Carlos', 'C', 'carlos@c.com', '(123)4567890', 0, 1492196619, 1492196987),
+(4, 2, 'Patricio', 'P', 'patricio@p.com', '(234)12345678', 0, 1492197048, 1492197048);
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
