@@ -23,9 +23,10 @@ $hardness_values = [
 ];
 
 $this->title = Yii::t('feedback', 'Feedback');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
-    <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
+    <?= Yii::$app->user->isGuest ? Html::img('@web/images/logo.png', ['class' => 'image-responsive']) : '' ?>
     <h1><?= Html::encode($this->title) ?></h1>
     <h4>
         <p>

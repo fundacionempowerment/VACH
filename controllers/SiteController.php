@@ -205,7 +205,9 @@ class SiteController extends BaseController
 
     public function actionContact()
     {
-        $this->layout = 'inner';
+        if (!Yii::$app->user->isGuest) {
+            $this->layout = 'inner';
+        }
 
         $model = new \app\models\ContactModel();
 

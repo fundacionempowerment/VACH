@@ -32,6 +32,7 @@ return [
     'Check your email for further instructions.' => 'Revise su buzón de correo para más instrucciones.',
     'Clients' => 'Clientes',
     'Concept' => 'Concepto',
+    'Contact' => 'Contacto',
     'Contact administrator' => 'Contactar administrador',
     'Contact VACH administrator' => 'Contactar al administrador de VACH',
     'Create' => 'Crear',

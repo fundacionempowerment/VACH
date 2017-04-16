@@ -11,6 +11,8 @@ use yii\helpers\Html;
         <?= Html::a('English', ['site/en']) ?>
         &nbsp;
         <?= Html::a(Yii::t('feedback', 'Feedbacks'), ['/feedback']) ?>
+        &nbsp;
+        <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?>
     </p>
     <p class="pull-right">
         <?= Yii::t('app', 'Powered by') ?>

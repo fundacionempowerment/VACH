@@ -13,7 +13,11 @@ use app\components\Icons;
 /* @var $content string */
 
 AppAsset::register($this);
-$isAdministrator = Yii::$app->user->identity->is_administrator;
+
+$isAdministrator = false;
+if (Yii::$app->user->identity) {
+    $isAdministrator = Yii::$app->user->identity->is_administrator;
+}
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
@@ -48,7 +52,7 @@ if (Yii::$app->params['monetize']) {
 $userMenu[] = ['label' => Yii::t('app', 'Logout'),
     'url' => ['/site/logout'],
     'linkOptions' => ['data-method' => 'post']];
-$items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username . ')', 'items' => $userMenu];
+$items[] = ['label' => Icons::USER . ' (' . (Yii::$app->user->identity ? Yii::$app->user->identity->username : '') . ')', 'items' => $userMenu];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
