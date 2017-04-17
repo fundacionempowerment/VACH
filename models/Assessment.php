@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\Query;
 use \yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 class Assessment extends ActiveRecord
@@ -172,6 +173,19 @@ class Assessment extends ActiveRecord
                             'assessment_id' => $this->id,
                             'coach_id' => Yii::$app->user->identity->id,
                         ])->exists();
+    }
+
+    static public function getDashboardList($teamId)
+    {
+        $assessments = self ::find()
+                ->innerJoin('team', 'team.id = assessment.team_id')
+                ->leftJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                ->where(['team.coach_id' => Yii::$app->user->id])
+                ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
+                ->andWhere(['team_id' => $teamId])
+                ->with(['team', 'team.company'])
+                ->all();
+        return ArrayHelper::map($assessments, 'id', 'name');
     }
 
 }

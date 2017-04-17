@@ -116,16 +116,19 @@ class AcceptanceTester extends \Codeception\Actor
                 $I->see($secondaryMenuItem, $inPageTag);
             }
         }
-        
     }
 
     public function selectOptionForSelect2($select, $option)
     {
         $this->click("//select[@name='$select']/../span/span[@class='selection']/span/span[@class='select2-selection__arrow']");
         $this->waitForElement('.select2-search__field');
-        $this->presskey('.select2-search__field', $option);
-        $this->wait(1);
-        $this->click("(//li[contains(@class, 'select2-results__option')])[1]");
+        try {
+            $this->presskey('.select2-search__field', $option);
+            $this->wait(1);
+            $this->click("(//li[contains(@class, 'select2-results__option')])[1]");
+        } catch (Exception $e) {
+            $this->click(".//li[text() = '$option']");
+        }
         $this->wait(1);
     }
 

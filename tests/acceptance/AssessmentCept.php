@@ -26,6 +26,18 @@ $I->fillField('Assessment[name]', $assessment['name']);
 $I->click('Guardar');
 $I->wait(1);
 
+$I->clickMainMenu('Clientes', 'Tablero');
+$I->wait(1);
+
+$I->selectOptionForSelect2('DashboardFilter[companyId]', 'ACME');
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[teamId]', 'Núcleo');
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[assessmentId]', $assessment['name']);
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[memberId]', 'Carlos C');
+$I->wait(1);
+
 $I->click('Inicio');
 $I->wait(1);
 

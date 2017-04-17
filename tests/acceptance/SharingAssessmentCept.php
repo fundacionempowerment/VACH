@@ -39,8 +39,9 @@ $I->loginAsAssisstant();
 $I->see($assessment['name']);
 
 $I->clickMainMenu('Clientes', 'Empresas');
+$I->wait(1);
 
-$I->waitForText('ACME');
+$I->dontSee('ACME');
 
 $I->clickMainMenu('Clientes', 'Personas');
 $I->wait(1);
@@ -48,7 +49,7 @@ $I->wait(1);
 $I->dontSee('Ariel');
 $I->dontSee('Beatriz');
 $I->dontSee('Carlos');
-        
+
 $I->clickMainMenu('Clientes', 'Equipos');
 $I->wait(1);
 
@@ -62,6 +63,18 @@ $I->wait(1);
 $I->waitForText('Ariel A');
 $I->waitForText('Beatriz B');
 $I->waitForText('Carlos C');
+
+$I->clickMainMenu('Clientes', 'Tablero');
+$I->wait(1);
+
+$I->selectOptionForSelect2('DashboardFilter[companyId]', 'ACME');
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[teamId]', 'Núcleo');
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[assessmentId]', $assessment['name']);
+$I->wait(1);
+$I->selectOptionForSelect2('DashboardFilter[memberId]', 'Carlos C');
+$I->wait(1);
 
 $I->logout();
 
@@ -78,7 +91,15 @@ $I->wait(1);
 $I->dontSee('Ariel');
 $I->dontSee('Beatriz');
 $I->dontSee('Carlos');
-        
+
 $I->clickMainMenu('Clientes', 'Equipos');
 $I->wait(1);
 $I->dontSee('Núcleo');
+
+$I->clickMainMenu('Clientes', 'Tablero');
+$I->wait(1);
+
+$I->dontSee('ACME');
+$I->dontSee('Núcleo');
+$I->dontSee($assessment['name']);
+$I->dontSee('Carlos C');

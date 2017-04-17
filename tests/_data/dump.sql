@@ -40,7 +40,8 @@ CREATE TABLE `company` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `company` (`id`, `coach_id`, `name`, `email`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895);
+(1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895),
+(2, 2, 'Yotsuba', 'info@yotsuba.com.jp', '(11)2323423423', 1492320953, 1492320953);
 
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
@@ -166,10 +167,14 @@ CREATE TABLE `person` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)4567890', 2, 1492196613, 1492196994),
-(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(123)4567890', 1, 1492196616, 1492196954),
-(3, 2, 'Carlos', 'C', 'carlos@c.com', '(123)4567890', 0, 1492196619, 1492196987),
-(4, 2, 'Patricio', 'P', 'patricio@p.com', '(234)12345678', 0, 1492197048, 1492197048);
+(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)12345678', 2, 1492196613, 1492196994),
+(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(234)12345678', 1, 1492196616, 1492196954),
+(3, 2, 'Carlos', 'C', 'carlos@c.com', '(345)12345678', 0, 1492196619, 1492196987),
+(4, 2, 'Patricio', 'P', 'patricio@p.com', '(456)12345678', 0, 1492197048, 1492197048),
+(5, 2, 'Dallas', 'D', 'dallas@d.com', '(567)12345678', 2, 1492321092, 1492321092),
+(6, 2, 'Esteban', 'E', 'esteben@e.com', '(678)12345678', 0, 1492321137, 1492321137),
+(7, 2, 'Fernanda', 'F', 'fernanda@f.com', '(789)12345678', 1, 1492321158, 1492321158),
+(8, 2, 'Quinn', 'Q', 'quinn@q.com', '(890)12345678', 1, 1492321269, 1492321269);
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
@@ -432,7 +437,8 @@ CREATE TABLE `team` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `team` (`id`, `name`, `coach_id`, `sponsor_id`, `company_id`, `created_at`, `updated_at`, `blocked`) VALUES
-(1, 'Núcleo', 2, 4, 1, 1492197030, 1492197079, 1);
+(1, 'Núcleo', 2, 4, 1, 1492197030, 1492197079, 1),
+(2, 'Ventas', 2, 8, 2, 1492321286, 1492321316, 1);
 
 CREATE TABLE `team_member` (
   `id` int(11) NOT NULL,
@@ -446,7 +452,10 @@ CREATE TABLE `team_member` (
 INSERT INTO `team_member` (`id`, `team_id`, `person_id`, `created_at`, `updated_at`, `active`) VALUES
 (1, 1, 1, 1492197064, 1492197064, 1),
 (2, 1, 2, 1492197067, 1492197067, 1),
-(3, 1, 3, 1492197070, 1492197070, 1);
+(3, 1, 3, 1492197070, 1492197070, 1),
+(4, 2, 5, 1492321297, 1492321297, 1),
+(5, 2, 6, 1492321302, 1492321302, 1),
+(6, 2, 7, 1492321307, 1492321307, 1);
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
