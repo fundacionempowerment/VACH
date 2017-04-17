@@ -41,6 +41,7 @@ if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
     $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
+    $admininistratorMenu[] = ['label' => Yii::t('app', 'Backup'), 'url' => ['site/backup']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 

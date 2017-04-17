@@ -260,4 +260,12 @@ class SiteController extends BaseController
         \Yii::$app = $oldApp;
     }
 
+    public function actionBackup()
+    {
+        if (\app\components\Backup::createAndSend()) {
+            self::addFlash('success', 'Backup sent!');
+        }
+        return $this->goHome();
+    }
+
 }

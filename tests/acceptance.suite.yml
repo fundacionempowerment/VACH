@@ -13,6 +13,7 @@ modules:
     enabled:
         - WebDriver
         - Db
+        - MailCatcher
         - Yii2
 # you can use WebDriver instead of PhpBrowser to test javascript and ajax.
 # This will require you to install selenium. See http://codeception.com/docs/04-AcceptanceTests#Selenium
@@ -32,3 +33,6 @@ modules:
             dump: tests/_data/dump.sql
             populate: true
             cleanup: true
+        MailCatcher:
+            url: 'http://localhost'
+            port: '1080'
