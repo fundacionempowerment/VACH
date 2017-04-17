@@ -23,4 +23,5 @@ return [
     'payu_action_url' => 'https://sandbox.gateway.payulatam.com/ppp-web-gateway',
     'payu_response_url' => 'http://**********:8080/vach/web/index.php?r=payment%2Fresponse',
     'payu_confirmation_url' => 'http://**********:8080/vach/web/index.php?r=payment%2Fconfirmation',
+    'payu_payment_confirmation_wait' => 10 * 60,
 ];

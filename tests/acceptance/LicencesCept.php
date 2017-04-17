@@ -9,8 +9,6 @@ $I->wantTo('ensure that licence management works');
 
 $I->loginAsAdmin();
 
-// Creo nuevo relevamiento
-
 $I->clickMainMenu('Admin', 'Licencias');
 $I->wait(1);
 
