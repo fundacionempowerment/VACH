@@ -87,6 +87,7 @@ class StockController extends BaseController
 
             $payment = new Payment();
             $payment->coach_id = Yii::$app->user->id;
+            $payment->creator_id = Yii::$app->user->id;
             $payment->stock_id = $stock->id;
             $payment->concept = $model->quantity . ' ' . $product->name;
             $payment->amount = $stock->total;
