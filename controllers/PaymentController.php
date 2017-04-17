@@ -54,6 +54,17 @@ class PaymentController extends BaseController
 
         $model = Payment::findOne(['uuid' => $referenceCode]);
 
+        if (!$model) {
+            $model = new Payment();
+            $model->status = Payment::STATUS_ERROR;
+        } else{
+            $a = new \DateTime($model->stamp);
+        }
+
+        if ($model->status == Payment::STATUS_ERROR) {
+            $this->notifyAdmin($referenceCode);
+        }
+
         return $this->render('response', [
                     'model' => $model,
         ]);
@@ -88,6 +99,16 @@ class PaymentController extends BaseController
         if (!$stock->save()) {
             SiteController::FlashErrors($stock);
         }
+    }
+
+    private function notifyAdmin($referenceCode)
+    {
+        Yii::$app->mailer->compose('payment', [
+                    'referenceCode' => $referenceCode,
+                ])
+                ->setSubject('Payment with issues')
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->send();
     }
 
 }
