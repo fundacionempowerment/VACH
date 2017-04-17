@@ -13,9 +13,15 @@ use app\models\CoachModel;
 use app\models\ClientModel;
 use app\models\Feedback;
 
-class FeedbackController extends BaseController {
+class FeedbackController extends BaseController
+{
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $this->layout = 'inner';
+        }
+
         $previous_feedback = Feedback::getPrevious();
         if (count($previous_feedback) > 0)
             return $this->render('already');
@@ -33,8 +39,7 @@ class FeedbackController extends BaseController {
 
             if ($feedback->save()) {
                 return $this->render('thanks');
-            }
-            else
+            } else
                 SiteController::FlashErrors($feedback);
         }
 
@@ -44,4 +49,3 @@ class FeedbackController extends BaseController {
     }
 
 }
-

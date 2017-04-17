@@ -189,7 +189,7 @@ class Relations
             $x = self::RELATION_width * ($who == 'observer' ? 1 : 3) / 4 + self::RELATION_xradio / 2 * cos($current_angle);
             $y = self::RELATION_height / 2 + self::RELATION_yradio / 2 * sin($current_angle);
 
-            $t = new \Text(round($data[$i]['value'] * 1000 / 4) / 10 . ' %', $x, $y);
+            $t = new \Text(round($data[$i]['value'] * 1000 / 4) / 10 . '%', $x, $y);
             $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 10);
             $t->Align('center', 'center');
             $t->SetColor("black");
