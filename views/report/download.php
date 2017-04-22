@@ -177,6 +177,47 @@ $this->title = Yii::t('report', 'Report');
                 <h1>
                     <?= $individualReport->member->fullname ?>
                 </h1>
+                <?=
+                $this->render('_individual_perception', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'projectedGroupWheel' => $projectedGroupWheel,
+                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+                    'reflectedGroupWheel' => $reflectedGroupWheel,
+                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
+                ])
+                ?> 
+                <div style="page-break-after: always"> </div>
+                <?=
+                $this->render('_individual_competences', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupGauges' => $groupGauges,
+                    'organizationalGauges' => $organizationalGauges,
+                    'members' => $members,
+                ]);
+                ?>
+                <div style="page-break-after: always"></div>
+                <?=
+                $this->render('_individual_emergents', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupEmergents' => $groupEmergents,
+                    'organizationalEmergents' => $organizationalEmergents,
+                    'members' => $members,
+                ]);
+                ?>
+                <div style="page-break-after: always"> </div>
+                <?=
+                $this->render('_individual_relations', [
+                    'report' => $individualReport,
+                    'assessment' => $assessment,
+                    'groupRelationsMatrix' => $groupRelationsMatrix,
+                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+                    'members' => $members,
+                ]);
+                ?>
+                <div style="page-break-after: always"> </div>
                 <?php
                 if ($individualReport->performance != '') {
                     echo $this->render('_individual_performance', [
@@ -189,47 +230,6 @@ $this->title = Yii::t('report', 'Report');
                 }
                 ?>
                 <div style="page-break-after: always"></div>
-                <?=
-                $this->render('_individual_perception', [
-                    'report' => $individualReport,
-                    'assessment' => $assessment,
-                    'projectedGroupWheel' => $projectedGroupWheel,
-                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
-                    'reflectedGroupWheel' => $reflectedGroupWheel,
-                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
-                ])
-                ?> 
-                <div style="page-break-after: always"></div>
-                <?=
-                $this->render('_individual_relations', [
-                    'report' => $individualReport,
-                    'assessment' => $assessment,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'members' => $members,
-                ]);
-                ?>
-                <div style="page-break-after: always"> </div>
-                <?=
-                $this->render('_individual_competences', [
-                    'report' => $individualReport,
-                    'assessment' => $assessment,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
-                    'members' => $members,
-                ]);
-                ?>
-                <div style="page-break-after: always"> </div>
-                <?=
-                $this->render('_individual_emergents', [
-                    'report' => $individualReport,
-                    'assessment' => $assessment,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
-                ]);
-                ?>
-                <div style="page-break-after: always"> </div>
                 <?php
             }
         }

@@ -84,7 +84,7 @@ $token = rand(100000, 999999);
                                     else
                                         $class = 'warning';
 
-                                    echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . ' %', ['class' => $class]);
+                                    echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . '%', ['class' => $class]);
                                     $observer_sum += $datum['value'];
                                     $observer_count++;
                                     if (!isset($observed_sum[$observedId]))
@@ -101,7 +101,7 @@ $token = rand(100000, 999999);
                         else
                             $class = 'warning';
 
-                        echo Html::tag('td', round($observer_sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                        echo Html::tag('td', round($observer_sum / $observer_count * 100 / 4, 1) . '%', ['class' => $class]);
                     }
                     ?>
                 </tr>
@@ -115,12 +115,12 @@ $token = rand(100000, 999999);
                 foreach ($observed_sum as $sum) {
                     if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
                         $class = 'success';
-                    else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
+                    else if ($sum / $observer_count < Yii::$app->params['minimal_consciousness'])
                         $class = 'danger';
                     else
                         $class = 'warning';
 
-                    echo Html::tag('td', round($sum / $observer_count * 100 / 4, 1) . ' %', ['class' => $class]);
+                    echo Html::tag('td', round($sum / $observer_count * 100 / 4, 1) . '%', ['class' => $class]);
                 }
             ?>
         </tr>

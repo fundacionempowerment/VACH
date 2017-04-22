@@ -308,7 +308,7 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Monofactorial productivity'))->getFont()->setSize(8);
         foreach ($performanceMatrix as $data) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'], 1) . ' %')->getFont()->setSize(8);
+            $cell->createTextRun(round($data['productivity'], 1) . '%')->getFont()->setSize(8);
         }
 
         // Responsability
@@ -328,11 +328,11 @@ class Presentation
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Avg. mon. prod.'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun(round($avgProductivity, 1) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun(round($avgProductivity, 1) . '%')->getFont()->setSize(8);
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Prod. deviation'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun((round($productivityDelta, 1)) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun((round($productivityDelta, 1)) . '%')->getFont()->setSize(8);
 
         // Consciousness
         $row = $tableShape->createRow();
@@ -340,7 +340,7 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Cons. gap'))->getFont()->setSize(8);
         foreach ($performanceMatrix as $data) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round(abs($data['consciousness']), 1) . ' %')->getFont()->setSize(8);
+            $cell->createTextRun(round(abs($data['consciousness']), 1) . '%')->getFont()->setSize(8);
         }
 
         $row = $tableShape->createRow();
@@ -357,7 +357,7 @@ class Presentation
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Avg. conc. gap'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun(round($avgConsciousness, 1) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun(round($avgConsciousness, 1) . '%')->getFont()->setSize(8);
 
         self::addCPCLogo($currentSlide);
 
@@ -439,7 +439,7 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Monofactorial productivity'))->getFont()->setSize(8);
         foreach ($performanceMatrix as $data) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'], 1) . ' %')->getFont()->setSize(8);
+            $cell->createTextRun(round($data['productivity'], 1) . '%')->getFont()->setSize(8);
         }
 
         // Responsability
@@ -459,11 +459,11 @@ class Presentation
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Avg. mon. prod.'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun(round($avgProductivity, 1) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun(round($avgProductivity, 1) . '%')->getFont()->setSize(8);
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Prod. deviation'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun((round($productivityDelta, 1)) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun((round($productivityDelta, 1)) . '%')->getFont()->setSize(8);
 
         // Consciousness
         $row = $tableShape->createRow();
@@ -471,7 +471,7 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Cons. gap'))->getFont()->setSize(8);
         foreach ($performanceMatrix as $data) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round(abs($data['consciousness']), 1) . ' %')->getFont()->setSize(8);
+            $cell->createTextRun(round(abs($data['consciousness']), 1) . '%')->getFont()->setSize(8);
         }
 
         $row = $tableShape->createRow();
@@ -488,7 +488,7 @@ class Presentation
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Avg. conc. gap'))->getFont()->setSize(8);
         $cell = $row->nextCell();
-        $cell->createTextRun(round($avgConsciousness, 1) . ' %')->getFont()->setSize(8);
+        $cell->createTextRun(round($avgConsciousness, 1) . '%')->getFont()->setSize(8);
 
         self::addCPCLogo($currentSlide);
     }

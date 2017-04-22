@@ -76,7 +76,7 @@ $token = rand(100000, 999999);
                         <?= $name ?>
                     </td>
                     <td>
-                        <?= $value . ' %' ?>                      
+                        <?= $value . '%' ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -109,7 +109,7 @@ $token = rand(100000, 999999);
                         <?= $name ?>                        
                     </td>
                     <td>
-                        <?= $value . ' %' ?>
+                        <?= $value . '%' ?>
                     </td>
                 </tr>
             <?php } ?>

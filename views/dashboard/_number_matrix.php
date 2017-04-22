@@ -118,7 +118,7 @@ $token = rand(100000, 999999);
             </td>
             <?php foreach ($howTheySeeMe as $value) { ?>
                 <td>
-                    <?= round($value / 4 * 100, 1) . ' %' ?>
+                    <?= round($value / 4 * 100, 1) . '%' ?>
                 </td>
             <?php } ?>
         </tr> 
@@ -137,14 +137,14 @@ $token = rand(100000, 999999);
                 <?= Yii::t('dashboard', 'Avg. mon. prod.') ?>
             </td>
             <td>
-                <?= round($allTheySee / 4 * 100, 1) . ' %' ?>
+                <?= round($allTheySee / 4 * 100, 1) . '%' ?>
             </td>
             <?php if ($version == 2) { ?>
                 <td colspan="2">
                     <?= Yii::t('dashboard', 'Prod. deviation') ?>
                 </td>
                 <td>
-                    <?= (round($productivityDelta / 4 * 100, 1)) . ' %' ?>
+                    <?= (round($productivityDelta / 4 * 100, 1)) . '%' ?>
                 </td>
             <?php } ?>
         </tr>
@@ -154,7 +154,7 @@ $token = rand(100000, 999999);
             </td>
             <?php for ($i = 0; $i < count($howTheySeeMe); $i++) { ?>
                 <td>
-                    <?= round(abs($gaps[$i]) / 4 * 100, 1) . ' %' ?>
+                    <?= round(abs($gaps[$i]) / 4 * 100, 1) . '%' ?>
                 </td>
             <?php } ?>
         </tr> 
@@ -173,7 +173,7 @@ $token = rand(100000, 999999);
                 <?= (!empty($assessment) && $assessment->version == 2 ? Yii::t('dashboard', 'Avg. conc. gap') : Yii::t('dashboard', 'St. dev.')) ?>
             </td>
             <td>
-                <?= ( $version == 2 ? round($mean_gap / 4 * 100, 1) : round($standar_deviation / 4 * 100, 1)) . ' %' ?>
+                <?= ( $version == 2 ? round($mean_gap / 4 * 100, 1) : round($standar_deviation / 4 * 100, 1)) . '%' ?>
             </td>
 
         </tr>

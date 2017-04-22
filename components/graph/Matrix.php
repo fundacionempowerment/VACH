@@ -168,19 +168,19 @@ class Matrix
         $g->img->Line($goodProductivityX2, $topMargin, $goodProductivityX2, $height - $bottomMargin);
 
         //axes values
-        $t = new \Text('Min: ' . round($minProductivity * 10) / 10 . ' %', $minx, $height - 6);
+        $t = new \Text('Min: ' . round($minProductivity * 10) / 10 . '%', $minx, $height - 6);
         $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
         $t->Align('center', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
-        $t = new \Text('Max: ' . round($maxProductivity * 10) / 10 . ' %', $maxx, $height - 6);
+        $t = new \Text('Max: ' . round($maxProductivity * 10) / 10 . '%', $maxx, $height - 6);
         $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
         $t->Align('center', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
-        $t = new \Text('Prom: ' . round($avgProductivity * 10) / 10 . ' %', $posx, $height - 6);
+        $t = new \Text('Prom: ' . round($avgProductivity * 10) / 10 . '%', $posx, $height - 6);
         $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
         $t->Align('center', 'bottom');
         $t->SetColor("red");

@@ -30,8 +30,7 @@ use yii\helpers\Html;
     ¿Por qué integral y sostenible?
 </h3>
 <p>
-    Medir el desempeño desde una visión integral y sistémica, permitirá obtener máxima asertividad en los procesos de cualificación del capital humano, en la medida que la herramienta permite obtener cualitativa y cuantitativamente, el grado de conciencia y el nivel de responsabilidad de cada Subsistema, desde la percepción de su propia realidad; y esto, desde la perspectiva del trabajo con el 
-    capital humano organizacional, permite en forma fáctica y precisa: 
+    Medir el desempeño desde una visión integral y sistémica, permitirá obtener máxima asertividad en los procesos de cualificación del capital humano, en la medida que la herramienta permite obtener cualitativa y cuantitativamente, el grado de conciencia y el nivel de responsabilidad de cada Subsistema, desde la percepción de su propia realidad; y esto, desde la perspectiva del trabajo con el capital humano organizacional, permite en forma fáctica y precisa: 
 </p>
 <ul>
     <li>
@@ -79,38 +78,21 @@ use yii\helpers\Html;
 </p>
 <ul>
     <li>
-        <b>Dialéctica:</b> es la acción de establecer diálogos con diversos participantes, los
-        cuales guardan como propósito desarrollar nuevos sentidos interpretativos, sobre
-        diversos fenómenos o experiencias, siguiendo un método y ampliando el
-        conocimiento y los acuerdos para optimizar futuras acciones.
+        <b>Dialéctica:</b> es la acción de establecer diálogos con diversos participantes, los cuales guardan como propósito desarrollar nuevos sentidos interpretativos, sobre diversos fenómenos o experiencias, siguiendo un método y ampliando el conocimiento y los acuerdos para optimizar futuras acciones.
     </li>
     <li>
-        <b>Proyección:</b> fenómeno psicológico de visualizar en el exterior una experiencia del
-        interior, tal cual como lo hace un proyector de imágenes. Lo que psicológicamente
-        sería el hecho de imputar en otras personas, determinadas experiencias,
-        cualidades y características, de las que percibe uno mismo, y que implica una
-        experiencia necesaria para establecer procesos de aprendizaje y auto-
-        descubrimiento para el desarrollo de la Conciencia.
+        <b>Proyección:</b> fenómeno psicológico de visualizar en el exterior una experiencia del interior, tal cual como lo hace un proyector de imágenes. Lo que psicológicamente sería el hecho de imputar en otras personas, determinadas experiencias, cualidades y características, de las que percibe uno mismo, y que implica una experiencia necesaria para establecer procesos de aprendizaje y auto-descubrimiento para el desarrollo de la Conciencia.
     </li>
     <li>
-        <b>Percepción:</b> refiere al proceso que implica la captación de las sensaciones a través
-        de los sentidos, que pasan a ser integradas y ordenadas por el sistema cognitivo
-        del sujeto, a partir de sus esquemas mentales y creencias aprehendidas en las
-        pautas de la crianza y la experiencia, dando sentido o descartando la información,
-        en términos de ordenadores.
+        <b>Percepción:</b> refiere al proceso que implica la captación de las sensaciones a través de los sentidos, que pasan a ser integradas y ordenadas por el sistema cognitivo del sujeto, a partir de sus esquemas mentales y creencias aprehendidas en las pautas de la crianza y la experiencia, dando sentido o descartando la información, en términos de ordenadores.
     </li>
 </ul>
 <p>
-    Es así como nuestra definición de la metodología «Dialéctica-Proyectiva-
-    Perceptiva» sería:
+    Es así como nuestra definición de la metodología «Dialéctica-Proyectiva-Perceptiva» sería:
 </p>
 <p>
     <b>
-        “...el proceso por el cual se observan las percepciones particulares sobre sí mismo
-        y los otros, identificando la diferencia entre las proyecciones individuales y
-        grupales (brechas) en un entorno determinado, facilitando así el ajuste subjetivo
-        hacia una nueva narrativa, en términos de realidad, que establecerá el Grupo para
-        sí mismo...”     
+        “...el proceso por el cual se observan las percepciones particulares sobre sí mismo y los otros, identificando la diferencia entre las proyecciones individuales y grupales (brechas) en un entorno determinado, facilitando así el ajuste subjetivo hacia una nueva narrativa, en términos de realidad, que establecerá el Grupo para sí mismo...”     
     </b>
 </p>
 <h3>
@@ -124,7 +106,7 @@ use yii\helpers\Html;
     personas. 
 </p>
 <p>
-    Este movimiento es complejizado cuando en la aplicación de la metodología de investigación, se observan las relaciones entre las percepciones individuales y grupales frente a la Organización, generando así diversas opiniones en tres subsistemas cada uno más complejo al anterior. Observar la dinámica de estos datos posibilita realizar retroalimentaciones en cada sistema de interacción (Individuo, Grupo y Organización) y, por consiguiente, a cada sistema de interacción, ajustarlo progresivamente aún más, según la percepción individual y grupal, hacia un máximo ajuste con la Cultura Organizacional. Es decir, ajustar es re-acordar, reorientar los acuerdos tácitos y explícitos de las personas que establecen sus relaciones en una Organización, a fin de garantizar que ese reajuste permita alcanzar el necesario estado de equilibrio entre los tres Subsistemas mencionados, permitiendo de este modo no sólo la realización de las personas en el plano laboral, sino la consecución de los objetivos estratégicos del Negocio, en un marco de eficiencia y productividad gestional. 
+    Este movimiento es complejizado cuando en la aplicación de la metodología de investigación, se observan las relaciones entre las percepciones individuales y grupales frente a la Organización, generando así diversas opiniones en tres subsistemas cada uno más complejo al anterior. Observar la dinámica de estos datos posibilita realizar retroalimentaciones en cada sistema de interacción (Individuo, Grupo y Organización) y, por consiguiente, a cada sistema de interacción, ajustarlo progresivamente aún más, según la percepción individual y grupal, hacia un máximo ajuste con la Cultura Organizacional. Es decir, ajustar es re-acordar, reorientar los acuerdos tácitos y explícitos de las personas que establecen sus relaciones en una Organización, a fin de garantizar que ese reajuste permita alcanzar el necesario estado de equilibrio entre los tres Subsistemas mencionados, permitiendo de este modo no sólo la realización de las personas en el plano laboral, sino la consecución de los objetivos estratégicos del Negocio, en un marco de eficiencia y productividad gestional.
 </p>
 <p>
     En este orden, y sólo para llevarlo a un ejemplo medible, si yo creo que doy (o soy: si acordamos que dar y ser terminan siendo lo mismo) en algún aspecto un 10 (en una escala de 1-10), pero 15 personas que comparten conmigo, me devuelven que en ese mismo aspecto doy un 5, evidentemente lo que estoy proyectando es un 5 (vuelve lo que doy: por la ley causa-efecto). En este ejemplo, podríamos validar mi realidad como un nivel de 5 y mi creencia como uno de 10. 
