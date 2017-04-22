@@ -34,7 +34,7 @@ class Backup
         LogController::log('Sending to ' . Yii::$app->params['adminEmail']);
         Yii::$app->mailer->compose('backup')
                 ->setSubject('VACH Backup ' . date('Y-m-d'))
-                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo(Yii::$app->params['adminEmail'])
                 ->attach($temp_file, ['fileName' => 'vach.' . date('Y-m-d') . '.sql.gz'])
                 ->send();

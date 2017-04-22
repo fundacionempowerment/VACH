@@ -3,6 +3,7 @@
 return [
     'allow_register' => false,
     'adminEmail' => 'admin@example.com',
+    'senderEmail' => 'sender@example.com',
     'minimal_consciousness' => 4 / 3,
     'good_consciousness' => 4 * 2 / 3,
     'server_status' => 'online',

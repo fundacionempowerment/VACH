@@ -250,9 +250,10 @@ class AssessmentController extends BaseController
                             'wheel_type' => $wheel_type,
                             'assessment' => $wheel->assessment->name,
                 ]))
-                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->observer->email)
                 ->setBcc(Yii::$app->params['adminEmail'])
+                ->setReplyTo(Yii::$app->params['adminEmail'])
                 ->send();
 
         SiteController::addFlash('success', \Yii::t('assessment', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));

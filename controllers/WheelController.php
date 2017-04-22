@@ -281,7 +281,7 @@ class WheelController extends BaseController
                 ->setSubject(Yii::t('wheel', 'CPC: {wheel} answers', [
                             'wheel' => $type_text
                 ]))
-                ->setFrom($wheel->coach->email)
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->observer->email)
                 ->send();
 
@@ -292,7 +292,7 @@ class WheelController extends BaseController
                 ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
                             'wheel' => $type_text, 'person' => $wheel->observer->fullname
                 ]))
-                ->setFrom($wheel->observer->email)
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->coach->email)
                 ->send();
     }
