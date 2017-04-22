@@ -139,7 +139,12 @@ class TeamController extends BaseController
         }
 
         $team->blocked = true;
-        $team->save();
+
+        if ($team->save()) {
+            return $this->redirect(['assessment/new', 'teamId' => $team->id]);
+        } else {
+            SiteController::FlashErrors($team);
+        }
 
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
