@@ -83,7 +83,7 @@ class Gauges
         $t->SetColor("black");
         $t->Stroke($g->img);
 
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < count($gauges); $i++) {
             self::drawGauge($g, $gauges[$i], self::cells[$i], $wheelType, $minValue, $maxValue);
         }
 
