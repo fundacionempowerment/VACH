@@ -10,6 +10,9 @@ use kartik\widgets\Select2;
 
 $this->title = Yii::t('stock', 'Add licences');
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
+$this->params['breadcrumbs'][] = $this->title;
+
 $this->registerJs("function updateAmount(quantity) {
     var price = $('#addmodel-price').val();
     var quantity = $('#addmodel-quantity').val();

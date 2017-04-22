@@ -26,10 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <p>
             <?=
-            Html::a(Yii::t('app', 'Edit'), ['team/edit', 'id' => $team->id], [
-                'title' => Yii::t('yii', 'Edit'),
-                'class' => 'btn btn-primary',
-            ])
+            $team->coach_id == Yii::$app->user->identity->id ?
+                    Html::a(Yii::t('app', 'Edit'), ['team/edit', 'id' => $team->id], [
+                        'title' => Yii::t('yii', 'Edit'),
+                        'class' => 'btn btn-primary',
+                    ]) : ''
             ?>
         </p>
     </div>
@@ -47,8 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'member.fullname',
                 'format' => 'html',
-                'value' => function ($data) {
-                    return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
+                'value' => function ($data) use ($team) {
+                    if ($team->coach_id == Yii::$app->user->identity->id) {
+                        return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
+                    } else {
+                        return $data->member->fullname;
+                    }
                 },
             ],
             [
@@ -76,15 +81,19 @@ $this->params['breadcrumbs'][] = $this->title;
             $columns [] = [
                 'format' => 'html',
                 'options' => ['width' => '60px'],
-                'value' => function( $data ) {
-                    return
-                            Html::a('<span class="glyphicon glyphicon-trash"></span>', ['team/delete-member', 'id' => $data['id']], [
-                                'title' => Yii::t('yii', 'Delete'),
-                                'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                'data-method' => 'post',
-                                'data-pjax' => '0',
-                                'class' => 'btn btn-danger',
-                    ]);
+                'value' => function( $data ) use ($team) {
+                    if ($team->coach_id == Yii::$app->user->identity->id) {
+                        return
+                                Html::a('<span class="glyphicon glyphicon-trash"></span>', ['team/delete-member', 'id' => $data['id']], [
+                                    'title' => Yii::t('yii', 'Delete'),
+                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                    'data-method' => 'post',
+                                    'data-pjax' => '0',
+                                    'class' => 'btn btn-danger',
+                        ]);
+                    } else {
+                        return '';
+                    }
                 }
             ];
         }
@@ -142,17 +151,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'format' => 'html',
                     'options' => ['width' => '60px'],
-                    'value' => function ($data) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['team/delete-assessment', 'id' => $data['id']]), [
-                                    'title' => Yii::t('yii', 'Delete'),
-                                    'class' => 'btn btn-danger',
-                        ]);
+                    'value' => function ($data) use ($team) {
+                        if ($team->coach_id == Yii::$app->user->identity->id) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['team/delete-assessment', 'id' => $data['id']]), [
+                                        'title' => Yii::t('yii', 'Delete'),
+                                        'class' => 'btn btn-danger',
+                            ]);
+                        } else {
+                            return '';
+                        }
                     },
                 ],
             ],
         ]);
         ?>
-        <?= ( $team->blocked ? Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']) : Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled'])) ?>
+        <?php
+        if ($team->coach_id == Yii::$app->user->identity->id) {
+            if ($team->blocked) {
+                echo Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']);
+            } else {
+                echo Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled']);
+            }
+        }
+        ?>
     </div>
 </div>
 <script>

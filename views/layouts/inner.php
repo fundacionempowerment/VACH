@@ -13,7 +13,11 @@ use app\components\Icons;
 /* @var $content string */
 
 AppAsset::register($this);
-$isAdministrator = Yii::$app->user->identity->is_administrator;
+
+$isAdministrator = false;
+if (Yii::$app->user->identity) {
+    $isAdministrator = Yii::$app->user->identity->is_administrator;
+}
 
 $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
@@ -37,6 +41,7 @@ if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/user']];
     $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/wheel/questions']];
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['admin/feedback']];
+    $admininistratorMenu[] = ['label' => Yii::t('app', 'Backup'), 'url' => ['site/backup']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 
@@ -48,7 +53,7 @@ if (Yii::$app->params['monetize']) {
 $userMenu[] = ['label' => Yii::t('app', 'Logout'),
     'url' => ['/site/logout'],
     'linkOptions' => ['data-method' => 'post']];
-$items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username . ')', 'items' => $userMenu];
+$items[] = ['label' => Icons::USER . ' (' . (Yii::$app->user->identity ? Yii::$app->user->identity->username : '') . ')', 'items' => $userMenu];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -70,10 +75,12 @@ $items[] = ['label' => Icons::USER . ' (' . Yii::$app->user->identity->username 
                     'class' => 'navbar-default navbar-fixed-top',
                 ],
             ]);
-            echo Html::img('@web/images/logo.png', ['alt' => 'logo',
-                'class' => 'image-responsive', 'height' => '35px', 'style' => 'margin-top: 6px',]);
+            $logo = Html::img('@web/images/logo.png', ['alt' => 'logo',
+                        'class' => 'image-responsive', 'height' => '35px', 'style' => 'margin-top: 6px',]);
+            echo Html::a($logo, ['/site/index']);
 
             echo Nav::widget([
+                'id' => 'navbar',
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => $items,
                 'encodeLabels' => false,

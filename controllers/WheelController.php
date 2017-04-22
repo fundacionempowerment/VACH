@@ -124,6 +124,7 @@ class WheelController extends BaseController
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = $current_dimension;
+                        $answer->question_id = $questions[$i]->question_id;
                         $answer->save();
                     } else {
                         $new_answer = new WheelAnswer();
@@ -146,9 +147,6 @@ class WheelController extends BaseController
             if ($current_wheel->validate()) {
                 $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
-                    if (Yii::$app->params['send_wheel_answers'] == true)
-                        $this->sendAnswers($current_wheel);
-
                     $type_text = Wheel::getWheelTypes()[$current_wheel->type];
 
                     $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);
@@ -212,7 +210,8 @@ class WheelController extends BaseController
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
-            $questionCount = WheelQuestion::getQuestionCount($wheel->type);
+            $questions = WheelQuestion::getQuestions($wheel->type);
+            $questionCount = count($questions);
             $setSize = $questionCount / 8;
 
             for ($i = 0; $i < $questionCount; $i++) {
@@ -242,6 +241,7 @@ class WheelController extends BaseController
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = intval($i / $setSize);
+                        $answer->question_id = $questions[$i]->question_id;
                         if ($valid_answer)
                             $answer->save();
                     } else {
@@ -249,6 +249,7 @@ class WheelController extends BaseController
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
                         $new_answer->dimension = intval($i / $setSize);
+                        $new_answer->question_id = $questions[$i]->question_id;
                         if ($valid_answer)
                             $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
                     }
@@ -280,7 +281,7 @@ class WheelController extends BaseController
                 ->setSubject(Yii::t('wheel', 'CPC: {wheel} answers', [
                             'wheel' => $type_text
                 ]))
-                ->setFrom($wheel->coach->email)
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->observer->email)
                 ->send();
 
@@ -291,7 +292,7 @@ class WheelController extends BaseController
                 ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
                             'wheel' => $type_text, 'person' => $wheel->observer->fullname
                 ]))
-                ->setFrom($wheel->observer->email)
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->coach->email)
                 ->send();
     }

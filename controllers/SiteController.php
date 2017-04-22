@@ -12,9 +12,11 @@ use app\models\Wheel;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 
-class SiteController extends BaseController {
+class SiteController extends BaseController
+{
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -36,7 +38,8 @@ class SiteController extends BaseController {
         ];
     }
 
-    public function actions() {
+    public function actions()
+    {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -48,7 +51,8 @@ class SiteController extends BaseController {
         ];
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (!\Yii::$app->user->isGuest) {
             return $this->redirect(['/assessment']);
         }
@@ -66,7 +70,8 @@ class SiteController extends BaseController {
         ]);
     }
 
-    public function actionToken() {
+    public function actionToken()
+    {
         if (!Yii::$app->request->isPost)
             return $this->goHome();
 
@@ -81,7 +86,8 @@ class SiteController extends BaseController {
         return $this->redirect(['wheel/run', 'token' => $token]);
     }
 
-    public function actionLogin() {
+    public function actionLogin()
+    {
         if (!\Yii::$app->user->isGuest) {
             return $this->redirect(['/assessment']);
         }
@@ -99,13 +105,15 @@ class SiteController extends BaseController {
         }
     }
 
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
 
-    public function actionRegister() {
+    public function actionRegister()
+    {
         $model = new RegisterModel();
         $model->isCoach = true;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -132,7 +140,8 @@ class SiteController extends BaseController {
      *
      * @return mixed
      */
-    public function actionRequestPasswordReset() {
+    public function actionRequestPasswordReset()
+    {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -154,7 +163,8 @@ class SiteController extends BaseController {
      * @return mixed
      * @throws BadRequestHttpException
      */
-    public function actionResetPassword($token) {
+    public function actionResetPassword($token)
+    {
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -169,32 +179,61 @@ class SiteController extends BaseController {
         ]);
     }
 
-    public function actionCoach() {
+    public function actionCoach()
+    {
         return $this->render('coachIntro', [
         ]);
     }
 
-    public function actionPerson() {
+    public function actionPerson()
+    {
         return $this->render('personIntro', [
         ]);
     }
 
-    public function actionEs() {
+    public function actionEs()
+    {
         Yii::$app->session->set('language', 'es');
         return $this->goHome();
     }
 
-    public function actionEn() {
+    public function actionEn()
+    {
         Yii::$app->session->set('language', 'en');
         return $this->goHome();
     }
 
-    public static function addFlash($key, $value) {
+    public function actionContact()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $this->layout = 'inner';
+        }
+
+        $model = new \app\models\ContactModel();
+
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+            SiteController::addFlash('success', Yii::t('app', 'Message sent successfully'));
+            return $this->goHome();
+        }
+
+        if (Yii::$app->request->get('quantity') && empty($model->subject)) {
+            $model->subject = Yii::t('stock', 'Requesting licences');
+            $model->body = Yii::t('stock', 'Dear administrator, I\'m requesting {q} licences. Thanks.', ['q' => Yii::$app->request->get('quantity')]);
+        }
+
+        return $this->render('contact', [
+                    'model' => $model,
+        ]);
+    }
+
+    public static function addFlash($key, $value)
+    {
         \Yii::$app->session->addFlash('success', $value);
         LogController::log($value);
     }
 
-    public static function FlashErrors($record) {
+    public static function FlashErrors($record)
+    {
         if (!isset($record))
             return;
 
@@ -203,7 +242,8 @@ class SiteController extends BaseController {
                 self::addFlash('error', \Yii::t('app', 'Problem: ') . $message);
     }
 
-    public function actionMigrateUp() {
+    public function actionMigrateUp()
+    {
 // https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
         defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
@@ -218,6 +258,14 @@ class SiteController extends BaseController {
         ]);
         \Yii::$app->runAction('migrate/up', ['migrationPath' => '@app/migrations/', 'interactive' => false]);
         \Yii::$app = $oldApp;
+    }
+
+    public function actionBackup()
+    {
+        if (\app\components\Backup::createAndSend()) {
+            self::addFlash('success', 'Backup sent!');
+        }
+        return $this->goHome();
     }
 
 }

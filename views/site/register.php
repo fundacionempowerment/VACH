@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\RegisterModel;
+use app\widgets\Alert;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -10,15 +11,15 @@ use app\models\RegisterModel;
 
 $assisstances = RegisterModel::getAssisstanceTypes();
 
-$this->title = Yii::t('register','Sign up');
+$this->title = Yii::t('register', 'Sign up');
 ?>
 <div class="site-register">
     <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Alert::widget() ?>
+    <p><?= Yii::t('register', 'Please, fill your sign up form out:') ?></p>
 
-    <p><?= Yii::t('register','Please, fill your sign up form out:') ?></p>
-
-    <?php $form = ActiveForm::begin([ 'id' => 'register-form']); ?>
+    <?php $form = ActiveForm::begin(['id' => 'register-form']); ?>
     <?= $form->field($model, 'name') ?>
     <?= $form->field($model, 'surname') ?>
     <?= $form->field($model, 'email') ?>

@@ -15,12 +15,14 @@ use app\models\Company;
 use app\models\DashboardFilter;
 use app\models\Person;
 
-class DashboardController extends BaseController {
+class DashboardController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
-        $filter = Yii::$app->session->get('DashboardFilter') ? : new DashboardFilter();
+    public function actionIndex()
+    {
+        $filter = Yii::$app->session->get('DashboardFilter') ?: new DashboardFilter();
         if ($filter->load(Yii::$app->request->post())) {
             Yii::$app->session->set('DashboardFilter', $filter);
             $this->redirect(['/dashboard']);
@@ -33,7 +35,7 @@ class DashboardController extends BaseController {
         $members = [];
         $member = null;
 
-        $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
+        $companies = Company::getDashboardList();
         if (count($companies) == 1) {
             foreach ($companies as $id => $fullname) {
                 $filter->companyId = $id;
@@ -46,11 +48,7 @@ class DashboardController extends BaseController {
         }
 
         if ($filter->companyId > 0) {
-            $teamQuery = Team::find()
-                    ->where(['company_id' => $filter->companyId])
-                    ->with(['coach', 'company'])
-                    ->all();
-            $teams = ArrayHelper::map($teamQuery, 'id', 'fullname');
+            $teams = Team::getDashboardList($filter->companyId);
 
             if (count($teams) == 1) {
                 foreach ($teams as $id => $fullname) {
@@ -73,11 +71,7 @@ class DashboardController extends BaseController {
         }
 
         if ($filter->teamId > 0) {
-            $assessmentQuery = Assessment::find()
-                    ->where(['team_id' => $filter->teamId])
-                    ->with(['team', 'team.company'])
-                    ->all();
-            $assessments = ArrayHelper::map($assessmentQuery, 'id', 'name');
+            $assessments = Assessment::getDashboardList($filter->teamId);
 
             if (count($assessments) == 1) {
                 foreach ($assessments as $id => $fullname) {
@@ -93,8 +87,9 @@ class DashboardController extends BaseController {
                         break;
                     }
 
-                if (!$exists)
+                if (!$exists) {
                     $filter->assessmentId = 0;
+                }
             }
 
             foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember)

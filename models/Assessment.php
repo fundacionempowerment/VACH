@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\Query;
 use \yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 class Assessment extends ActiveRecord
@@ -45,6 +46,7 @@ class Assessment extends ActiveRecord
             'IndividualWheelStatus' => Yii::t('wheel', 'Individual Wheels'),
             'GroupWheelStatus' => Yii::t('wheel', 'Group Wheels'),
             'OrganizationalWheelStatus' => Yii::t('wheel', 'Organizational Wheels'),
+            'coaches' => Yii::t('assessment', 'Allowed coaches'),
         ];
     }
 
@@ -72,6 +74,7 @@ class Assessment extends ActiveRecord
 
     public function beforeDelete()
     {
+        AssessmentCoach::deleteAll(['assessment_id' => $this->id]);
         Wheel::deleteAll(['assessment_id' => $this->id]);
         return parent::beforeDelete();
     }
@@ -80,8 +83,10 @@ class Assessment extends ActiveRecord
     {
         return Assessment::find()
                         ->select('assessment.*')
-                        ->innerJoin('assessment_coach', '`assessment_coach`.`assessment_id` = `assessment`.`id`')
-                        ->where(['assessment_coach.coach_id' => Yii::$app->user->id])
+                        ->leftJoin('assessment_coach', '`assessment_coach`.`assessment_id` = `assessment`.`id`')
+                        ->leftJoin('team', '`team`.`id` = `assessment`.`team_id`')
+                        ->where(['team.coach_id' => Yii::$app->user->id])
+                        ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
                         ->orderBy('assessment.id desc');
     }
 
@@ -113,7 +118,7 @@ class Assessment extends ActiveRecord
         if ($questions == 0)
             $questions = 1;
 
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getGroupWheelStatus()
@@ -123,7 +128,7 @@ class Assessment extends ActiveRecord
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
         if ($questions == 0)
             $questions = 1;
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getOrganizationalWheelStatus()
@@ -133,7 +138,7 @@ class Assessment extends ActiveRecord
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
         if ($questions == 0)
             $questions = 1;
-        return round($answers / $questions * 100, 1) . ' %';
+        return round($answers / $questions * 100, 1) . '%';
     }
 
     public function getWheels()
@@ -168,6 +173,19 @@ class Assessment extends ActiveRecord
                             'assessment_id' => $this->id,
                             'coach_id' => Yii::$app->user->identity->id,
                         ])->exists();
+    }
+
+    static public function getDashboardList($teamId)
+    {
+        $assessments = self ::find()
+                ->innerJoin('team', 'team.id = assessment.team_id')
+                ->leftJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                ->where(['team.coach_id' => Yii::$app->user->id])
+                ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
+                ->andWhere(['team_id' => $teamId])
+                ->with(['team', 'team.company'])
+                ->all();
+        return ArrayHelper::map($assessments, 'id', 'name');
     }
 
 }

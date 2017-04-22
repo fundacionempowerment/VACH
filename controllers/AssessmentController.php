@@ -47,9 +47,9 @@ class AssessmentController extends BaseController
 
         $balance = Stock::getStock(1);
         $licences_required = count($assessment->team->members);
-        $licences_diff = $licences_required - $balance;
+        $licences_to_buy = $licences_required - $balance;
 
-        if (!Yii::$app->params['monetize'] || $licences_diff <= 0) {
+        if (!Yii::$app->params['monetize'] || $licences_to_buy <= 0) {
             if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
                 foreach ($assessment->team->members as $observerMember) {
                     $token = $this->newToken();
@@ -110,7 +110,7 @@ class AssessmentController extends BaseController
                     'assessment' => $assessment,
                     'balance' => $balance,
                     'licences_required' => $licences_required,
-                    'licences_diff' => $licences_diff,
+                    'licences_to_buy' => $licences_to_buy,
         ]);
     }
 
@@ -250,9 +250,10 @@ class AssessmentController extends BaseController
                             'wheel_type' => $wheel_type,
                             'assessment' => $wheel->assessment->name,
                 ]))
-                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->observer->email)
                 ->setBcc(Yii::$app->params['adminEmail'])
+                ->setReplyTo(Yii::$app->params['adminEmail'])
                 ->send();
 
         SiteController::addFlash('success', \Yii::t('assessment', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
