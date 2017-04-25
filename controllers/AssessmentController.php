@@ -52,7 +52,7 @@ class AssessmentController extends BaseController
         if (!Yii::$app->params['monetize'] || $licences_to_buy <= 0) {
             if ($assessment->load(Yii::$app->request->post()) && $assessment->save()) {
                 foreach ($assessment->team->members as $observerMember) {
-                    $token = $this->newToken();
+                    $token = Wheel::getNewToken();
                     $newWheel = new Wheel();
 
                     $newWheel->observer_id = $observerMember->member->id;
@@ -63,7 +63,7 @@ class AssessmentController extends BaseController
 
                     $newWheel->save();
 
-                    $token = $this->newToken();
+                    $token = Wheel::getNewToken();
                     foreach ($assessment->team->members as $observedMember) {
                         $newWheel = new Wheel();
                         $newWheel->observer_id = $observerMember->member->id;
@@ -74,7 +74,7 @@ class AssessmentController extends BaseController
                         $newWheel->save();
                     }
 
-                    $token = $this->newToken();
+                    $token = Wheel::getNewToken();
                     foreach ($assessment->team->members as $observedMember) {
                         $newWheel = new Wheel();
                         $newWheel->observer_id = $observerMember->member->id;
@@ -155,8 +155,9 @@ class AssessmentController extends BaseController
             }
         }
 
-        if ($sent == false)
+        if ($sent == false) {
             \Yii::$app->session->addFlash('info', \Yii::t('assessment', 'Wheel already fullfilled. Email not sent.'));
+        }
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
@@ -225,21 +226,6 @@ class AssessmentController extends BaseController
         return $this->redirect(['/assessment/view', 'id' => $assessmentCoach->assessment_id]);
     }
 
-    private static function newToken()
-    {
-        $token_exists = true;
-        while ($token_exists) {
-            $number = rand(1000000000, 1999999999);
-            $string = (string) $number;
-            $newToken = $string[1] . $string[2] . $string[3] . '-' .
-                    $string[4] . $string[5] . $string[6] . '-' .
-                    $string[7] . $string[8] . $string[9];
-
-            $token_exists = Wheel::doesTokenExist($newToken);
-        }
-        return $newToken;
-    }
-
     private function sendWheel($wheel)
     {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
@@ -257,6 +243,14 @@ class AssessmentController extends BaseController
                 ->send();
 
         SiteController::addFlash('success', \Yii::t('assessment', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+
+        $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
+        foreach ($wheels as $wheel) {
+            if ($wheel->status == 'created') {
+                $wheel->status = 'sent';
+                $wheel->save();
+            }
+        }
     }
 
 }

@@ -188,4 +188,39 @@ class Assessment extends ActiveRecord
         return ArrayHelper::map($assessments, 'id', 'name');
     }
 
+    public function notifyIcon($type, $observer_id)
+    {
+        $count = [
+            'created' => 0,
+            'sent' => 0,
+            'received' => 0,
+            'in_progress' => 0,
+            'done' => 0,
+        ];
+
+        $wheels = Wheel::find()
+                ->where(['assessment_id' => $this->id])
+                ->andWhere(['type' => $type])
+                ->andWhere(['observer_id' => $observer_id])
+                ->all();
+
+        foreach ($wheels as $wheel) {
+            $count[$wheel->status] += 1;
+        }
+
+        if ($count['created'] > 0 && ($count ['sent'] + $count['received'] + $count['in_progress'] == 0) && $count['done'] > 0) {
+            // retry
+            return \app\components\Icons::EXCLAMATION;
+        } else if ($count['done'] == count($wheels)) {
+            return \app\components\Icons::OK . \app\components\Icons::OK;
+        } else if ($count['in_progress'] > 0) {
+            return \app\components\Icons::PLAY;
+        } else if ($count['received'] > 0) {
+            return \app\components\Icons::OK;
+        } else if ($count['sent'] > 0) {
+            return \app\components\Icons::SEND;
+        }
+        return '';
+    }
+
 }

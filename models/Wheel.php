@@ -85,18 +85,6 @@ class Wheel extends ActiveRecord
         return $this->hasMany(WheelAnswer::className(), ['wheel_id' => 'id']);
     }
 
-    public function afterFind()
-    {
-        parent::afterFind();
-
-        foreach ($this->answers as $answer) {
-            $this->dimensionAnswers[(int) ($answer['answer_order'] / 10)] += $answer['answer_value'];
-        }
-        for ($i = 0; $i < count($this->dimensionAnswers); $i++) {
-            $this->dimensionAnswers[$i] = 1 + ($this->dimensionAnswers[$i] / 10);
-        }
-    }
-
     public function customSave($answers)
     {
         if (count($answers) < 80) {
@@ -358,7 +346,22 @@ class Wheel extends ActiveRecord
         return $rawAnswers;
     }
 
-    public static function doesTokenExist($token)
+    public static function getNewToken()
+    {
+        $token_exists = true;
+        while ($token_exists) {
+            $number = rand(1000000000, 1999999999);
+            $string = (string) $number;
+            $newToken = $string[1] . $string[2] . $string[3] . '-' .
+                    $string[4] . $string[5] . $string[6] . '-' .
+                    $string[7] . $string[8] . $string[9];
+
+            $token_exists = self::doesTokenExist($newToken);
+        }
+        return $newToken;
+    }
+
+    private static function doesTokenExist($token)
     {
         return (new Query())->select('count(*)')
                         ->from('wheel')

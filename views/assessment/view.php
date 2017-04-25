@@ -133,7 +133,7 @@ $pluginOptions = [
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon . $assessment->notifyIcon(Wheel::TYPE_INDIVIDUAL, $observerMember->member->id), Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => "btn btn-default btn-xs ", 'title' => Yii::t('wheel', 'Send by email')]) ?>
 
                         <?php
                         foreach ($assessment->individualWheels as $wheel)
@@ -184,7 +184,7 @@ $pluginOptions = [
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon . $assessment->notifyIcon(Wheel::TYPE_GROUP, $observerMember->member->id), Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id) {
@@ -236,7 +236,7 @@ $pluginOptions = [
                 <tr>
                     <th style="text-align: right;">
                         <?= $observerMember->member->fullname ?>
-                        <?= Html::a($mail_icon, Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                        <?= Html::a($mail_icon . $assessment->notifyIcon(Wheel::TYPE_ORGANIZATIONAL, $observerMember->member->id), Url::to(['assessment/send-wheel', 'id' => $assessment->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
                         <?php
                         foreach ($assessment->organizationalWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id) {

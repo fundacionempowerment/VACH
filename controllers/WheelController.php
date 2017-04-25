@@ -145,13 +145,17 @@ class WheelController extends BaseController
             }
 
             if ($current_wheel->validate()) {
-                $current_wheel->save();
                 if (count($current_wheel->answers) == $questionCount) {
+                    $current_wheel->status = 'done';
+                    $current_wheel->save();
                     $type_text = Wheel::getWheelTypes()[$current_wheel->type];
 
                     $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);
                     LogController::log($text, $current_wheel->coach->id);
                     return $this->redirect(['/wheel/run', 'token' => $token]);
+                } else {
+                    $current_wheel->status = 'in_progress';
+                    $current_wheel->save();
                 }
             }
         }
@@ -266,6 +270,25 @@ class WheelController extends BaseController
         return $this->render('manual-form', [
                     'wheel' => $wheel,
                     'invalids' => $invalids,
+        ]);
+    }
+
+    public function actionReceived($token)
+    {
+        $this->layout = 'printable';
+
+        $wheels = Wheel::find()
+                ->where(['token' => $token])
+                ->andWhere(['in', 'status', ['created', 'sent']])
+                ->all();
+
+        foreach ($wheels as $wheel) {
+            $wheel->status = 'received';
+            $wheel->save();
+        }
+
+        return $this->render('received', [
+                    'wheels' => $wheels,
         ]);
     }
 
