@@ -27,6 +27,7 @@ class ReportController extends Controller
         $string = strip_tags($string, '<b><i><p><ul><li><ol><br>');
         $string = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $string);
         $string = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $string);
+        $string = str_replace('<br>', '<br/>', $string);
         return $string;
     }
 
