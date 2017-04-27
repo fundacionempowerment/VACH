@@ -15,7 +15,7 @@ class Payment extends ActiveRecord
     const STATUS_INIT = 'init';
     const STATUS_PENDING = 'pending';
     const STATUS_PAID = 'paid';
-    const STATUS_PARTIAL = 'partial';
+    const STATUS_REJECTED = 'rejected';
     const STATUS_ERROR = 'error';
 
     public $external_data;
@@ -102,7 +102,7 @@ class Payment extends ActiveRecord
             self::STATUS_INIT => Yii::t('app', self::STATUS_INIT),
             self::STATUS_PENDING => Yii::t('app', self::STATUS_PENDING),
             self::STATUS_PAID => Yii::t('app', self::STATUS_PAID),
-            self::STATUS_PARTIAL => Yii::t('app', self::STATUS_PARTIAL),
+            self::STATUS_REJECTED => Yii::t('app', self::STATUS_REJECTED),
             self::STATUS_ERROR => Yii::t('app', self::STATUS_ERROR),
         ];
 

@@ -98,11 +98,4 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
         box-sizing: border-box;']);
     ?>
 </p>
-<p>
-    <?= Yii::t('wheel', 'Thank you very much!') ?>
-</p>
-<p>
-    <b>VACH</b><br/>
-    Team Integration Tool<br/><br/>
-    <b><?= Yii::t('app', 'Empowerment Foundation') ?></b>
-</p>
+<?= $this->render('_footer') ?>

@@ -41,15 +41,7 @@ class PaymentLog extends ActiveRecord
 
     public static function getStatusList()
     {
-        $list = [
-            Payment::STATUS_INIT => Yii::t('app', Payment::STATUS_INIT),
-            Payment::STATUS_PENDING => Yii::t('app', Payment::STATUS_PENDING),
-            Payment::STATUS_PAID => Yii::t('app', Payment::STATUS_PAID),
-            Payment::STATUS_PARTIAL => Yii::t('app', Payment::STATUS_PARTIAL),
-            Payment::STATUS_ERROR => Yii::t('app', Payment::STATUS_ERROR),
-        ];
-
-        return $list;
+        return Payment::getStatusList();
     }
 
     public function getStatusName()

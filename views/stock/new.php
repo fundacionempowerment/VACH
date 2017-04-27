@@ -50,3 +50,4 @@ $this->registerJs("function updateTotal(quantity) {
     </div>
     <?php ActiveForm::end(); ?>
 </div>
+<img src="images/red-loading.gif" style="opacity: 0.01;" />

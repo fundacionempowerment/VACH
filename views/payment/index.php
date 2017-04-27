@@ -24,6 +24,7 @@ $dataProvider = new ActiveDataProvider([
     GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
+            'uuid',
             'stamp:datetime',
             'concept',
             'amount:currency',

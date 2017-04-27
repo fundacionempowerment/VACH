@@ -51,23 +51,61 @@ class PaymentController extends BaseController
     public function actionResponse()
     {
         $referenceCode = Yii::$app->request->get('referenceCode');
+        $lapTransactionState = Yii::$app->request->get('lapTransactionState');
 
         $model = Payment::findOne(['uuid' => $referenceCode]);
 
-        if (!$model) {
-            $model = new Payment();
-            $model->status = Payment::STATUS_ERROR;
-        } else{
-            $a = new \DateTime($model->stamp);
-        }
+        $responses = [
+            'APPROVED' => [
+                Payment:: STATUS_INIT => 'wait',
+                Payment:: STATUS_PENDING => 'wait',
+                Payment:: STATUS_PAID => 'success',
+                Payment:: STATUS_REJECTED => 'wait',
+                Payment:: STATUS_ERROR => 'wait',
+            ],
+            'DECLINED' => [
+                Payment:: STATUS_INIT => 'declined',
+                Payment:: STATUS_PENDING => 'declined',
+                Payment:: STATUS_PAID => 'error',
+                Payment:: STATUS_REJECTED => 'error',
+                Payment:: STATUS_ERROR => 'declined',
+            ],
+            'EXPIRED' => [
+                Payment:: STATUS_INIT => 'declined',
+                Payment:: STATUS_PENDING => 'declined',
+                Payment:: STATUS_PAID => 'error',
+                Payment:: STATUS_REJECTED => 'error',
+                Payment:: STATUS_ERROR => 'declined',
+            ],
+            'PENDING' => [
+                Payment:: STATUS_INIT => 'pending',
+                Payment:: STATUS_PENDING => 'pending',
+                Payment:: STATUS_PAID => 'error',
+                Payment:: STATUS_REJECTED => 'pending',
+                Payment:: STATUS_ERROR => 'pending',
+            ],
+            'ERROR' => [
+                Payment:: STATUS_INIT => 'error',
+                Payment:: STATUS_PENDING => 'error',
+                Payment:: STATUS_PAID => 'error',
+                Payment:: STATUS_REJECTED => 'error',
+                Payment:: STATUS_ERROR => 'error',
+            ]
+        ];
 
-        if ($model->status == Payment::STATUS_ERROR) {
-            $this->notifyAdmin($referenceCode);
+        switch ($responses[$lapTransactionState][$model->status]) {
+            case 'success':
+                return $this->render('response_success');
+            case 'wait':
+                return $this->render('response_wait');
+            case 'pending':
+                return $this->render('response_pending');
+            case 'declined':
+                return $this->render('response_declined');
+            default :
+                $this->notifyAdmin($referenceCode);
+                return $this->render('response_error');
         }
-
-        return $this->render('response', [
-                    'model' => $model,
-        ]);
     }
 
     public function actionConfirmation()
@@ -85,29 +123,54 @@ class PaymentController extends BaseController
         switch ($state_pol) {
             case 4:
                 $payment->status = Payment::STATUS_PAID;
+                $payment->save();
                 $stock->status = Stock::STATUS_VALID;
+                $stock->save();
+
+                $this->notifyPayed($referenceCode);
+                break;
+            case 7:
+                $payment->status = Payment::STATUS_PENDING;
+                $payment->save();
+                break;
+            case 5:
+            case 6:
+                $payment->status = Payment::STATUS_REJECTED;
+                $payment->save();
+                $stock->status = Stock::STATUS_INVALID;
+                $stock->save();
                 break;
             default :
-                $payment->status = Payment::STATUS_ERROR;
-                $stock->status = Stock::STATUS_ERROR;
+                if ($payment->status != Payment::STATUS_PAID) {
+                    $payment->status = Payment::STATUS_ERROR;
+                    $stock->status = Stock::STATUS_ERROR;
+                    $payment->save();
+                    $stock->save();
+                }
                 break;
-        }
-
-        if (!$payment->save()) {
-            SiteController::FlashErrors($payment);
-        }
-        if (!$stock->save()) {
-            SiteController::FlashErrors($stock);
         }
     }
 
     private function notifyAdmin($referenceCode)
     {
-        Yii::$app->mailer->compose('payment', [
+        Yii::$app->mailer->compose('payment_error', [
                     'referenceCode' => $referenceCode,
                 ])
                 ->setSubject('Payment with issues')
                 ->setTo(Yii::$app->params['adminEmail'])
+                ->send();
+    }
+
+    private function notifyPayed($referenceCode)
+    {
+        $model = Payment::findOne(['uuid' => $referenceCode]);
+
+        Yii::$app->mailer->compose('payment_success', [
+                    'model' => $model,
+                ])
+                ->setSubject('Payment successful')
+                ->setTo($model->coach->email)
+                ->setBcc(Yii::$app->params['adminEmail'])
                 ->send();
     }
 

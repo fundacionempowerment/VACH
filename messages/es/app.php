@@ -102,6 +102,7 @@ return [
     'paid' => 'pagado',
     'partial' => 'parcial',
     'pending' => 'pendiente',
+    'rejected' => 'cancelado',
     'valid' => 'válido',
     'Verification Code' => 'Código de verificación',
     '{name} has been successfully added to {group}.' => '{name} ha sido exitosamente agregado a {group}',

@@ -26,6 +26,7 @@ $detailProvider = new ArrayDataProvider([
     DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'uuid',
             'stamp:datetime',
             'concept',
             'amount:currency',
