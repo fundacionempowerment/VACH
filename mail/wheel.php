@@ -10,47 +10,6 @@ $wheel_url = Url::toRoute(['wheel/run', 'token' => $wheel->token], true);
 $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true);
 ?>
 <style>
-    *::before, *::after {
-        box-sizing: border-box;
-    }
-    *::before, *::after {
-        box-sizing: border-box;
-    }
-    .btn-success {
-        background-color: #5cb85c;
-        border-color: #4cae4c;
-        color: #fff;
-    }
-    .btn-primary {
-        background-color: #337ab7;
-        border-color: #2e6da4;
-        color: #fff;
-    }
-    .btn {
-        -moz-user-select: none;
-        background-image: none;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        cursor: pointer;
-        display: inline-block;
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 1.42857;
-        margin-bottom: 0;
-        padding: 6px 12px;
-        text-align: center;
-        touch-action: manipulation;
-        vertical-align: middle;
-        white-space: nowrap;
-    }
-    a {
-        color: #337ab7;
-        text-decoration: none;
-        background-color: transparent;
-    }
-    * {
-        box-sizing: border-box;
-    }
     body {
         color: #333;
         font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -59,11 +18,18 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
     }
 </style>
 <p>
-    <?=
-    Yii::t('wheel', "{gender,select,0{Dear} 1{Dear} other{Dear}} {name},", [
-        'name' => $wheel->observer->name,
-        'gender' => $wheel->observer->gender,
-    ])
+    <?php
+    switch ($wheel->observer->gender) {
+        case app\models\Person::GENDER_MALE:
+            echo 'Estimado ' . $wheel->observer->name . ',';
+            break;
+        case app\models\Person::GENDER_FEMALE:
+            echo 'Estimada ' . $wheel->observer->name . ',';
+            break;
+        default :
+            echo 'Estimado/a ' . $wheel->observer->name . ',';
+            break;
+    }
     ?>
 </p>
 <p>
@@ -72,7 +38,24 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
     ?>
 </p>
 <p style="margin: 30px">
-    <?= Html::a(Yii::t('wheel', 'Confirm reception'), $reception_url, ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('wheel', 'Confirm reception'), $reception_url, ['style' => '
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+        color: #fff;
+        text-decoration: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.42857;
+        margin-bottom: 0;
+        padding: 6px 12px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        box-sizing: border-box;']) ?>
 </p>
 <p>
     <?=
@@ -95,7 +78,24 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
             $button_text = Yii::t('wheel', 'Run organizational wheel');
             break;
     }
-    echo Html::a($button_text, $wheel_url, ['class' => 'btn btn-primary']);
+    echo Html::a($button_text, $wheel_url, ['style' => '
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        color: #fff;
+        text-decoration: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.42857;
+        margin-bottom: 0;
+        padding: 6px 12px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        box-sizing: border-box;']);
     ?>
 </p>
 <p>

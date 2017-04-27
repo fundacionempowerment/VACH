@@ -60,7 +60,7 @@ return [
     'Organizational Wheels' => 'Ruedas organizacionales',
     'Physical Dimension' => 'Dimensión física',
     'Please, click next button to confirm reception of this email:' => 'Por favor, cliquee el siguiente botón para confirmar la recepción de este email:',
-    'Please, click next button to run the {wheel} of assessment {assessment}:' => 'Por favor, cliquee el siguiente boton para ejecutar la {wheel} del relevamiento {assessment}:',
+    'Please, click next button to run the {wheel} of assessment {assessment}:' => 'Por favor, cliquee el siguiente botón para ejecutar la {wheel} del relevamiento {assessment}:',
     'Please, keep this email until the CPC process of your team is completed.' => 'Por favor, conserve este correo hasta que el proceso CPC de su equipo sea completado.',
     'Please, use next link in your browser' => 'Por favor, utilice el siguiente link en su navegador',
     'Quality guidance' => 'Orientación a la calidad',
