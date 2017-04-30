@@ -110,44 +110,51 @@ class PaymentController extends BaseController
 
     public function actionConfirmation()
     {
-        $referenceCode = Yii::$app->request->post('reference_sale');
+        try {
+            $referenceCode = Yii::$app->request->post('reference_sale');
 
-        $payment = Payment::findOne(['uuid' => $referenceCode]);
-        $stock = $payment->stock;
+            $payment = Payment::findOne(['uuid' => $referenceCode]);
+            $stock = $payment->stock;
 
-        $payment->external_id = Yii::$app->request->post('reference_pol');
-        $payment->external_data = serialize($_POST);
+            $payment->external_id = Yii::$app->request->post('reference_pol');
+            $payment->external_data = serialize($_POST);
 
-        $state_pol = Yii::$app->request->post('state_pol');
+            $state_pol = Yii::$app->request->post('state_pol');
 
-        switch ($state_pol) {
-            case 4:
-                $payment->status = Payment::STATUS_PAID;
-                $payment->save();
-                $stock->status = Stock::STATUS_VALID;
-                $stock->save();
-
-                $this->notifyPayed($referenceCode);
-                break;
-            case 7:
-                $payment->status = Payment::STATUS_PENDING;
-                $payment->save();
-                break;
-            case 5:
-            case 6:
-                $payment->status = Payment::STATUS_REJECTED;
-                $payment->save();
-                $stock->status = Stock::STATUS_INVALID;
-                $stock->save();
-                break;
-            default :
-                if ($payment->status != Payment::STATUS_PAID) {
-                    $payment->status = Payment::STATUS_ERROR;
-                    $stock->status = Stock::STATUS_ERROR;
+            switch ($state_pol) {
+                case 4:
+                    $payment->status = Payment::STATUS_PAID;
+                    $payment->rate = Yii::$app->request->post('exchange_rate');
+                    $payment->commision = Yii::$app->request->post('commision_pol');
+                    $payment->commision_currency = Yii::$app->request->post('commision_pol_currency');
                     $payment->save();
+                    $stock->status = Stock::STATUS_VALID;
                     $stock->save();
-                }
-                break;
+
+                    $this->notifyPayed($referenceCode);
+                    break;
+                case 7:
+                    $payment->status = Payment::STATUS_PENDING;
+                    $payment->save();
+                    break;
+                case 5:
+                case 6:
+                    $payment->status = Payment::STATUS_REJECTED;
+                    $payment->save();
+                    $stock->status = Stock::STATUS_INVALID;
+                    $stock->save();
+                    break;
+                default :
+                    if ($payment->status != Payment::STATUS_PAID) {
+                        $payment->status = Payment::STATUS_ERROR;
+                        $stock->status = Stock::STATUS_ERROR;
+                        $payment->save();
+                        $stock->save();
+                    }
+                    break;
+            }
+        } finally {
+            return 'OK';
         }
     }
 

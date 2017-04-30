@@ -27,7 +27,13 @@ $dataProvider = new ActiveDataProvider([
             'uuid',
             'stamp:datetime',
             'concept',
-            'amount:currency',
+            [
+                'attribute' => 'amount',
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'value' => function ($data) {
+                    return $data['currency'] . ' ' . $data['amount'];
+                },
+            ],
             'statusName',
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',

@@ -33,8 +33,8 @@ class Payment extends ActiveRecord
     public function rules()
     {
         return [
-            [['coach_id', 'uuid', 'concept', 'amount', 'status', 'stamp'], 'required'],
-            [['external_id'], 'safe'],
+            [['coach_id', 'uuid', 'concept', 'amount', 'currency', 'status', 'stamp'], 'required'],
+            [['external_id', 'rate', 'commision', 'commision_currency'], 'safe'],
         ];
     }
 
@@ -44,8 +44,13 @@ class Payment extends ActiveRecord
             'coach_id' => Yii::t('team', 'Coach'),
             'uuid' => Yii::t('app', 'Unique ID'),
             'concept' => Yii::t('app', 'Concept'),
-            'amount' => Yii::t('app', 'Amount'),
+            'amount' => Yii::t('app', 'Trans. Amount'),
+            'currency' => Yii::t('payment', 'Currency'),
+            'rate' => Yii::t('payment', 'Rate'),
+            'commision' => Yii::t('payment', 'Commision'),
+            'commision_currency' => Yii::t('payment', 'Commision currency'),
             'status' => Yii::t('app', 'Status'),
+            'is_manual' => Yii::t('payment', 'Is manual'),
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
             'log' => Yii::t('app', 'Log'),
@@ -107,6 +112,21 @@ class Payment extends ActiveRecord
         ];
 
         return $list;
+    }
+
+    public function getName()
+    {
+        return Yii::t('payment', 'Payment') . ' ' . $this->id;
+    }
+
+    public function getLocalAmount()
+    {
+        return $this->amount * $this->rate;
+    }
+
+    public function getNetAmount()
+    {
+        return $this->amount * $this->rate - $this->commision;
     }
 
     public function getStatusName()
