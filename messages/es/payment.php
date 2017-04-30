@@ -17,15 +17,26 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Commision' => 'Comisión',
+    'Commision currency' => 'Moneda de comisión',
+    'Currency' => 'Moneda',
+    'Is manual' => 'Es manual',
+    'Local amount' => 'Monto local',
     'Money to add' => 'Dinero a agregar',
     'My Payments' => 'Mis pagos',
+    'Net amount' => 'Monto neto',
     'Payment' => 'Pago',
-    'Payments' => 'Pagos',
     'Payment successfull!' => '¡Pago exitoso!!!',
+    'Payments' => 'Pagos',
     'Please, wait in this page.' => 'Por favor, aguarde en esta página',
+    'Rate' => 'Tasa',
+    'Set commision' => 'Fijar comisión',
     'There was an error' => 'Hubo un error',
     'VACH' => 'VACH',
     'VACH administrators has been notified.' => 'Los administradores de VACH han sido notificados',
     'We are going to contact you soon.' => 'Nos pondremos en contacto con usted pronto.',
+    'We are going to notify you when it is fulfilled.' => 'Le notificaremos cuando esté completo.',
     'We are waiting payment broker confirmation.' => 'Estamos esperando la confirmación del intermediario.',
+    'Your payment has been declined. Please try again.' => 'Su pago ha sido desestimado. Por favor intente nuevamente.',
+    'Your payment is pending.' => 'Su está pendiente.',
 ];
