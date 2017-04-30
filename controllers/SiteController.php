@@ -228,7 +228,7 @@ class SiteController extends BaseController
 
     public static function addFlash($key, $value)
     {
-        \Yii::$app->session->addFlash('success', $value);
+        \Yii::$app->session->addFlash($key, $value);
         LogController::log($value);
     }
 

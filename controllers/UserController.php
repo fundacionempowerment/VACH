@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -14,7 +14,7 @@ use app\controllers\SiteController;
 class UserController extends Controller
 {
 
-    public $layout = '//admin';
+    public $layout = '//inner';
 
     /**
      * @inheritdoc
@@ -68,80 +68,6 @@ class UserController extends Controller
         }
 
         return $data;
-    }
-
-    public function actionIndex()
-    {
-
-        $user = User::find();
-
-        return $this->render('index', [
-                    'user' => $user,
-        ]);
-    }
-
-    public function actionNew($personId = null)
-    {
-        $user = new User();
-
-        if ($user->load(Yii::$app->request->post())) {
-            $postUser = Yii::$app->request->post('User');
-            $password = $postUser['password'];
-            if (isset($password)) {
-                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-                $user->password_hash = $encryptedPassword;
-            }
-
-            if ($user->save()) {
-                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $user->fullname]));
-                return $this->redirect(['/user']);
-            } else {
-                SiteController::FlashErrors($user);
-            }
-        }
-
-        return $this->render('form', [
-                    'user' => $user,
-                    'return' => '/user',
-        ]);
-    }
-
-    public function actionEdit($id)
-    {
-        $user = User::findOne(['id' => $id]);
-
-        if ($user->load(Yii::$app->request->post())) {
-            $postUser = Yii::$app->request->post('User');
-            $password = $postUser['password'];
-            if (isset($password)) {
-                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-                $user->password_hash = $encryptedPassword;
-            }
-
-            if ($user->save()) {
-                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $user->fullname]));
-                return $this->redirect(['/user']);
-            } else {
-                SiteController::FlashErrors($user);
-            }
-        }
-
-        return $this->render('form', [
-                    'user' => $user,
-                    'return' => '/user',
-        ]);
-    }
-
-    public function actionDelete($id)
-    {
-        $user = User::findOne(['id' => $id]);
-        if ($user->delete()) {
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $user->fullname]));
-        } else {
-            SiteController::FlashErrors($user);
-        }
-
-        return $this->redirect(['/user']);
     }
 
     public function actionMyAccount()

@@ -48,28 +48,6 @@ class UserController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionFindByName($name = null)
-    {
-        Yii::$app->response->format = 'json';
-
-        $data['results'] = [];
-        if ($name) {
-
-            $users = User::findByName($name)->all();
-            foreach ($users as $user) {
-                $newElement['id'] = $user->id;
-                $newElement['name'] = $user->name;
-                $newElement['surname'] = $user->surname;
-                $newElement['fullname'] = $user->fullname;
-                $newElement['userFullname'] = $user->userFullname;
-                $newElement['email'] = $user->email;
-                $data['results'][] = $newElement;
-            }
-        }
-
-        return $data;
-    }
-
     public function actionIndex()
     {
 
@@ -142,35 +120,6 @@ class UserController extends Controller
         }
 
         return $this->redirect(['/user']);
-    }
-
-    public function actionMyAccount()
-    {
-        if (Yii::$app->user->isGuest)
-            $this->goHome();
-
-        $user = User::findOne(['id' => Yii::$app->user->id]);
-
-        if ($user->load(Yii::$app->request->post())) {
-            $postUser = Yii::$app->request->post('User');
-            $password = $postUser['password'];
-            if (isset($password)) {
-                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-                $user->password_hash = $encryptedPassword;
-            }
-
-            if ($user->save()) {
-                SiteController::addFlash('success', Yii::t('user', 'Your personal data has been successfully saved.'));
-                return $this->redirect(['/site']);
-            } else {
-                SiteController::FlashErrors($user);
-            }
-        }
-
-        return $this->render('myAccount', [
-                    'user' => $user,
-                    'return' => '/site',
-        ]);
     }
 
 }
