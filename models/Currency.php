@@ -5,6 +5,10 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\httpclient\Client;
+use app\models\Log;
+use app\controllers\LogController;
+use app\models\Currency;
 
 class Currency extends ActiveRecord
 {
@@ -54,10 +58,70 @@ class Currency extends ActiveRecord
     {
         return Currency::find()->orderBy('id desc');
     }
-    
+
     public static function lastValue()
     {
-        return Currency::find()->orderBy('stamp desc')->one()->rate;
+        $lastRate = Currency::find()->orderBy('stamp desc')->one();
+
+        if (!$lastRate) {
+            Currency::fetchLastValue();
+            $lastRate = Currency::find()->orderBy('stamp desc')->one();
+        }
+        if ($lastRate->stamp < (new \DateTime('today -1 days'))->format('Y-m-d H:i:s')) {
+            Currency::fetchLastValue();
+            $lastRate = Currency::find()->orderBy('stamp desc')->one();
+        }
+
+        if (!$lastRate) {
+            throw new Exception('Currency rate could not be fetched. Contact VACH administrator!');
+        }
+
+        return $lastRate->rate;
+    }
+
+    public static function fetchLastValue()
+    {
+        $client = new Client();
+        $response = $client->createRequest()
+                ->setMethod('get')
+                ->setUrl('http://www.bcra.gov.ar/')
+                ->send();
+
+        if (!$response->isOk) {
+            LogController::log('Error: fail to get data from BCRA');
+            return;
+        }
+
+        LogController::log('Data obteined from BCRA');
+
+        $content = $response->content;
+
+        $init = strpos($content, 'contenedordolar');
+        $end = strpos($content, 'lar Mayorista');
+
+        $data = substr($content, $init, $end - $init);
+
+        $init = strpos($data, '<h3>$ ') + 6;
+        $end = strpos($data, '</h3>');
+
+        $number = substr($data, $init, $end - $init);
+        $number = str_replace(',', '.', $number);
+
+        $value = floatval($number);
+
+        LogController::log('USD/ARS rate: ' . $number);
+
+        $newCurrency = new Currency();
+        $newCurrency->from_currency = 'ARS';
+        $newCurrency->to_currency = 'USD';
+        $newCurrency->rate = $value;
+
+        if (!$newCurrency->save()) {
+            $errors = $newCurrency->getErrors();
+            LogController::log('Currency not saved: ' . print_r($errors));
+        }
+
+        LogController::log('Currency saved');
     }
 
 }
