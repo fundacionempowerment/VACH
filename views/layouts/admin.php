@@ -14,6 +14,11 @@ use app\components\Icons;
 
 AppAsset::register($this);
 
+$isAdministrator = false;
+if (Yii::$app->user->identity) {
+    $isAdministrator = Yii::$app->user->identity->is_administrator;
+}
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -32,7 +37,7 @@ AppAsset::register($this);
             <?php
             NavBar::begin([
                 'options' => [
-                    'class' => 'navbar-default navbar-fixed-top',
+                    'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
             $logo = Html::img('@web/images/logo.png', ['alt' => 'logo',

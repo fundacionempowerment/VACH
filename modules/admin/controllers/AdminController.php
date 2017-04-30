@@ -32,19 +32,6 @@ class AdminController extends BaseController
         ]);
     }
 
-    public function actionStock()
-    {
-        if (!Yii::$app->user->identity->is_administrator) {
-            return $this->goHome();
-        }
-
-        $models = Stock::adminBrowse();
-
-        return $this->render('stock', [
-                    'models' => $models,
-        ]);
-    }
-
     public function actionPayment()
     {
         if (!Yii::$app->user->identity->is_administrator) {

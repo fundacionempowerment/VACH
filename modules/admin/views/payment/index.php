@@ -1,0 +1,87 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\grid\GridView;
+use yii\data\ActiveDataProvider;
+
+/* @var $this yii\web\View */
+$this->title = Yii::t('payment', 'Payments');
+
+$this->params['breadcrumbs'][] = $this->title;
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $models,
+    'pagination' => [
+        'pageSize' => 10,
+    ],
+        ]);
+?>
+<div class="coach-companies">
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?=
+    GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'id',
+            'concept',
+            [
+                'attribute' => 'amount',
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'value' => function ($data) {
+                    return $data['currency'] . ' ' . $data['amount'];
+                },
+            ],
+            'rate:decimal',
+            [
+                'label' => Yii::t('payment', 'Local amount'),
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'value' => function ($data) {
+                    return 'ARS ' . Yii::$app->formatter->asDecimal($data['localAmount']);
+                },
+            ],
+            [
+                'attribute' => 'commision',
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'value' => function ($data) {
+                    return $data['commision_currency'] . ' ' . $data['commision'];
+                },
+            ],
+            [
+                'label' => Yii::t('payment', 'Net amount'),
+                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                'value' => function ($data) {
+                    return $data['commision_currency'] . ' ' . $data['netAmount'];
+                },
+            ],
+            'stamp:datetime',
+            'statusName',
+            'is_manual:boolean',
+            [
+                'attribute' => 'creator.fullname',
+                'label' => Yii::t('app', 'Creator')
+            ],
+            ['class' => 'app\components\grid\ActionColumn',
+                'template' => '{view} {update}',
+                'options' => ['width' => '110px'],
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a(app\components\Icons::EYE, Url::to(['payment/view', 'id' => $model['id']]), [
+                                    'title' => Yii::t('app', 'View'),
+                                    'data-pjax' => '0',
+                                    'class' => 'btn btn-default',
+                        ]);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(app\components\Icons::EURO, Url::to(['payment/edit', 'id' => $model['id']]), [
+                                    'title' => Yii::t('payment', 'Set commision'),
+                                    'data-pjax' => '0',
+                                    'class' => 'btn btn-default',
+                        ]);
+                    },
+                ]
+            ]
+        ],
+    ]);
+    ?>
+</div>
