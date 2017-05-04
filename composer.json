@@ -24,7 +24,8 @@
         "kartik-v/yii2-checkbox-x": "^1.0",
         "yiisoft/yii2-httpclient": "^2.0",
         "phpoffice/phppresentation": "dev-master",
-        "phpoffice/phpword": "dev-master"
+        "phpoffice/phpword": "dev-master",
+        "onmotion/yii2-telegram": "^0.8.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
