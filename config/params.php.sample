@@ -7,10 +7,11 @@ return [
     'minimal_consciousness' => 4 / 3,
     'good_consciousness' => 4 * 2 / 3,
     'server_status' => 'online',
-    'send_wheel_answers' => true,
+    'send_wheel_answers' => false,
     'user.passwordResetTokenExpire' => 3600,
     //
     'monetize' => true,
+    'manual_mode' => false,
     'default_product_id' => 1,
     'default_quantity' => 10,
     //
