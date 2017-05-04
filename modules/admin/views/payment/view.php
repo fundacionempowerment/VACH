@@ -33,6 +33,7 @@ $detailProvider = new ArrayDataProvider([
             'stamp:datetime',
             'concept',
             'amount:currency',
+            'rate:decimal',
             [
                 'label' => Yii::t('payment', 'Local amount'),
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default

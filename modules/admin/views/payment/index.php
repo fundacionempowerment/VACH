@@ -37,21 +37,21 @@ $dataProvider = new ActiveDataProvider([
                 'label' => Yii::t('payment', 'Local amount'),
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
-                    return 'ARS ' . Yii::$app->formatter->asDecimal($data['localAmount']);
+                    return 'ARS ' . Yii::$app->formatter->asDecimal($data['localAmount'], 2);
                 },
             ],
             [
                 'attribute' => 'commision',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
-                    return $data['commision_currency'] . ' ' . $data['commision'];
+                    return $data['commision_currency'] . ' ' . Yii::$app->formatter->asDecimal($data['commision'], 2);
                 },
             ],
             [
                 'label' => Yii::t('payment', 'Net amount'),
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
-                    return $data['commision_currency'] . ' ' . $data['netAmount'];
+                    return $data['commision_currency'] . ' ' . Yii::$app->formatter->asDecimal($data['netAmount'], 2);
                 },
             ],
             'stamp:datetime',

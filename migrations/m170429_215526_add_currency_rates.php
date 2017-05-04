@@ -17,7 +17,7 @@ class m170429_215526_add_currency_rates extends Migration
             'id' => $this->primaryKey(),
             'from_currency' => $this->string()->notNull(),
             'to_currency' => $this->string()->notNull(),
-            'rate' => $this->money()->notNull(),
+            'rate' => $this->decimal(10,4)->notNull(),
             'stamp' => $this->string()->notNull(),
                 ], $tableOptions);
     }
