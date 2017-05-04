@@ -127,9 +127,6 @@ $I->wait(1);
 
 // Creo nuevo relevamiento
 
-$I->click('Nuevo relevamiento');
-$I->wait(1);
-
 $I->see('Licencias requeridas: ' . count($persons));
 
 $I->fillField('Assessment[name]', $assessment['name']);
@@ -143,7 +140,7 @@ for ($i = 0; $i < count($persons) * 3; $i++) {
     $I->click('#cell_' . $i);
     $I->wait(1);
     $wheelToken[] = $I->grabTextFrom('#token');
-    $I->click("//button[@class='close']");
+    $I->click(".//*[@id='email_modal']/div/div/div[1]/button");
     $I->wait(1);
 }
 

@@ -44,7 +44,7 @@ $I->wait(1);
 $I->see('exitosamente');
 $I->see($fullname);
 
-$I->click('(//a[@title="Eliminar"])[1]');
+$I->click('(//a[@title="Eliminar"])[4]');
 $I->wait(1);
 $I->acceptPopup();
 $I->wait(1);
