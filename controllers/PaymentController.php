@@ -164,6 +164,7 @@ class PaymentController extends BaseController
                     'referenceCode' => $referenceCode,
                 ])
                 ->setSubject('Payment with issues')
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo(Yii::$app->params['adminEmail'])
                 ->send();
     }
@@ -176,6 +177,7 @@ class PaymentController extends BaseController
                     'model' => $model,
                 ])
                 ->setSubject('Payment successful')
+                ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($model->coach->email)
                 ->setBcc(Yii::$app->params['adminEmail'])
                 ->send();
