@@ -18,6 +18,7 @@ class AddModel extends Model
     public $quantity;
     public $price;
     public $coach_id;
+    public $part_distribution;
 
     /**
      * @return array the validation rules.
@@ -26,7 +27,7 @@ class AddModel extends Model
     {
         return [
             // username and password are both required
-            [['product_id', 'quantity', 'price', 'coach_id'], 'required'],
+            [['product_id', 'quantity', 'price', 'coach_id', 'part_distribution'], 'required'],
             ['quantity', 'number', 'min' => 1, 'max' => 100],
             ['amount', 'number', 'min' => 0, 'max' => 100000],
         ];

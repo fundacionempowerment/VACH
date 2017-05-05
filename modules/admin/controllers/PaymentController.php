@@ -53,7 +53,6 @@ class PaymentController extends \app\controllers\BaseController
         $model = Payment::findOne(['id' => $id]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->commision_currency = 'ARS';
             if ($model->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $model->name]));
                 return $this->redirect(['payment/view', 'id' => $model->id]);

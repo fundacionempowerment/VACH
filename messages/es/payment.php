@@ -17,10 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Available payments' => 'Pagos disponibles',
     'Commision' => 'Comisión',
     'Commision currency' => 'Moneda de comisión',
+    'Create liquidation' => 'Crear liquidación',
     'Currency' => 'Moneda',
     'Is manual' => 'Es manual',
+    'Liquidation' => 'Liquidación',
+    'Liquidations' => 'Liquidaciones',
     'Local amount' => 'Monto local',
     'Money to add' => 'Dinero a agregar',
     'My Payments' => 'Mis pagos',
@@ -30,6 +34,7 @@ return [
     'Payments' => 'Pagos',
     'Please, wait in this page.' => 'Por favor, aguarde en esta página',
     'Rate' => 'Tasa',
+    'Raw amount' => 'Monto bruto',
     'Set commision' => 'Fijar comisión',
     'There was an error' => 'Hubo un error',
     'VACH' => 'VACH',
@@ -39,4 +44,5 @@ return [
     'We are waiting payment broker confirmation.' => 'Estamos esperando la confirmación del intermediario.',
     'Your payment has been declined. Please try again.' => 'Su pago ha sido desestimado. Por favor intente nuevamente.',
     'Your payment is pending.' => 'Su está pendiente.',
+    '{name} amount' => 'Monto {name}',
 ];

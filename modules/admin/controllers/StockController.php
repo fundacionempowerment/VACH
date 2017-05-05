@@ -70,6 +70,7 @@ class StockController extends \app\controllers\BaseController
             'product_id' => $product_id,
             'quantity' => $quantity,
             'price' => $product->price,
+            'part_distribution' => 0,
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -94,6 +95,8 @@ class StockController extends \app\controllers\BaseController
             $payment->currency = 'USD';
             $payment->amount = $stock->total;
             $payment->rate = \app\models\Currency::lastValue();
+            $payment->commision_currency = 'ARS';
+            $payment->commision = 0;
             $payment->status = Payment::STATUS_INIT;
             if (!$payment->save()) {
                 \app\controllers\SiteController::FlashErrors($payment);
@@ -158,8 +161,17 @@ class StockController extends \app\controllers\BaseController
             $payment->currency = 'USD';
             $payment->amount = $stock->total;
             $payment->rate = \app\models\Currency::lastValue();
+            $payment->commision_currency = 'ARS';
+            $payment->commision = 0;
             $payment->status = Payment::STATUS_PAID;
             $payment->is_manual = true;
+            if ($model->part_distribution == 1) {
+                $payment->part_distribution = 50;
+            } else if ($model->part_distribution == 2) {
+                $payment->part_distribution = 100;
+            } else {
+                $payment->part_distribution = 0;
+            }
             if (!$payment->save()) {
                 $success = false;
                 \app\controllers\SiteController::FlashErrors($payment);

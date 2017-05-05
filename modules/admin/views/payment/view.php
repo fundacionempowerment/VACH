@@ -21,10 +21,11 @@ $detailProvider = new ArrayDataProvider([
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>
-        <?= Html::a(Yii::t('payment', 'Set commision'), Url::to(['payment/edit', 'id' => $model->id]), ['class' => 'btn btn-default']) ?>
-    </p>
-
+    <?php if (!$model->liquidation_id) { ?>
+        <p>
+            <?= Html::a(Yii::t('payment', 'Set commision'), Url::to(['payment/edit', 'id' => $model->id]), ['class' => 'btn btn-default']) ?>
+        </p>
+    <?php } ?>
     <?=
     DetailView::widget([
         'model' => $model,
@@ -53,6 +54,18 @@ $detailProvider = new ArrayDataProvider([
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
                     return $data['commision_currency'] . ' ' . $data['netAmount'];
+                },
+            ],
+            [
+                'label' => Yii::$app->params['part1_name'],
+                'value' => function ($data) {
+                    return 'ARS' . ' ' . Yii::$app->formatter->asDecimal($data['part1Amount'] ?: 0, 2);
+                },
+            ],
+            [
+                'label' => Yii::$app->params['part2_name'],
+                'value' => function ($data) {
+                    return 'ARS' . ' ' . Yii::$app->formatter->asDecimal($data['part2Amount'] ?: 0, 2);
                 },
             ],
             'statusName',

@@ -20,6 +20,12 @@ $this->registerJs("function updateAmount(quantity) {
     $('#total').text('" . Yii::$app->formatter->numberFormatterSymbols[NumberFormatter::CURRENCY_SYMBOL] . "' + total.toFixed(2));
     return true;
     }", View::POS_END, 'refresh-page');
+
+$distributions = [
+    1 => '50% ' . Yii::$app->params['part1_name'] . ' 50% ' . Yii::$app->params['part2_name'],
+    2 => '100% ' . Yii::$app->params['part1_name'],
+    3 => '100% ' . Yii::$app->params['part2_name'],
+];
 ?>
 <div class="col-md-12">
     <h1><?= $this->title ?></h1>
@@ -40,6 +46,7 @@ $this->registerJs("function updateAmount(quantity) {
             'onchange' => "updateAmount();"]
     ])
     ?>
+    <?= $form->field($model, 'part_distribution')->dropDownList($distributions) ?>
     <div class="form-group">
         Total:  <b><span id="total"><?= Yii::$app->formatter->asCurrency($model->price * $model->quantity) ?></span></b><br/><br>
             <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success', 'name' => 'pay-button']) ?>         

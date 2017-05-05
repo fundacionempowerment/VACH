@@ -20,8 +20,10 @@ $dataProvider = new ActiveDataProvider([
 ?>
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a(Yii::t('stock', 'Add licences'), Url::to(['stock/add']), ['class' => 'btn btn-success']) ?>
-    <?= Html::a(Yii::t('stock', 'Remove licences'), Url::to(['stock/remove']), ['class' => 'btn btn-danger']) ?>
+    <p>
+        <?= Html::a(Yii::t('stock', 'Add licences'), Url::to(['stock/add']), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('stock', 'Remove licences'), Url::to(['stock/remove']), ['class' => 'btn btn-danger']) ?>
+    </p>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,

@@ -14,6 +14,8 @@ return [
     'manual_mode' => false,
     'default_product_id' => 1,
     'default_quantity' => 10,
+    'part1_name' => 'Part 1',
+    'part2_name' => 'Part 2',
     //
     'payu_test' => true,
     'payu_merchant_id' => 508029,

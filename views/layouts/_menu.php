@@ -28,6 +28,7 @@ $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Payments'), 'url' => ['/admin/payment']];
+    $admininistratorMenu[] = ['label' => Yii::t('payment', 'Liquidations'), 'url' => ['/admin/liquidation']];
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/admin/user']];
     $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/admin/wheel/questions']];
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['/admin/feedback']];

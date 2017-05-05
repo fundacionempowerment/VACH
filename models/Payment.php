@@ -154,4 +154,14 @@ class Payment extends ActiveRecord
         return $this->hasOne(Stock::className(), ['id' => 'stock_id']);
     }
 
+    public function getPart1Amount()
+    {
+        return $this->netAmount * $this->part_distribution / 100;
+    }
+
+    public function getPart2Amount()
+    {
+        return $this->netAmount * (100 - $this->part_distribution) / 100;
+    }
+
 }
