@@ -19,12 +19,12 @@ use yii\helpers\ArrayHelper;
 class Presentation
 {
 
-    private static $assessment;
+    private static $team;
     private static $ppt;
 
-    static public function create($assessment)
+    static public function create($team)
     {
-        self::$assessment = $assessment;
+        self::$team = $team;
 
         self::$ppt = new PhpPresentation();
 
@@ -39,7 +39,7 @@ class Presentation
 
         self::addMembersTitleSlide();
 
-        foreach ($assessment->team->members as $member) {
+        foreach ($team->members as $member) {
             self::addMemberTitleSlide($member);
             self::addMemberPerceptionSlide($member);
             self::addMemberCompentencesSlide($member);
@@ -79,21 +79,21 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-        $textRun = $shape->createParagraph()->createTextRun(self::$assessment->team->company->name);
+        $textRun = $shape->createParagraph()->createTextRun(self::$team->company->name);
         $textRun->getFont()->setBold(true)
                 ->setSize(40)
                 ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
-        $textRun = $shape->createParagraph()->createTextRun(self::$assessment->team->name);
+        $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
         $textRun->getFont()->setBold(true)
                 ->setSize(40)
                 ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
-        $textRun = $shape->createParagraph()->createTextRun(self::$assessment->name);
+        $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
         $textRun->getFont()->setBold(true)
                 ->setSize(40)
                 ->setColor(new Color('FFFF0000'));
@@ -193,13 +193,13 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/gauges',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -214,7 +214,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/gauges',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -230,7 +230,7 @@ class Presentation
 
     static private function addTeamNumberMatrixSlide()
     {
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
 
         $currentSlide = self::$ppt->createSlide();
 
@@ -247,10 +247,10 @@ class Presentation
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
-        $performanceMatrix = Wheel::getPerformanceMatrix($assessmentId, Wheel::TYPE_GROUP);
+        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_GROUP);
 
         $members = [];
-        foreach (TeamMember::find()->where(['team_id' => self::$assessment->team->id, 'active' => true])->all() as $teamMember) {
+        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
         }
 
@@ -378,10 +378,10 @@ class Presentation
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
-        $performanceMatrix = Wheel::getPerformanceMatrix($assessmentId, Wheel::TYPE_ORGANIZATIONAL);
+        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
 
         $members = [];
-        foreach (TeamMember::find()->where(['team_id' => self::$assessment->team->id, 'active' => true])->all() as $teamMember) {
+        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
         }
 
@@ -497,13 +497,13 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/matrix',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -518,7 +518,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/matrix',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -536,13 +536,13 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/emergents',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -557,7 +557,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/emergents',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -615,14 +615,14 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
         $memberId = $member->person_id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/lineal',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -637,7 +637,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/lineal',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -655,14 +655,14 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
         $memberId = $member->person_id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/gauges',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -677,7 +677,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/gauges',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -695,14 +695,14 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
         $memberId = $member->person_id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/matrix',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -717,7 +717,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/matrix',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -735,14 +735,14 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
         $memberId = $member->person_id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/relations',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -757,7 +757,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/relations',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 
@@ -775,14 +775,14 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
-        $assessmentId = self::$assessment->id;
+        $teamId = self::$team->id;
         $memberId = $member->person_id;
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/emergents',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
 
@@ -801,7 +801,7 @@ class Presentation
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
                             '/graph/emergents',
-                            'assessmentId' => $assessmentId,
+                            'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
 

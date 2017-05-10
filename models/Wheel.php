@@ -75,9 +75,9 @@ class Wheel extends ActiveRecord
         return User::findOne(['id' => $this->observer->coach_id]);
     }
 
-    public function getAssessment()
+    public function getTeam()
     {
-        return Assessment::findOne(['id' => $this->assessment_id]);
+        return Team::findOne(['id' => $this->team_id]);
     }
 
     public function getAnswers()
@@ -137,15 +137,15 @@ class Wheel extends ActiveRecord
         ];
     }
 
-    private static function getProjectedWheel($assessmentId, $memberId, $type)
+    private static function getProjectedWheel($teamId, $memberId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = $type")
+                ->innerJoin('team', 'team.id = wheel.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("wheel.observer_id = $memberId and wheel.observed_id = $memberId and team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
@@ -156,30 +156,30 @@ class Wheel extends ActiveRecord
         return $answers;
     }
 
-    public static function getProjectedIndividualWheel($assessmentId, $memberId)
+    public static function getProjectedIndividualWheel($teamId, $memberId)
     {
-        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_INDIVIDUAL);
+        return self::getProjectedWheel($teamId, $memberId, Wheel::TYPE_INDIVIDUAL);
     }
 
-    public static function getProjectedGroupWheel($assessmentId, $memberId)
+    public static function getProjectedGroupWheel($teamId, $memberId)
     {
-        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
+        return self::getProjectedWheel($teamId, $memberId, Wheel::TYPE_GROUP);
     }
 
-    public static function getProjectedOrganizationalWheel($assessmentId, $memberId)
+    public static function getProjectedOrganizationalWheel($teamId, $memberId)
     {
-        return self::getProjectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
+        return self::getProjectedWheel($teamId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
-    private static function getReflectedWheel($assessmentId, $memberId, $type)
+    private static function getReflectedWheel($teamId, $memberId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("wheel.observer_id <> $memberId and wheel.observed_id = $memberId and assessment.id = $assessmentId and wheel.type = $type")
+                ->innerJoin('team', 'team.id = wheel.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("wheel.observer_id <> $memberId and wheel.observed_id = $memberId and team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
@@ -190,25 +190,25 @@ class Wheel extends ActiveRecord
         return $answers;
     }
 
-    public static function getReflectedGroupWheel($assessmentId, $memberId)
+    public static function getReflectedGroupWheel($teamId, $memberId)
     {
-        return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_GROUP);
+        return self::getReflectedWheel($teamId, $memberId, Wheel::TYPE_GROUP);
     }
 
-    public static function getReflectedOrganizationalWheel($assessmentId, $memberId)
+    public static function getReflectedOrganizationalWheel($teamId, $memberId)
     {
-        return self::getReflectedWheel($assessmentId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
+        return self::getReflectedWheel($teamId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
-    public static function getPerformanceMatrix($assessmentId, $type)
+    public static function getPerformanceMatrix($teamId, $type)
     {
         $reflectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("assessment.id = $assessmentId")
+                ->innerJoin('team', 'team.id = wheel.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("team.id = $teamId")
                 ->andWhere("wheel.type = $type")
                 ->andWhere("wheel.observer_id <> wheel.observed_id")
                 ->andWhere("m_observed.active = 1")
@@ -219,11 +219,11 @@ class Wheel extends ActiveRecord
         $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, person.name, person.surname, person.shortname')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team', 'team.id = wheel.team_id')
                 ->innerJoin('person', 'person.id = wheel.observed_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("assessment.id = $assessmentId and wheel.type = $type and wheel.observer_id = wheel.observed_id")
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("team.id = $teamId and wheel.type = $type and wheel.observer_id = wheel.observed_id")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel.observed_id')
@@ -245,15 +245,15 @@ class Wheel extends ActiveRecord
         return $result;
     }
 
-    public static function getGauges($assessmentId, $type)
+    public static function getGauges($teamId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("wheel.observed_id <> wheel.observer_id and assessment.id = $assessmentId and wheel.type = $type")
+                ->innerJoin('team', 'team.id = wheel.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("wheel.observed_id <> wheel.observer_id and team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
@@ -264,15 +264,15 @@ class Wheel extends ActiveRecord
         return $answers;
     }
 
-    public static function getMemberGauges($assessmentId, $memberId, $type)
+    public static function getMemberGauges($teamId, $memberId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("wheel.observed_id = $memberId and wheel.observer_id <> $memberId and assessment.id = $assessmentId and wheel.type = $type")
+                ->innerJoin('team', 'team.id = wheel.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("wheel.observed_id = $memberId and wheel.observer_id <> $memberId and team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.dimension')
@@ -283,18 +283,18 @@ class Wheel extends ActiveRecord
         return $answers;
     }
 
-    public static function getEmergents($assessmentId, $type)
+    public static function getEmergents($teamId, $type)
     {
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, question.`text` as question ,'
                         . ' avg( case when wheel.observed_id <> wheel.observer_id then wheel_answer.answer_value else null end) as value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team', 'team.id = wheel.team_id')
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
                 ->innerJoin('question', 'question.id = wheel_question.question_id')
-                ->where("assessment.id = $assessmentId and wheel.type = $type")
+                ->where("team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.answer_order, wheel_question.dimension, question.`text`')
@@ -304,19 +304,19 @@ class Wheel extends ActiveRecord
         return $rawEmergents;
     }
 
-    public static function getMemberEmergents($assessmentId, $memberId, $type)
+    public static function getMemberEmergents($teamId, $memberId, $type)
     {
         $rawEmergents = (new Query)->select('wheel_question.dimension, wheel_answer.answer_order, question.`text` as question ,'
                         . ' avg( case when wheel.observed_id <> wheel.observer_id then wheel_answer.answer_value else null end) as value,'
                         . 'avg( case when wheel.observed_id = wheel.observer_id then wheel_answer.answer_value else null end) as mine_value')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team', 'team.id = wheel.team_id')
                 ->innerJoin('wheel_question', 'wheel_question.order = wheel_answer.answer_order and wheel_question.type = wheel.type')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
                 ->innerJoin('question', 'question.id = wheel_question.question_id')
-                ->where("assessment.id = $assessmentId and wheel.observed_id = $memberId and wheel.type = $type")
+                ->where("team.id = $teamId and wheel.observed_id = $memberId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel_answer.answer_order, wheel_question.dimension, question.`text`')
@@ -326,18 +326,18 @@ class Wheel extends ActiveRecord
         return $rawEmergents;
     }
 
-    public static function getRelationsMatrix($assessmentId, $type)
+    public static function getRelationsMatrix($teamId, $type)
     {
         $rawAnswers = (new Query())->select('wheel.observer_id, wheel.observed_id, avg(wheel_answer.answer_value) as value, observer.name as observer_name, observer.surname as observer_surname, observed.name as observed_name, observed.surname as observed_surname,'
                         . 'observer.gender as observer_gender, observed.gender as observed_gender')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
-                ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
+                ->innerJoin('team', 'team.id = wheel.team_id')
                 ->innerJoin('person as observer', 'observer.id = wheel.observer_id')
                 ->innerJoin('person as observed', 'observed.id = wheel.observed_id')
-                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = assessment.team_id')
-                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = assessment.team_id')
-                ->where("assessment.id = $assessmentId and wheel.type = $type")
+                ->innerJoin('team_member as m_observed', 'm_observed.person_id = wheel.observed_id and m_observed.team_id = team.id')
+                ->innerJoin('team_member as m_observer', 'm_observer.person_id = wheel.observer_id and m_observer.team_id = team.id')
+                ->where("team.id = $teamId and wheel.type = $type")
                 ->andWhere("m_observed.active = 1")
                 ->andWhere("m_observer.active = 1")
                 ->groupBy('wheel.observer_id, wheel.observed_id, observer.name, observer.surname, observed.name, observed.surname')

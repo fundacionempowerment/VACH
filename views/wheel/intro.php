@@ -66,7 +66,7 @@ $show_instructions = $instructions_shown == true ? false : true;
     <?php
     if (isset(Yii::$app->user))
         if (isset(Yii::$app->user->identity)) {
-            echo Html::a(Yii::t('wheel', 'Back to assessment board'), ['assessment/view', 'id' => $wheel->assessment->id], ['class' => 'btn btn-default']);
+            echo Html::a(Yii::t('wheel', 'Back to team board'), ['team/view', 'id' => $wheel->team->id], ['class' => 'btn btn-default']);
         }
     ?>
     <?php ActiveForm::end(); ?>

@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -14,10 +15,28 @@ use kartik\widgets\Select2;
 $this->title = $team->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$coachesProvider = new ArrayDataProvider([
+    'allModels' => $team->teamCoaches,
+        ]);
+
+$pluginOptions = [
+    'allowClear' => true,
+    'minimumInputLength' => 3,
+    'ajax' => [
+        'url' => Url::to(['/user/find-by-name']),
+        'dataType' => 'json',
+        'data' => new JsExpression('function(params) { return {name:params.term, id:$(this).val()}; }')
+    ],
+    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+    'templateResult' => new JsExpression('function(user) { return user.userFullname; }'),
+    'templateSelection' => new JsExpression('function (user) { return user.userFullname; }'),
+    'cache' => true
+];
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-    <div class="row col-md-4">
+    <div class="row col-md-6">
         <h3><?= Yii::t('team', 'Team data') ?> </h3>
         <p>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
@@ -33,158 +52,60 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]) : ''
             ?>
         </p>
-    </div>
-    <div class="col-md-4 thumbnail" style="padding: 10px; margin-right: 20px;" >
-        <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Members') ?></h3>
-        <?php
-        $membersDataProvider = new ArrayDataProvider([
-            'allModels' => $team->members,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-
-        $columns = [
-            [
-                'attribute' => 'member.fullname',
-                'format' => 'html',
-                'value' => function ($data) use ($team) {
-                    if ($team->coach_id == Yii::$app->user->identity->id) {
-                        return Html::a($data->member->fullname, Url::to(['team/edit-member', 'id' => $data['id']]));
-                    } else {
-                        return $data->member->fullname;
-                    }
-                },
-            ],
-            [
-                'class' => 'yii\grid\DataColumn',
-                'attribute' => 'active',
-                'format' => 'html',
-                'content' => function ($data) {
-                    return kartik\checkbox\CheckboxX::widget([
-                                'name' => 'c' . $data['id'],
-                                'value' => $data['active'],
-                                'pluginOptions' => [
-                                    'threeState' => false
-                                ],
-                                'pluginEvents' => [
-                                    "change" => 'function(e) { 
-                                        var element = $(e.target);
-                                        var isActive = element.val()
-                                        activate(' . $data['id'] . ', isActive); }',
-                                ]
-                    ]);
-                },
-            ],
-        ];
-        if (!$team->blocked) {
-            $columns [] = [
-                'format' => 'html',
-                'options' => ['width' => '60px'],
-                'value' => function( $data ) use ($team) {
-                    if ($team->coach_id == Yii::$app->user->identity->id) {
-                        return
-                                Html::a('<span class="glyphicon glyphicon-trash"></span>', ['team/delete-member', 'id' => $data['id']], [
-                                    'title' => Yii::t('yii', 'Delete'),
-                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                    'class' => 'btn btn-danger',
-                        ]);
-                    } else {
-                        return '';
-                    }
-                }
-            ];
-        }
-        echo GridView::widget([
-            'dataProvider' => $membersDataProvider,
-            'summary' => '',
-            'columns' => $columns,
-        ]);
-        ?>
-        <?php if (!$team->blocked) { ?>
-            <?php $form = ActiveForm::begin(['id' => 'addmember-form', 'options' => ['class' => 'form-inline']]);
-            ?>
-            <?= Html::a(Yii::t('team', 'New member'), Url::to(['team/new-member', 'id' => $team->id]), ['class' => 'btn btn-success', 'style' => 'margin-bottom: 10px;']) ?>                    
-            <?=
-            Select2::widget([
-                'name' => 'new_member',
-                'data' => $persons,
-                'options' => [
-                    'placeholder' => Yii::t('team', 'Select new member ...'),
-                ],
-            ])
-            ?>
-            <?= Html::submitButton(\Yii::t('app', 'Add'), ['class' => 'btn btn-primary', 'name' => 'save-button', 'style' => 'margin-bottom: 10px;']) ?>
-            <br>
-            <?=
-            Html::a(Yii::t('team', 'Team fullfilled'), Url::to(['team/fullfilled', 'id' => $team->id]), [
-                'class' => 'btn btn-warning',
-                'style' => 'margin-bottom: 10px;',
-                'data-confirm' => Yii::t('app', 'Are you sure?'),
-                'data-method' => 'post',])
-            ?>
-            <?php ActiveForm::end(); ?>
-        <?php } ?>
-    </div>
-    <div class="col-md-4 thumbnail" style="padding: 10px;">
-        <h3 style="margin-top: 12px;"><?= Yii::t('team', 'Assessments') ?></h3>
-        <?php
-        $assessmentsDataProvider = new ArrayDataProvider([
-            'allModels' => $team->assessments,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-        echo GridView::widget([
-            'dataProvider' => $assessmentsDataProvider,
-            'summary' => '',
+        <h3><?= $team->getAttributeLabel('coaches') ?></h3>
+        <?=
+        GridView::widget([
+            'dataProvider' => $coachesProvider,
             'columns' => [
-                [
-                    'attribute' => 'name',
-                    'format' => 'html',
-                    'value' => function ($data) {
-                        return Html::a($data->name, Url::to(['assessment/view', 'id' => $data['id']]));
-                    },
-                ],
-                [
-                    'format' => 'html',
+                'coach.fullname',
+                ['class' => 'app\components\grid\ActionColumn',
+                    'template' => '{delete}',
                     'options' => ['width' => '60px'],
-                    'value' => function ($data) use ($team) {
-                        if ($team->coach_id == Yii::$app->user->identity->id) {
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['team/delete-assessment', 'id' => $data['id']]), [
-                                        'title' => Yii::t('yii', 'Delete'),
-                                        'class' => 'btn btn-danger',
-                            ]);
-                        } else {
-                            return '';
-                        }
-                    },
-                ],
+                    'buttons' => [
+                        'delete' => function ($url, $model, $key) use ($team) {
+                            if ($model['coach_id'] == Yii::$app->user->identity->id || $team->coach_id != Yii::$app->user->identity->id) {
+                                return '';
+                            } else {
+                                return Html::a(app\components\Icons::REMOVE, Url::to(['remove-coach', 'id' => $model['id']]), [
+                                            'title' => Yii::t('team', 'Remove access'),
+                                            'class' => 'btn btn-danger',
+                                ]);
+                            }
+                        },
+                    ]
+                ]
             ],
         ]);
         ?>
         <?php
         if ($team->coach_id == Yii::$app->user->identity->id) {
-            if ($team->blocked) {
-                echo Html::a(Yii::t('team', 'New assessment'), Url::to(['assessment/new', 'teamId' => $team->id]), ['class' => 'btn btn-success']);
-            } else {
-                echo Html::a(Yii::t('team', 'New assessment (requires team fullfilled)'), '#', ['class' => 'btn btn-default disabled']);
-            }
+            $form = ActiveForm::begin(['id' => 'addcoach-form', 'action' => ['grant-coach', 'id' => $team->id], 'options' => ['class' => 'form-inline']]);
+            ?>
+            <table>
+                <tr>
+                    <td style="width: 100%;">
+                        <?=
+                        Select2::widget([
+                            'name' => 'coach_id',
+                            'options' => [
+                                'placeholder' => Yii::t('team', 'Select coach...'),
+                            ],
+                            'pluginOptions' => $pluginOptions,
+                        ])
+                        ?>
+                    </td>
+                    <td>
+                        <?= Html::submitButton(\Yii::t('team', 'Grant access'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+                    </td>
+                </tr>
+            </table>
+            <?php
+            ActiveForm::end();
         }
         ?>
     </div>
+    <?= $this->render('_members', ['team' => $team, 'persons' => $persons]) ?>
+    <div class="clearfix"></div>
+    <?= $this->render('_wheels', ['team' => $team]) ?>
 </div>
-<script>
-    function activate(id, isActive) {
-        $.ajax({
-            url: 'index.php?r=team/activate-member',
-            data: {
-                id: id,
-                isActive: isActive,
-            },
-        });
-    }
-</script>
 

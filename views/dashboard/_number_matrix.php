@@ -8,12 +8,6 @@ use app\components\Utils;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if (!empty($assessment) && $assessment->version == 2) {
-    $version = 2;
-} else {
-    $version = 1;
-}
-
 if ($type == Wheel::TYPE_GROUP) {
     $title = Yii::t('dashboard', 'Group Consciousness and Responsability Matrix');
 } else if ($type == Wheel::TYPE_ORGANIZATIONAL) {
@@ -128,7 +122,7 @@ $token = rand(100000, 999999);
             </td>
             <?php foreach ($howTheySeeMe as $value) { ?>
                 <td class="<?= $value < $allTheySee ? 'warning' : 'success' ?>">
-                    <?= Utils::productivityText($value, $allTheySee, $productivityDelta, $version) ?>
+                    <?= Utils::productivityText($value, $allTheySee, $productivityDelta) ?>
                 </td>
             <?php } ?>
         </tr> 
@@ -139,14 +133,12 @@ $token = rand(100000, 999999);
             <td>
                 <?= round($allTheySee / 4 * 100, 1) . '%' ?>
             </td>
-            <?php if ($version == 2) { ?>
-                <td colspan="2">
-                    <?= Yii::t('dashboard', 'Prod. deviation') ?>
-                </td>
-                <td>
-                    <?= (round($productivityDelta / 4 * 100, 1)) . '%' ?>
-                </td>
-            <?php } ?>
+            <td colspan="2">
+                <?= Yii::t('dashboard', 'Prod. deviation') ?>
+            </td>
+            <td>
+                <?= (round($productivityDelta / 4 * 100, 1)) . '%' ?>
+            </td>
         </tr>
         <tr>
             <td>
@@ -163,17 +155,17 @@ $token = rand(100000, 999999);
                 <?= Yii::t('dashboard', 'Consciousness') ?>
             </td>
             <?php for ($i = 0; $i < count($howTheySeeMe); $i++) { ?>
-                <td class="<?= abs($gaps[$i]) > ($version == 2 ? $mean_gap : $standar_deviation) ? 'warning' : 'success' ?>">
-                    <?= abs($gaps[$i]) > ($version == 2 ? $mean_gap : $standar_deviation) ? Yii::t('app', 'Low') : Yii::t('app', 'High') ?>
+                <td class="<?= abs($gaps[$i]) > ($mean_gap) ? 'warning' : 'success' ?>">
+                    <?= abs($gaps[$i]) > ($mean_gap) ? Yii::t('app', 'Low') : Yii::t('app', 'High') ?>
                 </td>
             <?php } ?>
         </tr> 
         <tr>
             <td>
-                <?= (!empty($assessment) && $assessment->version == 2 ? Yii::t('dashboard', 'Avg. conc. gap') : Yii::t('dashboard', 'St. dev.')) ?>
+                <?= Yii::t('dashboard', 'Avg. conc. gap') ?>
             </td>
             <td>
-                <?= ( $version == 2 ? round($mean_gap / 4 * 100, 1) : round($standar_deviation / 4 * 100, 1)) . '%' ?>
+                <?= round($mean_gap / 4 * 100, 1) . '%' ?>
             </td>
 
         </tr>

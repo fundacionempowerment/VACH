@@ -65,8 +65,8 @@ class Company extends ActiveRecord
     public static function browse()
     {
         return Company::find()
-                ->where(['company.coach_id' => Yii::$app->user->id])
-                ->orderBy('name');
+                        ->where(['company.coach_id' => Yii::$app->user->id])
+                        ->orderBy('name');
     }
 
     public function getCoach()
@@ -78,14 +78,17 @@ class Company extends ActiveRecord
     {
         $companies = Company::find()
                 ->leftJoin('team', 'team.company_id = company.id')
-                ->leftJoin('assessment', 'assessment.team_id = team.id')
-                ->leftJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                ->leftJoin('team_coach', 'team_coach.team_id = team.id')
                 ->where(['company.coach_id' => Yii::$app->user->id])
-                ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
+                ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
                 ->asArray()
                 ->all();
 
         return ArrayHelper::map($companies, 'id', 'name');
+    }
+    
+    public function userAllowed(){
+        return $this->coach_id == Yii::$app->user->identity->id;
     }
 
 }

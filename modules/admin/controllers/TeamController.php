@@ -16,7 +16,7 @@ use app\models\Team;
 use app\models\TeamMember;
 use app\models\Company;
 use app\models\Person;
-use app\models\Assessment;
+use app\models\Team;
 
 class TeamController extends AdminBaseController
 {
@@ -138,7 +138,7 @@ class TeamController extends AdminBaseController
         $team->blocked = true;
 
         if ($team->save()) {
-            return $this->redirect(['assessment/new', 'teamId' => $team->id]);
+            return $this->redirect(['team/new', 'teamId' => $team->id]);
         } else {
             SiteController::FlashErrors($team);
         }
@@ -203,23 +203,23 @@ class TeamController extends AdminBaseController
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
-    public function actionDeleteAssessment($id)
+    public function actionDeleteTeam($id)
     {
-        $assessment = Assessment::findOne($id);
-        $team = $assessment->team;
+        $team = Team::findOne($id);
+        $team = $team;
 
         if (Yii::$app->request->post('delete')) {
-            if ($assessment->delete()) {
+            if ($team->delete()) {
 
-                SiteController::addFlash('success', Yii::t('assessment', 'Assessment has been successfully deleted.'));
+                SiteController::addFlash('success', Yii::t('team', 'Team has been successfully deleted.'));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             } else {
-                SiteController::FlashErrors($assessment);
+                SiteController::FlashErrors($team);
             }
         }
 
-        return $this->render('delete_assessment', [
-                    'assessment' => $assessment,
+        return $this->render('delete_team', [
+                    'team' => $team,
                     'team' => $team,
         ]);
     }

@@ -10,12 +10,6 @@ use yii\bootstrap\Progress;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if (!empty($assessment) && $assessment->version == 2) {
-    $version = 2;
-} else {
-    $version = 1;
-}
-
 $this->title = Yii::t('dashboard', 'Dashboard');
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,13 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'filter' => $filter,
         'companies' => $companies,
         'teams' => $teams,
-        'assessments' => $assessments,
         'members' => $members,
     ]);
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_INDIVIDUAL,
         ]);
@@ -42,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
@@ -50,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('_lineal', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
@@ -58,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
@@ -66,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
         echo $this->render('_lineal', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
@@ -74,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($gauges) > 0)
         echo $this->render('_gauges', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
         ]);
@@ -87,13 +80,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
             'member' => $member,
-            'assessment' => $assessment,
+            'team' => $team,
         ]);
     }
 
     if (count($performanceMatrix) > 0) {
         echo $this->render('_matrix', [
-            'assessmentId' => $filter->assessmentId,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
         ]);
@@ -102,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
     if (count($relationsMatrix) > 0) {
         if ($filter->memberId > 0) {
             echo $this->render('_relation', [
-                'assessmentId' => $filter->assessmentId,
+                'teamId' => $filter->teamId,
                 'memberId' => $filter->memberId,
                 'wheelType' => $filter->wheelType,
             ]);

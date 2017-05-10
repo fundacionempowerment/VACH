@@ -22,5 +22,5 @@ if (count($organizationalEmergents) > 0) {
 }
 ?>
 <p>
-    <?= empty($assessment->report->emergents) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $assessment->report->emergents ?>
+    <?= empty($team->report->emergents) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $team->report->emergents ?>
 </p>

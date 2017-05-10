@@ -17,9 +17,8 @@ use app\controllers\ReportController;
 
 $this->title = Yii::t('report', 'Competences Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
@@ -30,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupGauges) > 0) {
         echo $this->render('../dashboard/_gauges', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
@@ -39,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($organizationalGauges) > 0) {
         echo $this->render('../dashboard/_gauges', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);

@@ -20,7 +20,7 @@ class Emergents
     static private $dimensions;
     static private $value_key;
 
-    static public function draw($assessmentId, $memberId, $wheelType)
+    static public function draw($teamId, $memberId, $wheelType)
     {
         if ($wheelType == Wheel::TYPE_GROUP)
             $title = Yii::t('dashboard', 'Group Emergents Matrix');
@@ -38,9 +38,9 @@ class Emergents
         }
 
         if ($memberId > 0) {
-            $emergents = Wheel::getMemberEmergents($assessmentId, $memberId, $wheelType);
+            $emergents = Wheel::getMemberEmergents($teamId, $memberId, $wheelType);
         } else {
-            $emergents = Wheel::getEmergents($assessmentId, $wheelType);
+            $emergents = Wheel::getEmergents($teamId, $wheelType);
         }
 
         $max_emergents = [];

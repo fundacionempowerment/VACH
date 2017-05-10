@@ -13,16 +13,6 @@ use app\models\WheelAnswer;
 class WheelAnswer extends ActiveRecord
 {
 
-    const ANSWER_NUMBERS_0_TO_4 = 0;
-    const ANSWER_WORST_TO_OPTIMAL = 1;
-    const ANSWER_NEVER_TO_ALWAYS = 2;
-    const ANSWER_NONE_TO_ALL = 3;
-    const ANSWER_NOTHING_TO_ABSOLUTLY = 4;
-    const ANSWER_OPTIMAL_TO_WORST = 101;
-    const ANSWER_ALWAYS_TO_NEVER = 102;
-    const ANSWER_ALL_TO_NONE = 103;
-    const ANSWER_ABSOLUTLY_TO_NOTHING = 104;
-
     /**
      * @inheritdoc
      */

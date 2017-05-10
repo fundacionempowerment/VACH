@@ -26,15 +26,15 @@ class Gauges
         ['dimension' => 7, 'row' => 2, 'col' => 1],
     ];
 
-    static public function draw($assessmentId, $memberId, $wheelType)
+    static public function draw($teamId, $memberId, $wheelType)
     {
         $minValue = 10000;
         $maxValue = -10000;
 
         if ($memberId > 0) {
-            $gauges = Wheel::getMemberGauges($assessmentId, $memberId, $wheelType);
+            $gauges = Wheel::getMemberGauges($teamId, $memberId, $wheelType);
         } else {
-            $gauges = Wheel::getGauges($assessmentId, $wheelType);
+            $gauges = Wheel::getGauges($teamId, $wheelType);
         }
 
         foreach ($gauges as $gauge) {

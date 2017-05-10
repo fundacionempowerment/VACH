@@ -18,7 +18,7 @@ $token = rand(100000, 999999);
 <div id="r-div<?= $token ?>" class="col-xs-12 col-md-push-1 col-md-10 text-center" >
     <?=
     Html::img(Url::toRoute(["/graph/matrix",
-                'assessmentId' => $assessmentId,
+                'teamId' => $teamId,
                 'memberId' => $memberId,
                 'wheelType' => $wheelType]), ['class' => 'img-responsive'])
     ?>

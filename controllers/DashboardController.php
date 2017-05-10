@@ -10,7 +10,6 @@ use yii\filters\VerbFilter;
 use app\models\Wheel;
 use app\models\TeamMember;
 use app\models\Team;
-use app\models\Assessment;
 use app\models\Company;
 use app\models\DashboardFilter;
 use app\models\Person;
@@ -32,8 +31,7 @@ class DashboardController extends BaseController
 
         $companies = [];
         $teams = [];
-        $assessments = [];
-        $assessment = null;
+        $team = null;
         $members = [];
         $member = null;
 
@@ -67,36 +65,13 @@ class DashboardController extends BaseController
 
                 if (!$exists) {
                     $filter->teamId = 0;
-                    $filter->assessmentId = 0;
+                    $filter->teamId = 0;
                 }
             }
         }
 
         if ($filter->teamId > 0) {
-            $assessments = Assessment::getDashboardList($filter->teamId);
-
-            if (count($assessments) == 1) {
-                foreach ($assessments as $id => $fullname) {
-                    $filter->assessmentId = $id;
-                    $assessment = Assessment::findOne(['id' => $filter->assessmentId]);
-                    if (!$assessment->isUserAllowed()) {
-                        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
-                    }
-                    break;
-                }
-            } else {
-                $exists = false;
-                foreach ($assessments as $id => $name)
-                    if ($id == $filter->assessmentId) {
-                        $exists = true;
-                        break;
-                    }
-
-                if (!$exists) {
-                    $filter->assessmentId = 0;
-                }
-            }
-
+            $team = Team::findOne(['id' => $filter->teamId]);
             foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember)
                 $members[$teamMember->person_id] = $teamMember->member->fullname;
         }
@@ -119,23 +94,23 @@ class DashboardController extends BaseController
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
 
-            $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($filter->assessmentId, $filter->memberId);
-            $projectedGroupWheel = Wheel::getProjectedGroupWheel($filter->assessmentId, $filter->memberId);
-            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($filter->assessmentId, $filter->memberId);
-            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($filter->assessmentId, $filter->memberId);
-            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($filter->assessmentId, $filter->memberId);
+            $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($filter->teamId, $filter->memberId);
+            $projectedGroupWheel = Wheel::getProjectedGroupWheel($filter->teamId, $filter->memberId);
+            $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($filter->teamId, $filter->memberId);
+            $reflectedGroupWheel = Wheel::getReflectedGroupWheel($filter->teamId, $filter->memberId);
+            $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($filter->teamId, $filter->memberId);
 
-            $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
-        } else if ($filter->assessmentId > 0 && $filter->wheelType > 0) {
-            $performanceMatrix = Wheel::getPerformanceMatrix($filter->assessmentId, $filter->wheelType);
-            $relationsMatrix = Wheel::getRelationsMatrix($filter->assessmentId, $filter->wheelType);
+            $emergents = Wheel::getMemberEmergents($filter->teamId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
+        } else if ($filter->teamId > 0 && $filter->wheelType > 0) {
+            $performanceMatrix = Wheel::getPerformanceMatrix($filter->teamId, $filter->wheelType);
+            $relationsMatrix = Wheel::getRelationsMatrix($filter->teamId, $filter->wheelType);
 
             if ($filter->memberId > 0) {
-                $gauges = Wheel::getMemberGauges($filter->assessmentId, $filter->memberId, $filter->wheelType);
-                $emergents = Wheel::getMemberEmergents($filter->assessmentId, $filter->memberId, $filter->wheelType);
+                $gauges = Wheel::getMemberGauges($filter->teamId, $filter->memberId, $filter->wheelType);
+                $emergents = Wheel::getMemberEmergents($filter->teamId, $filter->memberId, $filter->wheelType);
             } else {
-                $gauges = Wheel::getGauges($filter->assessmentId, $filter->wheelType);
-                $emergents = Wheel::getEmergents($filter->assessmentId, $filter->wheelType);
+                $gauges = Wheel::getGauges($filter->teamId, $filter->wheelType);
+                $emergents = Wheel::getEmergents($filter->teamId, $filter->wheelType);
             }
         }
 
@@ -143,8 +118,7 @@ class DashboardController extends BaseController
                     'filter' => $filter,
                     'companies' => $companies,
                     'teams' => $teams,
-                    'assessments' => $assessments,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'members' => $members,
                     'member' => $member,
                     // Indivudual wheel

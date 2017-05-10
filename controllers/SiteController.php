@@ -59,7 +59,7 @@ class SiteController extends BaseController
     public function actionIndex()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(['/assessment']);
+            return $this->redirect(['/team']);
         }
 
         $model = new LoginForm();
@@ -95,7 +95,7 @@ class SiteController extends BaseController
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(['/assessment']);
+            return $this->redirect(['/team']);
         }
 
         $model = new LoginForm();
@@ -109,7 +109,7 @@ class SiteController extends BaseController
                 SiteController::FlashErrors($userSession);
             }
 
-            return $this->redirect(['/assessment']);
+            return $this->redirect(['/team']);
         } else {
             $wheel = new Wheel();
             return $this->render('index', [

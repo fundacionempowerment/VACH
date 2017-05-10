@@ -30,6 +30,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->fullname, Url::to(['team/view', 'id' => $data['id'],]));
                 },
             ],
+            [
+                'attribute' => 'IndividualWheelStatus',
+                'format' => 'html',
+                'value' => function($data) {
+                    return Html::a($data->IndividualWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                },
+            ],
+            [
+                'attribute' => 'GroupWheelStatus',
+                'format' => 'html',
+                'value' => function ($data) {
+                    return Html::a($data->GroupWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                },
+            ],
+            [
+                'attribute' => 'OrganizationalWheelStatus',
+                'format' => 'html',
+                'value' => function($data) {
+                    return Html::a($data->OrganizationalWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                },
+            ],
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'options' => ['width' => '110px'],

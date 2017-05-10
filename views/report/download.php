@@ -11,12 +11,6 @@ use app\models\Wheel;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-if (!empty($assessment) && $assessment->version == 2) {
-    $version = 2;
-} else {
-    $version = 1;
-}
-
 $this->title = Yii::t('report', 'Report');
 ?>
 <div class="report-technical row">
@@ -33,8 +27,8 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12 text-center">
         <h2>
-            <?= Html::label($assessment->team->company->name) ?>
-            <?= Html::label($assessment->team->name) ?>
+            <?= Html::label($team->company->name) ?>
+            <?= Html::label($team->name) ?>
         </h2>
         <h3>
             <?= Yii::t('report', 'Report') ?> <?= Yii::$app->formatter->asDate('now') ?>
@@ -42,17 +36,17 @@ $this->title = Yii::t('report', 'Report');
     </div>
     <div class="col-lg-12">
         <h4>
-            <?= Yii::t('team', 'Company') ?>: <?= Html::label($assessment->team->company->name) ?>
+            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?>
             <br/>
-            <?= Yii::t('team', 'Team') ?>: <?= Html::label($assessment->team->name) ?>
+            <?= Yii::t('team', 'Team') ?>: <?= Html::label($team->name) ?>
             <br/>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?>
             <br/>
-            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?>
+            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
             <br/>
             <?= Yii::t('team', 'Natural Team') ?>:
             <ul>
-                <?php foreach ($assessment->team->members as $teamMember) { ?>
+                <?php foreach ($team->members as $teamMember) { ?>
                     <li>
                         <?= Html::label($teamMember->member->fullname) ?>
                     </li>
@@ -85,7 +79,7 @@ $this->title = Yii::t('report', 'Report');
     <div style="page-break-after: always"> </div>
     <div class="col-lg-12">
         <div id="view-introduction">
-            <?= $assessment->report->introduction ?>
+            <?= $team->report->introduction ?>
         </div>        
     </div>
     <div style="page-break-after: always"> </div>
@@ -108,7 +102,7 @@ $this->title = Yii::t('report', 'Report');
     <div class="col-lg-12">
         <?=
         $this->render('_relations', [
-            'assessment' => $assessment,
+            'team' => $team,
             'groupRelationsMatrix' => $groupRelationsMatrix,
             'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
@@ -117,7 +111,7 @@ $this->title = Yii::t('report', 'Report');
         <div style="page-break-after: always"> </div>
         <?=
         $this->render('_effectiveness', [
-            'assessment' => $assessment,
+            'team' => $team,
             'groupRelationsMatrix' => $groupRelationsMatrix,
             'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
             'members' => $members,
@@ -126,7 +120,7 @@ $this->title = Yii::t('report', 'Report');
         <div style="page-break-after: always"> </div>
         <?=
         $this->render('_performance', [
-            'assessment' => $assessment,
+            'team' => $team,
             'groupPerformanceMatrix' => $groupPerformanceMatrix,
             'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
             'members' => $members,
@@ -135,7 +129,7 @@ $this->title = Yii::t('report', 'Report');
         <div style="page-break-after: always"> </div>
         <?=
         $this->render('_competences', [
-            'assessment' => $assessment,
+            'team' => $team,
             'groupGauges' => $groupGauges,
             'organizationalGauges' => $organizationalGauges,
             'members' => $members,
@@ -144,7 +138,7 @@ $this->title = Yii::t('report', 'Report');
         <div style="page-break-after: always"> </div>
         <?=
         $this->render('_emergents', [
-            'assessment' => $assessment,
+            'team' => $team,
             'groupEmergents' => $groupEmergents,
             'organizationalEmergents' => $organizationalEmergents,
             'members' => $members,
@@ -160,18 +154,18 @@ $this->title = Yii::t('report', 'Report');
     <div style="page-break-after: always"> </div>
     <div class="col-lg-12">
         <?php
-        foreach ($assessment->report->individualReports as $individualReport) {
+        foreach ($team->report->individualReports as $individualReport) {
             if ($individualReport->teamMember->active) {
-                $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->person_id);
-                $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->person_id);
-                $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->person_id);
-                $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->person_id);
-                $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-                $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
-                $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-                $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
-                $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-                $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+                $projectedGroupWheel = Wheel::getProjectedGroupWheel($team->id, $individualReport->person_id);
+                $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($team->id, $individualReport->person_id);
+                $reflectedGroupWheel = Wheel::getReflectedGroupWheel($team->id, $individualReport->person_id);
+                $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($team->id, $individualReport->person_id);
+                $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+                $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+                $groupGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+                $organizationalGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+                $groupEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+                $organizationalEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
                 $subtitle_number = 97; // letter 'a'
                 ?>
                 <h1>
@@ -180,7 +174,7 @@ $this->title = Yii::t('report', 'Report');
                 <?=
                 $this->render('_individual_perception', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'projectedGroupWheel' => $projectedGroupWheel,
                     'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
                     'reflectedGroupWheel' => $reflectedGroupWheel,
@@ -191,7 +185,7 @@ $this->title = Yii::t('report', 'Report');
                 <?=
                 $this->render('_individual_competences', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupGauges' => $groupGauges,
                     'organizationalGauges' => $organizationalGauges,
                     'members' => $members,
@@ -201,7 +195,7 @@ $this->title = Yii::t('report', 'Report');
                 <?=
                 $this->render('_individual_emergents', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
@@ -211,7 +205,7 @@ $this->title = Yii::t('report', 'Report');
                 <?=
                 $this->render('_individual_relations', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'members' => $members,
@@ -222,7 +216,7 @@ $this->title = Yii::t('report', 'Report');
                 if ($individualReport->performance != '') {
                     echo $this->render('_individual_performance', [
                         'report' => $individualReport,
-                        'assessment' => $assessment,
+                        'team' => $team,
                         'groupPerformanceMatrix' => $groupPerformanceMatrix,
                         'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
                         'member' => $individualReport->member,
@@ -247,7 +241,7 @@ $this->title = Yii::t('report', 'Report');
             <?= Yii::t('report', 'Summary') ?>
         </h2>
         <div id="view-introduction">
-            <?= $assessment->report->summary ?>
+            <?= $team->report->summary ?>
         </div>  
     </div>
     <div style="page-break-after: always"> </div>
@@ -262,7 +256,7 @@ $this->title = Yii::t('report', 'Report');
             <?= Yii::t('report', 'Action Plan') ?>
         </h2>
         <div id="view-introduction">
-            <?= $assessment->report->action_plan ?>
+            <?= $team->report->action_plan ?>
         </div>  
     </div>
 </div>

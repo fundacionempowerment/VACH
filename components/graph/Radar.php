@@ -10,15 +10,15 @@ use app\models\WheelQuestion;
 class Radar
 {
 
-    static public function draw($assessmentId, $memberId, $wheelType)
+    static public function draw($teamId, $memberId, $wheelType)
     {
-        $redWheel = Wheel::getProjectedIndividualWheel($assessmentId, $memberId);
+        $redWheel = Wheel::getProjectedIndividualWheel($teamId, $memberId);
         switch ($wheelType) {
             case Wheel::TYPE_GROUP:
-                $blueWheel = Wheel::getReflectedGroupWheel($assessmentId, $memberId);
+                $blueWheel = Wheel::getReflectedGroupWheel($teamId, $memberId);
                 break;
             case Wheel::TYPE_ORGANIZATIONAL:
-                $blueWheel = Wheel::getReflectedOrganizationalWheel($assessmentId, $memberId);
+                $blueWheel = Wheel::getReflectedOrganizationalWheel($teamId, $memberId);
                 break;
         }
 

@@ -38,9 +38,9 @@ $dataProvider = new ActiveDataProvider([
             ],
             'quantity',
             [
-                'attribute' => 'assessment',
+                'attribute' => 'team',
                 'value' => function($data) {
-                    return $data->assessment ? $data->assessment->fullname : '';
+                    return $data ? $data->fullname : '';
                 },
             ],
             'stamp:datetime',

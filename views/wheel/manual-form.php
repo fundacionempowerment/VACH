@@ -27,8 +27,7 @@ foreach ($wheel->answers as $answer) {
 
 $this->title = Yii::t('wheel', 'Manual form');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $wheel->assessment->team->fullname, 'url' => ['/team/view', 'id' => $wheel->assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $wheel->assessment->fullname, 'url' => ['/assessment/view', 'id' => $wheel->assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $wheel->team->fullname, 'url' => ['/team/view', 'id' => $wheel->team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="wheel-manual">

@@ -36,15 +36,15 @@ class Utils {
         return $sum / count($array);
     }
 
-    public static function productivityText($productivity, $meanProductivity, $deltaProductivity, $version) {
+    public static function productivityText($productivity, $meanProductivity, $deltaProductivity) {
         if ($productivity < $meanProductivity) {
-            if ($productivity < $meanProductivity - $deltaProductivity || $version == 1) {
+            if ($productivity < $meanProductivity - $deltaProductivity) {
                 return 'Baja';
             } else {
                 return 'Media baja';
             }
         } else {
-            if ($productivity <= $meanProductivity + $deltaProductivity && $version == 2) {
+            if ($productivity <= $meanProductivity + $deltaProductivity) {
                 return 'Media alta';
             } else {
                 return 'Alta';

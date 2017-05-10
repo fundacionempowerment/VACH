@@ -31,9 +31,9 @@ $dataProvider = new ActiveDataProvider([
             'product.name',
             'quantity',
             [
-                'attribute' => 'assessment',
+                'attribute' => 'team',
                 'value' => function($data) {
-                    return $data->assessment ? $data->assessment->fullname : '';
+                    return $data->team ? $data->team->fullname : '';
                 },
             ],
             ['class' => 'app\components\grid\ActionColumn',

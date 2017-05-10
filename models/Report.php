@@ -17,7 +17,7 @@ class Report extends ActiveRecord
     public function rules()
     {
         return [
-            [['assessment_id'], 'required'],
+            [['team_id'], 'required'],
         ];
     }
 
@@ -36,9 +36,9 @@ class Report extends ActiveRecord
         return $this->hasMany(IndividualReport::className(), ['report_id' => 'id']);
     }
 
-    public function getAssessment()
+    public function getTeam()
     {
-        return $this->hasOne(Assessment::className(), ['id' => 'assessment_id']);
+        return $this->hasOne(Team::className(), ['id' => 'team_id']);
     }
 
     public function getSummary()

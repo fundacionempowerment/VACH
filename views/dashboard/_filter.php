@@ -33,7 +33,7 @@ use kartik\widgets\Select2;
     ]);
     ?>
     <div class="form-group">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <?=
             $form->field($filter, 'companyId')->widget(Select2::classname(), [
                 'data' => $companies,
@@ -45,24 +45,12 @@ use kartik\widgets\Select2;
             ])
             ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <?=
             $form->field($filter, 'teamId')->widget(Select2::classname(), [
                 'data' => $teams,
                 'hideSearch' => true,
                 'options' => ['placeholder' => Yii::t('dashboard', 'Select team ...'), 'onchange' => 'lockAndSubmit(this.form);',],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ])
-            ?>
-        </div>
-        <div class="col-md-4">
-            <?=
-            $form->field($filter, 'assessmentId')->widget(Select2::classname(), [
-                'data' => $assessments,
-                'hideSearch' => true,
-                'options' => ['placeholder' => Yii::t('dashboard', 'Select assesment ...'), 'onchange' => 'lockAndSubmit(this.form);',],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
@@ -97,8 +85,8 @@ use kartik\widgets\Select2;
         </div>
         <div class="col-md-2 text-right">
             <?php
-            if ($filter->assessmentId > 0)
-                echo Html::a(\Yii::t('assessment', 'Go to report...'), Url::to(['report/view', 'id' => $filter->assessmentId]), [
+            if ($filter->teamId > 0)
+                echo Html::a(\Yii::t('team', 'Go to report...'), Url::to(['report/view', 'id' => $filter->teamId]), [
                     'class' => 'btn btn-default'
                 ])
                 ?>
