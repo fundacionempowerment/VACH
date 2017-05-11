@@ -38,6 +38,9 @@
                 "npm-asset-library": "vendor/npm",
                 "bower-asset-library": "vendor/bower"
             }
+        },
+        "preferred-install": {
+            "*": "dist"
         }
     },
     "scripts": {
