@@ -20,52 +20,6 @@ class WheelController extends BaseController
 
     public $layout = 'inner';
 
-    public function actionIndex()
-    {
-        if (Yii::$app->request->get('person_id')) {
-            Yii::$app->session->set('person_id', Yii::$app->request->get('person_id'));
-            Yii::$app->session->set('wheelid', null);
-            Yii::$app->session->set('compareid', -1);
-        }
-
-        if (Yii::$app->request->get('wheelid')) {
-            Yii::$app->session->set('wheelid', Yii::$app->request->get('wheelid'));
-        }
-
-        if (Yii::$app->request->get('compareid')) {
-            Yii::$app->session->set('compareid', Yii::$app->request->get('compareid'));
-        }
-
-        $person_id = Yii::$app->session->get('person_id');
-        $wheelid = Yii::$app->session->get('wheelid');
-        $compareId = Yii::$app->session->get('compareid');
-
-        if ($wheelid > 0) {
-            $model = Wheel::find()->where(['id' => $wheelid])->one();
-        } else {
-            $model = Wheel::find()->where(['person_id' => $person_id])->orderBy('id desc')->one();
-        }
-
-        if (!isset($model))
-            $this->redirect(['/site']);
-
-        $compareModel = new Wheel();
-        if ($compareId > 0) {
-            $compareModel = Wheel::findOne(['id' => $compareId]);
-        }
-
-        $wheels = Wheel::browse($model->person->id);
-
-        if ($model->id == 0)
-            return $this->redirect(['form', 'id' => 0]);
-        else
-            return $this->render('view', [
-                        'model' => $model,
-                        'compare' => $compareModel,
-                        'wheels' => $wheels,
-            ]);
-    }
-
     public function actionRun()
     {
         $this->layout = 'printable';
@@ -176,41 +130,18 @@ class WheelController extends BaseController
         ]);
     }
 
-    public function actionDelete($id)
+    public function actionManualForm($id)
     {
-        $wheel = Wheel::findOne(['id' => $id]);
-        if ($wheel->delete()) {
-            SiteController::addFlash('success', Yii::t('wheel', 'Wheel deleted.'));
-        } else {
-            SiteController::FlashErrors($wheel);
-        }
-        return $this->redirect(['/person/view', 'id' => $wheel->person->id]);
-    }
-
-    public function actionQuestions()
-    {
-        $wheelQuestions = WheelQuestion::find()->orderBy('type, dimension, order')->all();
-
-        if (Yii::$app->request->isPost) {
-            foreach ($wheelQuestions as $wheelQuestion) {
-                $questionText = Yii::$app->request->post('question' . $wheelQuestion->id);
-                $questionId = Question::getId($questionText);
-                $wheelQuestion->question_id = $questionId;
-                $wheelQuestion->save();
-            }
-
-            SiteController::addFlash('success', Yii::t('wheel', 'Wheel questions saved.'));
+        if (Yii::$app->user->isGuest) {
             return $this->redirect(['/site']);
         }
 
-        return $this->render('questions', [
-                    'questions' => $wheelQuestions
-        ]);
-    }
-
-    public function actionManualForm($id)
-    {
         $wheel = Wheel::findOne(['id' => $id]);
+
+        if (!$wheel || !$wheel->assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
@@ -290,34 +221,6 @@ class WheelController extends BaseController
         return $this->render('received', [
                     'wheels' => $wheels,
         ]);
-    }
-
-    public function sendAnswers($wheel)
-    {
-        $type_text = Wheel::getWheelTypes()[$wheel->type];
-        $questions = WheelQuestion::find()->where('type = ' . $wheel->type)->asArray()->all();
-
-        Yii::$app->mailer->compose('answers', [
-                    'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('wheel', 'CPC: {wheel} answers', [
-                            'wheel' => $type_text
-                ]))
-                ->setFrom(Yii::$app->params['senderEmail'])
-                ->setTo($wheel->observer->email)
-                ->send();
-
-        Yii::$app->mailer->compose('answers', [
-                    'wheel' => $wheel,
-                    'questions' => $questions,
-                ])
-                ->setSubject(Yii::t('wheel', "CPC: {wheel} answers of {person}", [
-                            'wheel' => $type_text, 'person' => $wheel->observer->fullname
-                ]))
-                ->setFrom(Yii::$app->params['senderEmail'])
-                ->setTo($wheel->coach->email)
-                ->send();
     }
 
 }

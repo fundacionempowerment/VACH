@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
@@ -15,34 +15,22 @@ use app\models\Feedback;
 use app\models\Stock;
 use app\models\Payment;
 
-class AdminController extends BaseController
+class FeedbackController extends \app\controllers\BaseController
 {
 
-    public $layout = 'inner';
+    public $layout = '//admin';
 
-    public function actionFeedback()
+    public function actionIndex()
     {
         if (!Yii::$app->user->identity->is_administrator) {
             return $this->goHome();
         }
 
         $feedbacks = Feedback::find()->orderby('id desc');
-        return $this->render('feedback', [
+        return $this->render('index', [
                     'feedbacks' => $feedbacks,
         ]);
     }
 
-    public function actionPayment()
-    {
-        if (!Yii::$app->user->identity->is_administrator) {
-            return $this->goHome();
-        }
-
-        $models = Payment::adminBrowse();
-
-        return $this->render('payment', [
-                    'models' => $models,
-        ]);
-    }
 
 }

@@ -92,7 +92,7 @@ class StockController extends BaseController
             $payment->concept = $model->quantity . ' ' . $product->name;
             $payment->currency = 'USD';
             $payment->amount = $stock->total;
-            $payment->rate = \app\models\Currency::lastValue();
+            $payment->rate = 0;
             $payment->status = Payment::STATUS_INIT;
             if (!$payment->save()) {
                 \app\controllers\SiteController::FlashErrors($payment);

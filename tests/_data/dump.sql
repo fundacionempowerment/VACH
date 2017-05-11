@@ -43,6 +43,17 @@ INSERT INTO `company` (`id`, `coach_id`, `name`, `email`, `phone`, `created_at`,
 (1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895),
 (2, 2, 'Yotsuba', 'info@yotsuba.com.jp', '(11)2323423423', 1492320953, 1492320953);
 
+CREATE TABLE `currency` (
+  `id` int(11) NOT NULL,
+  `from_currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `to_currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `rate` decimal(10,4) NOT NULL,
+  `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `currency` (`id`, `from_currency`, `to_currency`, `rate`, `stamp`) VALUES
+(1, 'USD', 'ARS', '15.5555', NOW());
+
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -65,6 +76,17 @@ CREATE TABLE `individual_report` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   `performance` text COLLATE utf8_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `liquidation` (
+  `id` int(11) NOT NULL,
+  `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `raw_amount` decimal(10,4) NOT NULL,
+  `commision` decimal(10,4) NOT NULL,
+  `net_amount` decimal(10,4) NOT NULL,
+  `part1_amount` decimal(10,4) NOT NULL,
+  `part2_amount` decimal(10,4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `log` (
@@ -133,7 +155,12 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170424_034317_wheel_status_and_sent_count', 1493091866),
 ('m170426_005337_sanitize_reports', 1493269319),
 ('m170426_005628_drop_individual_summary', 1493269319),
-('m170427_042955_add_declined_payment_status', 1493269319);
+('m170427_042955_add_declined_payment_status', 1493269319),
+('m170428_033049_add_payment_commision_fields', 1494465575),
+('m170429_215526_add_currency_rates', 1494465575),
+('m170429_223113_add_manual_payment_field', 1494465575),
+('m170504_224630_add_payment_liquidation', 1494465575),
+('m170511_002445_add_session_token', 1494465575);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -145,7 +172,14 @@ CREATE TABLE `payment` (
   `status` enum('init','pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'init',
   `external_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `stamp` datetime NOT NULL,
-  `creator_id` int(11) NOT NULL
+  `creator_id` int(11) NOT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USD',
+  `rate` decimal(10,2) DEFAULT NULL,
+  `commision` decimal(10,2) DEFAULT NULL,
+  `commision_currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_manual` tinyint(1) NOT NULL DEFAULT '0',
+  `part_distribution` int(11) NOT NULL DEFAULT '50',
+  `liquidation_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `payment_log` (
@@ -481,6 +515,13 @@ INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_res
 (2, 'coach', 'bn7LboYGkEEvp2BIQtbhBF3qf8V4KL3-', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'coach@example.com', 'Coach', 'C', 10, 1430540056, 1492197337, 0, '(432)1098765'),
 (3, 'assisstant', 'Wb7v9hgzxjTrmiZ2NFxQhfoMN2oamovk', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'assisstant@example.com', 'Assisstant', 'A', 10, 0, 1492197406, 0, '(012)1234567');
 
+CREATE TABLE `user_session` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE `wheel` (
   `id` int(11) NOT NULL,
   `observer_id` int(11) NOT NULL,
@@ -784,6 +825,9 @@ ALTER TABLE `company`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_company_coach` (`coach_id`);
 
+ALTER TABLE `currency`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id`);
 
@@ -791,6 +835,9 @@ ALTER TABLE `individual_report`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_individual_report_report` (`report_id`),
   ADD KEY `fk_individual_report_user` (`person_id`);
+
+ALTER TABLE `liquidation`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `log`
   ADD PRIMARY KEY (`id`),
@@ -803,7 +850,8 @@ ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_payment_coach` (`coach_id`),
   ADD KEY `fk_payment_stock` (`stock_id`),
-  ADD KEY `fk_payment_creator` (`creator_id`);
+  ADD KEY `fk_payment_creator` (`creator_id`),
+  ADD KEY `fk_payment_liquidation` (`liquidation_id`);
 
 ALTER TABLE `payment_log`
   ADD PRIMARY KEY (`id`),
@@ -843,6 +891,10 @@ ALTER TABLE `team_member`
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `user_session`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_session_user` (`user_id`);
+
 ALTER TABLE `wheel`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_wheel_assessment` (`assessment_id`),
@@ -866,9 +918,13 @@ ALTER TABLE `assessment_coach`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `company`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `currency`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `feedback`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `individual_report`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `liquidation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
@@ -891,6 +947,8 @@ ALTER TABLE `team`
 ALTER TABLE `team_member`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `user_session`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `wheel`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
@@ -917,6 +975,7 @@ ALTER TABLE `log`
   ADD CONSTRAINT `fk_log_user` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `payment`
+  ADD CONSTRAINT `fk_payment_liquidation` FOREIGN KEY (`liquidation_id`) REFERENCES `liquidation` (`id`),
   ADD CONSTRAINT `fk_payment_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_payment_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_payment_stock` FOREIGN KEY (`stock_id`) REFERENCES `stock` (`id`);
@@ -943,6 +1002,9 @@ ALTER TABLE `team`
 ALTER TABLE `team_member`
   ADD CONSTRAINT `fk_team_member_person` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_team_member_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `user_session`
+  ADD CONSTRAINT `fk_user_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `wheel`
   ADD CONSTRAINT `fk_wheel_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`),

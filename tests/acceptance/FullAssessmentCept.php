@@ -43,7 +43,7 @@ $I->selectOptionForSelect2('AddModel[coach_id]', 'Coach');
 $I->fillField('AddModel[quantity]', count($persons));
 
 $I->click('Guardar');
-$I->wait(1);
+$I->waitForText('exitosamente');
 
 // Creo empresa
 

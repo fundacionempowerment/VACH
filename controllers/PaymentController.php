@@ -50,6 +50,10 @@ class PaymentController extends BaseController
 
     public function actionResponse()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $referenceCode = Yii::$app->request->get('referenceCode');
         $lapTransactionState = Yii::$app->request->get('lapTransactionState');
 

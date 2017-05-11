@@ -22,6 +22,10 @@ class DashboardController extends BaseController
 
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $filter = Yii::$app->session->get('DashboardFilter') ?: new DashboardFilter();
         if ($filter->load(Yii::$app->request->post())) {
             Yii::$app->session->set('DashboardFilter', $filter);
@@ -77,6 +81,9 @@ class DashboardController extends BaseController
                 foreach ($assessments as $id => $fullname) {
                     $filter->assessmentId = $id;
                     $assessment = Assessment::findOne(['id' => $filter->assessmentId]);
+                    if (!$assessment->isUserAllowed()) {
+                        throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+                    }
                     break;
                 }
             } else {

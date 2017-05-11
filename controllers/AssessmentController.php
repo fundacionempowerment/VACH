@@ -11,6 +11,7 @@ use app\models\DashboardFilter;
 use app\models\Wheel;
 use app\models\Stock;
 use app\models\AssessmentCoach;
+use app\models\Team;
 
 class AssessmentController extends BaseController
 {
@@ -19,8 +20,9 @@ class AssessmentController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             return $this->redirect(['/site']);
+        }
 
         $assessments = Assessment::browse();
 
@@ -31,9 +33,15 @@ class AssessmentController extends BaseController
 
     public function actionView($id)
     {
-        $assessment = Assessment::find()
-                ->where(['id' => $id])
-                ->one();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
+        $assessment = Assessment::findOne(['id' => $id]);
+
+        if (!$assessment || !$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         return $this->render('view', [
                     'assessment' => $assessment,
@@ -42,6 +50,15 @@ class AssessmentController extends BaseController
 
     public function actionNew($teamId)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
+        $team = Team::findOne(['id' => $teamId]);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $assessment = new Assessment();
         $assessment->team_id = $teamId;
 
@@ -116,7 +133,16 @@ class AssessmentController extends BaseController
 
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessment = Assessment::findOne(['id' => $id]);
+
+        if (!$assessment || !$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $teamId = $assessment->team->id;
         if ($assessment->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $assessment->fullname]));
@@ -128,7 +154,15 @@ class AssessmentController extends BaseController
 
     public function actionSendWheel($id, $memberId, $type)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessment = Assessment::findOne(['id' => $id]);
+
+        if (!$assessment || !$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         $sent = false;
         foreach ($assessment->team->members as $teamMember) {
@@ -161,29 +195,18 @@ class AssessmentController extends BaseController
         return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
     }
 
-    public function actionDetailView($id, $type)
-    {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        return $this->render('detail_view', [
-                    'assessment' => $assessment,
-                    'type' => $type,
-        ]);
-    }
-
-    public function actionToggleAutofill($id)
-    {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        $assessment->autofill_answers = !$assessment->autofill_answers;
-        $assessment->save();
-
-        return $this->redirect(['/assessment/view', 'id' => $assessment->id]);
-    }
-
     public function actionGoToDashboard($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessment = Assessment::findOne(['id' => $id]);
+
+        if (!$assessment || !$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $filter = new DashboardFilter();
 
         $filter->companyId = $assessment->team->company_id;
@@ -197,7 +220,16 @@ class AssessmentController extends BaseController
 
     public function actionGrantCoach($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessment = Assessment::findOne(['id' => $id]);
+
+        if (!$assessment || !$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $coach_id = Yii::$app->request->post('coach_id');
 
         //if ($assessment->coach_id == Yii::$app->user->identity->id && $coach_id) {
@@ -218,7 +250,16 @@ class AssessmentController extends BaseController
 
     public function actionRemoveCoach($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessmentCoach = AssessmentCoach::findOne(['id' => $id]);
+
+        if (!$assessmentCoach || !$assessmentCoach->assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         $assessmentCoach->delete();
 
         SiteController::addFlash('success', Yii::t('assessment', 'Access removed'));

@@ -7,7 +7,7 @@ class Downloader
 
     public static function download($url)
     {
-        $request = file_get_contents($url);
+        $request = file_get_contents($url . '&t=' . session_id());
 
         $name = uniqid() . '.png';
         $file = DIRECTORY_SEPARATOR .

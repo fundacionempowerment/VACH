@@ -25,8 +25,9 @@ class TeamController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             return $this->redirect(['/site']);
+        }
 
         $teams = Team::browse();
 
@@ -37,10 +38,14 @@ class TeamController extends BaseController
 
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = Team::findOne($id);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         if (Yii::$app->request->isPost) {
@@ -69,6 +74,10 @@ class TeamController extends BaseController
 
     public function actionNew()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = new Team();
 
         if ($team->load(Yii::$app->request->post()) && $team->save()) {
@@ -87,10 +96,14 @@ class TeamController extends BaseController
 
     public function actionEdit($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = Team::findOne(['id' => $id]);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         Yii::$app->session->set('team_id', $id);
@@ -109,17 +122,16 @@ class TeamController extends BaseController
         ]);
     }
 
-    private function save($team)
-    {
-        
-    }
-
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = Team::findOne($id);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         if ($team->delete()) {
@@ -132,10 +144,14 @@ class TeamController extends BaseController
 
     public function actionFullfilled($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = Team::findOne($id);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         $team->blocked = true;
@@ -151,10 +167,14 @@ class TeamController extends BaseController
 
     public function actionNewMember($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $team = Team::findOne($id);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!$team || $team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         $member = new Person();
@@ -177,10 +197,18 @@ class TeamController extends BaseController
 
     public function actionEditMember($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $teamMember = TeamMember::findOne($id);
 
         $team = $teamMember->team;
         $member = $teamMember->member;
+
+        if ($team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if ($member->load(Yii::$app->request->post()) && $member->save()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $member->fullname]));
@@ -194,9 +222,17 @@ class TeamController extends BaseController
 
     public function actionDeleteMember($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $teamMember = TeamMember::findOne($id);
         $team = $teamMember->team;
         $member = $teamMember->member;
+
+        if ($team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if ($teamMember->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully removed from {group}.', ['name' => $member->fullname, 'group' => $team->fullname]));
@@ -208,8 +244,16 @@ class TeamController extends BaseController
 
     public function actionDeleteAssessment($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $assessment = Assessment::findOne($id);
         $team = $assessment->team;
+
+        if ($team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if (Yii::$app->request->post('delete')) {
             if ($assessment->delete()) {
@@ -229,10 +273,18 @@ class TeamController extends BaseController
 
     public function actionActivateMember()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $id = Yii::$app->request->get("id");
         $isActive = Yii::$app->request->get("isActive");
 
         $teamMember = TeamMember::findOne(['id' => $id]);
+
+        if ($teamMember->team->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if ($teamMember) {
             $teamMember->active = $isActive;

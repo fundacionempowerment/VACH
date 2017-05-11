@@ -82,13 +82,24 @@ class Currency extends ActiveRecord
     public static function fetchLastValue()
     {
         $client = new Client();
+
         $response = $client->createRequest()
                 ->setMethod('get')
                 ->setUrl('http://www.bcra.gov.ar/')
+                ->setOptions([
+                    'timeout' => 5, // set timeout to 5 seconds for the case server is not responding
+                ])
                 ->send();
 
         if (!$response->isOk) {
             LogController::log('Error: fail to get data from BCRA');
+
+            Yii::$app->mailer->compose('currency_error')
+                    ->setSubject('Currency fetch error')
+                    ->setFrom(Yii::$app->params['senderEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->send();
+
             return;
         }
 

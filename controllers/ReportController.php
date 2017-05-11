@@ -34,6 +34,7 @@ class ReportController extends Controller
     public function actionView($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if ($assessment->report == null) {
             $newReport = new Report();
@@ -65,6 +66,7 @@ class ReportController extends Controller
     public function actionIntroduction($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -83,6 +85,7 @@ class ReportController extends Controller
     public function actionEffectiveness($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -118,6 +121,7 @@ class ReportController extends Controller
     public function actionPerformance($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -152,6 +156,7 @@ class ReportController extends Controller
     public function actionRelations($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -186,6 +191,7 @@ class ReportController extends Controller
     public function actionCompetences($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -219,6 +225,7 @@ class ReportController extends Controller
     public function actionEmergents($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -260,6 +267,7 @@ class ReportController extends Controller
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -302,6 +310,7 @@ class ReportController extends Controller
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -332,6 +341,7 @@ class ReportController extends Controller
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -364,6 +374,7 @@ class ReportController extends Controller
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -400,6 +411,7 @@ class ReportController extends Controller
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
         $assessment = $individualReport->report->assessment;
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -440,6 +452,7 @@ class ReportController extends Controller
     public function actionSummary($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -458,6 +471,7 @@ class ReportController extends Controller
     public function actionActionPlan($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
@@ -478,6 +492,7 @@ class ReportController extends Controller
         $this->layout = 'printable';
 
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         $members = [];
 
@@ -520,6 +535,7 @@ class ReportController extends Controller
     public function actionPresentation($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         $ppt = \app\components\Presentation::create($assessment);
 
@@ -530,10 +546,11 @@ class ReportController extends Controller
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $assessment->fullname . '.' . date('Y-m-d') . '.pptx');
     }
-    
+
     public function actionWord($id)
     {
         $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
 
         $phpWord = \app\components\Word::create($assessment);
 
@@ -541,6 +558,13 @@ class ReportController extends Controller
         $phpWord->save("/tmp/$uuid.docx", 'Word2007');
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $assessment->fullname . '.' . date('Y-m-d') . '.docx');
+    }
+
+    private function checkAllowed($assessment)
+    {
+        if (!$assessment->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
     }
 
 }

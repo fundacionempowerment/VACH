@@ -223,4 +223,18 @@ class Assessment extends ActiveRecord
         return '';
     }
 
+    public function isUserAllowed()
+    {
+        if ($this->team->coach_id == Yii::$app->user->id) {
+            return true;
+        }
+
+        foreach ($this->assessmentCoaches as $assessmentCoach) {
+            if ($assessmentCoach->coach->id == Yii::$app->user->id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

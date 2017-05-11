@@ -39,9 +39,9 @@ class UserController extends Controller
 
     public function beforeAction($action)
     {
-        if (!isset(Yii::$app->user->identity))
+        if (!isset(Yii::$app->user->identity)) {
             $this->redirect(['/site']);
-        else if ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
+        } else if ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
             \Yii::$app->session->addFlash('error', \Yii::t('app', 'Access denied'));
             $this->redirect(['/site']);
         }
@@ -72,8 +72,9 @@ class UserController extends Controller
 
     public function actionMyAccount()
     {
-        if (Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             $this->goHome();
+        }
 
         $user = User::findOne(['id' => Yii::$app->user->id]);
 

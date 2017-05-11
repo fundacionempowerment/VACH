@@ -95,6 +95,14 @@ class SiteController extends BaseController
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             LogController::log(Yii::t('app', 'Logged in as {username}.', ['username' => Yii::$app->user->identity->username]));
+
+            $userSession = new \app\models\UserSession();
+            $userSession->user_id = Yii::$app->user->id;
+            $userSession->token = session_id();
+            if (!$userSession->save()){
+                SiteController::FlashErrors($userSession);
+            }
+
             return $this->redirect(['/assessment']);
         } else {
             $wheel = new Wheel();
@@ -107,6 +115,11 @@ class SiteController extends BaseController
 
     public function actionLogout()
     {
+        $session = \app\models\UserSession::findOne(['token' => session_id()]);
+        if ($session) {
+            $session->delete();
+        }
+
         Yii::$app->user->logout();
 
         return $this->goHome();

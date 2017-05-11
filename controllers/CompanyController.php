@@ -6,25 +6,37 @@ use Yii;
 use yii\web\Controller;
 use app\models\Company;
 
-class CompanyController extends BaseController {
+class CompanyController extends BaseController
+{
 
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $companies = Company::browse();
         return $this->render('index', [
                     'companies' => $companies,
         ]);
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $company = Company::findOne(['id' => $id]);
         return $this->render('view', [
                     'company' => $company,
         ]);
     }
 
-    public function actionNew() {
+    public function actionNew()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $company = new Company();
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
@@ -39,8 +51,17 @@ class CompanyController extends BaseController {
         ]);
     }
 
-    public function actionEdit($id) {
+    public function actionEdit($id)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $company = Company::findOne(['id' => $id]);
+
+        if (!$company || $company->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $company->name]));
@@ -54,8 +75,18 @@ class CompanyController extends BaseController {
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/site']);
+        }
+
         $company = Company::findOne(['id' => $id]);
+
+        if (!$company || $company->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         if ($company->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $company->name]));
         } else {
