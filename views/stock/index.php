@@ -21,7 +21,9 @@ $dataProvider = new ActiveDataProvider([
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
     <h2><?= Yii::t('stock', 'Your balance') ?>: <?= Stock::getStock(1) ?></h2>
-    <?= Yii::$app->params['manual_mode'] ? '' : Html::a(Yii::t('stock', 'Buy Licences'), Url::to(['stock/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= Yii::$app->params['manual_mode'] ? '' : Html::a(Yii::t('stock', 'Buy Licences'), Url::to(['stock/new']), ['class' => 'btn btn-success']) ?>
+    </p>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
