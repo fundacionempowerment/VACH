@@ -105,6 +105,7 @@ return [
     'Verification Code' => 'Código de verificación',
     'View' => 'Ver',
     'Wheel Received' => 'Rueda recibida',
+    'Your not allowed to access this page.' => 'No está autorizado para acceder a esta página.',
     'done' => 'listo',
     'error' => 'error',
     'init' => 'iniciado',

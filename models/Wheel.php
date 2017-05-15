@@ -216,7 +216,7 @@ class Wheel extends ActiveRecord
                 ->groupBy('wheel.observed_id')
                 ->all();
 
-        $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, person.name, person.surname')
+        $projectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value, person.name, person.surname, person.shortname')
                 ->from('wheel_answer')
                 ->innerJoin('wheel', 'wheel.id = wheel_answer.wheel_id')
                 ->innerJoin('assessment', 'assessment.id = wheel.assessment_id')
@@ -235,7 +235,7 @@ class Wheel extends ActiveRecord
                 if ($reflectedValue['observed_id'] == $projectedValue['observed_id']) {
                     $result[] = [
                         'id' => $reflectedValue['observed_id'],
-                        'name' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
+                        'name' => empty($projectedValue['shortname']) ? ($projectedValue['name'] . ' ' . $projectedValue['surname']) : $projectedValue['shortname'],
                         'productivity' => $reflectedValue['value'] / 4 * 100,
                         'steem' => $projectedValue['value'] / 4 * 100,
                         'consciousness' => ($projectedValue['value'] - $reflectedValue['value']) / 4 * 100

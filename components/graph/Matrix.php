@@ -63,7 +63,7 @@ class Matrix
         $avgProductivity = $sumProductivity / count($performanceMatrix);
         $deltax = $maxx - $minx;
         $deltaProductivity = $maxProductivity - $minProductivity;
-        
+
         $avgDeltaProductivity = Utils::variance(ArrayHelper::getColumn($performanceMatrix, 'productivity'));
 
         $maxy = (floor(($maxConsciousness + 1) / 10) + 1.1) * 10;
@@ -199,7 +199,6 @@ class Matrix
             }
 
             $g->img->FilledCircle($data['x'], $data['y'], 10);
-
 
             $t = new \Text($data['name'], $data['x'], $data['y'] + 16);
             if ($data['id'] == $memberId) {

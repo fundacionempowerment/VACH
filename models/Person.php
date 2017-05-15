@@ -25,8 +25,8 @@ class Person extends ActiveRecord {
         return [
 // username and password are both required
             [['name', 'surname', 'email', 'coach_id', 'gender'], 'required'],
-            [['phone'], 'safe'],
-            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['shortname', 'phone'], 'safe'],
+            [['name', 'surname', 'shortname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
         ];
     }
@@ -44,6 +44,7 @@ class Person extends ActiveRecord {
         return [
             'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
+            'shortname' => Yii::t('user', 'Shortname or initials'),
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),

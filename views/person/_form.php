@@ -19,6 +19,7 @@ $genders = Person::getGenders();
 
     <?= $form->field($person, 'name') ?>
     <?= $form->field($person, 'surname') ?>
+    <?= $form->field($person, 'shortname') ?>
     <?= $form->field($person, 'email') ?>
     <?= $form->field($person, 'phone') ?>
     <?= $form->field($person, 'gender')->dropDownList($genders) ?>

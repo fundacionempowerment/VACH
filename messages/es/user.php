@@ -37,6 +37,7 @@ return [
     'Please fill out the following fields with your personal data:' => 'Por favor, complete los campos con sus datos personales:',
     'Re-enter password' => 'Re-ingrese contraseña',
     'Remember me' => 'Recuerdeme',
+    'Shortname or initials' => 'Nombre corto o iniciales',
     'Surname' => 'Apellido',
     'Username' => 'Nombre usuario',
     'Users' => 'Usuarios',
