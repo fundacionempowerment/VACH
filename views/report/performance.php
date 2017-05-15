@@ -6,7 +6,8 @@ use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
 use yii\bootstrap\Button;
 use app\models\Wheel;
-use franciscomaya\sceditor\SCEditor;
+use dosamigos\ckeditor\CKEditor;
+use app\controllers\ReportController;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -63,14 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             ?>
             <?=
-            SCEditor::widget([
+            CKEditor::widget([
                 'name' => 'analysis',
                 'value' => $assessment->report->performance,
-                'options' => ['rows' => 10],
-                'clientOptions' => [
-                    'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
-                    'width' => '100%',
-                ]
+                'preset' => 'custom',
+                'clientOptions' => ReportController::CKEDITOR_OPTIONS
             ])
             ?>
         </p>

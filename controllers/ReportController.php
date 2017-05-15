@@ -20,14 +20,26 @@ use app\models\TeamMember;
 class ReportController extends Controller
 {
 
+    const CKEDITOR_OPTIONS = [
+        'height' => '500px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
+
     public $layout = 'inner';
 
     private function sanitize($string)
     {
-        $string = strip_tags($string, '<b><i><p><ul><li><ol><br>');
+        $string = strip_tags($string, '<b><i><p><br><strong><em><ul><li><ol>');
         $string = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $string);
         $string = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $string);
+        $string = preg_replace('/(<[^>]+) align=".*?"/i', '$1', $string);
         $string = str_replace('<br>', '<br/>', $string);
+        $string = \yii\helpers\HtmlPurifier::process($string);
         return $string;
     }
 
