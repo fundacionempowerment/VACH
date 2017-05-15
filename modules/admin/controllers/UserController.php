@@ -98,7 +98,7 @@ class UserController extends Controller
 
             if ($user->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $user->fullname]));
-                return $this->redirect(['/user']);
+                return $this->redirect(['index']);
             } else {
                 SiteController::FlashErrors($user);
             }

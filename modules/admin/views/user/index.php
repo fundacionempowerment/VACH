@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'name',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data->fullname, Url::to(['/user/edit', 'id' => $data['id'],]));
+                    return Html::a($data->fullname, Url::to(['user/edit', 'id' => $data['id'],]));
                 },
             ],
             'username',
