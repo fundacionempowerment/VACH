@@ -17,7 +17,7 @@ use app\models\BuyModel;
 use app\models\Payment;
 use app\controllers\SiteController;
 
-class PaymentController extends \app\controllers\BaseController
+class PaymentController extends AdminBaseController
 {
 
     public $layout = '//admin';

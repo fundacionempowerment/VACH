@@ -26,10 +26,6 @@ class StockController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $models = Stock::browse();
 
         return $this->render('index', [
@@ -39,10 +35,6 @@ class StockController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = Stock::findOne(['id' => $id]);
 
         return $this->render('view', [
@@ -52,10 +44,6 @@ class StockController extends BaseController
 
     public function actionNew($product_id = null, $quantity = null)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         if (!$product_id) {
             $product_id = Yii::$app->params['default_product_id'];
         }

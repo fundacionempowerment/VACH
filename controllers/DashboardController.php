@@ -22,9 +22,7 @@ class DashboardController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
+        SiteController::checkUserSession();
 
         $filter = Yii::$app->session->get('DashboardFilter') ?: new DashboardFilter();
         if ($filter->load(Yii::$app->request->post())) {

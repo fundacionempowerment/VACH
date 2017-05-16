@@ -18,16 +18,13 @@ use app\models\Company;
 use app\models\Person;
 use app\models\Assessment;
 
-class TeamController extends BaseController
+class TeamController extends AdminBaseController
 {
 
     public $layout = 'inner';
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest)
-            return $this->redirect(['/site']);
-
         $teams = Team::browse();
 
         return $this->render('index', [

@@ -22,12 +22,16 @@ class PaymentController extends BaseController
     public $layout = 'inner';
     public $enableCsrfValidation = false;
 
+    public function beforeAction($action)
+    {
+        if ($action != 'confirmation') {
+            return parent::beforeAction($action);
+        }
+        return true;
+    }
+
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $models = Payment::browse();
 
         return $this->render('index', [
@@ -37,10 +41,6 @@ class PaymentController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = Payment::findOne(['id' => $id]);
 
         return $this->render('view', [
@@ -50,10 +50,6 @@ class PaymentController extends BaseController
 
     public function actionResponse()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $referenceCode = Yii::$app->request->get('referenceCode');
         $lapTransactionState = Yii::$app->request->get('lapTransactionState');
 

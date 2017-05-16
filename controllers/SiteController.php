@@ -51,6 +51,11 @@ class SiteController extends BaseController
         ];
     }
 
+    public function beforeAction($action)
+    {
+        return true;
+    }
+
     public function actionIndex()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -72,8 +77,9 @@ class SiteController extends BaseController
 
     public function actionToken()
     {
-        if (!Yii::$app->request->isPost)
-            return $this->goHome();
+        if (!Yii::$app->request->isPost){
+                        return $this->goHome();
+        }
 
         $wheel = Yii::$app->request->post('Wheel');
         if (!isset($wheel)) {
@@ -99,7 +105,7 @@ class SiteController extends BaseController
             $userSession = new \app\models\UserSession();
             $userSession->user_id = Yii::$app->user->id;
             $userSession->token = session_id();
-            if (!$userSession->save()){
+            if (!$userSession->save()) {
                 SiteController::FlashErrors($userSession);
             }
 
@@ -113,12 +119,31 @@ class SiteController extends BaseController
         }
     }
 
+    public static function checkUserSession()
+    {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->response->redirect(['/site'])->send();
+            return false;
+        }
+
+        $session = \app\models\UserSession::findOne(['token' => session_id()]);
+        if (!$session) {
+            $userSession = new \app\models\UserSession();
+            $userSession->user_id = Yii::$app->user->id;
+            $userSession->token = session_id();
+            $userSession->save();
+        }
+
+        return true;
+    }
+
     public function actionLogout()
     {
-        $session = \app\models\UserSession::findOne(['token' => session_id()]);
-        if ($session) {
-            $session->delete();
-        }
+        Yii::$app->db->createCommand()
+                ->delete('user_session', 'token = :token and stamp < :stamp', [
+                    ':token' => session_id(),
+                    ':stamp' => (new \DateTime('today -30 days'))->format('Y-m-d H:i:s')])
+                ->execute();
 
         Yii::$app->user->logout();
 

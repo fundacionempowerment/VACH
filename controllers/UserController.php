@@ -72,10 +72,6 @@ class UserController extends Controller
 
     public function actionMyAccount()
     {
-        if (Yii::$app->user->isGuest) {
-            $this->goHome();
-        }
-
         $user = User::findOne(['id' => Yii::$app->user->id]);
 
         if ($user->load(Yii::$app->request->post())) {

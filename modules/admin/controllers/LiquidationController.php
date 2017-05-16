@@ -17,7 +17,7 @@ use app\models\BuyModel;
 use app\models\Liquidation;
 use app\controllers\SiteController;
 
-class LiquidationController extends \app\controllers\BaseController
+class LiquidationController extends AdminBaseController
 {
 
     public $layout = '//admin';

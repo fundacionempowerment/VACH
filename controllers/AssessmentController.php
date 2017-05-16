@@ -20,10 +20,6 @@ class AssessmentController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessments = Assessment::browse();
 
         return $this->render('index', [
@@ -33,10 +29,6 @@ class AssessmentController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (!$assessment || !$assessment->isUserAllowed()) {
@@ -50,10 +42,6 @@ class AssessmentController extends BaseController
 
     public function actionNew($teamId)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne(['id' => $teamId]);
         if (!$team || $team->coach_id != Yii::$app->user->id) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
@@ -133,10 +121,6 @@ class AssessmentController extends BaseController
 
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (!$assessment || !$assessment->isUserAllowed()) {
@@ -154,10 +138,6 @@ class AssessmentController extends BaseController
 
     public function actionSendWheel($id, $memberId, $type)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (!$assessment || !$assessment->isUserAllowed()) {
@@ -197,10 +177,6 @@ class AssessmentController extends BaseController
 
     public function actionGoToDashboard($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (!$assessment || !$assessment->isUserAllowed()) {
@@ -220,10 +196,6 @@ class AssessmentController extends BaseController
 
     public function actionGrantCoach($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne(['id' => $id]);
 
         if (!$assessment || !$assessment->isUserAllowed()) {
@@ -250,10 +222,6 @@ class AssessmentController extends BaseController
 
     public function actionRemoveCoach($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessmentCoach = AssessmentCoach::findOne(['id' => $id]);
 
         if (!$assessmentCoach || !$assessmentCoach->assessment->isUserAllowed()) {

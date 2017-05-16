@@ -14,10 +14,6 @@ class PersonController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $persons = Person::browse();
         return $this->render('index', [
                     'persons' => $persons,
@@ -26,10 +22,6 @@ class PersonController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $person = Person::findOne(['id' => $id]);
 
         if (!$person || $person->coach_id != Yii::$app->user->id) {
@@ -43,10 +35,6 @@ class PersonController extends BaseController
 
     public function actionNew()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $person = new Person();
 
         if ($person->load(Yii::$app->request->post()) && $person->save()) {
@@ -63,10 +51,6 @@ class PersonController extends BaseController
 
     public function actionEdit($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $person = Person::findOne(['id' => $id]);
 
         if (!$person || $person->coach_id != Yii::$app->user->id) {
@@ -87,10 +71,6 @@ class PersonController extends BaseController
 
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $person = Person::findOne(['id' => $id]);
 
         if (!$person || $person->coach_id != Yii::$app->user->id) {

@@ -11,7 +11,7 @@ use app\controllers\SiteController;
 /**
  * User controller
  */
-class UserController extends Controller
+class UserController extends AdminBaseController
 {
 
     public $layout = '//admin';

@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use app\models\Log;
 
-class LogController extends BaseController
+class LogController extends AdminBaseController
 {
 
     public $layout = 'inner';

@@ -15,7 +15,7 @@ use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 
-class WheelController extends \app\controllers\BaseController
+class WheelController extends AdminBaseController
 {
 
     public $layout = '//admin';

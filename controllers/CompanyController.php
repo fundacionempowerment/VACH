@@ -21,10 +21,6 @@ class CompanyController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $company = Company::findOne(['id' => $id]);
         return $this->render('view', [
                     'company' => $company,
@@ -33,10 +29,6 @@ class CompanyController extends BaseController
 
     public function actionNew()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $company = new Company();
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
@@ -53,10 +45,6 @@ class CompanyController extends BaseController
 
     public function actionEdit($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $company = Company::findOne(['id' => $id]);
 
         if (!$company || $company->coach_id != Yii::$app->user->id) {
@@ -77,10 +65,6 @@ class CompanyController extends BaseController
 
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $company = Company::findOne(['id' => $id]);
 
         if (!$company || $company->coach_id != Yii::$app->user->id) {

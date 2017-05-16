@@ -20,7 +20,7 @@ use app\models\AddModel;
 use app\models\RemoveModel;
 use app\controllers\SiteController;
 
-class StockController extends \app\controllers\BaseController
+class StockController extends AdminBaseController
 {
 
     public $layout = '//admin';
@@ -40,10 +40,6 @@ class StockController extends \app\controllers\BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = Stock::findOne(['id' => $id]);
 
         return $this->render('view', [

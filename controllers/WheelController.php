@@ -20,6 +20,14 @@ class WheelController extends BaseController
 
     public $layout = 'inner';
 
+    public function beforeAction($action)
+    {
+        if ($action == 'manual-form') {
+            return parent::beforeAction($action);
+        }
+        return true;
+    }
+
     public function actionRun()
     {
         $this->layout = 'printable';
@@ -132,10 +140,6 @@ class WheelController extends BaseController
 
     public function actionManualForm($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $wheel = Wheel::findOne(['id' => $id]);
 
         if (!$wheel || !$wheel->assessment->isUserAllowed()) {

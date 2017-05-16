@@ -25,10 +25,6 @@ class TeamController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $teams = Team::browse();
 
         return $this->render('index', [
@@ -38,10 +34,6 @@ class TeamController extends BaseController
 
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne($id);
 
         if (!$team || $team->coach_id != Yii::$app->user->id) {
@@ -74,10 +66,6 @@ class TeamController extends BaseController
 
     public function actionNew()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = new Team();
 
         if ($team->load(Yii::$app->request->post()) && $team->save()) {
@@ -96,10 +84,6 @@ class TeamController extends BaseController
 
     public function actionEdit($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne(['id' => $id]);
 
         if (!$team || $team->coach_id != Yii::$app->user->id) {
@@ -124,10 +108,6 @@ class TeamController extends BaseController
 
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne($id);
 
         if (!$team || $team->coach_id != Yii::$app->user->id) {
@@ -144,10 +124,6 @@ class TeamController extends BaseController
 
     public function actionFullfilled($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne($id);
 
         if (!$team || $team->coach_id != Yii::$app->user->id) {
@@ -167,10 +143,6 @@ class TeamController extends BaseController
 
     public function actionNewMember($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $team = Team::findOne($id);
 
         if (!$team || $team->coach_id != Yii::$app->user->id) {
@@ -197,10 +169,6 @@ class TeamController extends BaseController
 
     public function actionEditMember($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $teamMember = TeamMember::findOne($id);
 
         $team = $teamMember->team;
@@ -222,10 +190,6 @@ class TeamController extends BaseController
 
     public function actionDeleteMember($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $teamMember = TeamMember::findOne($id);
         $team = $teamMember->team;
         $member = $teamMember->member;
@@ -244,10 +208,6 @@ class TeamController extends BaseController
 
     public function actionDeleteAssessment($id)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $assessment = Assessment::findOne($id);
         $team = $assessment->team;
 
@@ -273,10 +233,6 @@ class TeamController extends BaseController
 
     public function actionActivateMember()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/site']);
-        }
-
         $id = Yii::$app->request->get("id");
         $isActive = Yii::$app->request->get("isActive");
 

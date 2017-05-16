@@ -19,9 +19,6 @@ class AssessmentController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest)
-            return $this->redirect(['/site']);
-
         $assessments = Assessment::browse();
 
         return $this->render('index', [

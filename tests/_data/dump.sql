@@ -75,7 +75,12 @@ CREATE TABLE `individual_report` (
   `emergents` text COLLATE utf8_unicode_ci,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
-  `performance` text COLLATE utf8_unicode_ci
+  `performance` text COLLATE utf8_unicode_ci,
+  `perception_keywords` text COLLATE utf8_unicode_ci,
+  `relations_keywords` text COLLATE utf8_unicode_ci,
+  `competences_keywords` text COLLATE utf8_unicode_ci,
+  `emergents_keywords` text COLLATE utf8_unicode_ci,
+  `performance_keywords` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `liquidation` (
@@ -160,7 +165,9 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170429_215526_add_currency_rates', 1494465575),
 ('m170429_223113_add_manual_payment_field', 1494465575),
 ('m170504_224630_add_payment_liquidation', 1494465575),
-('m170511_002445_add_session_token', 1494465575);
+('m170511_002445_add_session_token', 1494465575),
+('m170515_230603_add_person_shortname', 1494909385),
+('m170516_022644_add_report_keywords', 1494909385);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -200,18 +207,19 @@ CREATE TABLE `person` (
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `gender` int(11) NOT NULL DEFAULT '0',
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL
+  `updated_at` int(11) NOT NULL,
+  `shortname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)12345678', 2, 1492196613, 1492196994),
-(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(234)12345678', 1, 1492196616, 1492196954),
-(3, 2, 'Carlos', 'C', 'carlos@c.com', '(345)12345678', 0, 1492196619, 1492196987),
-(4, 2, 'Patricio', 'P', 'patricio@p.com', '(456)12345678', 0, 1492197048, 1492197048),
-(5, 2, 'Dallas', 'D', 'dallas@d.com', '(567)12345678', 2, 1492321092, 1492321092),
-(6, 2, 'Esteban', 'E', 'esteben@e.com', '(678)12345678', 0, 1492321137, 1492321137),
-(7, 2, 'Fernanda', 'F', 'fernanda@f.com', '(789)12345678', 1, 1492321158, 1492321158),
-(8, 2, 'Quinn', 'Q', 'quinn@q.com', '(890)12345678', 1, 1492321269, 1492321269);
+INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`, `shortname`) VALUES
+(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)12345678', 2, 1492196613, 1492196994, 'Ariel A'),
+(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(234)12345678', 1, 1492196616, 1492196954, 'Beatriz B'),
+(3, 2, 'Carlos', 'C', 'carlos@c.com', '(345)12345678', 0, 1492196619, 1492196987, 'Carlos C'),
+(4, 2, 'Patricio', 'P', 'patricio@p.com', '(456)12345678', 0, 1492197048, 1492197048, 'Patricio P'),
+(5, 2, 'Dallas', 'D', 'dallas@d.com', '(567)12345678', 2, 1492321092, 1492321092, 'Dallas D'),
+(6, 2, 'Esteban', 'E', 'esteben@e.com', '(678)12345678', 0, 1492321137, 1492321137, 'Esteban E'),
+(7, 2, 'Fernanda', 'F', 'fernanda@f.com', '(789)12345678', 1, 1492321158, 1492321158, 'Fernanda F'),
+(8, 2, 'Quinn', 'Q', 'quinn@q.com', '(890)12345678', 1, 1492321269, 1492321269, 'Quinn Q');
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
@@ -440,11 +448,16 @@ CREATE TABLE `report` (
   `performance` text COLLATE utf8_unicode_ci,
   `competences` text COLLATE utf8_unicode_ci,
   `emergents` text COLLATE utf8_unicode_ci,
-  `summary` text COLLATE utf8_unicode_ci,
   `action_plan` text COLLATE utf8_unicode_ci,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
-  `relations` text COLLATE utf8_unicode_ci
+  `relations` text COLLATE utf8_unicode_ci,
+  `introduction_keywords` text COLLATE utf8_unicode_ci,
+  `effectiveness_keywords` text COLLATE utf8_unicode_ci,
+  `performance_keywords` text COLLATE utf8_unicode_ci,
+  `competences_keywords` text COLLATE utf8_unicode_ci,
+  `emergents_keywords` text COLLATE utf8_unicode_ci,
+  `relations_keywords` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `stock` (
