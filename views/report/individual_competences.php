@@ -56,21 +56,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('descriptions/individual_competences') ?>
     </div>
     <div class="row col-md-12">
-        <h3>
-            Análisis
-        </h3>
+        <?php $form = ActiveForm::begin(['id' => 'report-form']); ?>
+        <h3><?= Yii::t('report', 'Analysis') ?></h3>
         <p>
-            <?php
-            $form = ActiveForm::begin([
-                        'id' => 'newassessment-form',
-            ]);
-            ?>
             <?=
             CKEditor::widget([
                 'name' => 'analysis',
                 'value' => $report->competences,
                 'preset' => 'custom',
-                'clientOptions' => ReportController::CKEDITOR_OPTIONS
+                'clientOptions' => ReportController::ANALYSIS_OPTIONS
+            ])
+            ?>
+        </p>
+        <h3><?= Yii::t('report', 'Keywords') ?></h3>
+        <p>
+            <?=
+            CKEditor::widget([
+                'name' => 'keywords',
+                'value' => $report->competences_keywords,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::SUMMARY_OPTIONS
             ])
             ?>
         </p>

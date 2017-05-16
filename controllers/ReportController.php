@@ -20,8 +20,17 @@ use app\models\TeamMember;
 class ReportController extends Controller
 {
 
-    const CKEDITOR_OPTIONS = [
+    const ANALYSIS_OPTIONS = [
         'height' => '500px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
+    const SUMMARY_OPTIONS = [
+        'height' => '250px',
         'toolbarGroups' => [
             ['name' => 'undo'],
             ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
@@ -83,7 +92,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->introduction = $analysis;
+            $assessment->report->introduction_keywords = $keywords;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'introduction']);
@@ -102,7 +115,12 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->effectiveness = $analysis;
+            $assessment->report->effectiveness_keywords = $keywords;
+
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'effectiveness']);
@@ -138,7 +156,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->performance = $analysis;
+            $assessment->report->performance_keywords = $keywords;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'performance']);
@@ -173,7 +195,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->relations = $analysis;
+            $assessment->report->relations_keywords = $keywords;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'relations']);
@@ -208,7 +234,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->competences = $analysis;
+            $assessment->report->competences_keywords = $keywords;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
@@ -242,7 +272,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $assessment->report->emergents = $analysis;
+            $assessment->report->emergents_keywords = $keywords;
             $assessment->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'emergents']);
@@ -274,6 +308,26 @@ class ReportController extends Controller
         ]);
     }
 
+    public function actionActionPlan($id)
+    {
+        $assessment = Assessment::findOne(['id' => $id]);
+        $this->checkAllowed($assessment);
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = $this->sanitize($analysis);
+
+            $assessment->report->action_plan = $analysis;
+            $assessment->report->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'action-plan']);
+        }
+
+        return $this->render('action_plan', [
+                    'assessment' => $assessment,
+        ]);
+    }
+
     public function actionIndividualPerformance($id)
     {
         $individualReport = IndividualReport::findOne(['id' => $id]);
@@ -284,7 +338,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->performance = $analysis;
+            $individualReport->performance_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'performance-' . $individualReport->id]);
@@ -327,7 +385,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->perception = $analysis;
+            $individualReport->perception_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'perception-' . $individualReport->id]);
@@ -358,6 +420,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $individualReport->relations = $analysis;
+            $individualReport->relations_keywords = $keywords;
             $individualReport->relations = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
@@ -391,7 +458,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->competences = $analysis;
+            $individualReport->competences_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-competences-' . $individualReport->id]);
@@ -428,7 +499,11 @@ class ReportController extends Controller
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->emergents = $analysis;
+            $individualReport->emergents_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-emergents-' . $individualReport->id]);
@@ -458,44 +533,6 @@ class ReportController extends Controller
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'memberId' => $individualReport->person_id,
-        ]);
-    }
-
-    public function actionSummary($id)
-    {
-        $assessment = Assessment::findOne(['id' => $id]);
-        $this->checkAllowed($assessment);
-
-        if (Yii::$app->request->isPost) {
-            $analysis = Yii::$app->request->post('analysis');
-            $analysis = $this->sanitize($analysis);
-            $assessment->report->summary = $analysis;
-            $assessment->report->save();
-            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id, '#' => 'summary']);
-        }
-
-        return $this->render('summary', [
-                    'assessment' => $assessment,
-        ]);
-    }
-
-    public function actionActionPlan($id)
-    {
-        $assessment = Assessment::findOne(['id' => $id]);
-        $this->checkAllowed($assessment);
-
-        if (Yii::$app->request->isPost) {
-            $analysis = Yii::$app->request->post('analysis');
-            $analysis = $this->sanitize($analysis);
-            $assessment->report->action_plan = $analysis;
-            $assessment->report->save();
-            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id, '#' => 'action-plan']);
-        }
-
-        return $this->render('action_plan', [
-                    'assessment' => $assessment,
         ]);
     }
 

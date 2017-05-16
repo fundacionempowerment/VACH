@@ -177,11 +177,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
         <h3>
             <?= Yii::t('report', 'Summary'); ?>
-            <?=
-            Html::a(\Yii::t('app', 'Edit'), Url::to(['report/summary', 'id' => $assessment->id]), [
-                'id' => 'summary', 'class' => 'btn ' . (empty($assessment->report->summary) ? 'btn-success' : 'btn-default')
-            ])
-            ?>
         </h3>
         <p>
             <?= $assessment->report->summary ?>

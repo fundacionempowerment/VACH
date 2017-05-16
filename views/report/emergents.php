@@ -59,21 +59,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('descriptions/emergents') ?>
     </div>
     <div class="row col-md-12">
-        <h3>
-            Análisis
-        </h3>
+        <?php $form = ActiveForm::begin(['id' => 'report-form']); ?>
+        <h3><?= Yii::t('report', 'Analysis') ?></h3>
         <p>
-            <?php
-            $form = ActiveForm::begin([
-                        'id' => 'newassessment-form',
-            ]);
-            ?>
             <?=
             CKEditor::widget([
                 'name' => 'analysis',
                 'value' => $assessment->report->emergents,
                 'preset' => 'custom',
-                'clientOptions' => ReportController::CKEDITOR_OPTIONS
+                'clientOptions' => ReportController::ANALYSIS_OPTIONS
+            ])
+            ?>
+        </p>
+        <h3><?= Yii::t('report', 'Keywords') ?></h3>
+        <p>
+            <?=
+            CKEditor::widget([
+                'name' => 'keywords',
+                'value' => $assessment->report->emergents_keywords,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::SUMMARY_OPTIONS
             ])
             ?>
         </p>
