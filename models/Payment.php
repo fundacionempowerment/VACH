@@ -101,6 +101,15 @@ class Payment extends ActiveRecord
         return Payment::find()->orderBy('id desc');
     }
 
+    public static function adminBrowsePendings()
+    {
+        return Payment::find()
+                        ->where(['status' => 'pending'])
+                        ->andWhere(['>', 'amount', 0])
+                        ->andWhere(['>', 'rate', 0])
+                        ->orderBy('id desc');
+    }
+
     public static function getStatusList()
     {
         $list = [

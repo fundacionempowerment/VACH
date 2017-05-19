@@ -19,6 +19,9 @@ $dataProvider = new ActiveDataProvider([
 ?>
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
+    <p>
+        <?= Html::a(Yii::t('payment', 'Pay pendings'), Url::to(['payment/pay-pendings']), ['class' => 'btn btn-success']) ?>
+    </p>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,

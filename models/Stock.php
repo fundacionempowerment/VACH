@@ -45,6 +45,7 @@ class Stock extends ActiveRecord
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
             'payments' => Yii::t('payment', 'Payments'),
+            'assessment' => Yii::t('assessment', 'Assessment'),
         ];
     }
 
@@ -97,6 +98,11 @@ class Stock extends ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    public function getAssessment()
+    {
+        return $this->hasOne(Assessment::className(), ['id' => 'assessment_id']);
     }
 
     public static function getStatusList()

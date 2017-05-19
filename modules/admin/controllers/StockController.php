@@ -159,7 +159,7 @@ class StockController extends AdminBaseController
             $payment->rate = \app\models\Currency::lastValue();
             $payment->commision_currency = 'ARS';
             $payment->commision = 0;
-            $payment->status = Payment::STATUS_PAID;
+            $payment->status = Payment::STATUS_PENDING;
             $payment->is_manual = true;
             if ($model->part_distribution == 1) {
                 $payment->part_distribution = 50;

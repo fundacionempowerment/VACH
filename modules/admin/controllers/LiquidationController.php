@@ -99,6 +99,8 @@ class LiquidationController extends AdminBaseController
 
     public function actionCalculateTotals()
     {
+        Yii::$app->response->format = 'json';
+
         $ids = Yii::$app->request->post('ids');
 
         $payments = \app\models\Payment::find()
@@ -119,7 +121,6 @@ class LiquidationController extends AdminBaseController
 
         $net_amount = $raw_amount - $commisions;
 
-        Yii::$app->response->format = 'json';
         return [
             'raw_amount' => 'ARS ' . Yii::$app->formatter->asDecimal($raw_amount),
             'commision' => 'ARS ' . Yii::$app->formatter->asDecimal($commisions),

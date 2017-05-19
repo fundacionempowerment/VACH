@@ -66,4 +66,42 @@ class PaymentController extends AdminBaseController
         ]);
     }
 
+    public function actionPayPendings()
+    {
+        $models = Payment::adminBrowsePendings();
+
+        if (Yii::$app->request->isPost) {
+            $ids = Yii::$app->request->post('selection');
+
+            Payment::updateAll(['status' => 'paid'], ['in', 'id', $ids]);
+
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => Yii::t('payment', 'Payments')]));
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('pay_pendings', [
+                    'models' => $models,
+        ]);
+    }
+
+    public function actionCalculateTotals()
+    {
+        Yii::$app->response->format = 'json';
+
+        $ids = Yii::$app->request->post('ids');
+
+        $payments = \app\models\Payment::find()
+                ->where(['in', 'id', $ids])
+                ->all();
+
+        $total = 0;
+        foreach ($payments as $payment) {
+            $total += $payment->localAmount;
+        }
+
+        return [
+            'total' => 'ARS ' . Yii::$app->formatter->asDecimal($total, 2),
+        ];
+    }
+
 }

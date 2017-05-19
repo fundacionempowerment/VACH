@@ -30,9 +30,12 @@ $dataProvider = new ActiveDataProvider([
         'columns' => [
             'product.name',
             'quantity',
-            'price:currency',
-            'total:currency',
-            'stamp:datetime',
+            [
+                'attribute' => 'assessment',
+                'value' => function($data) {
+                    return $data->assessment ? $data->assessment->fullname : '';
+                },
+            ],
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],

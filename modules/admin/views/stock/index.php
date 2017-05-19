@@ -37,8 +37,12 @@ $dataProvider = new ActiveDataProvider([
                 'label' => Yii::t('stock', 'Product')
             ],
             'quantity',
-            'price:currency',
-            'total:currency',
+            [
+                'attribute' => 'assessment',
+                'value' => function($data) {
+                    return $data->assessment ? $data->assessment->fullname : '';
+                },
+            ],
             'stamp:datetime',
             'statusName',
             [
