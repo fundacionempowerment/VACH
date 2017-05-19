@@ -100,11 +100,13 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($relationsMatrix) > 0) {
-        echo $this->render('_relation', [
-            'assessmentId' => $filter->assessmentId,
-            'memberId' => $filter->memberId,
-            'wheelType' => $filter->wheelType,
-        ]);
+        if ($filter->memberId > 0) {
+            echo $this->render('_relation', [
+                'assessmentId' => $filter->assessmentId,
+                'memberId' => $filter->memberId,
+                'wheelType' => $filter->wheelType,
+            ]);
+        }
         echo $this->render('_relation_table', [
             'data' => $relationsMatrix,
             'members' => $members,
