@@ -40,7 +40,7 @@ $dataProvider = new ActiveDataProvider([
             [
                 'attribute' => 'team',
                 'value' => function($data) {
-                    return $data ? $data->fullname : '';
+                    return $data->team ? $data->team->fullname : '';
                 },
             ],
             'stamp:datetime',
