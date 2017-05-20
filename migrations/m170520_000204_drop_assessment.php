@@ -44,7 +44,6 @@ class m170520_000204_drop_assessment extends Migration
             'updated_at' => $this->integer()->notNull(),
                 ], $tableOptions);
 
-
         $this->execute("
             INSERT INTO `tempo_team` (`original_team_id`, `original_assessment_id`, `name`, `sponsor_id`, `company_id`, `coach_id`, `created_at`, `updated_at`)
             SELECT `team`.`id`, `assessment`.`id`,
@@ -111,11 +110,21 @@ class m170520_000204_drop_assessment extends Migration
         $this->renameTable('tempo_team_member', 'team_member');
         $this->renameTable('tempo_team_coach', 'team_coach');
         $this->renameTable('tempo_team', 'team');
-        
+
         $this->dropColumn('team', 'original_team_id');
         $this->dropColumn('team', 'original_assessment_id');
         $this->dropColumn('team_member', 'original_team_id');
         $this->dropColumn('team_member', 'original_assessment_id');
+
+        $this->addForeignKey('fk_team_sponsor', 'team', 'sponsor_id', 'person', 'id');
+        $this->addForeignKey('fk_team_company', 'team', 'company_id', 'company', 'id');
+        $this->addForeignKey('fk_team_coach', 'team', 'coach_id', 'user', 'id');
+
+        $this->addForeignKey('fk_team_member_team', 'team_member', 'team_id', 'team', 'id');
+        $this->addForeignKey('fk_team_member_person', 'team_member', 'person_id', 'person', 'id');
+
+        $this->addForeignKey('fk_team_coach_team', 'team_coach', 'team_id', 'team', 'id');
+        $this->addForeignKey('fk_team_coach_coach', 'team_coach', 'coach_id', 'user', 'id');
 
         $this->addForeignKey('fk_report_team', 'report', 'team_id', 'team', 'id');
         $this->addForeignKey('fk_wheel_team', 'wheel', 'team_id', 'team', 'id');
