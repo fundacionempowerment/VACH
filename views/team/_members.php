@@ -51,12 +51,12 @@ use kartik\widgets\Select2;
             },
         ],
     ];
-    if (count($team->wheels) == 0) {
+    if (count($team->individualWheels) != count($team->members)) {
         $columns [] = [
             'format' => 'html',
             'options' => ['width' => '60px'],
             'value' => function( $data ) use ($team) {
-                if ($team->coach_id == Yii::$app->user->identity->id) {
+                if ($data->deletable) {
                     return
                             Html::a('<span class="glyphicon glyphicon-trash"></span>', ['team/delete-member', 'id' => $data['id']], [
                                 'title' => Yii::t('yii', 'Delete'),
@@ -97,20 +97,22 @@ use kartik\widgets\Select2;
             </td>
         </tr>
     </table>        
-    <br/>
-    <?php
-    if (count($team->wheels) == 0) {
-        echo Html::a(Yii::t('team', 'Team fullfilled'), Url::to(['team/fullfilled', 'id' => $team->id]), [
-            'class' => 'btn btn-warning',
-            'style' => 'margin-bottom: 10px;',
-        ]);
-    } else if (count($team->individualWheels) != count($team->members)) {
-        echo Html::a(Yii::t('team', 'Update Team'), Url::to(['team/fullfilled', 'id' => $team->id]), [
-            'class' => 'btn btn-info',
-            'style' => 'margin-bottom: 10px;',
-        ]);
-    }
-    ?>
+    <br>
+    <div class="text-center">
+        <?php
+        if (count($team->wheels) == 0) {
+            echo Html::a(Yii::t('team', 'Team fullfilled'), Url::to(['team/fullfilled', 'id' => $team->id]), [
+                'class' => 'btn btn-warning',
+                'style' => 'margin-bottom: 10px;',
+            ]);
+        } else if (count($team->individualWheels) != count($team->members)) {
+            echo Html::a(Yii::t('team', 'Update Team'), Url::to(['team/fullfilled', 'id' => $team->id]), [
+                'class' => 'btn btn-warning btn-lg',
+                'style' => 'margin-bottom: 10px;',
+            ]);
+        }
+        ?>
+    </div>
     <?php ActiveForm::end(); ?>
 </div>
 <script>

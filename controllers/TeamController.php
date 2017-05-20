@@ -48,6 +48,7 @@ class TeamController extends BaseController
             $teamMember = new TeamMember();
             $teamMember->person_id = $new_member_id;
             $teamMember->team_id = $team->id;
+            $teamMember->active = true;
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
@@ -246,32 +247,6 @@ class TeamController extends BaseController
         ]);
     }
 
-    public function actionNewMember($id)
-    {
-        $team = Team::findOne($id);
-
-        if (!$team || $team->coach_id != Yii::$app->user->id) {
-            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
-        }
-
-        $member = new Person();
-
-        if ($member->load(Yii::$app->request->post()) && $member->save()) {
-            $teamMember = new TeamMember();
-            $teamMember->person_id = $member->id;
-            $teamMember->team_id = $team->id;
-            $teamMember->save();
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $member->fullname]));
-            return $this->redirect(['/team/view', 'id' => $team->id]);
-        } else
-            SiteController::FlashErrors($member);
-
-        return $this->render('member-form', [
-                    'team' => $team,
-                    'member' => $member,
-        ]);
-    }
-
     public function actionEditMember($id)
     {
         $teamMember = TeamMember::findOne($id);
@@ -343,14 +318,16 @@ class TeamController extends BaseController
 
         $teamMember = TeamMember::findOne(['id' => $id]);
 
-        if ($teamMember->team->coach_id != Yii::$app->user->id) {
+        if (!$teamMember->team->isUserAllowed(Yii::$app->user->id)) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         if ($teamMember) {
             $teamMember->active = $isActive;
-            $teamMember->save(false);
-            return 'ok';
+            if ($teamMember->save()) {
+                return 'ok';
+            }
+            SiteController::FlashErrors($teamMember);
         }
 
         return 'error';
