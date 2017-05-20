@@ -100,6 +100,7 @@ class AssessmentController extends BaseController
                     $stock->quantity = -$licences_required;
                     $stock->price = 0;
                     $stock->total = 0;
+                    $stock->assessment_id = $assessment->id;
                     $stock->status = Stock::STATUS_VALID;
                     if (!$stock->save()) {
                         \app\controllers\SiteController::FlashErrors($stock);
