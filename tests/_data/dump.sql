@@ -72,17 +72,6 @@ CREATE TABLE `liquidation` (
   `part2_amount` decimal(10,4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `liquidation` (
-  `id` int(11) NOT NULL,
-  `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `raw_amount` decimal(10,4) NOT NULL,
-  `commision` decimal(10,4) NOT NULL,
-  `net_amount` decimal(10,4) NOT NULL,
-  `part1_amount` decimal(10,4) NOT NULL,
-  `part2_amount` decimal(10,4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `coach_id` int(11) DEFAULT NULL,
@@ -156,13 +145,10 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170504_224630_add_payment_liquidation', 1494465575),
 ('m170511_002445_add_session_token', 1494465575),
 ('m170515_230603_add_person_shortname', 1494909385),
-('m170516_022644_add_report_keywords', 1494909385);
-('m170428_033049_add_payment_commision_fields', 1494390957),
-('m170429_215526_add_currency_rates', 1494390957),
-('m170429_223113_add_manual_payment_field', 1494390957),
-('m170504_224630_add_payment_liquidation', 1494390957),
-('m170507_005853_drop_blocked_field', 1494390957),
-('m170509_000204_drop_assessment', 1494390957);
+('m170516_022644_add_report_keywords', 1494909385),
+('m170518_060529_add_stock_assessment_relation', 1495300680),
+('m170519_011035_mark_pending_payments', 1495300680),
+('m170520_000204_drop_assessment', 1495300680);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -446,13 +432,13 @@ CREATE TABLE `report` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   `relations` text COLLATE utf8_unicode_ci,
-  `team_id` int(11) DEFAULT NULL
   `introduction_keywords` text COLLATE utf8_unicode_ci,
   `effectiveness_keywords` text COLLATE utf8_unicode_ci,
   `performance_keywords` text COLLATE utf8_unicode_ci,
   `competences_keywords` text COLLATE utf8_unicode_ci,
   `emergents_keywords` text COLLATE utf8_unicode_ci,
-  `relations_keywords` text COLLATE utf8_unicode_ci
+  `relations_keywords` text COLLATE utf8_unicode_ci,
+  `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `stock` (
@@ -464,11 +450,12 @@ CREATE TABLE `stock` (
   `total` decimal(10,2) NOT NULL,
   `status` enum('invalid','valid','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'invalid',
   `stamp` datetime NOT NULL,
-  `creator_id` int(11) NOT NULL
+  `creator_id` int(11) NOT NULL,
+  `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`) VALUES
-(1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1);
+INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`, `team_id`) VALUES
+(1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1, NULL);
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
@@ -886,7 +873,8 @@ ALTER TABLE `stock`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_stock_coach` (`coach_id`),
   ADD KEY `fk_stock_product` (`product_id`),
-  ADD KEY `fk_stock_creator` (`creator_id`);
+  ADD KEY `fk_stock_creator` (`creator_id`),
+  ADD KEY `fk_stock_team` (`team_id`);
 
 ALTER TABLE `team`
   ADD PRIMARY KEY (`id`);
@@ -990,18 +978,10 @@ ALTER TABLE `report`
   ADD CONSTRAINT `fk_report_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`);
 
 ALTER TABLE `stock`
+  ADD CONSTRAINT `fk_stock_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
   ADD CONSTRAINT `fk_stock_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
-
-ALTER TABLE `team`
-  ADD CONSTRAINT `fk_team_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `fk_team_company` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
-  ADD CONSTRAINT `fk_team_sponsor` FOREIGN KEY (`sponsor_id`) REFERENCES `person` (`id`);
-
-ALTER TABLE `team_member`
-  ADD CONSTRAINT `fk_team_member_person` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_team_member_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `user_session`
   ADD CONSTRAINT `fk_user_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
