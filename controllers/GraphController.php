@@ -16,7 +16,7 @@ use app\models\DashboardFilter;
 use app\models\Person;
 use app\models\WheelQuestion;
 
-class GraphController extends BaseController
+class GraphController extends Controller
 {
 
     public function actionRadar($assessmentId, $memberId, $wheelType)
