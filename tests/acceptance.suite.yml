@@ -25,7 +25,7 @@ modules:
             url: 'http://localhost/vach/web/'
             browser: firefox
             window_size: maximize
-            restart: true
+            restart: false
         Db:
             dsn: 'mysql:host=127.0.0.1;port=3307;dbname=vach_test'
             user: 'root'
