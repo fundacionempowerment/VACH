@@ -20,15 +20,11 @@ $I->fillField('AddModel[quantity]', $add);
 $I->selectOptionForSelect2('AddModel[coach_id]', 'coach');
 $I->wait(1);
 
-$I->waitForText(Yii::$app->formatter->asCurrency($price * $add));
-
 $I->click('Guardar');
 $I->waitForText('exitosamente');
 
 $I->see('Coach');
 $I->see($add);
-$I->see(Yii::$app->formatter->asCurrency($price));
-$I->see(Yii::$app->formatter->asCurrency($price * $add));
 
 $I->click('Quitar licencias');
 $I->wait(1);
@@ -50,10 +46,12 @@ $I->loginAsCoach();
 
 $I->clickMainMenu('(coach)', 'Mis licencias');
 
-$I->waitForText(Yii::$app->formatter->asCurrency($price));
-$I->see(Yii::$app->formatter->asCurrency($price * $add));
 $I->see($add);
+$I->see(100 + $add - $remove);
+
+$I->clickMainMenu('(coach)', 'Mis pagos');
+
+$I->see(Yii::$app->formatter->asCurrency($price * $add));
 $I->see($remove);
 
-$I->see(100 + $add - $remove);
 

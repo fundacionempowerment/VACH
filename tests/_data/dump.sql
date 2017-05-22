@@ -167,7 +167,9 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170504_224630_add_payment_liquidation', 1494465575),
 ('m170511_002445_add_session_token', 1494465575),
 ('m170515_230603_add_person_shortname', 1494909385),
-('m170516_022644_add_report_keywords', 1494909385);
+('m170516_022644_add_report_keywords', 1494909385),
+('m170518_060529_add_stock_assessment_relation', 1495415609),
+('m170519_011035_mark_pending_payments', 1495415609);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -469,11 +471,12 @@ CREATE TABLE `stock` (
   `total` decimal(10,2) NOT NULL,
   `status` enum('invalid','valid','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'invalid',
   `stamp` datetime NOT NULL,
-  `creator_id` int(11) NOT NULL
+  `creator_id` int(11) NOT NULL,
+  `assessment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`) VALUES
-(1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1);
+INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`, `assessment_id`) VALUES
+(1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1, NULL);
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
@@ -888,7 +891,8 @@ ALTER TABLE `stock`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_stock_coach` (`coach_id`),
   ADD KEY `fk_stock_product` (`product_id`),
-  ADD KEY `fk_stock_creator` (`creator_id`);
+  ADD KEY `fk_stock_creator` (`creator_id`),
+  ADD KEY `fk_stock_assessment` (`assessment_id`);
 
 ALTER TABLE `team`
   ADD PRIMARY KEY (`id`),
@@ -1003,6 +1007,7 @@ ALTER TABLE `report`
   ADD CONSTRAINT `fk_report_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `stock`
+  ADD CONSTRAINT `fk_stock_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`),
   ADD CONSTRAINT `fk_stock_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
