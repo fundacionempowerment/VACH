@@ -18,6 +18,7 @@
  */
 return [
     'Action Plan' => 'Plan de acción',
+    'Analysis' => 'Análisis',
     'Analysis saved.' => 'Análisis guardado.',
     'Competence Matrix' => 'Matriz de competencias',
     'Competences Matrix' => 'Matriz de competencias',
@@ -31,6 +32,7 @@ return [
     'Index' => 'Índice',
     'Individual Analysis' => 'Análisis Individual',
     'Introduction' => 'Introducción',
+    'Keywords' => 'Palabras clave',
     'Natural Team' => 'Equipo natural',
     'Perception Matrix' => 'Matriz de percepción',
     'Perception Matrix of {member}' => 'Matriz de percepción de {member}',
