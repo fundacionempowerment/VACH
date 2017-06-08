@@ -10,16 +10,16 @@ use app\models\WheelQuestion;
 class Lineal
 {
 
-    static public function draw($assessmentId, $memberId, $wheelType)
+    static public function draw($teamId, $memberId, $wheelType)
     {
         switch ($wheelType) {
             case Wheel::TYPE_GROUP:
-                $redLine = Wheel::getProjectedGroupWheel($assessmentId, $memberId);
-                $blueLine = Wheel::getReflectedGroupWheel($assessmentId, $memberId);
+                $redLine = Wheel::getProjectedGroupWheel($teamId, $memberId);
+                $blueLine = Wheel::getReflectedGroupWheel($teamId, $memberId);
                 break;
             case Wheel::TYPE_ORGANIZATIONAL:
-                $redLine = Wheel::getProjectedOrganizationalWheel($assessmentId, $memberId);
-                $blueLine = Wheel::getReflectedOrganizationalWheel($assessmentId, $memberId);
+                $redLine = Wheel::getProjectedOrganizationalWheel($teamId, $memberId);
+                $blueLine = Wheel::getReflectedOrganizationalWheel($teamId, $memberId);
                 break;
         }
 

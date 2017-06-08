@@ -6,7 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
-class AssessmentCoach extends ActiveRecord
+class TeamCoach extends ActiveRecord
 {
 
     /**
@@ -19,6 +19,16 @@ class AssessmentCoach extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+    /**
      * @return array customized attribute labels
      */
     public function attributeLabels()
@@ -27,9 +37,9 @@ class AssessmentCoach extends ActiveRecord
         ];
     }
 
-    public function getAssessment()
+    public function getTeam()
     {
-        return $this->hasOne(Assessment::className(), ['id' => 'assessment_id']);
+        return $this->hasOne(Team::className(), ['id' => 'team_id']);
     }
 
     public function getCoach()
@@ -37,11 +47,11 @@ class AssessmentCoach extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }
 
-    static public function notGranted($assessmentId, $coachId)
+    static public function notGranted($teamId, $coachId)
     {
         return !self::find()
                         ->where([
-                            'assessment_id' => $assessmentId,
+                            'team_id' => $teamId,
                             'coach_id' => $coachId,
                         ])->exists();
     }

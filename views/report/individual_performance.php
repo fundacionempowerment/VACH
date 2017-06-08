@@ -13,17 +13,10 @@ use app\controllers\ReportController;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-if (!empty($assessment) && $assessment->version == 2) {
-    $version = 2;
-} else {
-    $version = 1;
-}
-
 $this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
@@ -34,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
@@ -43,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($organizationalPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);

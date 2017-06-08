@@ -142,7 +142,7 @@ class WheelController extends BaseController
     {
         $wheel = Wheel::findOne(['id' => $id]);
 
-        if (!$wheel || !$wheel->assessment->isUserAllowed()) {
+        if (!$wheel || !$wheel->team->isUserAllowed()) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
@@ -196,7 +196,7 @@ class WheelController extends BaseController
             }
             if (count($invalids) == 0) {
                 SiteController::addFlash('success', Yii::t('wheel', 'Wheel answers saved.'));
-                return $this->redirect(['/assessment/view', 'id' => $wheel->assessment->id]);
+                return $this->redirect(['/team/view', 'id' => $wheel->team->id]);
             } else {
                 \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
             }

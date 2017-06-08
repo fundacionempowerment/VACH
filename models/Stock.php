@@ -45,7 +45,7 @@ class Stock extends ActiveRecord
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
             'payments' => Yii::t('payment', 'Payments'),
-            'assessment' => Yii::t('assessment', 'Assessment'),
+            'team' => Yii::t('team', 'Team'),
         ];
     }
 
@@ -100,9 +100,9 @@ class Stock extends ActiveRecord
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
-    public function getAssessment()
+    public function getTeam()
     {
-        return $this->hasOne(Assessment::className(), ['id' => 'assessment_id']);
+        return $this->hasOne(Team::className(), ['id' => 'team_id']);
     }
 
     public static function getStatusList()

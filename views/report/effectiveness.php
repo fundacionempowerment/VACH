@@ -17,9 +17,8 @@ use app\controllers\ReportController;
 
 $this->title = Yii::t('report', 'Effectiveness Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupRelationsMatrix) > 0) {
         echo $this->render('../dashboard/_number_matrix', [
-            'assessment' => $assessment,
+            'team' => $team,
             'data' => $groupRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
@@ -45,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($organizationalRelationsMatrix) > 0) {
         echo $this->render('../dashboard/_number_matrix', [
-            'assessment' => $assessment,
+            'team' => $team,
             'data' => $organizationalRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
@@ -71,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             CKEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->effectiveness,
+                'value' => $team->report->effectiveness,
                 'preset' => 'custom',
                 'clientOptions' => ReportController::ANALYSIS_OPTIONS
             ])
@@ -82,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             CKEditor::widget([
                 'name' => 'keywords',
-                'value' => $assessment->report->effectiveness_keywords,
+                'value' => $team->report->effectiveness_keywords,
                 'preset' => 'custom',
                 'clientOptions' => ReportController::SUMMARY_OPTIONS
             ])

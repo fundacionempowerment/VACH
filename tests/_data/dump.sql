@@ -7,28 +7,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
-CREATE TABLE `assessment` (
-  `id` int(11) NOT NULL,
-  `team_id` int(11) NOT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  `individual_status` int(11) NOT NULL,
-  `group_status` int(11) NOT NULL,
-  `organizational_status` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `version` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `assessment` (`id`, `team_id`, `created_at`, `updated_at`, `individual_status`, `group_status`, `organizational_status`, `name`, `version`) VALUES
-(1, 1, 1492197123, 1492197123, 0, 0, 0, 'Inicial', 2),
-(2, 1, 1492197137, 1492197137, 0, 0, 0, 'Final', 2);
-
-CREATE TABLE `assessment_coach` (
-  `id` int(11) NOT NULL,
-  `assessment_id` int(11) NOT NULL,
-  `coach_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 CREATE TABLE `company` (
   `id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL,
@@ -169,7 +147,8 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170515_230603_add_person_shortname', 1494909385),
 ('m170516_022644_add_report_keywords', 1494909385),
 ('m170518_060529_add_stock_assessment_relation', 1495415609),
-('m170519_011035_mark_pending_payments', 1495415609);
+('m170519_011035_mark_pending_payments', 1495415609),
+('m170520_000204_drop_assessment', 1495300680);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -444,7 +423,6 @@ INSERT INTO `question` (`id`, `text`) VALUES
 
 CREATE TABLE `report` (
   `id` int(11) NOT NULL,
-  `assessment_id` int(11) NOT NULL,
   `introduction` text COLLATE utf8_unicode_ci,
   `effectiveness` text COLLATE utf8_unicode_ci,
   `performance` text COLLATE utf8_unicode_ci,
@@ -459,7 +437,8 @@ CREATE TABLE `report` (
   `performance_keywords` text COLLATE utf8_unicode_ci,
   `competences_keywords` text COLLATE utf8_unicode_ci,
   `emergents_keywords` text COLLATE utf8_unicode_ci,
-  `relations_keywords` text COLLATE utf8_unicode_ci
+  `relations_keywords` text COLLATE utf8_unicode_ci,
+  `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `stock` (
@@ -472,43 +451,55 @@ CREATE TABLE `stock` (
   `status` enum('invalid','valid','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'invalid',
   `stamp` datetime NOT NULL,
   `creator_id` int(11) NOT NULL,
-  `assessment_id` int(11) DEFAULT NULL
+  `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`, `assessment_id`) VALUES
+INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`, `team_id`) VALUES
 (1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1, NULL);
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `coach_id` int(11) NOT NULL,
   `sponsor_id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
+  `coach_id` int(11) NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  `blocked` tinyint(1) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `team` (`id`, `name`, `coach_id`, `sponsor_id`, `company_id`, `created_at`, `updated_at`, `blocked`) VALUES
-(1, 'Núcleo', 2, 4, 1, 1492197030, 1492197079, 1),
-(2, 'Ventas', 2, 8, 2, 1492321286, 1492321316, 1);
+INSERT INTO `team` (`id`, `name`, `sponsor_id`, `company_id`, `coach_id`, `created_at`, `updated_at`) VALUES
+(1, 'Núcleo Inicial', 4, 1, 2, 1492197123, 1492197123),
+(2, 'Núcleo Final', 4, 1, 2, 1492197137, 1492197137),
+(3, 'Ventas', 8, 2, 2, 1492321286, 1492321316);
+
+CREATE TABLE `team_coach` (
+  `id` int(11) NOT NULL,
+  `team_id` int(11) NOT NULL,
+  `coach_id` int(11) NOT NULL,
+  `anonimize` tinyint(1) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `team_member` (
   `id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '1'
+  `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `team_member` (`id`, `team_id`, `person_id`, `created_at`, `updated_at`, `active`) VALUES
-(1, 1, 1, 1492197064, 1492197064, 1),
-(2, 1, 2, 1492197067, 1492197067, 1),
-(3, 1, 3, 1492197070, 1492197070, 1),
-(4, 2, 5, 1492321297, 1492321297, 1),
-(5, 2, 6, 1492321302, 1492321302, 1),
-(6, 2, 7, 1492321307, 1492321307, 1);
+INSERT INTO `team_member` (`id`, `team_id`, `person_id`, `active`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 1492197064, 1492197064),
+(2, 1, 2, 1, 1492197067, 1492197067),
+(3, 1, 3, 1, 1492197070, 1492197070),
+(4, 2, 1, 1, 1492197064, 1492197064),
+(5, 2, 2, 1, 1492197067, 1492197067),
+(6, 2, 3, 1, 1492197070, 1492197070),
+(7, 3, 5, 1, 1492321297, 1492321297),
+(8, 3, 6, 1, 1492321302, 1492321302),
+(9, 3, 7, 1, 1492321307, 1492321307);
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
@@ -544,57 +535,57 @@ CREATE TABLE `wheel` (
   `date` date NOT NULL,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
-  `assessment_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
   `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `observed_id` int(11) DEFAULT NULL,
   `sent_count` smallint(6) NOT NULL DEFAULT '0',
-  `status` enum('created','sent','received','in_progress','done') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'created'
+  `status` enum('created','sent','received','in_progress','done') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'created',
+  `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `wheel` (`id`, `observer_id`, `date`, `created_at`, `updated_at`, `assessment_id`, `type`, `token`, `observed_id`, `sent_count`, `status`) VALUES
-(11, 1, '2017-04-14', 1492197123, 1492197123, 1, 0, '799-123-455', 1, 0, 'created'),
-(12, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 1, 0, 'created'),
-(13, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 2, 0, 'created'),
-(14, 1, '2017-04-14', 1492197123, 1492197123, 1, 1, '749-972-437', 3, 0, 'created'),
-(15, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 1, 0, 'created'),
-(16, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 2, 0, 'created'),
-(17, 1, '2017-04-14', 1492197123, 1492197123, 1, 2, '326-952-011', 3, 0, 'created'),
-(18, 2, '2017-04-14', 1492197123, 1492197123, 1, 0, '295-015-471', 2, 0, 'created'),
-(19, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 1, 0, 'created'),
-(20, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 2, 0, 'created'),
-(21, 2, '2017-04-14', 1492197123, 1492197123, 1, 1, '072-444-085', 3, 0, 'created'),
-(22, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 1, 0, 'created'),
-(23, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 2, 0, 'created'),
-(24, 2, '2017-04-14', 1492197123, 1492197123, 1, 2, '812-331-347', 3, 0, 'created'),
-(25, 3, '2017-04-14', 1492197123, 1492197123, 1, 0, '152-820-545', 3, 0, 'created'),
-(26, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 1, 0, 'created'),
-(27, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 2, 0, 'created'),
-(28, 3, '2017-04-14', 1492197123, 1492197123, 1, 1, '989-581-797', 3, 0, 'created'),
-(29, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 1, 0, 'created'),
-(30, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 2, 0, 'created'),
-(31, 3, '2017-04-14', 1492197123, 1492197123, 1, 2, '398-230-990', 3, 0, 'created'),
-(32, 1, '2017-04-14', 1492197137, 1492197137, 2, 0, '305-660-713', 1, 0, 'created'),
-(33, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 1, 0, 'created'),
-(34, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 2, 0, 'created'),
-(35, 1, '2017-04-14', 1492197137, 1492197137, 2, 1, '658-054-732', 3, 0, 'created'),
-(36, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 1, 0, 'created'),
-(37, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 2, 0, 'created'),
-(38, 1, '2017-04-14', 1492197137, 1492197137, 2, 2, '438-517-666', 3, 0, 'created'),
-(39, 2, '2017-04-14', 1492197137, 1492197137, 2, 0, '277-638-061', 2, 0, 'created'),
-(40, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 1, 0, 'created'),
-(41, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 2, 0, 'created'),
-(42, 2, '2017-04-14', 1492197137, 1492197137, 2, 1, '677-153-449', 3, 0, 'created'),
-(43, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 1, 0, 'created'),
-(44, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 2, 0, 'created'),
-(45, 2, '2017-04-14', 1492197137, 1492197137, 2, 2, '085-897-442', 3, 0, 'created'),
-(46, 3, '2017-04-14', 1492197137, 1492197137, 2, 0, '547-298-853', 3, 0, 'created'),
-(47, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 1, 0, 'created'),
-(48, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 2, 0, 'created'),
-(49, 3, '2017-04-14', 1492197137, 1492197137, 2, 1, '311-931-808', 3, 0, 'created'),
-(50, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 1, 0, 'created'),
-(51, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 2, 0, 'created'),
-(52, 3, '2017-04-14', 1492197137, 1492197137, 2, 2, '866-893-870', 3, 0, 'created');
+INSERT INTO `wheel` (`id`, `observer_id`, `date`, `created_at`, `updated_at`, `type`, `token`, `observed_id`, `sent_count`, `status`, `team_id`) VALUES
+(11, 1, '2017-04-14', 1492197123, 1492197123, 0, '799-123-455', 1, 0, 'created', 1),
+(12, 1, '2017-04-14', 1492197123, 1492197123, 1, '749-972-437', 1, 0, 'created', 1),
+(13, 1, '2017-04-14', 1492197123, 1492197123, 1, '749-972-437', 2, 0, 'created', 1),
+(14, 1, '2017-04-14', 1492197123, 1492197123, 1, '749-972-437', 3, 0, 'created', 1),
+(15, 1, '2017-04-14', 1492197123, 1492197123, 2, '326-952-011', 1, 0, 'created', 1),
+(16, 1, '2017-04-14', 1492197123, 1492197123, 2, '326-952-011', 2, 0, 'created', 1),
+(17, 1, '2017-04-14', 1492197123, 1492197123, 2, '326-952-011', 3, 0, 'created', 1),
+(18, 2, '2017-04-14', 1492197123, 1492197123, 0, '295-015-471', 2, 0, 'created', 1),
+(19, 2, '2017-04-14', 1492197123, 1492197123, 1, '072-444-085', 1, 0, 'created', 1),
+(20, 2, '2017-04-14', 1492197123, 1492197123, 1, '072-444-085', 2, 0, 'created', 1),
+(21, 2, '2017-04-14', 1492197123, 1492197123, 1, '072-444-085', 3, 0, 'created', 1),
+(22, 2, '2017-04-14', 1492197123, 1492197123, 2, '812-331-347', 1, 0, 'created', 1),
+(23, 2, '2017-04-14', 1492197123, 1492197123, 2, '812-331-347', 2, 0, 'created', 1),
+(24, 2, '2017-04-14', 1492197123, 1492197123, 2, '812-331-347', 3, 0, 'created', 1),
+(25, 3, '2017-04-14', 1492197123, 1492197123, 0, '152-820-545', 3, 0, 'created', 1),
+(26, 3, '2017-04-14', 1492197123, 1492197123, 1, '989-581-797', 1, 0, 'created', 1),
+(27, 3, '2017-04-14', 1492197123, 1492197123, 1, '989-581-797', 2, 0, 'created', 1),
+(28, 3, '2017-04-14', 1492197123, 1492197123, 1, '989-581-797', 3, 0, 'created', 1),
+(29, 3, '2017-04-14', 1492197123, 1492197123, 2, '398-230-990', 1, 0, 'created', 1),
+(30, 3, '2017-04-14', 1492197123, 1492197123, 2, '398-230-990', 2, 0, 'created', 1),
+(31, 3, '2017-04-14', 1492197123, 1492197123, 2, '398-230-990', 3, 0, 'created', 1),
+(32, 1, '2017-04-14', 1492197137, 1492197137, 0, '305-660-713', 1, 0, 'created', 2),
+(33, 1, '2017-04-14', 1492197137, 1492197137, 1, '658-054-732', 1, 0, 'created', 2),
+(34, 1, '2017-04-14', 1492197137, 1492197137, 1, '658-054-732', 2, 0, 'created', 2),
+(35, 1, '2017-04-14', 1492197137, 1492197137, 1, '658-054-732', 3, 0, 'created', 2),
+(36, 1, '2017-04-14', 1492197137, 1492197137, 2, '438-517-666', 1, 0, 'created', 2),
+(37, 1, '2017-04-14', 1492197137, 1492197137, 2, '438-517-666', 2, 0, 'created', 2),
+(38, 1, '2017-04-14', 1492197137, 1492197137, 2, '438-517-666', 3, 0, 'created', 2),
+(39, 2, '2017-04-14', 1492197137, 1492197137, 0, '277-638-061', 2, 0, 'created', 2),
+(40, 2, '2017-04-14', 1492197137, 1492197137, 1, '677-153-449', 1, 0, 'created', 2),
+(41, 2, '2017-04-14', 1492197137, 1492197137, 1, '677-153-449', 2, 0, 'created', 2),
+(42, 2, '2017-04-14', 1492197137, 1492197137, 1, '677-153-449', 3, 0, 'created', 2),
+(43, 2, '2017-04-14', 1492197137, 1492197137, 2, '085-897-442', 1, 0, 'created', 2),
+(44, 2, '2017-04-14', 1492197137, 1492197137, 2, '085-897-442', 2, 0, 'created', 2),
+(45, 2, '2017-04-14', 1492197137, 1492197137, 2, '085-897-442', 3, 0, 'created', 2),
+(46, 3, '2017-04-14', 1492197137, 1492197137, 0, '547-298-853', 3, 0, 'created', 2),
+(47, 3, '2017-04-14', 1492197137, 1492197137, 1, '311-931-808', 1, 0, 'created', 2),
+(48, 3, '2017-04-14', 1492197137, 1492197137, 1, '311-931-808', 2, 0, 'created', 2),
+(49, 3, '2017-04-14', 1492197137, 1492197137, 1, '311-931-808', 3, 0, 'created', 2),
+(50, 3, '2017-04-14', 1492197137, 1492197137, 2, '866-893-870', 1, 0, 'created', 2),
+(51, 3, '2017-04-14', 1492197137, 1492197137, 2, '866-893-870', 2, 0, 'created', 2),
+(52, 3, '2017-04-14', 1492197137, 1492197137, 2, '866-893-870', 3, 0, 'created', 2);
 
 CREATE TABLE `wheel_answer` (
   `id` int(11) NOT NULL,
@@ -828,15 +819,6 @@ INSERT INTO `wheel_question` (`id`, `dimension`, `order`, `created_at`, `updated
 (208, 7, 63, 1492102383, 1492102383, 2, 200);
 
 
-ALTER TABLE `assessment`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_assessment_team` (`team_id`);
-
-ALTER TABLE `assessment_coach`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_assessment_coach_assessment` (`assessment_id`),
-  ADD KEY `fk_assessment_coach_coach` (`coach_id`);
-
 ALTER TABLE `company`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_company_coach` (`coach_id`);
@@ -885,25 +867,23 @@ ALTER TABLE `question`
 
 ALTER TABLE `report`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_report_assessment` (`assessment_id`);
+  ADD KEY `fk_report_team` (`team_id`);
 
 ALTER TABLE `stock`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_stock_coach` (`coach_id`),
   ADD KEY `fk_stock_product` (`product_id`),
   ADD KEY `fk_stock_creator` (`creator_id`),
-  ADD KEY `fk_stock_assessment` (`assessment_id`);
+  ADD KEY `fk_stock_team` (`team_id`);
 
 ALTER TABLE `team`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_team_coach` (`coach_id`),
-  ADD KEY `fk_team_sponsor` (`sponsor_id`),
-  ADD KEY `fk_team_company` (`company_id`);
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `team_coach`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `team_member`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_team_member_team` (`team_id`),
-  ADD KEY `fk_team_member_person` (`person_id`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
@@ -914,9 +894,9 @@ ALTER TABLE `user_session`
 
 ALTER TABLE `wheel`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_wheel_assessment` (`assessment_id`),
   ADD KEY `fk_wheel_observed` (`observed_id`),
-  ADD KEY `fk_wheel_observer` (`observer_id`);
+  ADD KEY `fk_wheel_observer` (`observer_id`),
+  ADD KEY `fk_wheel_team` (`team_id`);
 
 ALTER TABLE `wheel_answer`
   ADD PRIMARY KEY (`id`),
@@ -929,10 +909,6 @@ ALTER TABLE `wheel_question`
   ADD KEY `fk_wheel_question_question` (`question_id`);
 
 
-ALTER TABLE `assessment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `assessment_coach`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `company`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `currency`
@@ -961,6 +937,8 @@ ALTER TABLE `stock`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `team`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `team_coach`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `team_member`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `user`
@@ -973,13 +951,6 @@ ALTER TABLE `wheel_answer`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `wheel_question`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `assessment`
-  ADD CONSTRAINT `fk_assessment_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE;
-
-ALTER TABLE `assessment_coach`
-  ADD CONSTRAINT `fk_assessment_coach_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`),
-  ADD CONSTRAINT `fk_assessment_coach_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `company`
   ADD CONSTRAINT `fk_company_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
@@ -1004,28 +975,19 @@ ALTER TABLE `person`
   ADD CONSTRAINT `fk_person_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `report`
-  ADD CONSTRAINT `fk_report_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_report_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`);
 
 ALTER TABLE `stock`
-  ADD CONSTRAINT `fk_stock_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`),
+  ADD CONSTRAINT `fk_stock_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
   ADD CONSTRAINT `fk_stock_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
-
-ALTER TABLE `team`
-  ADD CONSTRAINT `fk_team_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `fk_team_company` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
-  ADD CONSTRAINT `fk_team_sponsor` FOREIGN KEY (`sponsor_id`) REFERENCES `person` (`id`);
-
-ALTER TABLE `team_member`
-  ADD CONSTRAINT `fk_team_member_person` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_team_member_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `user_session`
   ADD CONSTRAINT `fk_user_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `wheel`
-  ADD CONSTRAINT `fk_wheel_assessment` FOREIGN KEY (`assessment_id`) REFERENCES `assessment` (`id`),
+  ADD CONSTRAINT `fk_wheel_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
   ADD CONSTRAINT `fk_wheel_observed` FOREIGN KEY (`observed_id`) REFERENCES `person` (`id`),
   ADD CONSTRAINT `fk_wheel_observer` FOREIGN KEY (`observer_id`) REFERENCES `person` (`id`);
 

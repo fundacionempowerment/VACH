@@ -1,9 +1,6 @@
 <?php
 
 $random = rand(111, 999);
-$assessment['name'] = "assessment$random";
-
-$random = rand(111, 999);
 $team['name'] = "name$random";
 
 $random = rand(111, 999);
@@ -122,14 +119,10 @@ foreach ($persons as $person) {
 
 $I->click('Equipo completado');
 $I->wait(1);
-$I->acceptPopup();
-$I->wait(1);
 
 // Creo nuevo relevamiento
 
 $I->see('Licencias requeridas: ' . count($persons));
-
-$I->fillField('Assessment[name]', $assessment['name']);
 
 $I->click('Guardar');
 $I->wait(1);
@@ -223,18 +216,6 @@ for ($i = 3; $i < count($persons) * 3; $i++) {
 
 $I->loginAsCoach();
 
-$I->see($assessment['name']);
+$I->see($team['name']);
 
-$I->click($assessment['name']);
-$I->wait(1);
-
-$I->click($team['name']);
-$I->wait(1);
-
-$I->click('(//a[@title="Eliminar"])[1]');
-$I->wait(1);
-
-$I->click('Eliminar');
-$I->wait(1);
-
-$I->dontSee($assessment['name']);
+$I->seeNumberOfElements("//a[text() = '100%']", 3);

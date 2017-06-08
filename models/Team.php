@@ -22,6 +22,7 @@ class Team extends ActiveRecord
     {
         return [
             [['name', 'coach_id', 'sponsor_id', 'company_id'], 'required'],
+            [['name'], 'unique'],
         ];
     }
 
@@ -32,6 +33,10 @@ class Team extends ActiveRecord
             'coach_id' => Yii::t('team', 'Coach'),
             'sponsor_id' => Yii::t('team', 'Sponsor'),
             'company_id' => Yii::t('team', 'Company'),
+            'coaches' => Yii::t('team', 'Allowed coaches'),
+            'IndividualWheelStatus' => Yii::t('wheel', 'Individual Wheels'),
+            'GroupWheelStatus' => Yii::t('wheel', 'Group Wheels'),
+            'OrganizationalWheelStatus' => Yii::t('wheel', 'Organizational Wheels'),
         ];
     }
 
@@ -57,8 +62,7 @@ class Team extends ActiveRecord
     {
         $this->fullname = $this->company->name . ' ' . $this->name;
 
-        $assessments = $this->hasMany(Assessment::className(), ['team_id' => 'id']);
-        $this->deletable = $assessments->count() == 0;
+        $this->deletable = count($this->wheels) == 0;
 
         parent::afterFind();
     }
@@ -94,18 +98,27 @@ class Team extends ActiveRecord
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
-    public function getAssessments()
+    public function getWheels()
     {
-        return $this->hasMany(Assessment::className(), ['team_id' => 'id']);
+        return $this->hasMany(Wheel::className(), ['team_id' => 'id']);
+    }
+
+    public function getTeamCoaches()
+    {
+        return $this->hasMany(TeamCoach::className(), ['team_id' => 'id']);
+    }
+
+    public function getReport()
+    {
+        return $this->hasOne(Report::className(), ['team_id' => 'id']);
     }
 
     static public function getDashboardList($companyId)
     {
         $teams = self ::find()
-                ->leftJoin('assessment', 'assessment.team_id = team.id')
-                ->leftJoin('assessment_coach', 'assessment_coach.assessment_id = assessment.id')
+                ->leftJoin('team_coach', 'team_coach.team_id = team.id')
                 ->where(['team.coach_id' => Yii::$app->user->id])
-                ->orWhere(['assessment_coach.coach_id' => Yii::$app->user->id])
+                ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
                 ->andWhere(['team.company_id' => $companyId])
                 ->with(['coach', 'company'])
                 ->all();
@@ -113,4 +126,108 @@ class Team extends ActiveRecord
         return ArrayHelper::map($teams, 'id', 'name');
     }
 
+    public function getIndividualWheels()
+    {
+        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL])->with('answers');
+    }
+
+    public function getGroupWheels()
+    {
+        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP])->with('answers');
+    }
+
+    public function getOrganizationalWheels()
+    {
+        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL])->with('answers');
+    }
+
+    public function getIndividualWheelStatus()
+    {
+        $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
+        $members = count($this->members);
+        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        if ($questions == 0)
+            $questions = 1;
+
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function getGroupWheelStatus()
+    {
+        $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
+        $members = count($this->members);
+        $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function getOrganizationalWheelStatus()
+    {
+        $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
+        $members = count($this->members);
+        $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function wheelStatus($type)
+    {
+        return (new Query)->select('count(wheel_answer.id) as count')
+                        ->from('wheel')
+                        ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+                        ->where(['team_id' => $this->id, 'type' => $type])
+                        ->scalar();
+        ;
+    }
+
+    public function notifyIcon($type, $observer_id)
+    {
+        $count = [
+            'created' => 0,
+            'sent' => 0,
+            'received' => 0,
+            'in_progress' => 0,
+            'done' => 0,
+        ];
+
+        $wheels = Wheel::find()
+                ->where(['team_id' => $this->id])
+                ->andWhere(['type' => $type])
+                ->andWhere(['observer_id' => $observer_id])
+                ->all();
+
+        foreach ($wheels as $wheel) {
+            $count[$wheel->status] += 1;
+        }
+
+        if ($count['created'] > 0 && ($count ['sent'] + $count['received'] + $count['in_progress'] == 0) && $count['done'] > 0) {
+            // retry
+            return \app\components\Icons::EXCLAMATION;
+        } else if ($count['done'] == count($wheels)) {
+            return \app\components\Icons::OK . \app\components\Icons::OK;
+        } else if ($count['in_progress'] > 0) {
+            return \app\components\Icons::PLAY;
+        } else if ($count['received'] > 0) {
+            return \app\components\Icons::OK;
+        } else if ($count['sent'] > 0) {
+            return \app\components\Icons::SEND;
+        }
+        return '';
+    }
+
+    public function isUserAllowed()
+    {
+        if ($this->coach_id == Yii::$app->user->id) {
+            return true;
+        }
+
+        foreach ($this->teamCoaches as $teamCoach) {
+            if ($teamCoach->coach->id == Yii::$app->user->id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -22,9 +22,9 @@ class Relations
     const RELATION_yradio = self::RELATION_xradio;
     const RELATION_image_text_height = self::RELATION_imageSize + self::RELATION_text_height;
 
-    static public function draw($assessmentId, $memberId, $wheelType)
+    static public function draw($teamId, $memberId, $wheelType)
     {
-        $data = Wheel::getRelationsMatrix($assessmentId, $wheelType);
+        $data = Wheel::getRelationsMatrix($teamId, $wheelType);
 
         $member = Person::findOne(['id' => $memberId]);
 

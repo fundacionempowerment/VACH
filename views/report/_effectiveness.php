@@ -9,7 +9,7 @@ use app\models\Wheel;
 <?php
 if (count($groupRelationsMatrix) > 0) {
     echo $this->render('../dashboard/_number_matrix', [
-        'assessment' => $assessment,
+        'team' => $team,
         'data' => $groupRelationsMatrix,
         'members' => $members,
         'type' => Wheel::TYPE_GROUP,
@@ -21,7 +21,7 @@ if (count($groupRelationsMatrix) > 0) {
 <?php
 if (count($organizationalRelationsMatrix) > 0) {
     echo $this->render('../dashboard/_number_matrix', [
-        'assessment' => $assessment,
+        'team' => $team,
         'data' => $organizationalRelationsMatrix,
         'members' => $members,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
@@ -31,5 +31,5 @@ if (count($organizationalRelationsMatrix) > 0) {
 }
 ?>
 <p>
-    <?= empty($assessment->report->effectiveness) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $assessment->report->effectiveness ?>
+    <?= empty($team->report->effectiveness) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $team->report->effectiveness ?>
 </p>

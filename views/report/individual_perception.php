@@ -17,9 +17,8 @@ use app\controllers\ReportController;
 
 $this->title = Yii::t('report', 'Perception Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
@@ -30,14 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);

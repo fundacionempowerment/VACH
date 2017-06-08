@@ -11,12 +11,14 @@ use app\models\LoginModel;
 use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
-use app\models\ClientModel;
+use app\models\TeamCoach;
 use app\models\Team;
 use app\models\TeamMember;
 use app\models\Company;
 use app\models\Person;
-use app\models\Assessment;
+use app\models\DashboardFilter;
+use app\models\Wheel;
+use app\models\Stock;
 
 class TeamController extends BaseController
 {
@@ -46,6 +48,7 @@ class TeamController extends BaseController
             $teamMember = new TeamMember();
             $teamMember->person_id = $new_member_id;
             $teamMember->team_id = $team->id;
+            $teamMember->active = true;
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
@@ -53,10 +56,7 @@ class TeamController extends BaseController
                 SiteController::FlashErrors($teamMember);
         }
 
-        $persons = [];
-        if (!$team->blocked) {
-            $persons = $this->getPersons();
-        }
+        $persons = $this->getPersons();
 
         return $this->render('view', [
                     'team' => $team,
@@ -130,40 +130,120 @@ class TeamController extends BaseController
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
-        $team->blocked = true;
+        $balance = Stock::getStock(1);
+        $licences_required = count($team->members) - count($team->individualWheels);
+        $licences_to_buy = $licences_required - $balance;
 
-        if ($team->save()) {
-            return $this->redirect(['assessment/new', 'teamId' => $team->id]);
-        } else {
-            SiteController::FlashErrors($team);
+        if (!Yii::$app->params['monetize'] || $licences_to_buy <= 0) {
+            if (Yii::$app->request->isPost) {
+                foreach ($team->members as $observerMember) {
+
+                    $wheel = Wheel::findOne([
+                                'team_id' => $team->id,
+                                'observer_id' => $observerMember->member->id,
+                                'type' => Wheel::TYPE_INDIVIDUAL,
+                    ]);
+
+                    if (!$wheel) {
+                        $token = Wheel::getNewToken();
+                        $newWheel = new Wheel();
+
+                        $newWheel->observer_id = $observerMember->member->id;
+                        $newWheel->observed_id = $observerMember->member->id;
+                        $newWheel->type = Wheel::TYPE_INDIVIDUAL;
+                        $newWheel->token = $token;
+                        $newWheel->team_id = $team->id;
+
+                        $newWheel->save();
+                    }
+
+                    $wheel = Wheel::findOne([
+                                'team_id' => $team->id,
+                                'observer_id' => $observerMember->member->id,
+                                'type' => Wheel::TYPE_GROUP,
+                    ]);
+
+                    if ($wheel) {
+                        $token = $wheel->token;
+                    } else {
+                        $token = Wheel::getNewToken();
+                    }
+
+                    foreach ($team->members as $observedMember) {
+                        $wheel = Wheel::findOne([
+                                    'team_id' => $team->id,
+                                    'observer_id' => $observerMember->member->id,
+                                    'observed_id' => $observedMember->member->id,
+                                    'type' => Wheel::TYPE_GROUP,
+                        ]);
+
+                        if (!$wheel) {
+                            $newWheel = new Wheel();
+                            $newWheel->observer_id = $observerMember->member->id;
+                            $newWheel->observed_id = $observedMember->member->id;
+                            $newWheel->type = Wheel::TYPE_GROUP;
+                            $newWheel->token = $token;
+                            $newWheel->team_id = $team->id;
+                            $newWheel->save();
+                        }
+                    }
+
+                    $wheel = Wheel::findOne([
+                                'team_id' => $team->id,
+                                'observer_id' => $observerMember->member->id,
+                                'type' => Wheel::TYPE_ORGANIZATIONAL,
+                    ]);
+
+                    if ($wheel) {
+                        $token = $wheel->token;
+                    } else {
+                        $token = Wheel::getNewToken();
+                    }
+                    $token = Wheel::getNewToken();
+                    foreach ($team->members as $observedMember) {
+                        $wheel = Wheel::findOne([
+                                    'team_id' => $team->id,
+                                    'observer_id' => $observerMember->member->id,
+                                    'observed_id' => $observedMember->member->id,
+                                    'type' => Wheel::TYPE_ORGANIZATIONAL,
+                        ]);
+
+                        if (!$wheel) {
+                            $newWheel = new Wheel();
+                            $newWheel->observer_id = $observerMember->member->id;
+                            $newWheel->observed_id = $observedMember->member->id;
+                            $newWheel->type = Wheel::TYPE_ORGANIZATIONAL;
+                            $newWheel->token = $token;
+                            $newWheel->team_id = $team->id;
+                            $newWheel->save();
+                        }
+                    }
+                }
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $team->fullname]));
+
+                if (Yii::$app->params['monetize']) {
+                    $stock = new Stock();
+                    $stock->coach_id = Yii::$app->user->id;
+                    $stock->creator_id = Yii::$app->user->id;
+                    $stock->product_id = 1;
+                    $stock->quantity = -$licences_required;
+                    $stock->price = 0;
+                    $stock->total = 0;
+                    $stock->team_id = $team->id;
+                    $stock->status = Stock::STATUS_VALID;
+                    if (!$stock->save()) {
+                        \app\controllers\SiteController::FlashErrors($stock);
+                    }
+                }
+                return $this->redirect(['/team/view', 'id' => $team->id]);
+            }
         }
 
-        return $this->redirect(['/team/view', 'id' => $team->id]);
-    }
-
-    public function actionNewMember($id)
-    {
-        $team = Team::findOne($id);
-
-        if (!$team || $team->coach_id != Yii::$app->user->id) {
-            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
-        }
-
-        $member = new Person();
-
-        if ($member->load(Yii::$app->request->post()) && $member->save()) {
-            $teamMember = new TeamMember();
-            $teamMember->person_id = $member->id;
-            $teamMember->team_id = $team->id;
-            $teamMember->save();
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $member->fullname]));
-            return $this->redirect(['/team/view', 'id' => $team->id]);
-        } else
-            SiteController::FlashErrors($member);
-
-        return $this->render('member-form', [
+        return $this->render('fulfill', [
                     'team' => $team,
-                    'member' => $member,
+                    'balance' => $balance,
+                    'licences_required' => $licences_required,
+                    'licences_to_buy' => $licences_to_buy,
         ]);
     }
 
@@ -206,27 +286,27 @@ class TeamController extends BaseController
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
-    public function actionDeleteAssessment($id)
+    public function actionDeleteTeam($id)
     {
-        $assessment = Assessment::findOne($id);
-        $team = $assessment->team;
+        $team = Team::findOne($id);
+        $team = $team;
 
         if ($team->coach_id != Yii::$app->user->id) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         if (Yii::$app->request->post('delete')) {
-            if ($assessment->delete()) {
+            if ($team->delete()) {
 
-                SiteController::addFlash('success', Yii::t('assessment', 'Assessment has been successfully deleted.'));
+                SiteController::addFlash('success', Yii::t('team', 'Team has been successfully deleted.'));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             } else {
-                SiteController::FlashErrors($assessment);
+                SiteController::FlashErrors($team);
             }
         }
 
-        return $this->render('delete_assessment', [
-                    'assessment' => $assessment,
+        return $this->render('delete_team', [
+                    'team' => $team,
                     'team' => $team,
         ]);
     }
@@ -238,17 +318,100 @@ class TeamController extends BaseController
 
         $teamMember = TeamMember::findOne(['id' => $id]);
 
-        if ($teamMember->team->coach_id != Yii::$app->user->id) {
+        if (!$teamMember->team->isUserAllowed(Yii::$app->user->id)) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
         if ($teamMember) {
             $teamMember->active = $isActive;
-            $teamMember->save(false);
-            return 'ok';
+            if ($teamMember->save()) {
+                return 'ok';
+            }
+            SiteController::FlashErrors($teamMember);
         }
 
         return 'error';
+    }
+
+    public function actionGoToDashboard($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $filter = new DashboardFilter();
+
+        $filter->companyId = $team->company_id;
+        $filter->teamId = $team->id;
+        $filter->teamId = $id;
+        $filter->wheelType = Wheel::TYPE_GROUP;
+
+        Yii::$app->session->set('DashboardFilter', $filter);
+        $this->redirect(['/dashboard']);
+    }
+
+    public function actionGrantCoach($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $coach_id = Yii::$app->request->post('coach_id');
+
+        //if ($team->coach_id == Yii::$app->user->identity->id && $coach_id) {
+        if ($coach_id) {
+            if (TeamCoach::notGranted($id, $coach_id)) {
+                $model = new TeamCoach([
+                    'team_id' => $id,
+                    'coach_id' => $coach_id,
+                    'anonimize' => true,
+                ]);
+                if ($model->save()) {
+                    SiteController::addFlash('success', Yii::t('team', 'Access granted'));
+                }
+            }
+        }
+
+        return $this->redirect(['/team/view', 'id' => $id]);
+    }
+
+    public function actionRemoveCoach($id)
+    {
+        $teamCoach = TeamCoach::findOne(['id' => $id]);
+        $teamCoach->delete();
+
+        SiteController::addFlash('success', Yii::t('team', 'Access removed'));
+
+        return $this->redirect(['/team/view', 'id' => $teamCoach->team_id]);
+    }
+
+    public function actionSendWheel($id, $memberId, $type)
+    {
+        $team = Team::findOne(['id' => $id]);
+
+        $sent = false;
+        foreach ($team->members as $teamMember) {
+            if ($teamMember->person_id == $memberId) {
+                $wheels = [];
+                switch ($type) {
+                    case Wheel::TYPE_INDIVIDUAL:
+                        $wheels = $team->individualWheels;
+                        break;
+                    case Wheel::TYPE_GROUP:
+                        $wheels = $team->groupWheels;
+                        break;
+                    default :
+                        $wheels = $team->organizationalWheels;
+                        break;
+                }
+
+                foreach ($wheels as $wheel)
+                    if ($wheel->observer_id == $memberId && $wheel->answerStatus != '100%') {
+                        $this->sendWheel($wheel);
+                        $sent = true;
+                        break;
+                    }
+            }
+        }
+
+        if ($sent == false) {
+            \Yii::$app->session->addFlash('info', \Yii::t('team', 'Wheel already fullfilled. Email not sent.'));
+        }
+        return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
     private function getCompanies()
@@ -262,6 +425,33 @@ class TeamController extends BaseController
         foreach (Person::browse()->all() as $person)
             $persons[$person->id] = $person->fullname;
         return $persons;
+    }
+
+    private function sendWheel($wheel)
+    {
+        $wheel_type = Wheel::getWheelTypes()[$wheel->type];
+        Yii::$app->mailer->compose('wheel', [
+                    'wheel' => $wheel,
+                ])
+                ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
+                            'wheel_type' => $wheel_type,
+                            'team' => $wheel->team->name,
+                ]))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observer->email)
+                ->setBcc(Yii::$app->params['adminEmail'])
+                ->setReplyTo(Yii::$app->params['adminEmail'])
+                ->send();
+
+        SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+
+        $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
+        foreach ($wheels as $wheel) {
+            if ($wheel->status == 'created') {
+                $wheel->status = 'sent';
+                $wheel->save();
+            }
+        }
     }
 
 }

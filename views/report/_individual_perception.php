@@ -6,14 +6,14 @@ use app\models\Wheel;
 <?php
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
         echo $this->render('../dashboard/_lineal', [
-            'assessmentId' => $assessment->id,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);

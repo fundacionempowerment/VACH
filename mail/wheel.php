@@ -59,9 +59,9 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
 </p>
 <p>
     <?=
-    Yii::t('wheel', "Please, click next button to run the {wheel} of assessment {assessment}:", [
+    Yii::t('wheel', "Please, click next button to run the {wheel} of team {team}:", [
         'wheel' => $type_text,
-        'assessment' => $wheel->assessment->fullname,
+        'team' => $wheel->team->fullname,
     ])
     ?>
 </p>

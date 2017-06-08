@@ -9,9 +9,9 @@ use yii\grid\GridView;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = $assessment->id == 0 ? Yii::t('assessment', 'New assessment') : $assessment->name;
+$this->title = $team->id == 0 ? Yii::t('team', 'New team') : $team->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
@@ -21,16 +21,16 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
     <div class="row col-md-12">
         <h4><?= Yii::t('team', 'Team data') ?> </h4>
         <p>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?><br />
-            <?= Yii::t('team', 'Company') ?>: <?= Html::label($assessment->team->company->name) ?><br />
-            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
+            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
+            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
     </div>
     <div class="row col-md-12">
         <h4><?= Yii::t('team', 'Members') ?></h4>
         <?php
         $membersDataProvider = new ArrayDataProvider([
-            'allModels' => $assessment->team->members,
+            'allModels' => $team->members,
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -47,13 +47,9 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
         ?>
         <?php
         $form = ActiveForm::begin([
-                    'id' => 'newassessment-form',
+                    'id' => 'newteam-form',
         ]);
         ?>
-    </div>
-    <div class="row col-md-12" style="margin-right: 0px;">
-        <h4><?= Yii::t('assessment', 'Assessment') ?></h4>
-        <?= $form->field($assessment, 'name') ?>
     </div>
     <?php if (Yii::$app->params['monetize']) { ?>
         <div class="form-group">

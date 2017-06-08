@@ -40,7 +40,7 @@ class IndividualReport extends ActiveRecord
     {
         return TeamMember::findOne([
                     'person_id' => $this->person_id,
-                    'team_id' => $this->report->assessment->team_id,
+                    'team_id' => $this->report->team_id,
         ]);
     }
 
