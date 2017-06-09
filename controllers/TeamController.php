@@ -38,7 +38,7 @@ class TeamController extends BaseController
     {
         $team = Team::findOne($id);
 
-        if (!$team || $team->coach_id != Yii::$app->user->id) {
+        if (!$team || !$team->isUserAllowed()) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 

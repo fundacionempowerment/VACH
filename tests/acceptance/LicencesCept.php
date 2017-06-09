@@ -45,11 +45,13 @@ $I->logout();
 $I->loginAsCoach();
 
 $I->clickMainMenu('(coach)', 'Mis licencias');
+$I->wait(1);
 
 $I->see($add);
 $I->see(100 + $add - $remove);
 
 $I->clickMainMenu('(coach)', 'Mis pagos');
+$I->wait(1);
 
 $I->see(Yii::$app->formatter->asCurrency($price * $add));
 $I->see($remove);

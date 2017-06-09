@@ -10,7 +10,6 @@ $I->checkMenuItem('Inicio');
 $I->checkMenuItem('Clientes', 'Empresas');
 $I->checkMenuItem('Clientes', 'Personas');
 $I->checkMenuItem('Clientes', 'Equipos');
-$I->checkMenuItem('Clientes', 'Relevamientos');
 $I->checkMenuItem('Clientes', 'Tablero');
 
 $I->checkMenuItem('Ayuda', 'Historial de eventos');
@@ -27,7 +26,6 @@ $I->checkMenuItem('Inicio');
 $I->checkMenuItem('Clientes', 'Empresas');
 $I->checkMenuItem('Clientes', 'Personas');
 $I->checkMenuItem('Clientes', 'Equipos');
-$I->checkMenuItem('Clientes', 'Relevamientos');
 $I->checkMenuItem('Clientes', 'Tablero');
 
 $I->checkMenuItem('Ayuda', 'Historial de eventos');
@@ -44,7 +42,6 @@ $I->checkMenuItem('Inicio');
 $I->checkMenuItem('Clientes', 'Empresas');
 $I->checkMenuItem('Clientes', 'Personas');
 $I->checkMenuItem('Clientes', 'Equipos');
-$I->checkMenuItem('Clientes', 'Relevamientos');
 $I->checkMenuItem('Clientes', 'Tablero');
 
 $I->checkMenuItem('Ayuda', 'Historial de eventos');

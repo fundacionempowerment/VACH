@@ -98,6 +98,7 @@ return [
     'There is no user with such email.' => 'No hay usuario con este email.',
     'This action cannot be reverted.' => 'Esta acción no puede ser revertida.',
     'To:' => 'Para:',
+    'Total' => 'Total',
     'Trans. Amount' => 'Monto trans.',
     'Type' => 'Tipo',
     'Unique ID' => 'ID único',

@@ -33,7 +33,7 @@ $dataProvider = new ActiveDataProvider([
                 'attribute' => 'amount',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
-                    return $data['currency'] . ' ' . $data['amount'];
+                    return $data['currency'] . ' $' . $data['amount'];
                 },
             ],
             'statusName',

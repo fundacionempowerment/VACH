@@ -19,7 +19,7 @@
 return [
     'Answer type' => 'Tipo de respuesta',
     'Appropriateness' => 'Pertinencia',
-    'Back to assessment board' => 'Volver al tablero del relevamiento',
+    'Back to team board' => 'Volver al tablero del equipo',
     'Belonging' => 'Pertenencia',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
     'CPC: {wheel} answers of {person}' => 'CPC: respuestas a {wheel} de {person}',
@@ -59,7 +59,7 @@ return [
     'Organizational Wheels' => 'Ruedas organizacionales',
     'Physical Dimension' => 'Dimensión física',
     'Please, click next button to confirm reception of this email:' => 'Por favor, cliquee el siguiente botón para confirmar la recepción de este email:',
-    'Please, click next button to run the {wheel} of assessment {assessment}:' => 'Por favor, cliquee el siguiente botón para ejecutar la {wheel} del relevamiento {assessment}:',
+    'Please, click next button to run the {wheel} of team {team}:' => 'Por favor, cliquee el siguiente botón para ejecutar la {wheel} del relevamiento {team}:',
     'Please, keep this email until the CPC process of your team is completed.' => 'Por favor, conserve este correo hasta que el proceso CPC de su equipo sea completado.',
     'Please, use next link in your browser' => 'Por favor, utilice el siguiente link en su navegador',
     'Quality guidance' => 'Orientación a la calidad',

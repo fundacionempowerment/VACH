@@ -117,10 +117,10 @@ foreach ($persons as $person) {
     $I->wait(1);
 }
 
+// Creo nuevo relevamiento
+
 $I->click('Equipo completado');
 $I->wait(1);
-
-// Creo nuevo relevamiento
 
 $I->see('Licencias requeridas: ' . count($persons));
 

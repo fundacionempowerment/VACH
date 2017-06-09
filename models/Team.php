@@ -75,7 +75,12 @@ class Team extends ActiveRecord
 
     public static function browse()
     {
-        return Team::find()->where(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
+        return Team::find()
+                        ->select('team.*')
+                        ->leftJoin('team_coach', '`team_coach`.`team_id` = `team`.`id`')
+                        ->where(['team.coach_id' => Yii::$app->user->id])
+                        ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
+                        ->orderBy('team.id desc');
     }
 
     public function getCoach()
@@ -230,4 +235,5 @@ class Team extends ActiveRecord
         }
         return false;
     }
+
 }
