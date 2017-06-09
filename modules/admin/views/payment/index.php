@@ -27,6 +27,10 @@ $dataProvider = new ActiveDataProvider([
         'dataProvider' => $dataProvider,
         'columns' => [
             'id',
+            [
+                'attribute' => 'coach.fullname',
+                'label' => Yii::t('app', 'Coach')
+            ],
             'concept',
             [
                 'attribute' => 'amount',

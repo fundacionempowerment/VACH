@@ -28,6 +28,7 @@ $dataProvider = new ActiveDataProvider([
     GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
+            'id',
             [
                 'attribute' => 'coach.fullname',
                 'label' => Yii::t('app', 'Coach')
