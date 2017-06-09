@@ -36,6 +36,7 @@ $dataProvider = new ActiveDataProvider([
                     return $data->team ? $data->team->fullname : '';
                 },
             ],
+            'stamp',
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{view}',
                 'options' => ['width' => '60px'],
