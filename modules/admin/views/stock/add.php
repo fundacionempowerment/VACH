@@ -34,7 +34,7 @@ $distributions = [
                 'id' => 'add-form',
     ]);
     ?>
-    <?= $form->field($model, 'coach_id')->widget(Select2::classname(), ['data' => User::getList(),]) ?>
+    <?= $form->field($model, 'coach_id')->widget(Select2::classname(), ['data' => User::getUserList(),]) ?>
     <?= $form->field($model, 'product_id')->dropDownList(Product::getList()) ?>
     <?=
     $form->field($model, 'price', ['options' => [
