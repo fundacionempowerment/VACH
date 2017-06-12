@@ -80,6 +80,13 @@ $config = [
         'admin' => [
             'class' => 'app\modules\admin\AdminModule',
         ],
+        'telegram' => [
+            'class' => 'onmotion\telegram\Module',
+            'API_KEY' => '******************',
+            'BOT_NAME' => '******************',
+            'hook_url' => '****************', // must be https!
+            'PASSPHRASE' => '****************'
+        ],
     ],
 ];
 
