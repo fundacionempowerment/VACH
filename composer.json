@@ -21,11 +21,11 @@
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widgets": "*",
         "2amigos/yii2-ckeditor-widget": "*",
-        "kartik-v/yii2-checkbox-x": "^1.0",
-        "yiisoft/yii2-httpclient": "^2.0",
+        "kartik-v/yii2-checkbox-x": "*",
+        "yiisoft/yii2-httpclient": "*",
         "phpoffice/phppresentation": "dev-master",
         "phpoffice/phpword": "dev-master",
-        "onmotion/yii2-telegram": "^0.8.3"
+        "onmotion/yii2-telegram": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
