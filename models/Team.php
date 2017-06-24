@@ -103,6 +103,12 @@ class Team extends ActiveRecord
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
+    public function hasMember($personId)
+    {
+        return TeamMember::find(['person_id' => $personId, 'team_id' => $this->id])
+                        ->exists();
+    }
+
     public function getWheels()
     {
         return $this->hasMany(Wheel::className(), ['team_id' => 'id']);

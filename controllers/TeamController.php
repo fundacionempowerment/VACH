@@ -49,6 +49,12 @@ class TeamController extends BaseController
             $teamMember->person_id = $new_member_id;
             $teamMember->team_id = $team->id;
             $teamMember->active = true;
+
+            if ($team->hasMember($new_member_id)) {
+                SiteController::addFlash('error', Yii::t('app', '{name} has been already added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
+                return $this->redirect(['/team/view', 'id' => $team->id]);
+            }
+
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
