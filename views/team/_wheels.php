@@ -4,8 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Wheel;
 use yii\bootstrap\Modal;
+use app\components\Icons;
 
-if (count($team->wheels) == 0){
+if (count($team->wheels) == 0) {
     return '';
 }
 
@@ -32,8 +33,6 @@ if ($wheels_completed)
             $wheels_completed = false;
             break;
         }
-        
-        
 ?>
 <div class="row col-md-6">
     <h2>
@@ -67,7 +66,8 @@ if ($wheels_completed)
                     foreach ($team->individualWheels as $wheel)
                         if ($wheel->observer_id == $observerMember->person_id) {
                             echo $wheel->answerStatus . '&nbsp;';
-                            echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
+                            echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
+                            echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                         }
                     ?>
                 </td>
@@ -118,7 +118,8 @@ if ($wheels_completed)
                         foreach ($team->groupWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                 echo $wheel->answerStatus . '&nbsp;';
-                                echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
+                                echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
+                                echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                             }
                         ?>
                     </td>
@@ -170,7 +171,8 @@ if ($wheels_completed)
                         foreach ($team->organizationalWheels as $wheel)
                             if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                 echo $wheel->answerStatus . '&nbsp;';
-                                echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']);
+                                echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
+                                echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                             }
                         ?>
                     </td>
