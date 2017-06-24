@@ -24,10 +24,10 @@ class PaymentController extends BaseController
 
     public function beforeAction($action)
     {
-        if ($action != 'confirmation') {
-            return parent::beforeAction($action);
+        if ($action->id == 'confirmation') {
+            return true;
         }
-        return true;
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()

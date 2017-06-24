@@ -22,7 +22,7 @@ class WheelController extends BaseController
 
     public function beforeAction($action)
     {
-        if ($action == 'manual-form') {
+        if ($action->id == 'manual-form') {
             return parent::beforeAction($action);
         }
         return true;
