@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\Person;
+use kartik\widgets\Select2;
 
 $genders = Person::getGenders();
 ?>
@@ -22,7 +23,7 @@ $genders = Person::getGenders();
     <?= $form->field($person, 'shortname') ?>
     <?= $form->field($person, 'email') ?>
     <?= $form->field($person, 'phone') ?>
-    <?= $form->field($person, 'gender')->dropDownList($genders) ?>
+    <?= $form->field($person, 'gender')->widget(Select2::classname(), ['data' => $genders]) ?>
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($person->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
     </div>
