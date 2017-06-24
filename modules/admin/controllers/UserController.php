@@ -51,7 +51,7 @@ class UserController extends AdminBaseController
     public function actionIndex()
     {
 
-        $user = User::find();
+        $user = User::adminBrowse();
 
         return $this->render('index', [
                     'user' => $user,
@@ -72,7 +72,7 @@ class UserController extends AdminBaseController
 
             if ($user->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $user->fullname]));
-                return $this->redirect(['/user']);
+                return $this->redirect(['index']);
             } else {
                 SiteController::FlashErrors($user);
             }
@@ -91,7 +91,7 @@ class UserController extends AdminBaseController
         if ($user->load(Yii::$app->request->post())) {
             $postUser = Yii::$app->request->post('User');
             $password = $postUser['password'];
-            if (isset($password)) {
+            if ($password) {
                 $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
                 $user->password_hash = $encryptedPassword;
             }

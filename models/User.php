@@ -242,4 +242,9 @@ class User extends ActiveRecord implements IdentityInterface
         return \yii\helpers\ArrayHelper::map(static::find()->orderBy('name,surname')->all(), 'id', 'userfullname');
     }
 
+    public static function adminBrowse()
+    {
+        return static::find()->orderBy('name, surname, username');
+    }
+
 }
