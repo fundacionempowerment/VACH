@@ -20,6 +20,7 @@ $this->title = 'VACH';
     <div class="body-content">
         <div class="row">
             <div class="col-xs-push-2 col-xs-8 col-sm-push-2 col-sm-8 col-md-push-3 col-md-6">
+                <?= app\widgets\Alert::widget() ?>
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'action' => ['login']]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>

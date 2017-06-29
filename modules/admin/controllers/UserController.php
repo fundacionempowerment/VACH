@@ -66,8 +66,7 @@ class UserController extends AdminBaseController
             $postUser = Yii::$app->request->post('User');
             $password = $postUser['password'];
             if (isset($password)) {
-                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-                $user->password_hash = $encryptedPassword;
+                $user->setPassword($password);
             }
 
             if ($user->save()) {

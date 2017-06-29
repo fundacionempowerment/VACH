@@ -77,8 +77,8 @@ class SiteController extends BaseController
 
     public function actionToken()
     {
-        if (!Yii::$app->request->isPost){
-                        return $this->goHome();
+        if (!Yii::$app->request->isPost) {
+            return $this->goHome();
         }
 
         $wheel = Yii::$app->request->post('Wheel');
@@ -152,10 +152,10 @@ class SiteController extends BaseController
 
     public function actionRegister()
     {
-        $model = new RegisterModel();
-        $model->isCoach = true;
+        $model = new \app\models\User();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->register()) {
+            $model->setPassword($model->password);
+            if ($model->save()) {
                 $loginModel = new LoginForm();
                 $loginModel->username = $model->username;
                 $loginModel->password = $model->password;
@@ -164,10 +164,13 @@ class SiteController extends BaseController
                     \Yii::$app->session->addFlash('success', \Yii::t('register', 'Sign up successfull. Welcome to VACH!'));
                     return $this->goHome();
                 }
-            } else
+            } else {
                 \Yii::$app->session->addFlash('error', \Yii::t('register', 'Username already used.'));
-        } else
+            }
+        } else {
             SiteController::FlashErrors($model);
+        }
+
         return $this->render('register', [
                     'model' => $model,
         ]);

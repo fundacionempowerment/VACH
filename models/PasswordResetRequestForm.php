@@ -53,7 +53,7 @@ class PasswordResetRequestForm extends Model {
 
             if ($user->save()) {
                 return \Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
-                                ->setFrom(Yii::$app->params['senderEmail'])
+                                ->setFrom(\Yii::$app->params['senderEmail'])
                                 ->setTo($this->email)
                                 ->setSubject(\Yii::t('app', 'Password reset for VACH'))
                                 ->send();

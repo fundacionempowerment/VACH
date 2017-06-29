@@ -9,8 +9,6 @@ use app\widgets\Alert;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$assisstances = RegisterModel::getAssisstanceTypes();
-
 $this->title = Yii::t('register', 'Sign up');
 ?>
 <div class="site-register">
@@ -26,7 +24,7 @@ $this->title = Yii::t('register', 'Sign up');
     <?= $form->field($model, 'phone') ?>
     <?= $form->field($model, 'username') ?>
     <?= $form->field($model, 'password')->passwordInput() ?>
-    <?= $form->field($model, 'confirm')->passwordInput() ?>
+    <?= $form->field($model, 'password_confirm')->passwordInput() ?>
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Create'), ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
     </div>
