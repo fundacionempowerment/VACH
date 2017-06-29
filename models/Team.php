@@ -22,7 +22,7 @@ class Team extends ActiveRecord
     {
         return [
             [['name', 'coach_id', 'sponsor_id', 'company_id'], 'required'],
-            [['name'], 'unique'],
+            [['name', 'company_id'], 'unique', 'targetAttribute' => ['name', 'company_id']],
         ];
     }
 
@@ -105,7 +105,8 @@ class Team extends ActiveRecord
 
     public function hasMember($personId)
     {
-        return TeamMember::find(['person_id' => $personId, 'team_id' => $this->id])
+        return TeamMember::find()
+                        ->where(['person_id' => $personId, 'team_id' => $this->id])
                         ->exists();
     }
 
