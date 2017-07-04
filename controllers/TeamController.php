@@ -225,7 +225,7 @@ class TeamController extends BaseController
                         }
                     }
                 }
-                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $team->fullname]));
+                SiteController::addFlash('success', Yii::t('team', 'Wheel forms has been successfully created.'));
 
                 if (Yii::$app->params['monetize']) {
                     $stock = new Stock();
