@@ -45,6 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $team->report->introduction ?>
     </p>
     <h3>
+        <?= Yii::t('report', 'Relations Matrix'); ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $team->id]), [
+            'id' => 'relations', 'class' => 'btn ' . (empty($team->report->relations) ? 'btn-success' : 'btn-default')
+        ])
+        ?>    </h3>
+    <p>
+        <?= $team->report->relations ?>
+    </p>
+    <h3>
         <?= Yii::t('report', 'Effectiveness Matrix'); ?>
         <?=
         Html::a(\Yii::t('app', 'Edit'), Url::to(['report/effectiveness', 'id' => $team->id]), [
@@ -65,16 +75,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </h3>
     <p>
         <?= $team->report->performance ?>
-    </p>
-    <h3>
-        <?= Yii::t('report', 'Relations Matrix'); ?>
-        <?=
-        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $team->id]), [
-            'id' => 'relations', 'class' => 'btn ' . (empty($team->report->relations) ? 'btn-success' : 'btn-default')
-        ])
-        ?>    </h3>
-    <p>
-        <?= $team->report->relations ?>
     </p>
     <h3>
         <?= Yii::t('report', 'Competences Matrix'); ?>
@@ -108,18 +108,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </h1>
             <div class="col-md-push-1 col-md-11">
                 <h3>
-                    <?= Yii::t('report', 'Performance Matrix'); ?>
-                    <?=
-                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-performance', 'id' => $individualReport->id]), [
-                        'id' => 'performance-' . $individualReport->id,
-                        'class' => 'btn ' . (empty($individualReport->performance) ? 'btn-success' : 'btn-default'),
-                    ])
-                    ?>
-                </h3>
-                <p>
-                    <?= $individualReport->performance ?>
-                </p>
-                <h3>
                     <?= Yii::t('report', 'Perception Matrix'); ?>
                     <?=
                     Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-perception',
@@ -130,18 +118,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </h3>
                 <p>
                     <?= $individualReport->perception ?>
-                </p>
-                <h3>
-                    <?= Yii::t('report', 'Relations Matrix'); ?>
-                    <?=
-                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-relations', 'id' => $individualReport->id]), [
-                        'id' => 'relations-' . $individualReport->id,
-                        'class' => 'btn ' . (empty($individualReport->relations) ? 'btn-success' : 'btn-default'),
-                    ])
-                    ?>
-                </h3>
-                <p>
-                    <?= $individualReport->relations ?>
                 </p>
                 <h3>
                     <?= Yii::t('report', 'Competence Matrix'); ?>
@@ -167,8 +143,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 <p>
                     <?= $individualReport->emergents ?>
                 </p>
+                <h3>
+                    <?= Yii::t('report', 'Relations Matrix'); ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-relations', 'id' => $individualReport->id]), [
+                        'id' => 'relations-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->relations) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
+                </h3>
+                <p>
+                    <?= $individualReport->relations ?>
+                </p>
+                <h3>
+                    <?= Yii::t('report', 'Performance Matrix'); ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-performance', 'id' => $individualReport->id]), [
+                        'id' => 'performance-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->performance) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
+                </h3>
+                <p>
+                    <?= $individualReport->performance ?>
+                </p>
             </div>
             <?php
+
         }
     }
     ?>

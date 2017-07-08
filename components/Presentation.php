@@ -18,11 +18,10 @@ use yii\helpers\ArrayHelper;
 
 class Presentation
 {
-
     private static $team;
     private static $ppt;
 
-    static public function create($team)
+    public static function create($team)
     {
         self::$team = $team;
 
@@ -32,20 +31,22 @@ class Presentation
         self::addGoldenRuleSlide();
         self::addCompetenceTableSlide();
         self::addTeamTitleSlide();
-        self::addTeamCompentencesSlide();
-        self::addTeamEmergentsSlide();
-        self::addTeamMatrixSlide();
         self::addTeamNumberMatrixSlide();
+        self::addTeamCompentencesSlide();
+        self::addTeamMatrixSlide();
+        self::addTeamEmergentsSlide();
 
         self::addMembersTitleSlide();
 
         foreach ($team->members as $member) {
-            self::addMemberTitleSlide($member);
-            self::addMemberPerceptionSlide($member);
-            self::addMemberCompentencesSlide($member);
-            self::addMemberEmergentsSlide($member);
-            self::addMemberRelationsSlide($member);
-            self::addMemberMatrixSlide($member);
+            if ($member->active) {
+                self::addMemberTitleSlide($member);
+                self::addMemberPerceptionSlide($member);
+                self::addMemberCompentencesSlide($member);
+                self::addMemberEmergentsSlide($member);
+                self::addMemberRelationsSlide($member);
+                self::addMemberMatrixSlide($member);
+            }
         }
 
         self::addThankYouSlide();
@@ -53,7 +54,7 @@ class Presentation
         return self::$ppt;
     }
 
-    static private function addCPCLogo($slide)
+    private static function addCPCLogo($slide)
     {
         $shape = $slide->createDrawingShape();
 
@@ -65,7 +66,7 @@ class Presentation
                 ->setOffsetY(10);
     }
 
-    static private function addFirstSlide()
+    private static function addFirstSlide()
     {
         $currentSlide = self::$ppt->getActiveSlide();
 
@@ -90,16 +91,9 @@ class Presentation
         $textRun->getFont()->setBold(true)
                 ->setSize(40)
                 ->setColor(new Color('FF000000'));
-
-        $shape->createBreak();
-
-        $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
-        $textRun->getFont()->setBold(true)
-                ->setSize(40)
-                ->setColor(new Color('FFFF0000'));
     }
 
-    static private function addGoldenRuleSlide()
+    private static function addGoldenRuleSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -140,7 +134,7 @@ class Presentation
                 ->setColor(new Color('FF000000'));
     }
 
-    static private function addCompetenceTableSlide()
+    private static function addCompetenceTableSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -169,7 +163,7 @@ class Presentation
                 ->setOffsetY(130);
     }
 
-    static private function addTeamTitleSlide()
+    private static function addTeamTitleSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -189,7 +183,7 @@ class Presentation
                 ->setColor(new Color('FFFF0000'));
     }
 
-    static private function addTeamCompentencesSlide()
+    private static function addTeamCompentencesSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -228,7 +222,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addTeamNumberMatrixSlide()
+    private static function addTeamNumberMatrixSlide()
     {
         $teamId = self::$team->id;
 
@@ -493,7 +487,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addTeamMatrixSlide()
+    private static function addTeamMatrixSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -532,7 +526,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addTeamEmergentsSlide()
+    private static function addTeamEmergentsSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -571,7 +565,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addMembersTitleSlide()
+    private static function addMembersTitleSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -591,7 +585,7 @@ class Presentation
                 ->setColor(new Color('FFFF0000'));
     }
 
-    static private function addMemberTitleSlide($member)
+    private static function addMemberTitleSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -611,7 +605,7 @@ class Presentation
                 ->setColor(new Color('FFFF0000'));
     }
 
-    static private function addMemberPerceptionSlide($member)
+    private static function addMemberPerceptionSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -651,7 +645,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addMemberCompentencesSlide($member)
+    private static function addMemberCompentencesSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -691,7 +685,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addMemberMatrixSlide($member)
+    private static function addMemberMatrixSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -731,7 +725,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addMemberRelationsSlide($member)
+    private static function addMemberRelationsSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -771,7 +765,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addMemberEmergentsSlide($member)
+    private static function addMemberEmergentsSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -815,7 +809,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    static private function addThankYouSlide()
+    private static function addThankYouSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -834,5 +828,4 @@ class Presentation
                 ->setSize(60)
                 ->setColor(new Color('FFFF0000'));
     }
-
 }
