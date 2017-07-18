@@ -17,7 +17,6 @@ use app\models\WheelQuestion;
 
 class GraphController extends Controller
 {
-
     public function actionRadar($teamId, $memberId, $wheelType)
     {
         $this->checkAllowed($teamId);
@@ -64,17 +63,16 @@ class GraphController extends Controller
 
         $team = Team::findOne(['id' => $teamId]);
 
-        if ($team->coach_id == $session->user_id) {
+        if ($session && $team->coach_id == $session->user_id) {
             return true;
         }
 
         foreach ($team->teamCoaches as $teamCoach) {
-            if ($teamCoach->coach->id == $session->user_id) {
+            if ($session && $teamCoach->coach->id == $session->user_id) {
                 return true;
             }
         }
 
         throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
     }
-
 }
