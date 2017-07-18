@@ -30,10 +30,12 @@ class Presentation
         self::addFirstSlide();
         self::addGoldenRuleSlide();
         self::addCompetenceTableSlide();
+
         self::addTeamTitleSlide();
+        self::addTeamRelationsSlide();
         self::addTeamNumberMatrixSlide();
-        self::addTeamCompentencesSlide();
         self::addTeamMatrixSlide();
+        self::addTeamCompentencesSlide();
         self::addTeamEmergentsSlide();
 
         self::addMembersTitleSlide();
@@ -222,6 +224,129 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
+    private static function addTeamRelationsSlide()
+    {
+        $teamId = self::$team->id;
+
+        $members = [];
+        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
+
+        $currentSlide = self::$ppt->createSlide();
+        $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
+        self::addRelationsSlide($currentSlide, Yii::t('dashboard', 'Group Relations Matrix'), $members, $groupRelationsMatrix);
+
+        $currentSlide = self::$ppt->createSlide();
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
+        self::addRelationsSlide($currentSlide, Yii::t('dashboard', 'Organizational Relations Matrix'), $members, $organizationalRelationsMatrix);
+    }
+
+    private static function addRelationsSlide($currentSlide, $title, $members, $data)
+    {
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(480)
+                ->setWidth(1000)
+                ->setOffsetX(10)
+                ->setOffsetY(5);
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+
+        $textRun = $shape->createParagraph()->createTextRun($title);
+        $textRun->getFont()->setBold(true)
+                ->setSize(20)
+                ->setColor(new Color('FFFF0000'));
+
+        $tableShape = $currentSlide->createTableShape(count($members) + 2);
+        $tableShape->setWidth(920);
+        $tableShape->setHeight(750);
+        $tableShape->setOffsetX(10);
+        $tableShape->setOffsetY(120);
+
+        $row = $tableShape->createRow();
+        $cell = $row->nextCell();
+        $cell->createTextRun(Yii::t('wheel', "Observer \\ Observed"))->getFont()->setSize(8);
+        foreach ($members as $index => $name) {
+            $cell = $row->nextCell();
+            $cell->createTextRun($name)->getFont()->setSize(8);
+        }
+        $cell = $row->nextCell();
+        $cell->createTextRun(Yii::t('app', 'Avg.'))->getFont()->setSize(8);
+
+        $observed_sum = [];
+        foreach ($members as $observerId => $observer) {
+            $row = $tableShape->createRow();
+            if ($observerId > 0) {
+                $observer_sum = 0;
+                $observer_count = 0;
+
+                $cell = $row->nextCell();
+                $cell->createTextRun($name)->getFont()->setSize(8);
+
+                foreach ($members as $observedId => $observed) {
+                    if ($observedId > 0) {
+                        $cell = $row->nextCell();
+
+                        foreach ($data as $datum) {
+                            if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
+                                if ($datum['value'] > Yii::$app->params['good_consciousness']) {
+                                    $class = 'FFDFF0D8';
+                                } elseif ($datum['value'] < Yii::$app->params['minimal_consciousness']) {
+                                    $class = 'FFF2DEDE';
+                                } else {
+                                    $class = 'FFFCF8E3';
+                                }
+
+                                $cell->createTextRun(round($datum['value'] * 100 / 4, 1) . '%')->getFont()->setSize(8);
+
+                                $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
+
+                                $observer_sum += $datum['value'];
+                                $observer_count++;
+                                if (!isset($observed_sum[$observedId])) {
+                                    $observed_sum[$observedId] = 0;
+                                }
+                                $observed_sum[$observedId] += $datum['value'];
+                            }
+                        }
+                    }
+                }
+                if ($observer_count > 0) {
+                    if ($observer_sum / $observer_count > Yii::$app->params['good_consciousness']) {
+                        $class = 'FFDFF0D8';
+                    } elseif ($observer_sum / $observer_count < Yii::$app->params['minimal_consciousness']) {
+                        $class = 'FFF2DEDE';
+                    } else {
+                        $class = 'FFFCF8E3';
+                    }
+
+                    $cell = $row->nextCell();
+                    $cell->createTextRun(round($observer_sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setSize(8);
+                    $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
+                }
+            }
+        }
+
+        $row = $tableShape->createRow();
+        $cell = $row->nextCell();
+        $cell->createTextRun(Yii::t('app', 'Avg.'))->getFont()->setSize(8);
+        if ($observer_count > 0) {
+            foreach ($observed_sum as $sum) {
+                if ($sum / $observer_count > Yii::$app->params['good_consciousness']) {
+                    $class = 'FFDFF0D8';
+                } elseif ($sum / $observer_count < Yii::$app->params['minimal_consciousness']) {
+                    $class = 'FFF2DEDE';
+                } else {
+                    $class = 'FFFCF8E3';
+                }
+
+                $cell = $row->nextCell();
+                $cell->createTextRun(round($sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setSize(8);
+                $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
+            }
+        }
+    }
+
     private static function addTeamNumberMatrixSlide()
     {
         $teamId = self::$team->id;
@@ -287,7 +412,7 @@ class Presentation
             $cell->createTextRun(round($data['steem'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
-// How they see me
+        // How they see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How they see me'))->getFont()->setSize(8);

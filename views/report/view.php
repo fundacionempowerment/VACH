@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?><br />
     </div>
     <div class="col-md-6 text-right">
-        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $team->id]), ['class' => 'btn btn-info']) ?>
-        <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
         <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $team->id]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $team->id]), ['class' => 'btn btn-info']) ?>
     </div>
     <div class="clearfix"></div>
     <h3>
