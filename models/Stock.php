@@ -20,7 +20,7 @@ class Stock extends ActiveRecord
     {
         parent::init();
 
-        $this->stamp = date('Y-m-d H:i:s');
+        $this->created_stamp = date('Y-m-d H:i:s');
     }
 
     /**
@@ -29,7 +29,7 @@ class Stock extends ActiveRecord
     public function rules()
     {
         return [
-            [['coach_id', 'product_id', 'quantity', 'price', 'total', 'status', 'stamp'], 'required'],
+            [['coach_id', 'product_id', 'price', 'total', 'status', 'created_stamp'], 'required'],
         ];
     }
 
