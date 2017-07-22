@@ -60,35 +60,8 @@ class StockController extends BaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            // Register new stock
-            $stock = new Stock();
-            $stock->coach_id = Yii::$app->user->id;
-            $stock->creator_id = Yii::$app->user->id;
-            $stock->product_id = $model->product_id;
-            $stock->quantity = $model->quantity;
-            $stock->price = $product->price;
-            $stock->total = $model->quantity * $product->price;
-            $stock->status = Stock::STATUS_INVALID;
-            if (!$stock->save()) {
-                \app\controllers\SiteController::FlashErrors($stock);
-            }
 
-            $payment = new Payment();
-            $payment->coach_id = Yii::$app->user->id;
-            $payment->creator_id = Yii::$app->user->id;
-            $payment->stock_id = $stock->id;
-            $payment->concept = $model->quantity . ' ' . $product->name;
-            $payment->currency = 'USD';
-            $payment->amount = $stock->total;
-            $payment->rate = 0;
-            $payment->status = Payment::STATUS_INIT;
-            if (!$payment->save()) {
-                \app\controllers\SiteController::FlashErrors($payment);
-            }
-
-            $model->description = 'VACH ' . $payment->concept;
-            $model->amount = $payment->amount;
-            $model->referenceCode = $payment->uuid;
+            Stock::saveBuyModel($model);
 
             return $this->render('/payment/redirect', [
                         'model' => $model,

@@ -70,37 +70,8 @@ class StockController extends AdminBaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            // Register new stock
-            $stock = new Stock();
-            $stock->coach_id = Yii::$app->user->id;
-            $stock->creator_id = Yii::$app->user->id;
-            $stock->product_id = $model->product_id;
-            $stock->quantity = $model->quantity;
-            $stock->price = $product->price;
-            $stock->total = $model->quantity * $product->price;
-            $stock->status = Stock::STATUS_INVALID;
-            if (!$stock->save()) {
-                \app\controllers\SiteController::FlashErrors($stock);
-            }
 
-            $payment = new Payment();
-            $payment->coach_id = Yii::$app->user->id;
-            $payment->creator_id = Yii::$app->user->id;
-            $payment->stock_id = $stock->id;
-            $payment->concept = $model->quantity . ' ' . $product->name;
-            $payment->currency = 'USD';
-            $payment->amount = $stock->total;
-            $payment->rate = \app\models\Currency::lastValue();
-            $payment->commision_currency = 'ARS';
-            $payment->commision = 0;
-            $payment->status = Payment::STATUS_INIT;
-            if (!$payment->save()) {
-                \app\controllers\SiteController::FlashErrors($payment);
-            }
-
-            $model->description = 'VACH ' . $payment->concept;
-            $model->amount = $payment->amount;
-            $model->referenceCode = $payment->uuid;
+            Stock::saveBuyMode($model);
 
             return $this->render('/payment/redirect', [
                         'model' => $model,
@@ -134,44 +105,8 @@ class StockController extends AdminBaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $success = true;
-            // Register new stock
-            $stock = new Stock();
-            $stock->coach_id = $model->coach_id;
-            $stock->creator_id = Yii::$app->user->id;
-            $stock->product_id = $model->product_id;
-            $stock->quantity = $model->quantity;
-            $stock->price = $model->price;
-            $stock->total = $model->quantity * $model->price;
-            $stock->status = Stock::STATUS_VALID;
-            if (!$stock->save()) {
-                $success = false;
-                \app\controllers\SiteController::FlashErrors($stock);
-            }
 
-            $payment = new Payment();
-            $payment->coach_id = $model->coach_id;
-            $payment->creator_id = Yii::$app->user->id;
-            $payment->stock_id = $stock->id;
-            $payment->concept = $model->quantity . ' ' . $product->name;
-            $payment->currency = 'USD';
-            $payment->amount = $stock->total;
-            $payment->rate = \app\models\Currency::lastValue();
-            $payment->commision_currency = 'ARS';
-            $payment->commision = 0;
-            $payment->status = Payment::STATUS_PENDING;
-            $payment->is_manual = true;
-            if ($model->part_distribution == 1) {
-                $payment->part_distribution = 50;
-            } else if ($model->part_distribution == 2) {
-                $payment->part_distribution = 100;
-            } else {
-                $payment->part_distribution = 0;
-            }
-            if (!$payment->save()) {
-                $success = false;
-                \app\controllers\SiteController::FlashErrors($payment);
-            }
+            $success = Stock::saveAddModel($model);
 
             if ($success) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $model->quantity . ' ' . $product->name]));

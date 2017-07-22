@@ -5,7 +5,7 @@ use yii\db\Migration;
 class m170719_025000_new_stock_table extends Migration
 {
 
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -18,7 +18,7 @@ class m170719_025000_new_stock_table extends Migration
             'coach_id' => $this->integer()->notNull(),
             'product_id' => $this->integer()->notNull(),
             'price' => $this->decimal(10, 2)->notNull(),
-            'status' => "enum('invalid','valid','error') NOT NULL DEFAULT 'invalid'",
+            'status' => "enum('invalid','valid','consumed','error') NOT NULL DEFAULT 'invalid'",
             'created_stamp' => $this->dateTime()->notNull(),
             'creator_id' => $this->integer()->notNull(),
             'payment_id' => $this->integer()->null(),
@@ -28,7 +28,7 @@ class m170719_025000_new_stock_table extends Migration
                 ], $tableOptions);
 
         $purchases = $this->db->createCommand('SELECT '
-                        . 'ABS(`stock`.`quantity`) as `quantity`, `stock`.`coach_id`, `stock`.`product_id`, `stock`.`price`, `stock`.`status`, `stock`.`creator_id`, `payment`.`id` as `payment_id`, `payment`.`stamp` as `payment_stamp` '
+                        . 'ABS(`stock`.`quantity`) as `quantity`, `stock`.`coach_id`, `stock`.`product_id`, `stock`.`price`, `stock`.`status`, `payment`.`id` as `payment_id`, `payment`.`stamp` as `payment_stamp`, `payment`.`creator_id` '
                         . 'FROM `payment` '
                         . 'INNER JOIN `stock` ON `stock`.`id` = `payment`.`stock_id` '
                         . 'ORDER BY `payment`.`id`, `stock`.`id` ')->queryAll();
@@ -68,29 +68,29 @@ class m170719_025000_new_stock_table extends Migration
             }
         }
 
-//        $this->dropForeignKey('fk_payment_stock', 'payment');
-//        $this->dropColumn('payment', 'stock_id');
-//
-//        $this->dropForeignKey('fk_stock_coach', 'stock');
-//        $this->dropForeignKey('fk_stock_creator', 'stock');
-//        $this->dropForeignKey('fk_stock_product', 'stock');
-//        $this->dropForeignKey('fk_stock_team', 'stock');
-//        
-//        $this->dropTable('stock');
-//        
-//        $this->renameTable('tempo_stock', 'stock');
-//        
-//        $this->addForeignKey('fk_stock_coach',  'stock', 'coach_id', 'user', 'id');
-//        $this->addForeignKey('fk_stock_creator',  'stock', 'creator_id', 'user', 'id');
-//        $this->addForeignKey('fk_stock_consumer',  'stock', 'consumer_id', 'user', 'id');
-//        $this->addForeignKey('fk_stock_team',  'stock', 'team_id', 'team', 'id');
-//        $this->addForeignKey('fk_stock_product',  'stock', 'product_id', 'product', 'id');
-//        $this->addForeignKey('fk_stock_payment',  'stock', 'payment_id', 'payment', 'id');
+        $this->dropForeignKey('fk_payment_stock', 'payment');
+        $this->dropColumn('payment', 'stock_id');
+
+        $this->dropForeignKey('fk_stock_coach', 'stock');
+        $this->dropForeignKey('fk_stock_creator', 'stock');
+        $this->dropForeignKey('fk_stock_product', 'stock');
+        $this->dropForeignKey('fk_stock_team', 'stock');
+
+        $this->dropTable('stock');
+
+        $this->renameTable('tempo_stock', 'stock');
+
+        $this->addForeignKey('fk_stock_coach', 'stock', 'coach_id', 'user', 'id');
+        $this->addForeignKey('fk_stock_creator', 'stock', 'creator_id', 'user', 'id');
+        $this->addForeignKey('fk_stock_consumer', 'stock', 'consumer_id', 'user', 'id');
+        $this->addForeignKey('fk_stock_team', 'stock', 'team_id', 'team', 'id');
+        $this->addForeignKey('fk_stock_product', 'stock', 'product_id', 'product', 'id');
+        $this->addForeignKey('fk_stock_payment', 'stock', 'payment_id', 'payment', 'id');
     }
 
-    public function safeDown()
+    public function down()
     {
-        $this->dropTable('{{%tempo_stock}}');
+        throw new Exception('This migration cannot be reverted.');
     }
 
 }

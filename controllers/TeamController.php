@@ -228,18 +228,7 @@ class TeamController extends BaseController
                 SiteController::addFlash('success', Yii::t('team', 'Wheel forms has been successfully created.'));
 
                 if (Yii::$app->params['monetize']) {
-                    $stock = new Stock();
-                    $stock->coach_id = Yii::$app->user->id;
-                    $stock->creator_id = Yii::$app->user->id;
-                    $stock->product_id = 1;
-                    $stock->quantity = -$licences_required;
-                    $stock->price = 0;
-                    $stock->total = 0;
-                    $stock->team_id = $team->id;
-                    $stock->status = Stock::STATUS_VALID;
-                    if (!$stock->save()) {
-                        \app\controllers\SiteController::FlashErrors($stock);
-                    }
+                    Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
                 }
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             }

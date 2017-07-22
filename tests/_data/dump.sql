@@ -148,13 +148,16 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m170516_022644_add_report_keywords', 1494909385),
 ('m170518_060529_add_stock_assessment_relation', 1495415609),
 ('m170519_011035_mark_pending_payments', 1495415609),
-('m170520_000204_drop_assessment', 1495300680);
+('m170520_000204_drop_assessment', 1495300680),
+('m170520_185059_add_missing_fk', 1500759815),
+('m170719_025000_new_stock_table', 1500759815),
+('m170722_182046_fix_missing_payment_uuid', 1500759815),
+('m170722_210647_fix_stock_status', 1500759815);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
   `uuid` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `coach_id` int(11) NOT NULL,
-  `stock_id` int(11) NOT NULL,
   `concept` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `status` enum('init','pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'init',
@@ -445,17 +448,37 @@ CREATE TABLE `stock` (
   `id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `total` decimal(10,2) NOT NULL,
-  `status` enum('invalid','valid','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'invalid',
-  `stamp` datetime NOT NULL,
+  `status` enum('invalid','valid','consumed','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'invalid',
+  `created_stamp` datetime NOT NULL,
   `creator_id` int(11) NOT NULL,
+  `payment_id` int(11) DEFAULT NULL,
+  `consumed_stamp` datetime DEFAULT NULL,
+  `consumer_id` int(11) DEFAULT NULL,
   `team_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `quantity`, `price`, `total`, `status`, `stamp`, `creator_id`, `team_id`) VALUES
-(1, 2, 1, 100, 18.00, 0.00, 'valid', '2017-04-14 19:03:27', 1, NULL);
+INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `price`, `status`, `created_stamp`, `creator_id`, `team_id`) VALUES
+(1, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(2, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(3, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(4, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(5, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(6, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(7, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(8, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(9, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(10, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(11, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(12, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(13, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(14, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(15, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(16, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(17, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(18, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(19, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL),
+(20, 2, 1, 18.00, 'valid', '2017-04-14 19:03:27', 1, NULL);
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
@@ -827,7 +850,8 @@ ALTER TABLE `currency`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `feedback`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_feedback_user` (`user_id`);
 
 ALTER TABLE `individual_report`
   ADD PRIMARY KEY (`id`),
@@ -847,7 +871,6 @@ ALTER TABLE `migration`
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_payment_coach` (`coach_id`),
-  ADD KEY `fk_payment_stock` (`stock_id`),
   ADD KEY `fk_payment_creator` (`creator_id`),
   ADD KEY `fk_payment_liquidation` (`liquidation_id`);
 
@@ -872,9 +895,11 @@ ALTER TABLE `report`
 ALTER TABLE `stock`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_stock_coach` (`coach_id`),
-  ADD KEY `fk_stock_product` (`product_id`),
   ADD KEY `fk_stock_creator` (`creator_id`),
-  ADD KEY `fk_stock_team` (`team_id`);
+  ADD KEY `fk_stock_consumer` (`consumer_id`),
+  ADD KEY `fk_stock_team` (`team_id`),
+  ADD KEY `fk_stock_product` (`product_id`),
+  ADD KEY `fk_stock_payment` (`payment_id`);
 
 ALTER TABLE `team`
   ADD PRIMARY KEY (`id`);
@@ -955,6 +980,9 @@ ALTER TABLE `wheel_question`
 ALTER TABLE `company`
   ADD CONSTRAINT `fk_company_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
 
+ALTER TABLE `feedback`
+  ADD CONSTRAINT `fk_feedback_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
 ALTER TABLE `individual_report`
   ADD CONSTRAINT `fk_individual_report_report` FOREIGN KEY (`report_id`) REFERENCES `report` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_individual_report_user` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE;
@@ -963,10 +991,9 @@ ALTER TABLE `log`
   ADD CONSTRAINT `fk_log_user` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `payment`
-  ADD CONSTRAINT `fk_payment_liquidation` FOREIGN KEY (`liquidation_id`) REFERENCES `liquidation` (`id`),
   ADD CONSTRAINT `fk_payment_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_payment_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `fk_payment_stock` FOREIGN KEY (`stock_id`) REFERENCES `stock` (`id`);
+  ADD CONSTRAINT `fk_payment_liquidation` FOREIGN KEY (`liquidation_id`) REFERENCES `liquidation` (`id`);
 
 ALTER TABLE `payment_log`
   ADD CONSTRAINT `fk_payment_log_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`);
@@ -978,10 +1005,12 @@ ALTER TABLE `report`
   ADD CONSTRAINT `fk_report_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`);
 
 ALTER TABLE `stock`
-  ADD CONSTRAINT `fk_stock_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
+  ADD CONSTRAINT `fk_stock_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`),
   ADD CONSTRAINT `fk_stock_coach` FOREIGN KEY (`coach_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_stock_consumer` FOREIGN KEY (`consumer_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_stock_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `fk_stock_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+  ADD CONSTRAINT `fk_stock_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `fk_stock_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`);
 
 ALTER TABLE `user_session`
   ADD CONSTRAINT `fk_user_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);

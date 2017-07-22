@@ -15,12 +15,11 @@ class Stock extends ActiveRecord
     const STATUS_INVALID = 'invalid';
     const STATUS_VALID = 'valid';
     const STATUS_ERROR = 'error';
+    const STATUS_CONSUMED = 'consumed';
 
     public function init()
     {
         parent::init();
-
-        $this->created_stamp = date('Y-m-d H:i:s');
     }
 
     /**
@@ -29,7 +28,7 @@ class Stock extends ActiveRecord
     public function rules()
     {
         return [
-            [['coach_id', 'product_id', 'price', 'total', 'status', 'created_stamp'], 'required'],
+            [['coach_id', 'product_id', 'price', 'status', 'created_stamp', 'creator_id'], 'required'],
         ];
     }
 
@@ -69,15 +68,33 @@ class Stock extends ActiveRecord
 
     public static function browse()
     {
-        return Stock::find()->where([
-                    'coach_id' => Yii::$app->user->id,
-                    'status' => self::STATUS_VALID,
-                ])->orderBy('id desc');
+        return static::adminBrowse()->where([
+                    'stock.coach_id' => Yii::$app->user->id,
+                    'stock.status' => [self::STATUS_VALID, self::STATUS_CONSUMED],
+        ]);
     }
 
     public static function adminBrowse()
     {
-        return Stock::find()->orderBy('id desc');
+        return (new Query())
+                        ->select([
+                            'stock.coach_id',
+                            "CONCAT(coach.name, ' ', coach.surname) as coach_name",
+                            "CONCAT(creator.name, ' ', creator.surname) as creator_name",
+                            'product_id', 'price', 'stock.status', 'created_stamp', 'stock.creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'stock.team_id',
+                            'team.name as team_name', 'company.name as company_name',
+                            new Expression('COUNT(stock.id) as quantity'),
+                            new Expression('SUM(stock.price) as amount'),
+                            new Expression('SUM(stock.price * payment.rate) as localAmount'),
+                        ])
+                        ->from('stock')
+                        ->innerJoin('user as coach', 'coach.id = stock.coach_id')
+                        ->innerJoin('user as creator', 'creator.id = stock.creator_id')
+                        ->leftJoin('team', 'team.id = stock.team_id')
+                        ->leftJoin('company', 'company.id = team.company_id')
+                        ->innerJoin('payment', 'payment.id = stock.payment_id')
+                        ->groupBy(['coach_id', 'product_id', 'price', 'status', 'created_stamp', 'creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'team_id'])
+                        ->orderBy('created_stamp DESC, consumed_stamp DESC');
     }
 
     public function getCoach()
@@ -111,6 +128,7 @@ class Stock extends ActiveRecord
             self::STATUS_INVALID => Yii::t('app', self::STATUS_INVALID),
             self::STATUS_VALID => Yii::t('app', self::STATUS_VALID),
             self::STATUS_ERROR => Yii::t('app', self::STATUS_ERROR),
+            self::STATUS_CONSUMED => Yii::t('stock', self::STATUS_CONSUMED),
         ];
 
         return $list;
@@ -125,12 +143,13 @@ class Stock extends ActiveRecord
     {
         $query = new Query();
 
-        $balance = $query->select(new Expression('sum(quantity) as balance'))
+        $balance = $query->select(new Expression('count(id) as balance'))
                 ->from('stock')
                 ->where([
                     'coach_id' => Yii::$app->user->id,
                     'product_id' => $product_id,
                     'status' => self::STATUS_VALID,
+                    'consumer_id' => null
                 ])
                 ->one();
 
@@ -138,6 +157,116 @@ class Stock extends ActiveRecord
             return $balance['balance'];
         }
         return 0;
+    }
+
+    public static function saveBuyModel($model)
+    {
+        $success = true;
+        $product = Product::findOne(['id' => $model->product_id]);
+        $created_stamp = date('Y-m-d H:i:s');
+
+        $payment->coach_id = Yii::$app->user->id;
+        $payment->creator_id = Yii::$app->user->id;
+        $payment->stock_id = $stock->id;
+        $payment->concept = $model->quantity . ' ' . $product->name;
+        $payment->currency = 'USD';
+        $payment->amount = $stock->total;
+        $payment->rate = 0;
+        $payment->status = Payment::STATUS_INIT;
+        $payment->is_manual = false;
+        $payment->part_distribution = 50;
+        if (!$payment->save()) {
+            \app\controllers\SiteController::FlashErrors($payment);
+            $success = false;
+        }
+
+        for ($i = 1; $i <= $model->quantity; $i ++) {
+            $stock = new Stock();
+            $stock->coach_id = Yii::$app->user->id;
+            $stock->creator_id = Yii::$app->user->id;
+            $stock->product_id = $model->product_id;
+            $stock->payment_id = $payment->id;
+            $stock->price = $product->price;
+            $stock->status = Stock::STATUS_INVALID;
+            $stock->created_stamp = $created_stamp;
+            if (!$stock->save()) {
+                \app\controllers\SiteController::FlashErrors($stock);
+            }
+        }
+
+        $model->description = 'VACH ' . $payment->concept;
+        $model->amount = $payment->amount;
+        $model->referenceCode = $payment->uuid;
+
+        return $success;
+    }
+
+    public static function saveAddModel($model)
+    {
+        $success = true;
+        $product = Product::findOne(['id' => $model->product_id]);
+        $created_stamp = date('Y-m-d H:i:s');
+
+        $payment = new Payment();
+        $payment->coach_id = $model->coach_id;
+        $payment->creator_id = Yii::$app->user->id;
+        $payment->concept = $model->quantity . ' ' . $product->name;
+        $payment->currency = 'USD';
+        $payment->amount = $model->quantity * $model->price;
+        $payment->rate = \app\models\Currency::lastValue();
+        $payment->commision_currency = 'ARS';
+        $payment->commision = 0;
+        $payment->status = Payment::STATUS_PENDING;
+        $payment->is_manual = true;
+        if ($model->part_distribution == 1) {
+            $payment->part_distribution = 50;
+        } else if ($model->part_distribution == 2) {
+            $payment->part_distribution = 100;
+        } else {
+            $payment->part_distribution = 0;
+        }
+        if (!$payment->save()) {
+            $success = false;
+            \app\controllers\SiteController::FlashErrors($payment);
+        }
+
+        for ($i = 1; $i <= $model->quantity; $i ++) {
+            $stock = new Stock();
+            $stock->coach_id = $model->coach_id;
+            $stock->creator_id = Yii::$app->user->id;
+            $stock->product_id = $model->product_id;
+            $stock->payment_id = $payment->id;
+            $stock->price = $model->price;
+            $stock->status = Stock::STATUS_VALID;
+            $stock->created_stamp = $created_stamp;
+            if (!$stock->save()) {
+                $success = false;
+                \app\controllers\SiteController::FlashErrors($stock);
+            }
+        }
+
+        return $success;
+    }
+
+    public static function consume($consumer_id, $quantity, $team_id)
+    {
+        $consumed_stamp = date('Y-m-d H:i:s');
+        for ($i = 1; $i <= $quantity; $i ++) {
+            $available_stock_id = Yii::$app->db->createCommand('SELECT `id` FROM `stock` '
+                            . 'WHERE `consumed_stamp` is null '
+                            . 'AND `coach_id` = ' . $consumer_id
+                            . ' ORDER BY `id` ASC LIMIT 1')->queryScalar();
+
+            Yii::$app->db->createCommand()
+                    ->update('stock', [
+                        'status' => 'consumed',
+                        'consumed_stamp' => $consumed_stamp,
+                        'consumer_id' => $consumer_id,
+                        'team_id' => $team_id,
+                            ], [
+                        'id' => $available_stock_id,
+                    ])->execute();
+        }
     }
 
 }

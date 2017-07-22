@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Amount' => 'Monto',
     'Available payments' => 'Pagos disponibles',
     'Commision' => 'Comisión',
     'Commision currency' => 'Moneda de comisión',
@@ -25,6 +26,7 @@ return [
     'Is manual' => 'Es manual',
     'Liquidation' => 'Liquidación',
     'Liquidations' => 'Liquidaciones',
+    'Local Amount' => 'Monto local',
     'Local amount' => 'Monto local',
     'Mark as payed' => 'Marcar como pagados',
     'Money to add' => 'Dinero a agregar',

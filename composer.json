@@ -25,7 +25,8 @@
         "yiisoft/yii2-httpclient": "*",
         "phpoffice/phppresentation": "dev-master",
         "phpoffice/phpword": "dev-master",
-        "onmotion/yii2-telegram": "*"
+        "onmotion/yii2-telegram": "*",
+        "kartik-v/yii2-export": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

@@ -21,6 +21,9 @@ return [
     'Add licences' => 'Agregar licencias',
     'Begin payment' => 'Comenzar pago',
     'Buy Licences' => 'Comprar licencias',
+    'Created' => 'Creado',
+    'Consumed' => 'Consumido',
+    'Consumer' => 'Consumidor',
     'Dear administrator, I\'m requesting {q} licences. Thanks.' => 'Estimado administrado, Estoy solicitando {q} licencias. Gracias.',
     'Go to My Licences' => 'Ir a Mis licencias',
     'Licences' => 'Licencias',
@@ -35,4 +38,5 @@ return [
     'Total' => 'Total',
     'You need {count} more licences' => 'Necesita {count} licencias más',
     'Your balance' => 'Su saldo',
+    'consumed' => 'consumido',
 ];
