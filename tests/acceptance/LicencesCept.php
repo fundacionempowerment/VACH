@@ -1,5 +1,6 @@
 <?php
 
+$initial_stock = 20;
 $price = rand(100, 300) / 10;
 $add = rand(10, 20);
 $remove = rand(1, 9);
@@ -48,7 +49,7 @@ $I->clickMainMenu('(coach)', 'Mis licencias');
 $I->wait(1);
 
 $I->see($add);
-$I->see(100 + $add - $remove);
+$I->see($initial_stock + $add - $remove);
 
 $I->clickMainMenu('(coach)', 'Mis pagos');
 $I->wait(1);
