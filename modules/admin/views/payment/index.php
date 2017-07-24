@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $dataProvider = new ActiveDataProvider([
     'query' => $models,
     'pagination' => [
-        'pageSize' => 10,
+        'pageSize' => 20,
     ],
         ]);
 $columns = [
