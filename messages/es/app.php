@@ -125,6 +125,7 @@ return [
     'valid' => 'válido',
     '{name} has been already added to {group}.' => '{name} ya ha sido agregado a {group}.',
     '{name} has been successfully added to {group}.' => '{name} ha sido exitosamente agregado a {group}',
+    '{name} has been successfully canceled.' => '{name} ha sido exitosamente cancelado.',
     '{name} has been successfully created.' => '{name} ha sido exitosamente creado.',
     '{name} has been successfully deleted.' => '{name} ha sido exitosamente eliminado.',
     '{name} has been successfully edited.' => '{name} ha sido exitosamente editado.',

@@ -26,10 +26,12 @@ class StockController extends BaseController
 
     public function actionIndex()
     {
-        $models = Stock::browse();
+        $availableModels = Stock::browseAvailable();
+        $othersModels = Stock::browseOthers();
 
         return $this->render('index', [
-                    'models' => $models,
+                    'availableModels' => $availableModels,
+                    'othersModels' => $othersModels,
         ]);
     }
 

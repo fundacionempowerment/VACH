@@ -31,10 +31,12 @@ class StockController extends AdminBaseController
             return $this->goHome();
         }
 
-        $models = Stock::adminBrowse();
+        $availableModels = Stock::adminBrowseAvailable();
+        $othersModels = Stock::adminBrowseOthers();
 
         return $this->render('index', [
-                    'models' => $models,
+                    'availableModels' => $availableModels,
+                    'othersModels' => $othersModels,
         ]);
     }
 
@@ -140,24 +142,13 @@ class StockController extends AdminBaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $success = true;
-            // Register new stock
-            $stock = new Stock();
-            $stock->coach_id = $model->coach_id;
-            $stock->creator_id = Yii::$app->user->id;
-            $stock->product_id = $model->product_id;
-            $stock->quantity = -$model->quantity;
-            $stock->price = 0;
-            $stock->total = 0;
-            $stock->status = Stock::STATUS_VALID;
-            if (!$stock->save()) {
-                $success = false;
-                \app\controllers\SiteController::FlashErrors($stock);
-            }
-
-            if ($success) {
-                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $model->quantity . ' ' . $product->name]));
-                return $this->redirect(['/admin/stock']);
+            if ($model->quantity <= Stock::getStock(1, $model->coach_id)) {
+                if (Stock::cancel($model->coach_id, $model->quantity)) {
+                    SiteController::addFlash('success', Yii::t('app', '{name} has been successfully canceled.', ['name' => $model->quantity . ' ' . $product->name]));
+                    return $this->redirect(['/admin/stock']);
+                }
+            } else {
+                SiteController::addFlash('error', Yii::t('stock', 'Stock quantity not available'));
             }
         }
 

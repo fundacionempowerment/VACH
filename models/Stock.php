@@ -66,12 +66,31 @@ class Stock extends ActiveRecord
         return parent::beforeValidate();
     }
 
+    public static function browseAvailable()
+    {
+        return static::browse()->andWhere(['stock.status' => self::STATUS_VALID]);
+    }
+
+    public static function browseOthers()
+    {
+        return static::browse()->andWhere(['stock.status' => self::STATUS_CONSUMED]);
+    }
+
     public static function browse()
     {
-        return static::adminBrowse()->where([
+        return static::adminBrowse()->andWhere([
                     'stock.coach_id' => Yii::$app->user->id,
-                    'stock.status' => [self::STATUS_VALID, self::STATUS_CONSUMED],
         ]);
+    }
+
+    public static function adminBrowseAvailable()
+    {
+        return static::adminBrowse()->andWhere(['stock.status' => self::STATUS_VALID]);
+    }
+
+    public static function adminBrowseOthers()
+    {
+        return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID]);
     }
 
     public static function adminBrowse()
@@ -139,17 +158,16 @@ class Stock extends ActiveRecord
         return self::getStatusList()[$this->status];
     }
 
-    public static function getStock($product_id)
+    public static function getStock($product_id, $user_id = null)
     {
         $query = new Query();
 
         $balance = $query->select(new Expression('count(id) as balance'))
                 ->from('stock')
                 ->where([
-                    'coach_id' => Yii::$app->user->id,
+                    'coach_id' => ($user_id ? $user_id : Yii::$app->user->id),
                     'product_id' => $product_id,
                     'status' => self::STATUS_VALID,
-                    'consumer_id' => null
                 ])
                 ->one();
 
@@ -267,6 +285,30 @@ class Stock extends ActiveRecord
                         'id' => $available_stock_id,
                     ])->execute();
         }
+
+        return true;
+    }
+
+    public static function cancel($consumer_id, $quantity)
+    {
+        $consumed_stamp = date('Y-m-d H:i:s');
+        for ($i = 1; $i <= $quantity; $i ++) {
+            $available_stock_id = Yii::$app->db->createCommand('SELECT `id` FROM `stock` '
+                            . 'WHERE `consumed_stamp` is null '
+                            . 'AND `coach_id` = ' . $consumer_id
+                            . ' ORDER BY `id` ASC LIMIT 1')->queryScalar();
+
+            Yii::$app->db->createCommand()
+                    ->update('stock', [
+                        'status' => 'error',
+                        'consumed_stamp' => $consumed_stamp,
+                        'consumer_id' => Yii::$app->user->identity->id,
+                            ], [
+                        'id' => $available_stock_id,
+                    ])->execute();
+        }
+
+        return true;
     }
 
 }

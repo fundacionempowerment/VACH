@@ -19,6 +19,7 @@
  */
 return [
     'Add licences' => 'Agregar licencias',
+    'Available licences' => 'Licencias disponibles',
     'Begin payment' => 'Comenzar pago',
     'Buy Licences' => 'Comprar licencias',
     'Created' => 'Creado',
@@ -29,6 +30,7 @@ return [
     'Licences' => 'Licencias',
     'Licences required' => 'Licencias requeridas',
     'My Licences' => 'Mis licencias',
+    'Not available licences' => 'Licencias no disponibles',
     'Price' => 'Precio',
     'Price in USD $' => 'Precio es USD $',
     'Product' => 'Producto',

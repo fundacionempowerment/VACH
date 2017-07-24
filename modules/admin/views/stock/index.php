@@ -12,12 +12,19 @@ $this->title = Yii::t('stock', 'Licences');
 
 $this->params['breadcrumbs'][] = $this->title;
 
-$dataProvider = new ActiveDataProvider([
-    'query' => $models,
+$availableDataProvider = new ActiveDataProvider([
+    'query' => $availableModels,
     'pagination' => [
-        'pageSize' => 10,
+        'pageSize' => 20,
     ],
         ]);
+$othersDataProvider = new ActiveDataProvider([
+    'query' => $othersModels,
+    'pagination' => [
+        'pageSize' => 20,
+    ],
+        ]);
+
 $columns = [
     [
         'attribute' => 'coach_name',
@@ -81,9 +88,10 @@ $columns = [
         <?= Html::a(Yii::t('stock', 'Add licences'), Url::to(['stock/add']), ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('stock', 'Remove licences'), Url::to(['stock/remove']), ['class' => 'btn btn-danger']) ?>
     </p>
+    <h2><?= Yii::t('stock', 'Available licences') ?></h2>
     <?=
     ExportMenu::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $availableDataProvider,
         'columns' => $columns,
         'exportConfig' => [
             ExportMenu::FORMAT_PDF => false,
@@ -97,7 +105,28 @@ $columns = [
     ?>
     <?=
     GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $availableDataProvider,
+        'columns' => $columns,
+    ]);
+    ?>
+    <h2><?= Yii::t('stock', 'Not available licences') ?></h2>
+    <?=
+    ExportMenu::widget([
+        'dataProvider' => $othersDataProvider,
+        'columns' => $columns,
+        'exportConfig' => [
+            ExportMenu::FORMAT_PDF => false,
+        ],
+        'fontAwesome' => true,
+        'dropdownOptions' => [
+            'label' => 'Export All',
+            'class' => 'btn btn-default'
+        ]
+    ])
+    ?>
+    <?=
+    GridView::widget([
+        'dataProvider' => $othersDataProvider,
         'columns' => $columns,
     ]);
     ?>
