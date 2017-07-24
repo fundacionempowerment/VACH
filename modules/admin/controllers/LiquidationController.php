@@ -85,7 +85,7 @@ class LiquidationController extends AdminBaseController
                     $payment->save();
                 }
 
-                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $model->name]));
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $model->name]));
                 return $this->redirect(['liquidation/view', 'id' => $model->id]);
             } else {
                 SiteController::FlashErrors($model);

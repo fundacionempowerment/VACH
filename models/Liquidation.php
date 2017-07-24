@@ -65,7 +65,8 @@ class Liquidation extends ActiveRecord
 
     public function getPayments()
     {
-        return $this->hasMany(Payment::className(), ['liquidation_id' => 'id']);
+        return $this->hasMany(Payment::className(), ['liquidation_id' => 'id'])
+                ->orderBy(['id' => SORT_DESC]);
     }
 
     public function getAvailablePayments()
@@ -74,7 +75,8 @@ class Liquidation extends ActiveRecord
                         ->where('liquidation_id is null')
                         ->orWhere(['liquidation_id' => $this->id])
                         ->andWhere(['status' => Payment::STATUS_PAID])
-                        ->andWhere(['>', 'amount', '0']);
+                        ->andWhere(['>', 'amount', '0'])
+                        ->orderBy(['id' => SORT_DESC]);
     }
 
 }

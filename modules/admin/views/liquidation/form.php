@@ -26,7 +26,7 @@ $availablePaymentProvider = new ActiveDataProvider([
 
     <?php $form = ActiveForm::begin(['id' => 'payment-form',]); ?>
     <?= $form->field($model, 'stamp') ?>
-    <?= Yii::t('payment', 'Available payments') ?>
+    <label><?= Yii::t('payment', 'Available payments') ?></label>
     <?=
     GridView::widget([
         'id' => 'grid',
