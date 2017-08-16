@@ -10,12 +10,12 @@ use app\models\WheelQuestion;
 class Relations
 {
 
-    const RELATION_width = 950;
-    const RELATION_height = 500;
-    const RELATION_imageSize = 30;
-    const RELATION_margin = 50;
-    const RELATION_arrow_x_ring = 45;
-    const RELATION_text_height = 6;
+    const RELATION_width = 1800;
+    const RELATION_height = 1000;
+    const RELATION_imageSize = 60;
+    const RELATION_margin = 100;
+    const RELATION_arrow_x_ring = 90;
+    const RELATION_text_height = 12;
     // This code asume square proto human image
     const RELATION_arrow_y_ring = self::RELATION_arrow_x_ring;
     const RELATION_xradio = self::RELATION_width / 4 - self::RELATION_imageSize / 2 - self::RELATION_margin;
@@ -81,7 +81,7 @@ class Relations
         // texts
 
         $t = new \Text($title, self::RELATION_width / 2, 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 14);
+        $t->SetFont(FF_COOL, FS_BOLD, 28);
         $t->Align('center', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -143,7 +143,7 @@ class Relations
 
     static private function drawArrow($g, $x1, $y1, $x2, $y2)
     {
-        $g->img->SetLineWeight(3);
+        $g->img->SetLineWeight(6);
 
         $headlen = 10; // length of head in pixels
         $angle = atan2($y2 - $y1, $x2 - $x1);
@@ -181,7 +181,7 @@ class Relations
             }
 
             $t = new \Text($data[$i][$who . '_name'] . ' ' . $data[$i][$who . '_surname'], $x, $y + 4);
-            $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+            $t->SetFont(FF_COOL, FS_NORMAL, 20);
             $t->Align('center', 'top');
             $t->SetColor("black");
             $t->Stroke($g->img);
@@ -190,7 +190,7 @@ class Relations
             $y = self::RELATION_height / 2 + self::RELATION_yradio / 2 * sin($current_angle);
 
             $t = new \Text(round($data[$i]['value'] * 1000 / 4) / 10 . '%', $x, $y);
-            $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 10);
+            $t->SetFont(FF_COOL, FS_BOLD, 20);
             $t->Align('center', 'center');
             $t->SetColor("black");
             $t->Stroke($g->img);
@@ -212,7 +212,7 @@ class Relations
         }
 
         $t = new \Text($data[0][$who . '_name'] . ' ' . $data[0][$who . '_surname'], $x, $y + 4);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+        $t->SetFont(FF_COOL, FS_NORMAL, 20);
         $t->Align('center', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);

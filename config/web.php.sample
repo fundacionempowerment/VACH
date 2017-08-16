@@ -80,6 +80,9 @@ $config = [
         'admin' => [
             'class' => 'app\modules\admin\AdminModule',
         ],
+        'gridview' => [
+            'class' => 'kartik\grid\Module'
+        ],
         'telegram' => [
             'class' => 'onmotion\telegram\Module',
             'API_KEY' => '******************',

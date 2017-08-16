@@ -10,11 +10,11 @@ use app\models\WheelQuestion;
 class Gauges
 {
 
-    const width = 1000;
-    const height = 300;
-    const margin_title = 34;
-    const margin_subtitle = 25;
-    const margin_inner = 10;
+    const width = 2000;
+    const height = 600;
+    const margin_title = 64;
+    const margin_subtitle = 50;
+    const margin_inner = 20;
     const cells = [
         ['dimension' => 0, 'row' => 0, 'col' => 0],
         ['dimension' => 1, 'row' => 0, 'col' => 1],
@@ -78,7 +78,7 @@ class Gauges
         // title
 
         $t = new \Text($title, self::width / 2, 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 14);
+        $t->SetFont(FF_COOL, FS_BOLD, 40);
         $t->Align('center', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -106,27 +106,27 @@ class Gauges
 
         $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_INDIVIDUAL, true) . ' - ';
         $t = new \Text($text, $x1 + self::margin_inner, $ytitle);
-        $t->SetFont(FF_DV_SANSSERIF, ($wheelType == Wheel::TYPE_INDIVIDUAL ? FS_BOLD : FS_NORMAL), 9);
+        $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_INDIVIDUAL ? FS_BOLD : FS_NORMAL), 20);
         $t->Align('left', 'top');
-        $t->SetColor("black");
+        $t->SetColor($wheelType == Wheel::TYPE_INDIVIDUAL ? "black" : "gray7");
         $t->Stroke($g->img);
 
         $x_next = $x1 + self::margin_inner + $t->GetWidth($g->img);
 
         $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_GROUP, true) . ' - ';
         $t = new \Text($text, $x_next + 2, $ytitle);
-        $t->SetFont(FF_DV_SANSSERIF, ($wheelType == Wheel::TYPE_GROUP ? FS_BOLD : FS_NORMAL), 9);
+        $t->SetFont(FF_COOL, FS_NORMAL, 20);
         $t->Align('left', 'top');
-        $t->SetColor("black");
+        $t->SetColor($wheelType == Wheel::TYPE_GROUP ? "black" : "gray7" );
         $t->Stroke($g->img);
 
         $x_next = $x_next + 2 + $t->GetWidth($g->img);
 
         $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_ORGANIZATIONAL, true);
         $t = new \Text($text, $x_next + 2, $ytitle);
-        $t->SetFont(FF_DV_SANSSERIF, ($wheelType == Wheel::TYPE_ORGANIZATIONAL ? FS_BOLD : FS_NORMAL), 9);
+        $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_ORGANIZATIONAL ? FS_BOLD : FS_NORMAL), 20);
         $t->Align('left', 'top');
-        $t->SetColor("black");
+        $t->SetColor($wheelType == Wheel::TYPE_ORGANIZATIONAL ? "black" : "gray7");
         $t->Stroke($g->img);
 
         // Draw rectangles
@@ -160,15 +160,15 @@ class Gauges
             $g->img->SetColor('#67b168');
         }
         if ($value == $minValue || $value == $maxValue) {
-            $g->img->Rectangle($x1 + self::margin_inner - 1, $y2 - 1, $x2 - self::margin_inner + 1, $y3 - self::margin_inner * 2 + 1);
-            $g->img->Rectangle($x1 + self::margin_inner - 2, $y2 - 2, $x2 - self::margin_inner + 2, $y3 - self::margin_inner * 2 + 2);
-            $g->img->Rectangle($x1 + self::margin_inner - 3, $y2 - 3, $x2 - self::margin_inner + 3, $y3 - self::margin_inner * 2 + 3);
+            for($i = 1; $i <= 6; $i++){
+            $g->img->Rectangle($x1 + self::margin_inner - $i, $y2 - $i, $x2 - self::margin_inner + $i, $y3 - self::margin_inner * 2 + $i);
+            }
         }
 
         // Percentage
 
-        $t = new \Text(round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y2 + $y3 - self::margin_inner * 2) / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 13);
+        $t = new \Text(round($percentage, 1) . '%', $x1 + self::margin_inner + 10, ($y2 + $y3 - self::margin_inner * 2) / 2);
+        $t->SetFont(FF_COOL, FS_BOLD, 26);
         $t->Align('left', 'center');
         $t->SetColor("white");
         $t->Stroke($g->img);

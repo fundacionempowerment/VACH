@@ -46,18 +46,21 @@ class Lineal
         require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
         require Yii::getAlias("@app/components/jpgraph/jpgraph_line.php");
 
-        $graph = new \Graph(900, 400);
+        $graph = new \Graph(1800, 800);
 
         $graph->title->Set($title);
-        $graph->title->SetFont(FF_DV_SANSSERIF, FS_BOLD, 16);
+        $graph->title->SetFont(FF_COOL, FS_BOLD, 40);
         $graph->SetScale('textlin', 0, 4);
         $graph->SetColor('white');
         $graph->SetFrame(false);
         $graph->xgrid->Show();
         $graph->xaxis->SetTickLabels($dimensions);
+        $graph->xaxis->SetFont(FF_COOL, FS_NORMAL, 24);
+        $graph->yaxis->SetFont(FF_COOL, FS_NORMAL, 18);
         $graph->legend->SetPos(0.5, 0.93, 'center', 'bottom');
+        $graph->legend->SetFont(FF_COOL, FS_NORMAL, 20);
+        $graph->legend->SetMarkAbsSize(20);
         $graph->SetTickDensity(TICKD_SPARSE);
-        $graph->xaxis->SetFont(FF_DV_SANSSERIF);
         //$graph->xaxis->SetLabelAngle(10);
 
         $redPlot = new \LinePlot($redLine);
@@ -66,7 +69,7 @@ class Lineal
         $redPlot->SetLegend(Yii::t('dashboard', 'How I see me'));
         $redPlot->SetColor('red');
         $redPlot->SetFillColor('lightred@0.5');
-        $redPlot->SetWeight(3);
+        $redPlot->SetWeight(5);
         $redPlot->SetCenter();
 
         $bluePlot = new \LinePlot($blueLine);
@@ -74,7 +77,7 @@ class Lineal
         $bluePlot->SetLegend(Yii::t('dashboard', 'How they see me'));
         $bluePlot->SetColor('blue');
         $bluePlot->SetFillColor('lightblue@0.5');
-        $bluePlot->SetWeight(3);
+        $bluePlot->SetWeight(5);
         $bluePlot->SetCenter();
 
         $graph->Stroke();

@@ -10,12 +10,12 @@ use app\models\WheelQuestion;
 class Emergents
 {
 
-    const width = 1000;
-    const line_height = 44;
-    const margin_title = 34;
-    const height_subtitle = 18;
-    const margin_inner = 8;
-    const max_emergent_shown = 4;
+    const width = 2000;
+    const line_height = 88;
+    const margin_title = 68;
+    const height_subtitle = 36;
+    const margin_inner = 16;
+    const max_emergent_shown = 8;
 
     static private $dimensions;
     static private $value_key;
@@ -128,7 +128,7 @@ class Emergents
         // title
 
         $t = new \Text($title, self::width / 2, 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 14);
+        $t->SetFont(FF_COOL, FS_BOLD, 28);
         $t->Align('center', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -159,7 +159,7 @@ class Emergents
     static private function drawSubtitle($g, $text, &$current_y)
     {
         $t = new \Text($text, self::margin_inner, $current_y);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 12);
+        $t->SetFont(FF_COOL, FS_BOLD, 24);
         $t->Align('left', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -172,7 +172,7 @@ class Emergents
         $text = self::$dimensions[$emergent['dimension']] . ' - ' . $emergent['question'];
 
         $t = new \Text($text, self::margin_inner, $current_y + self::margin_inner / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 9);
+        $t->SetFont(FF_COOL, FS_BOLD, 18);
         $t->Align('left', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -213,7 +213,7 @@ class Emergents
         // Percentage
 
         $t = new \Text(round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2 - self::margin_inner * 2) / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 13);
+        $t->SetFont(FF_COOL, FS_BOLD, 26);
         $t->Align('left', 'center');
         $t->SetColor("white");
         $t->Stroke($g->img);
@@ -226,7 +226,7 @@ class Emergents
         $text = self::$dimensions[$emergent['dimension']] . ' - ' . $emergent['question'];
 
         $t = new \Text($text, self::margin_inner, $current_y + self::margin_inner / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 9);
+        $t->SetFont(FF_COOL, FS_BOLD, 18);
         $t->Align('left', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
@@ -259,7 +259,7 @@ class Emergents
         $g->img->Rectangle($x1 + self::margin_inner, $y1, $x2 - self::margin_inner, $y2);
 
         $t = new \Text(Yii::t('dashboard', 'How they see me') . ' ' . round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 8);
+        $t->SetFont(FF_COOL, FS_BOLD, 16);
         $t->Align('left', 'center');
         $t->SetColor("white");
         $t->Stroke($g->img);
@@ -285,7 +285,7 @@ class Emergents
         $g->img->Rectangle($x1 + self::margin_inner, $y1, $x2 - self::margin_inner, $y2);
 
         $t = new \Text(Yii::t('dashboard', 'How I see me') . ' ' . round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 8);
+        $t->SetFont(FF_COOL, FS_BOLD, 16);
         $t->Align('left', 'center');
         $t->SetColor("white");
         $t->Stroke($g->img);

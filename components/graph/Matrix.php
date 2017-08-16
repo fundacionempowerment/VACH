@@ -31,11 +31,11 @@ class Matrix
             $title .= ' ' . Yii::t('app', 'of the team');
         }
 
-        $width = 900;
-        $height = 400;
-        $topMargin = 30;
-        $bottomMargin = 26;
-        $horizontalMargin = 105;
+        $width = 1800;
+        $height = 800;
+        $topMargin = 60;
+        $bottomMargin = 50;
+        $horizontalMargin = 160;
         $matrixData = [];
         $minx = $horizontalMargin;
         $minProductivity = 10000;
@@ -112,43 +112,43 @@ class Matrix
         // texts
 
         $t = new \Text($title, $width / 2, 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 14);
+        $t->SetFont(FF_COOL, FS_BOLD, 28);
         $t->Align('center', 'top');
         $t->SetColor("black");
         $t->Stroke($g->img);
 
         $t = new \Text('BP/BC+', 5, 5 + $topMargin);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('left', 'top');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('BP/AC', 5, $goodConsciousnessYAxe - 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('left', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('BP/BC-', 5, $height - $bottomMargin - 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('left', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('AP/BC+', $width - 5, 5 + $topMargin);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('right', 'top');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('AP/AC', $width - 5, $goodConsciousnessYAxe - 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('right', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('AP/BC-', $width - 5, $height - $bottomMargin - 5);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 12);
+        $t->SetFont(FF_COOL, FS_NORMAL, 24);
         $t->Align('right', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
@@ -169,19 +169,19 @@ class Matrix
 
         //axes values
         $t = new \Text('Min: ' . round($minProductivity * 10) / 10 . '%', $minx, $height - 6);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+        $t->SetFont(FF_COOL, FS_NORMAL, 20);
         $t->Align('center', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('Max: ' . round($maxProductivity * 10) / 10 . '%', $maxx, $height - 6);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+        $t->SetFont(FF_COOL, FS_NORMAL, 20);
         $t->Align('center', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
 
         $t = new \Text('Prom: ' . round($avgProductivity * 10) / 10 . '%', $posx, $height - 6);
-        $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+        $t->SetFont(FF_COOL, FS_NORMAL, 20);
         $t->Align('center', 'bottom');
         $t->SetColor("red");
         $t->Stroke($g->img);
@@ -190,7 +190,7 @@ class Matrix
             $highConsciousness = abs($data['consciousness']) < $avgConsciousness;
 
             $g->img->SetColor('#496987');
-            $g->img->FilledCircle($data['x'], $data['y'], ($data['id'] == $memberId ? 15 : 11));
+            $g->img->FilledCircle($data['x'], $data['y'], ($data['id'] == $memberId ? 30 : 22));
 
             if ($highConsciousness) {
                 $g->img->SetColor('#5cb85c');
@@ -198,13 +198,13 @@ class Matrix
                 $g->img->SetColor('#f0ad4e');
             }
 
-            $g->img->FilledCircle($data['x'], $data['y'], 10);
+            $g->img->FilledCircle($data['x'], $data['y'], 20);
 
-            $t = new \Text($data['name'], $data['x'], $data['y'] + 16);
+            $t = new \Text($data['name'], $data['x'], $data['y'] + 32);
             if ($data['id'] == $memberId) {
-                $t->SetFont(FF_DV_SANSSERIF, FS_BOLD, 10);
+                $t->SetFont(FF_COOL, FS_BOLD, 20);
             } else {
-                $t->SetFont(FF_DV_SANSSERIF, FS_NORMAL, 10);
+                $t->SetFont(FF_COOL, FS_NORMAL, 20);
             }
             $t->Align('center', 'top');
             $t->SetColor("#496987");

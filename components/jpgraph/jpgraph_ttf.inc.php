@@ -63,9 +63,12 @@ define("FF_USERFONT1",90);
 define("FF_USERFONT2",91);
 define("FF_USERFONT3",92);
 
+// Custom added font families
+DEFINE("FF_COOL",100);
+
 // Limits for fonts
 define("_FIRST_FONT",10);
-define("_LAST_FONT",99);
+define("_LAST_FONT",100);
 
 // TTF Font styles
 define("FS_NORMAL",9001);
@@ -279,6 +282,11 @@ class TTF {
 
 	    // File names for available fonts
 	    $this->font_files=array(
+            FF_COOL => array(FS_NORMAL =>'coolvetica.ttf',
+	    	FS_BOLD  =>'coolvetica.ttf',
+	    	FS_ITALIC =>'coolvetica.ttf',
+	    	FS_BOLDITALIC =>'coolvetica.ttf' ),
+
 	    FF_COURIER => array(FS_NORMAL =>'cour.ttf',
 	    	FS_BOLD  =>'courbd.ttf',
 	    	FS_ITALIC =>'couri.ttf',

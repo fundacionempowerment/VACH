@@ -51,17 +51,18 @@ class Radar
         require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
         require Yii::getAlias("@app/components/jpgraph/jpgraph_radar.php");
 
-        $graph = new \RadarGraph(700, 400);
+        $graph = new \RadarGraph(1400, 800);
         $graph->title->Set($title);
-        $graph->title->SetFont(FF_DV_SANSSERIF, FS_BOLD, 16);
+        $graph->title->SetFont(FF_COOL, FS_BOLD, 40);
         $graph->SetColor('white');
         $graph->SetSize(0.65);
         $graph->SetCenter(0.5, 0.55);
         $graph->SetScale('lin', 0, 4);
         $graph->yscale->ticks->Set(4, 1);
         $graph->SetFrame(false);
+        $graph->legend->SetFont(FF_COOL, FS_NORMAL, 20);
 
-        $graph->axis->SetFont(FF_DV_SANSSERIF, FS_BOLD);
+        $graph->axis->SetFont(FF_COOL, FS_BOLD, 24);
         $graph->axis->SetWeight(1);
 
         // Uncomment the following lines to also show grid lines.
