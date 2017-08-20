@@ -99,8 +99,8 @@ class WheelQuestion extends ActiveRecord
                 Yii::t('wheel', 'Results guidance'),
                 Yii::t('wheel', 'Client guidance'),
                 Yii::t('wheel', 'Quality guidance'),
-                Yii::t('wheel', 'Change Management'),
                 Yii::t('wheel', 'Conflict resolution'),
+                Yii::t('wheel', 'Change Management'),
                 Yii::t('wheel', 'Strategic vision'),
                 Yii::t('wheel', 'Identity'),
             ];
