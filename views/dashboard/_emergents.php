@@ -95,7 +95,7 @@ $token = rand(100000, 999999);
         ?>
         <div style='position:relative; color: white; font-size: 20px;' class="table table-bordered">
             <div style='font-size:0px; border-top: 28px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
-            <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
+            <div style='position:absolute; top:0px; left: 5px;'><?= round($percentage) ?>%</div>
         </div>
     <?php } ?>
     <h4><?= Yii::t('dashboard', 'Weaknesses') ?></h4>
@@ -117,7 +117,7 @@ $token = rand(100000, 999999);
         ?>
         <div style='position:relative; color: white; font-size: 20px;' class="table table-bordered">
             <div style='font-size:0px; border-top: 28px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
-            <div style='position:absolute; top:0px; left: 5px;'><?= floor($percentage) ?>%</div>
+            <div style='position:absolute; top:0px; left: 5px;'><?= round($percentage) ?>%</div>
         </div>
     <?php } ?>
     <?php if ($type > Wheel::TYPE_INDIVIDUAL && $memberId > 0) { ?>
@@ -135,7 +135,7 @@ $token = rand(100000, 999999);
             ?>
             <div style='position:relative; color: white; font-size: 14px; margin-bottom: 0px;' class="table table-bordered">
                 <div style='font-size:0px; border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
-                <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How they see me') . ' ' . floor($percentage) ?>%</div>
+                <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How they see me') . ' ' . round($percentage) ?>%</div>
             </div>
             <?php
             $color = 'ff4444';
@@ -147,7 +147,7 @@ $token = rand(100000, 999999);
             ?>
             <div style='position:relative; color: white; font-size: 14px;' class="table table-bordered">
                 <div style='font-size:0px; border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
-                <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How I see me') . ' ' . floor($percentage) ?>%</div>
+                <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How I see me') . ' ' . round($percentage) ?>%</div>
             </div>
     <?php } ?>
 <?php } ?>

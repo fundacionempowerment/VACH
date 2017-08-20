@@ -212,7 +212,7 @@ class Emergents
 
         // Percentage
 
-        $t = new \Text(round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2 - self::margin_inner * 2) / 2);
+        $t = new \Text(round($percentage) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2 - self::margin_inner * 2) / 2);
         $t->SetFont(FF_COOL, FS_BOLD, 26);
         $t->Align('left', 'center');
         $t->SetColor("white");
@@ -258,7 +258,7 @@ class Emergents
         $g->img->SetColor('black');
         $g->img->Rectangle($x1 + self::margin_inner, $y1, $x2 - self::margin_inner, $y2);
 
-        $t = new \Text(Yii::t('dashboard', 'How they see me') . ' ' . round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
+        $t = new \Text(Yii::t('dashboard', 'How they see me') . ' ' . round($percentage) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
         $t->SetFont(FF_COOL, FS_BOLD, 16);
         $t->Align('left', 'center');
         $t->SetColor("white");
@@ -284,7 +284,7 @@ class Emergents
         $g->img->SetColor('black');
         $g->img->Rectangle($x1 + self::margin_inner, $y1, $x2 - self::margin_inner, $y2);
 
-        $t = new \Text(Yii::t('dashboard', 'How I see me') . ' ' . round($percentage, 1) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
+        $t = new \Text(Yii::t('dashboard', 'How I see me') . ' ' . round($percentage) . '%', $x1 + self::margin_inner + 5, ($y1 + $y2) / 2);
         $t->SetFont(FF_COOL, FS_BOLD, 16);
         $t->Align('left', 'center');
         $t->SetColor("white");
