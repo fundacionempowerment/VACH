@@ -55,6 +55,7 @@ if ($wheels_completed)
                             <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon ?>!
                             </button>
+                            <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
                             <?php
                             $buttonId++;
                             break;
@@ -67,7 +68,6 @@ if ($wheels_completed)
                         if ($wheel->observer_id == $observerMember->person_id) {
                             echo $wheel->answerStatus . '&nbsp;';
                             echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
-                            echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                         }
                     ?>
                 </td>
@@ -99,13 +99,14 @@ if ($wheels_completed)
                 <th style="text-align: right;">
                     <?= $observerMember->member->fullname ?>
                     <?= Html::a($mail_icon . $team->notifyIcon(Wheel::TYPE_GROUP, $observerMember->member->id), Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
-                    <?php
-                    foreach ($team->groupWheels as $wheel)
-                        if ($wheel->observer_id == $observerMember->person_id) {
-                            ?>
-                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                    <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                        <?php
+                        foreach ($team->groupWheels as $wheel)
+                            if ($wheel->observer_id == $observerMember->person_id) {
+                                ?>
                                 <?= $mail_icon ?>!
                             </button>
+                            <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
                             <?php
                             $buttonId++;
                             break;
@@ -119,7 +120,6 @@ if ($wheels_completed)
                             if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                 echo $wheel->answerStatus . '&nbsp;';
                                 echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
-                                echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                             }
                         ?>
                     </td>
@@ -159,6 +159,7 @@ if ($wheels_completed)
                             <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon ?>!
                             </button>
+                            <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
                             <?php
                             $buttonId++;
                             break;
@@ -172,7 +173,6 @@ if ($wheels_completed)
                             if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
                                 echo $wheel->answerStatus . '&nbsp;';
                                 echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
-                                echo Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']);
                             }
                         ?>
                     </td>
