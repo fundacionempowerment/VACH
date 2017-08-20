@@ -55,7 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-bordered">
                 <?php } ?>
                 <tr>
-                    <td style="text-align: right;"><?= empty($answers[$i]['value']) ? $questions[$i]->question->text : $answers[$i]['question'] ?></td>
+                    <td style="text-align: right;"><?=
+                        empty($answers[$i]['value']) ?
+                                $questions[$i]->question->wheelText($wheel) :
+                                app\models\Question::getWheelText($answers[$i]['question'], $wheel)
+                        ?></td>
                     <td><?= Html::textInput('answer' . $i, $answers[$i]['value'], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
                 </tr>
                 <?php if ($i % $setQuantity == $setQuantity - 1) { ?>

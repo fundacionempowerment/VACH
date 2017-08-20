@@ -15,6 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-wheel">
     <h1><?= Html::encode($this->title) ?></h1>
+    <p>
+        <label>Textos especiales</label><br>
+        <b>[observed]</b> miembro al que se está "evaluando".<br>
+        <b>[team]</b> nombre del equipo.<br>
+        <b>[company]</b> nombre de la empresa.<br>
+    </p>
     <div class="row col-md-12">
         <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
         <?php

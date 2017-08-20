@@ -117,6 +117,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'emergents' => $emergents,
             'type' => $filter->wheelType,
             'member' => $member,
+            'team' => $team,
+            'company' => $company,
         ]);
     }
     echo $this->render('_detailed_emergents', [

@@ -41,4 +41,36 @@ class Question extends ActiveRecord
         return $question->id;
     }
 
+    public function wheelText($wheel)
+    {
+        $result = static::getWheelText($this->text, $wheel);
+        return $result;
+    }
+
+    public static function getWheelText($text, $wheel)
+    {
+        $replaces = [
+            '[observed]' => $wheel->observed->fullname,
+            '[team]' => $wheel->team->name,
+            '[company]' => $wheel->team->company->name,
+        ];
+
+        $result = $text;
+
+        foreach ($replaces as $key => $value) {
+            $result = str_replace($key, $value, $result);
+        }
+
+        return $result;
+    }
+
+    public static function getEmergentText($text, $member, $team, $company)
+    {
+        $result = $text;
+        $result = str_replace('[observed]', ($member ? $member->fullname : Yii::t('app', 'All')), $result);
+        $result = str_replace('[team]', ($team ? $team->name : Yii::t('app', 'All')), $result);
+        $result = str_replace('[company]', ($company ? $company->name : Yii::t('app', 'All')), $result);
+        return $result;
+    }
+
 }

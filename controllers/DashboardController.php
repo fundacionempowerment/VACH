@@ -30,6 +30,7 @@ class DashboardController extends BaseController
         }
 
         $companies = [];
+        $company = null;
         $teams = [];
         $team = null;
         $members = [];
@@ -48,6 +49,7 @@ class DashboardController extends BaseController
         }
 
         if ($filter->companyId > 0) {
+            $company = Company::findOne($filter->companyId);
             $teams = Team::getDashboardList($filter->companyId);
 
             if (count($teams) == 1) {
@@ -117,6 +119,7 @@ class DashboardController extends BaseController
         return $this->render('index', [
                     'filter' => $filter,
                     'companies' => $companies,
+                    'company' => $company,
                     'teams' => $teams,
                     'team' => $team,
                     'members' => $members,

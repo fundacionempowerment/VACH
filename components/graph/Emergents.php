@@ -6,6 +6,7 @@ use Yii;
 use app\models\Person;
 use app\models\Wheel;
 use app\models\WheelQuestion;
+use app\models\Question;
 
 class Emergents
 {
@@ -19,6 +20,9 @@ class Emergents
 
     static private $dimensions;
     static private $value_key;
+    static private $member;
+    static private $team;
+    static private $company;
 
     static public function draw($teamId, $memberId, $wheelType)
     {
@@ -28,11 +32,13 @@ class Emergents
             $title = Yii::t('dashboard', 'Organiz. Emergents Matrix');
         else
             $title = Yii::t('dashboard', 'Individual Emergents Matrix');
-        
-        $member = Person::findOne(['id' => $memberId]);
 
-        if (!empty($member)) {
-            $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
+        self::$team = \app\models\Team::findOne(['id' => $teamId]);
+        self::$company = self::$team->company;
+        self::$member = Person::findOne(['id' => $memberId]);
+
+        if (!empty(self::$member)) {
+            $title .= ' ' . Yii::t('app', 'of') . ' ' . self::$member->fullname;
         } else {
             $title .= ' ' . Yii::t('app', 'of the team');
         }
@@ -169,7 +175,7 @@ class Emergents
 
     static private function drawGauge($g, $emergent, &$current_y)
     {
-        $text = self::$dimensions[$emergent['dimension']] . ' - ' . $emergent['question'];
+        $text = self::$dimensions[$emergent['dimension']] . ' - ' . Question::getEmergentText($emergent['question'], self::$member, self::$team, self::$company);
 
         $t = new \Text($text, self::margin_inner, $current_y + self::margin_inner / 2);
         $t->SetFont(FF_COOL, FS_BOLD, 18);
@@ -223,7 +229,7 @@ class Emergents
 
     static private function drawGap($g, $emergent, &$current_y)
     {
-        $text = self::$dimensions[$emergent['dimension']] . ' - ' . $emergent['question'];
+        $text = self::$dimensions[$emergent['dimension']] . ' - ' . Question::getEmergentText($emergent['question'], self::$member, self::$team, self::$company);
 
         $t = new \Text($text, self::margin_inner, $current_y + self::margin_inner / 2);
         $t->SetFont(FF_COOL, FS_BOLD, 18);

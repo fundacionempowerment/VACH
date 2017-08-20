@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Wheel;
 use app\models\WheelQuestion;
+use app\models\Question;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -78,7 +79,7 @@ $token = rand(100000, 999999);
     <h4><?= Yii::t('dashboard', 'Strengths') ?></h4>
     <?php foreach ($max_emergents as $emergent) {
         ?>
-        <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
+        <label><?= $dimensions[$emergent['dimension']] ?> - <?= Question::getEmergentText($emergent['question'], $member, $team, $company) ?></label>
         <?php
         if ($emergent[$index] > Yii::$app->params['good_consciousness'])
             $color = '5cb85c';
@@ -100,7 +101,7 @@ $token = rand(100000, 999999);
     <?php } ?>
     <h4><?= Yii::t('dashboard', 'Weaknesses') ?></h4>
     <?php foreach ($min_emergents as $emergent) { ?>
-        <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
+        <label><?= $dimensions[$emergent['dimension']] ?> - <?= Question::getEmergentText($emergent['question'], $member, $team, $company) ?></label>
         <?php
         if ($emergent[$index] > Yii::$app->params['good_consciousness'])
             $color = '5cb85c';
@@ -123,7 +124,7 @@ $token = rand(100000, 999999);
     <?php if ($type > Wheel::TYPE_INDIVIDUAL && $memberId > 0) { ?>
         <h4><?= Yii::t('dashboard', 'Consciousness gap emergents') ?></h4>
         <?php foreach ($gap_emergents as $emergent) { ?>
-            <label><?= $dimensions[$emergent['dimension']] ?> - <?= $emergent['question'] ?></label>
+            <label><?= $dimensions[$emergent['dimension']] ?> - <?= Question::getEmergentText($emergent['question'], $member, $team, $company) ?></label>
             <?php
             $color = '4444ff';
 
@@ -149,12 +150,12 @@ $token = rand(100000, 999999);
                 <div style='font-size:0px; border-top: 20px solid #<?= $color ?>; width: <?= $width ?>%;'>&nbsp;</div>
                 <div style='position:absolute; top:0px; left: 5px;'><?= Yii::t('dashboard', 'How I see me') . ' ' . round($percentage) ?>%</div>
             </div>
+        <?php } ?>
     <?php } ?>
-<?php } ?>
 </div>
-    <?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
+<?php if (strpos(Yii::$app->request->absoluteUrl, 'download') === false) { ?>
     <div class="col-md-12 text-center">
-    <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
+        <?= Html::button(Yii::t('app', 'Export'), ['class' => 'btn btn-default hidden-print', 'onclick' => "printDiv('div$token')"]) ?>
     </div>
 <?php } ?>
 <div class="clearfix"></div>
