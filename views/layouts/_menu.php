@@ -29,7 +29,7 @@ if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Payments'), 'url' => ['/admin/payment']];
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Liquidations'), 'url' => ['/admin/liquidation']];
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/admin/user']];
-    $admininistratorMenu[] = ['label' => Yii::t('wheel', 'Wheel Questions'), 'url' => ['/admin/wheel/questions']];
+    $admininistratorMenu[] = ['label' => Yii::t('team', 'Team Types'), 'url' => ['/admin/team-type']];
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['/admin/feedback']];
     $admininistratorMenu[] = ['label' => Yii::t('app', 'Backup'), 'url' => ['/site/backup']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];

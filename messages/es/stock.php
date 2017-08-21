@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -19,16 +18,18 @@
  */
 return [
     'Add licences' => 'Agregar licencias',
+    'Amount' => 'Monto',
     'Available licences' => 'Licencias disponibles',
     'Begin payment' => 'Comenzar pago',
     'Buy Licences' => 'Comprar licencias',
-    'Created' => 'Creado',
     'Consumed' => 'Consumido',
     'Consumer' => 'Consumidor',
+    'Created' => 'Creado',
     'Dear administrator, I\'m requesting {q} licences. Thanks.' => 'Estimado administrado, Estoy solicitando {q} licencias. Gracias.',
     'Go to My Licences' => 'Ir a Mis licencias',
     'Licences' => 'Licencias',
     'Licences required' => 'Licencias requeridas',
+    'Local Amount' => 'Monto local',
     'My Licences' => 'Mis licencias',
     'Not available licences' => 'Licencias no disponibles',
     'Price' => 'Precio',
@@ -37,6 +38,7 @@ return [
     'Quantity' => 'Cantidad',
     'Remove licences' => 'Quitar licencias',
     'Requesting licences' => 'Solicitando licencias',
+    'Stock quantity not available' => 'Cantidad en stock no disponible',
     'Total' => 'Total',
     'You need {count} more licences' => 'Necesita {count} licencias más',
     'Your balance' => 'Su saldo',

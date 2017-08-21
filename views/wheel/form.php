@@ -12,7 +12,7 @@ use yii\bootstrap\Modal;
 /* @var $wheel app\models\ContactForm */
 
 $dimensions = WheelQuestion::getDimensionNames($wheel->type);
-$questions = WheelQuestion::getQuestions($wheel->type);
+$questions = WheelQuestion::getQuestions($wheel);
 $setQuantity = count($questions) / 8;
 
 for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)

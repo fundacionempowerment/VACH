@@ -45,6 +45,7 @@ return [
     'Description' => 'Descripción',
     'Download DOC' => 'Descargar DOC',
     'Download PPT' => 'Descargar PPT',
+    'Duplicate' => 'Duplicar',
     'Edit' => 'Editar',
     'Email' => 'Correo electrónico',
     'Empowerment Foundation' => 'Fundación Empowerment',
@@ -128,6 +129,7 @@ return [
     '{name} has been successfully canceled.' => '{name} ha sido exitosamente cancelado.',
     '{name} has been successfully created.' => '{name} ha sido exitosamente creado.',
     '{name} has been successfully deleted.' => '{name} ha sido exitosamente eliminado.',
+    '{name} has been successfully duplicated.' => '{name}  ha sido exitosamente duplicado.',
     '{name} has been successfully edited.' => '{name} ha sido exitosamente editado.',
     '{name} has been successfully removed from {group}.' => '{name} ha sido exitosamente removido de {group}',
 ];

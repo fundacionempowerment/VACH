@@ -12,7 +12,7 @@ use app\models\WheelQuestion;
 /* @var $wheel app\models\ContactForm */
 
 $dimensions = WheelQuestion::getDimensionNames($wheel->type);
-$questions = WheelQuestion::getQuestions($wheel->type);
+$questions = WheelQuestion::getQuestions($wheel);
 $setQuantity = count($questions) / 8;
 
 for ($i = 0; $i < count($questions); $i++)

@@ -1,0 +1,63 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
+use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use yii\widgets\DetailView;
+
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+/* @var $teamType app\models\TeamType */
+
+$this->title = $teamType->name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Team Types'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
+$detailProvider = new ArrayDataProvider([
+    'allModels' => $teamType->wheelQuestions,
+    'pagination' => false,
+        ]);
+?>
+<div class="site-register">
+    <h1><?= Html::encode($this->title) ?></h1>
+    <p>
+        <?= Html::a(Yii::t('team', 'Edit team type'), ['edit', 'id' => $teamType->id], ['class' => 'btn btn-primary']) ?>
+    </p>
+    <?=
+    DetailView::widget([
+        'model' => $teamType,
+        'attributes' => [
+            'name',
+            [
+                'attribute' => 'product',
+                'value' => $teamType->product->name,
+            ],
+        ],
+    ])
+    ?>
+    <h3><?= $teamType->getAttributeLabel('wheelQuestions') ?></h3>
+    <?=
+    GridView::widget([
+        'dataProvider' => $detailProvider,
+        'columns' => [
+            [
+                'attribute' => 'dimension',
+                'value' => function ($data) {
+                    return app\models\WheelQuestion::getDimentionName($data['dimension'], $data['type']);
+                },
+            ],
+            [
+                'attribute' => 'question',
+                'value' => function ($data) {
+                    return $data ? $data->question->text : '';
+                },
+            ],
+        ],
+    ]);
+    ?>
+</div>
+

@@ -24,6 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?= $form->field($team, 'name') ?>
     <?=
+    $form->field($team, 'team_type_id')->widget(Select2::classname(), [
+        'data' => app\models\TeamType::getList(),
+    ]);
+    ?>
+    <?=
     $form->field($team, 'company_id')->widget(Select2::classname(), [
         'data' => $companies,
     ]);

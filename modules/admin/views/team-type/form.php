@@ -8,13 +8,19 @@ use app\models\WheelQuestion;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $wheel app\models\ContactForm */
+/* @var $wheel app\models\TeamType */
 
-$this->title = Yii::t('wheel', 'Wheel Questions');
+$this->title = ($teamType->id == 0 ? Yii::t('team', 'New team type') : Yii::t('app', 'Edit') . ' ' . $teamType->name );
+$this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Team Types'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $teamType->name, 'url' => ['view', 'id' => $teamType->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-wheel">
     <h1><?= Html::encode($this->title) ?></h1>
+    <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
+    <?= $form->field($teamType, 'name') ?>
+    <?= $form->field($teamType, 'product_id')->dropDownList(\app\models\Product::getList()) ?>
+    <h3><?= $teamType->getAttributeLabel('wheelQuestions') ?></h3>
     <p>
         <label>Textos especiales</label><br>
         <b>[observed]</b> miembro al que se está "evaluando".<br>
@@ -22,11 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <b>[company]</b> nombre de la empresa.<br>
     </p>
     <div class="row col-md-12">
-        <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
         <?php
         $current_dimension = -1;
         $div_open = false;
-        foreach ($questions as $question) {
+        foreach ($teamType->wheelQuestions as $question) {
             $dimensions = WheelQuestion::getDimensionNames($question->type);
 
             if ($current_dimension != $question->dimension) {
@@ -42,13 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <p>
-                <?= Html::input('text', 'question' . $question->id, $question->question->text, ['class' => 'col-md-12']) ?>
+                <?= Html::input('text', "q-$question->type-$question->dimension-$question->order", $question->question->text, ['class' => 'col-md-12']) ?>
             </p>
         <?php } ?>
         <?= '</div>' ?>
-        <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']); ?>
-        </div>
-        <?php ActiveForm::end(); ?>
     </div>
+    <p>
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']); ?>
+    </p>
+    <?php ActiveForm::end(); ?>
 </div>

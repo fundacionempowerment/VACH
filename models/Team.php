@@ -21,7 +21,7 @@ class Team extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'coach_id', 'sponsor_id', 'company_id'], 'required'],
+            [['name', 'coach_id', 'sponsor_id', 'company_id', 'team_type_id'], 'required'],
             [['name', 'company_id'], 'unique', 'targetAttribute' => ['name', 'company_id']],
         ];
     }
@@ -30,6 +30,7 @@ class Team extends ActiveRecord
     {
         return [
             'name' => Yii::t('app', 'Name'),
+            'team_type_id' => Yii::t('app', 'Type'),
             'coach_id' => Yii::t('team', 'Coach'),
             'sponsor_id' => Yii::t('team', 'Sponsor'),
             'company_id' => Yii::t('team', 'Company'),
@@ -81,6 +82,11 @@ class Team extends ActiveRecord
                         ->where(['team.coach_id' => Yii::$app->user->id])
                         ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
                         ->orderBy('team.id desc');
+    }
+
+    public function getTeamType()
+    {
+        return $this->hasOne(TeamType::className(), ['id' => 'team_type_id']);
     }
 
     public function getCoach()

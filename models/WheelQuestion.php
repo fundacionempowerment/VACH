@@ -119,19 +119,14 @@ class WheelQuestion extends ActiveRecord
         return $dimensions;
     }
 
-    public static function getQuestions($wheelType)
+    public static function getQuestions($wheel)
     {
-        return self::find()
-                        ->where(['type' => $wheelType])
-                        ->orderBy('order')
-                        ->all();
+        return $wheel->team->teamType->getWheelQuestions()->where(['type' => $wheel->type])->all();
     }
 
     public static function getQuestionCount($wheelType)
     {
-        return self::find()
-                        ->where(['type' => $wheelType])
-                        ->count();
+        return $wheelType == Wheel::TYPE_INDIVIDUAL ? 80 : 64;
     }
 
 }

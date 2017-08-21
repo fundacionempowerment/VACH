@@ -39,6 +39,7 @@ $pluginOptions = [
     <div class="row col-md-6">
         <h3><?= Yii::t('team', 'Team data') ?> </h3>
         <p>
+            <?= Yii::t('app', 'Type') ?>: <?= Html::label($team->teamType->name) ?><br />
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
             <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
