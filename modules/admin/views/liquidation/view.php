@@ -66,6 +66,10 @@ $detailProvider = new ArrayDataProvider([
         'dataProvider' => $detailProvider,
         'columns' => [
             'id',
+            [
+                'attribute' => 'coach.fullname',
+                'label' => Yii::t('payment', 'Coach'),
+            ],
             'concept',
             [
                 'attribute' => 'amount',

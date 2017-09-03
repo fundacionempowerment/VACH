@@ -44,13 +44,22 @@ $columns = [
     [
         'attribute' => 'price',
         'label' => Yii::t('stock', 'Price'),
-        'format' => 'currency',
+        'value' => function ($data) {
+            return 'USD ' . Yii::$app->formatter->asDecimal($data['price'], 2);
+        },
     ],
     [
         'attribute' => 'amount',
         'label' => Yii::t('stock', 'Amount'),
         'value' => function ($data) {
             return 'USD ' . Yii::$app->formatter->asDecimal($data['amount'], 2);
+        },
+    ],
+    [
+        'attribute' => 'rate',
+        'label' => Yii::t('payment', 'Rate'),
+        'value' => function ($data) {
+            return Yii::$app->formatter->asDecimal($data['rate'], 2);
         },
     ],
     [
@@ -71,14 +80,12 @@ $columns = [
     [
         'attribute' => 'created_stamp',
         'label' => Yii::t('stock', 'Created'),
-    ],
-    [
-        'attribute' => 'creator_name',
-        'label' => Yii::t('app', 'Creator')
+        'format' => 'date',
     ],
     [
         'attribute' => 'consumed_stamp',
         'label' => Yii::t('stock', 'Consumed'),
+        'format' => 'date',
     ],
 ];
 ?>

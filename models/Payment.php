@@ -93,12 +93,18 @@ class Payment extends ActiveRecord
 
     public static function browse()
     {
-        return Payment::find()->where(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
+        return Payment::find()
+                        ->where(['>', 'amount', 0])
+                        ->andWhere(['>', 'rate', 0])
+                        ->andWhere(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
     }
 
     public static function adminBrowse()
     {
-        return Payment::find()->orderBy('id desc');
+        return Payment::find()
+                        ->where(['>', 'amount', 0])
+                        ->andWhere(['>', 'rate', 0])
+                        ->orderBy('id desc');
     }
 
     public static function adminBrowsePendings()

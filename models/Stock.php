@@ -104,6 +104,7 @@ class Stock extends ActiveRecord
                             'team.name as team_name', 'company.name as company_name',
                             new Expression('COUNT(stock.id) as quantity'),
                             new Expression('SUM(stock.price) as amount'),
+                            new Expression('AVG(payment.rate) as rate'),
                             new Expression('SUM(stock.price * payment.rate) as localAmount'),
                         ])
                         ->from('stock')

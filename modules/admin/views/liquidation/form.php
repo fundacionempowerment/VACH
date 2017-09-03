@@ -5,6 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
+use kartik\widgets\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -25,7 +26,14 @@ $availablePaymentProvider = new ActiveDataProvider([
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(['id' => 'payment-form',]); ?>
-    <?= $form->field($model, 'stamp') ?>
+    <?=
+    $form->field($model, 'stamp')->widget(DateTimePicker::className(), [
+        'options' => ['placeholder' => 'Enter event time ...'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'dd-mm-yyyy hh:ii'
+    ]]);
+    ?>
     <label><?= Yii::t('payment', 'Available payments') ?></label>
     <?=
     GridView::widget([
@@ -43,24 +51,25 @@ $availablePaymentProvider = new ActiveDataProvider([
                 },
             ],
             'id',
+            [
+                'attribute' => 'coach.fullname',
+                'label' => Yii::t('payment', 'Coach'),
+            ],
             'concept',
             [
                 'label' => Yii::t('payment', 'Local amount'),
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
                     return 'ARS ' . Yii::$app->formatter->asDecimal($data['localAmount'], 2);
                 },
             ],
             [
                 'attribute' => 'commision',
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
                     return $data['commision_currency'] ?: 'ARS' . ' ' . Yii::$app->formatter->asDecimal($data['commision'] ?: 0, 2);
                 },
             ],
             [
                 'label' => Yii::t('payment', 'Net amount'),
-                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
                     return $data['commision_currency'] ?: 'ARS' . ' ' . Yii::$app->formatter->asDecimal($data['netAmount'] ?: 0, 2);
                 },
@@ -77,7 +86,11 @@ $availablePaymentProvider = new ActiveDataProvider([
                     return 'ARS' . ' ' . Yii::$app->formatter->asDecimal($data['part2Amount'] ?: 0, 2);
                 },
             ],
-            'stamp:datetime',
+            [
+                'attribute' => 'stamp',
+                'label' => Yii::t('app', 'Date'),
+                'format' => 'date',
+            ],
         ]
     ]);
     ?>
