@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
 
 class Presentation
 {
+
     private static $team;
     private static $ppt;
 
@@ -56,6 +57,17 @@ class Presentation
         return self::$ppt;
     }
 
+    private static function addBackground($slide)
+    {
+        $slide->createRichTextShape()
+                ->setHeight(768)
+                ->setWidth(1024)
+                ->getFill()
+                ->setFillType(Fill::FILL_SOLID)
+                ->setStartColor(new Color('FF000000'))
+                ->setEndColor(new Color('FF000000'));
+    }
+
     private static function addCPCLogo($slide)
     {
         $shape = $slide->createDrawingShape();
@@ -72,6 +84,7 @@ class Presentation
     {
         $currentSlide = self::$ppt->getActiveSlide();
 
+        self::addBackground($currentSlide);
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
@@ -83,16 +96,18 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->company->name);
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(40)
                 ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(40)
-                ->setColor(new Color('FF000000'));
+                ->setColor(new Color('FFFFFFFF'));
     }
 
     private static function addGoldenRuleSlide()
@@ -110,28 +125,32 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('reglas de oro');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(50)
                 ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('Ésta es la voz del equipo');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(35)
                 ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('Hipótesis sujeta a validación');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(35)
                 ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('No tomarlo personal');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(35)
                 ->setColor(new Color('FF000000'));
     }
@@ -151,7 +170,8 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun('cuadro integrado de competencias');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(30)
                 ->setColor(new Color('FFFF0000'));
 
@@ -180,7 +200,8 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('Equipo');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(70)
                 ->setColor(new Color('FFFF0000'));
     }
@@ -253,7 +274,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun($title);
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()->setName('Coolvetica')
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
@@ -362,7 +383,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'));
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()->setName('Coolvetica')
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
@@ -493,7 +514,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'));
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()->setName('Coolvetica')
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
@@ -705,7 +726,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('Miembros');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()->setName('Coolvetica')
                 ->setSize(70)
                 ->setColor(new Color('FFFF0000'));
     }
@@ -725,7 +746,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun($member->member->fullname);
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()->setName('Coolvetica')
                 ->setSize(60)
                 ->setColor(new Color('FFFF0000'));
     }
@@ -938,6 +959,7 @@ class Presentation
     {
         $currentSlide = self::$ppt->createSlide();
 
+        self::addBackground($currentSlide);
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
@@ -949,8 +971,10 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('¡Muchas gracias!');
-        $textRun->getFont()->setBold(true)
+        $textRun->getFont()
+                ->setName('Coolvetica')
                 ->setSize(60)
                 ->setColor(new Color('FFFF0000'));
     }
+
 }
