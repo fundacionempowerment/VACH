@@ -19,6 +19,7 @@
 return [
     'Amount' => 'Monto',
     'Available payments' => 'Pagos disponibles',
+    'Coach' => 'Coach',
     'Commision' => 'Comisión',
     'Commision currency' => 'Moneda de comisión',
     'Create liquidation' => 'Crear liquidación',

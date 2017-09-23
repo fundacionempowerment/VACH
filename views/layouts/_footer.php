@@ -15,6 +15,8 @@ use yii\helpers\Html;
         <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?>
     </p>
     <p class="pull-right">
+        <?= Html::a(Yii::t('app', 'Source code'), 'https://github.com/fundacionempowerment/VACH', ['rel' => 'external', 'target' => '_blank']) ?>
+        &nbsp;
         <?= Yii::t('app', 'Powered by') ?>
         <?= Html::a('Yii Framework', 'http://www.yiiframework.com/', ['rel' => 'external', 'target' => '_blank']) ?>
         <?= Yii::$app->request->isSecureConnection && !\Yii::$app->user->isGuest ? \onmotion\telegram\Telegram::widget() : '' ?>
