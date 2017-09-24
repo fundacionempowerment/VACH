@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\Person;
 use kartik\widgets\Select2;
+use dosamigos\fileupload\FileUpload;
 
 $genders = Person::getGenders();
 ?>
@@ -18,12 +19,37 @@ $genders = Person::getGenders();
     ]);
     ?>
 
-    <?= $form->field($person, 'name') ?>
-    <?= $form->field($person, 'surname') ?>
-    <?= $form->field($person, 'shortname') ?>
-    <?= $form->field($person, 'email') ?>
-    <?= $form->field($person, 'phone') ?>
-    <?= $form->field($person, 'gender')->widget(Select2::classname(), ['data' => $genders]) ?>
+    <div class="col-md-7">
+        <?= $form->field($person, 'name') ?>
+        <?= $form->field($person, 'surname') ?>
+        <?= $form->field($person, 'shortname') ?>
+        <?= $form->field($person, 'email') ?>
+        <?= $form->field($person, 'phone') ?>
+        <?= $form->field($person, 'gender')->widget(Select2::classname(), ['data' => $genders]) ?>
+    </div>
+    <div class="col-md-5">
+        <?=
+        FileUpload::widget([
+            'model' => $person,
+            'attribute' => 'photo',
+            'url' => ['person/photo', 'id' => $person->id],
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
+    	                            console.log(e);
+    	                            console.log(data);
+    	                        }',
+                'fileuploadfail' => 'function(e, data) {
+    	                            console.log(e);
+    	                            console.log(data);
+                                }',
+            ],
+        ]);
+        ?>
+    </div>
+
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($person->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
     </div>
