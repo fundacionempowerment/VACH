@@ -28,7 +28,7 @@ $this->title = 'VACH';
                     <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-vach col-md-12', 'name' => 'login-button']) ?><br />
                 </div>
                 <div class="text-right form-group">
-                    <?= Html::a(Yii::t('app', 'Forgor your password?'), ['site/request-password-reset'], ['class' => 'text-danger']) ?>
+                    <?= Html::a(Yii::t('app', 'Forgot your password?'), ['site/request-password-reset'], ['class' => 'text-danger']) ?>
                 </div>
                 <div class="text-center">
                     <?= Yii::$app->params['allow_register'] ? Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-default']) : '' ?> 
