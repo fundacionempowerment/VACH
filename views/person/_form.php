@@ -19,7 +19,7 @@ $genders = Person::getGenders();
     ]);
     ?>
 
-    <div class="col-md-7">
+    <div class="col-md-6">
         <?= $form->field($person, 'name') ?>
         <?= $form->field($person, 'surname') ?>
         <?= $form->field($person, 'shortname') ?>
@@ -27,7 +27,7 @@ $genders = Person::getGenders();
         <?= $form->field($person, 'phone') ?>
         <?= $form->field($person, 'gender')->widget(Select2::classname(), ['data' => $genders]) ?>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <?=
         FileUpload::widget([
             'model' => $person,
@@ -49,6 +49,7 @@ $genders = Person::getGenders();
         ]);
         ?>
     </div>
+    <div class="clearfix"></div>
 
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($person->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
