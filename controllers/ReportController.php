@@ -19,7 +19,6 @@ use app\models\TeamMember;
 
 class ReportController extends Controller
 {
-
     const ANALYSIS_OPTIONS = [
         'height' => '500px',
         'toolbarGroups' => [
@@ -65,11 +64,12 @@ class ReportController extends Controller
         foreach ($team->members as $teamMember) {
             $exists = false;
             if (count($team->report->individualReports) > 0) {
-                foreach ($team->report->individualReports as $individualReport)
+                foreach ($team->report->individualReports as $individualReport) {
                     if ($individualReport->person_id == $teamMember->person_id) {
                         $exists = true;
                         break;
                     }
+                }
             }
 
             if (!$exists) {
@@ -135,8 +135,9 @@ class ReportController extends Controller
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -177,8 +178,9 @@ class ReportController extends Controller
         $groupPerformanceMatrix = [];
         $organizationalPerformanceMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -218,8 +220,9 @@ class ReportController extends Controller
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -258,8 +261,9 @@ class ReportController extends Controller
         $groupGauges = [];
         $organizationalGauges = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -298,8 +302,9 @@ class ReportController extends Controller
         $groupEmergents = [];
         $organizationalEmergents = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -365,8 +370,9 @@ class ReportController extends Controller
         $groupPerformanceMatrix = [];
         $organizationalPerformanceMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -443,8 +449,9 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'relations-' . $individualReport->id]);
         }
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -484,8 +491,9 @@ class ReportController extends Controller
         $groupGauges = [];
         $organizationalGauges = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -525,8 +533,9 @@ class ReportController extends Controller
         $groupEmergents = [];
         $organizationalEmergents = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember)
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
             $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
@@ -627,5 +636,4 @@ class ReportController extends Controller
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
     }
-
 }

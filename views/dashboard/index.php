@@ -65,13 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
     }
 
-    if (count($gauges) > 0)
+    if (count($gauges) > 0) {
         echo $this->render('_gauges', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
         ]);
-
+    }
 
     if (count($relationsMatrix) > 0) {
         echo $this->render('_number_matrix', [

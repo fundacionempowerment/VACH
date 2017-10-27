@@ -8,7 +8,6 @@ use app\models\Company;
 
 class CompanyController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()
@@ -22,11 +21,11 @@ class CompanyController extends BaseController
     public function actionView($id)
     {
         $company = Company::findOne(['id' => $id]);
-        
+
         if ($company->userNotAllowed()) {
             throw new \yii\web\ForbiddenHttpException();
         }
-        
+
         return $this->render('view', [
                     'company' => $company,
         ]);
@@ -84,5 +83,4 @@ class CompanyController extends BaseController
 
         return $this->redirect(['/company']);
     }
-
 }

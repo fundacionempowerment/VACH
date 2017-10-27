@@ -14,7 +14,6 @@ use app\models\ResetPasswordForm;
 
 class SiteController extends BaseController
 {
-
     public function behaviors()
     {
         return [
@@ -66,8 +65,9 @@ class SiteController extends BaseController
         $wheel = new Wheel();
 
         $nowheel = Yii::$app->request->get('nowheel');
-        if (isset($nowheel))
+        if (isset($nowheel)) {
             $wheel->addError('token', Yii::t('wheel', 'Wheel not found.'));
+        }
 
         return $this->render('index', [
                     'model' => $model,
@@ -275,17 +275,20 @@ class SiteController extends BaseController
 
     public static function FlashErrors($record)
     {
-        if (!isset($record))
+        if (!isset($record)) {
             return;
+        }
 
-        foreach ($record->getErrors() as $attribute => $messages)
-            foreach ($messages as $message)
+        foreach ($record->getErrors() as $attribute => $messages) {
+            foreach ($messages as $message) {
                 self::addFlash('error', \Yii::t('app', 'Problem: ') . $message);
+            }
+        }
     }
 
     public function actionMigrateUp()
     {
-// https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
+        // https://github.com/yiisoft/yii2/issues/1764#issuecomment-42436905
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
         defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
@@ -308,5 +311,4 @@ class SiteController extends BaseController
         }
         return $this->goHome();
     }
-
 }

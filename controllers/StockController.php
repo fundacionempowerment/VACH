@@ -21,7 +21,6 @@ use app\models\RemoveModel;
 
 class StockController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()
@@ -62,7 +61,6 @@ class StockController extends BaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-
             Stock::saveBuyModel($model);
 
             return $this->render('/payment/redirect', [
@@ -74,5 +72,4 @@ class StockController extends BaseController
                     'model' => $model,
         ]);
     }
-
 }

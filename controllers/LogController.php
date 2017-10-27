@@ -8,7 +8,6 @@ use app\models\Log;
 
 class LogController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()
@@ -25,12 +24,11 @@ class LogController extends BaseController
 
         if ($coach_id) {
             $log->coach_id = $coach_id;
-        } else if (isset(Yii::$app->user)) {
+        } elseif (isset(Yii::$app->user)) {
             $log->coach_id = Yii::$app->user->id;
         }
 
         $log->text = $text;
         return $log->save();
     }
-
 }
