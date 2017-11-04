@@ -294,10 +294,10 @@ class Stock extends ActiveRecord
     {
         $consumed_stamp = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $quantity; $i ++) {
-            $available_stock_id = Yii::$app->db->createCommand('SELECT `id` FROM `stock` '
+            $available_stock = Yii::$app->db->createCommand('SELECT `id`, `price`, `payment_id` FROM `stock` '
                             . 'WHERE `consumed_stamp` is null '
                             . 'AND `coach_id` = ' . $consumer_id
-                            . ' ORDER BY `id` ASC LIMIT 1')->queryScalar();
+                            . ' ORDER BY `id` ASC LIMIT 1')->queryOne();
 
             Yii::$app->db->createCommand()
                     ->update('stock', [
@@ -305,7 +305,15 @@ class Stock extends ActiveRecord
                         'consumed_stamp' => $consumed_stamp,
                         'consumer_id' => Yii::$app->user->identity->id,
                             ], [
-                        'id' => $available_stock_id,
+                        'id' => $available_stock['id'],
+                    ])->execute();
+
+            Yii::$app->db->createCommand()
+                    ->update('payment', [
+                        'amount' => new Expression('amount - ' . $available_stock['price'])
+                            ], [
+                        'id' => $available_stock['payment_id'],
+                        'status' => 'pending',
                     ])->execute();
         }
 
