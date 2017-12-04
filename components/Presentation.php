@@ -446,7 +446,7 @@ class Presentation
                 $observer_count = 0;
 
                 $cell = $row->nextCell();
-                $cell->createTextRun($name)->getFont()->setSize(8);
+                $cell->createTextRun($members[$observerId])->getFont()->setSize(8);
 
                 foreach ($members as $observedId => $observed) {
                     if ($observedId > 0) {
