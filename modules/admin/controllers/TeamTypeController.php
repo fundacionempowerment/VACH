@@ -36,7 +36,7 @@ class TeamTypeController extends AdminBaseController
         $teamType = TeamType::findOne($id);
 
         if (!isset($teamType)) {
-            return $this->redirect(['/admin/team-type']);
+            return $this->redirect(['index']);
         }
 
         return $this->render('view', [
@@ -51,8 +51,6 @@ class TeamTypeController extends AdminBaseController
         if (!isset($teamType)) {
             return $this->redirect(['index']);
         }
-
-        Yii::$app->session->set('team_id', $id);
 
         if ($teamType->load(Yii::$app->request->post()) && $teamType->save()) {
             $this->saveQuestions($teamType);
@@ -97,10 +95,10 @@ class TeamTypeController extends AdminBaseController
             $new_question->type = $wheelQuestion->type;
             $new_question->question_id = $wheelQuestion->question_id;
             $new_question->team_type_id = $new_teamType->id;
-            
+
             $new_question->save();
         }
-        
+
         SiteController::addFlash('success', Yii::t('app', '{name} has been successfully duplicated.', ['name' => $teamType->name]));
 
         return $this->redirect(['index']);
@@ -108,18 +106,18 @@ class TeamTypeController extends AdminBaseController
 
     public function actionDelete($id)
     {
-        $team = Team::findOne($id);
+        $teamType = TeamType::findOne($id);
 
-        if (!isset($team)) {
-            return $this->redirect(['/team']);
+        if (!isset($teamType)) {
+            return $this->redirect(['index']);
         }
 
-        if ($team->delete()) {
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $team->name]));
+        if ($teamType->delete()) {
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $teamType->name]));
         } else {
-            SiteController::FlashErrors($team);
+            SiteController::FlashErrors($teamType);
         }
-        return $this->redirect(['/team']);
+        return $this->redirect(['index']);
     }
 
     private function saveQuestions($teamType)

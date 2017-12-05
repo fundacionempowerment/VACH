@@ -18,6 +18,8 @@ use Yii;
 class TeamType extends \yii\db\ActiveRecord
 {
 
+    public $deletable;
+
     /**
      * @inheritdoc
      */
@@ -47,7 +49,7 @@ class TeamType extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => Yii::t('app', 'Name'),
-            'product_id' => Yii::t('team', 'Licence'),
+            'product_id' => Yii::t('team', 'Licence Type'),
         ];
     }
 
@@ -57,6 +59,20 @@ class TeamType extends \yii\db\ActiveRecord
     public static function browse()
     {
         return TeamType::find()->orderBy('name');
+    }
+
+    public function afterFind()
+    {
+        $this->deletable = $this->getTeams()->count() == 0;
+
+        return parent::afterFind();
+    }
+
+    public function beforeDelete()
+    {
+        WheelQuestion::deleteAll(['team_type_id' => $this->id]);
+
+        return parent::beforeDelete();
     }
 
     /**
@@ -87,4 +103,5 @@ class TeamType extends \yii\db\ActiveRecord
     {
         return \yii\helpers\ArrayHelper::map(static::browse()->all(), 'id', 'name');
     }
+
 }
