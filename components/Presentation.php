@@ -30,7 +30,9 @@ class Presentation
 
         self::addFirstSlide();
         self::addGoldenRuleSlide();
+        self::addFunctionalThinkingSlide();
         self::addCompetenceTableSlide();
+        self::addPercetualAdjustmentSlide();
 
         self::addTeamTitleSlide();
         self::addTeamRelationsSlide();
@@ -155,6 +157,36 @@ class Presentation
                 ->setColor(new Color('FF000000'));
     }
 
+    private static function addFunctionalThinkingSlide()
+    {
+        $currentSlide = self::$ppt->createSlide();
+
+        self::addCPCLogo($currentSlide);
+
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(480)
+                ->setWidth(1000)
+                ->setOffsetX(10)
+                ->setOffsetY(10);
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+
+        $textRun = $shape->createParagraph()->createTextRun('ajuste perceptual');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FFFF0000'));
+
+        $shape = $currentSlide->createDrawingShape();
+
+        $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath(Yii::getAlias("@app/web/images/funcional_thinking.png"))
+                ->setHeight(440)
+                ->setOffsetX(40)
+                ->setOffsetY(160);
+    }
+
     private static function addCompetenceTableSlide()
     {
         $currentSlide = self::$ppt->createSlide();
@@ -183,6 +215,118 @@ class Presentation
                 ->setHeight(560)
                 ->setOffsetX(30)
                 ->setOffsetY(130);
+    }
+
+    private static function addPercetualAdjustmentSlide()
+    {
+        $currentSlide = self::$ppt->createSlide();
+
+        self::addCPCLogo($currentSlide);
+
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(480)
+                ->setWidth(1000)
+                ->setOffsetX(10)
+                ->setOffsetY(10);
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+
+        $textRun = $shape->createParagraph()->createTextRun('pensamiento funcional y disfuncional');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FFFF0000'));
+
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(240)
+                ->setWidth(400)
+                ->setOffsetX(30)
+                ->setOffsetY(150);
+        $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FFFF0000'));
+
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que era?');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('¿Quién creo que soy');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
+
+        ///////////////
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(240)
+                ->setWidth(400)
+                ->setOffsetX(30)
+                ->setOffsetY(380);
+        $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FF008000'));
+
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $textRun = $shape->createParagraph()->createTextRun('¿A qué me comprometo y cómo?');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
+
+        ///////////////
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(240)
+                ->setWidth(400)
+                ->setOffsetX(520)
+                ->setOffsetY(150);
+        $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FFFF0000'));
+
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que eras?');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('¿Quién he descubierto que eres?');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
+
+        ///////////////
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(240)
+                ->setWidth(400)
+                ->setOffsetX(520)
+                ->setOffsetY(380);
+        $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FF008000'));
+
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $textRun = $shape->createParagraph()->createTextRun('¿Cómo vamos a prevenir el conflicto?');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FFFFFFFF'));
+
+        $shape->createBreak();
     }
 
     private static function addTeamTitleSlide()
@@ -302,7 +446,7 @@ class Presentation
                 $observer_count = 0;
 
                 $cell = $row->nextCell();
-                $cell->createTextRun($name)->getFont()->setSize(8);
+                $cell->createTextRun($members[$observerId])->getFont()->setSize(8);
 
                 foreach ($members as $observedId => $observed) {
                     if ($observedId > 0) {

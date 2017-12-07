@@ -6,7 +6,6 @@ use yii\web\Controller;
 
 class RunController extends BaseController
 {
-
     public function beforeAction($action)
     {
         return true;
@@ -16,5 +15,4 @@ class RunController extends BaseController
     {
         return $this->redirect(['wheel/run', 'token' => $a . '-' . $b . '-' . $c]);
     }
-
 }

@@ -52,7 +52,7 @@ return [
     'Export' => 'Exportar',
     'Female' => 'Femenino',
     'Follow the link below to reset your password:' => 'Siga el vínculo de abajo para reiniciar su contraseña:',
-    'Forgor your password?' => '¿Olvidó si contraseña?',
+    'Forgot your password?' => '¿Olvidó su contraseña?',
     'Gender' => 'Género',
     'Hello' => 'Hola',
     'High' => 'Alto',

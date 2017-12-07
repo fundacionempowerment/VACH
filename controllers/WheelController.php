@@ -17,7 +17,6 @@ use app\models\WheelQuestion;
 
 class WheelController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function beforeAction($action)
@@ -52,7 +51,7 @@ class WheelController extends BaseController
                     $current_dimension = -1;
                     $current_wheel = $wheel;
                     break;
-                } else if ($wheel->answerStatus != '100%') {
+                } elseif ($wheel->answerStatus != '100%') {
                     $questionCount = WheelQuestion::getQuestionCount($wheel->type);
                     $setSize = $questionCount / 8;
                     $current_dimension = intval(count($wheel->answers) / $setSize);
@@ -60,7 +59,7 @@ class WheelController extends BaseController
                     break;
                 }
             }
-        } else if (Yii::$app->request->isPost) {
+        } elseif (Yii::$app->request->isPost) {
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
             $current_wheel = Wheel::findOne(['id' => $id]);
@@ -76,11 +75,12 @@ class WheelController extends BaseController
                 if (isset($new_answer_value)) {
                     $count += 1;
                     $answer = null;
-                    foreach ($current_wheel->answers as $lookup_answer)
+                    foreach ($current_wheel->answers as $lookup_answer) {
                         if ($lookup_answer->answer_order == $i) {
                             $answer = $lookup_answer;
                             break;
                         }
+                    }
 
                     if (isset($answer)) {
                         $answer->answer_order = $i;
@@ -99,9 +99,9 @@ class WheelController extends BaseController
                 }
             }
 
-            if ($current_dimension == -1 || $count == $setSize)
+            if ($current_dimension == -1 || $count == $setSize) {
                 $current_dimension += 1;
-            else {
+            } else {
                 \Yii::$app->session->addFlash('error', \Yii::t('wheel', 'Some answers missed'));
                 $showMissingAnswers = true;
             }
@@ -122,13 +122,14 @@ class WheelController extends BaseController
             }
         }
 
-        if (!isset($current_wheel))
+        if (!isset($current_wheel)) {
             return $this->render('thanks');
-        else if ($current_dimension == -1)
+        } elseif ($current_dimension == -1) {
             return $this->render('intro', [
                         'wheel' => $current_wheel,
                         'current_dimension' => $current_dimension,
             ]);
+        }
 
         Yii::$app->session->set('instructions_shown', true);
         return $this->render('form', [
@@ -170,27 +171,30 @@ class WheelController extends BaseController
 
                 if ($valid_answer) {
                     $answer = null;
-                    foreach ($wheel->answers as $lookup_answer)
+                    foreach ($wheel->answers as $lookup_answer) {
                         if ($lookup_answer->answer_order == $i) {
                             $answer = $lookup_answer;
                             break;
                         }
+                    }
 
                     if (isset($answer)) {
                         $answer->answer_order = $i;
                         $answer->answer_value = $new_answer_value;
                         $answer->dimension = intval($i / $setSize);
                         $answer->question_id = $questions[$i]->question_id;
-                        if ($valid_answer)
+                        if ($valid_answer) {
                             $answer->save();
+                        }
                     } else {
                         $new_answer = new WheelAnswer();
                         $new_answer->answer_order = $i;
                         $new_answer->answer_value = $new_answer_value;
                         $new_answer->dimension = intval($i / $setSize);
                         $new_answer->question_id = $questions[$i]->question_id;
-                        if ($valid_answer)
+                        if ($valid_answer) {
                             $wheel->link('answers', $new_answer, ['wheel_id', 'id']);
+                        }
                     }
                 }
             }
@@ -226,5 +230,4 @@ class WheelController extends BaseController
                     'wheels' => $wheels,
         ]);
     }
-
 }

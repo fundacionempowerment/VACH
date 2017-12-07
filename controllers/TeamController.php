@@ -22,7 +22,6 @@ use app\models\Stock;
 
 class TeamController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()
@@ -58,8 +57,9 @@ class TeamController extends BaseController
             if ($teamMember->save()) {
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully added to {group}.', ['name' => $teamMember->member->fullname, 'group' => $team->fullname]));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
-            } else
+            } else {
                 SiteController::FlashErrors($teamMember);
+            }
         }
 
         $persons = $this->getPersons();
@@ -143,7 +143,6 @@ class TeamController extends BaseController
         if (!Yii::$app->params['monetize'] || $licences_to_buy <= 0) {
             if (Yii::$app->request->isPost) {
                 foreach ($team->members as $observerMember) {
-
                     $wheel = Wheel::findOne([
                                 'team_id' => $team->id,
                                 'observer_id' => $observerMember->member->id,
@@ -292,7 +291,6 @@ class TeamController extends BaseController
 
         if (Yii::$app->request->post('delete')) {
             if ($team->delete()) {
-
                 SiteController::addFlash('success', Yii::t('team', 'Team has been successfully deleted.'));
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             } else {
@@ -389,17 +387,18 @@ class TeamController extends BaseController
                     case Wheel::TYPE_GROUP:
                         $wheels = $team->groupWheels;
                         break;
-                    default :
+                    default:
                         $wheels = $team->organizationalWheels;
                         break;
                 }
 
-                foreach ($wheels as $wheel)
+                foreach ($wheels as $wheel) {
                     if ($wheel->observer_id == $memberId && $wheel->answerStatus != '100%') {
                         $this->sendWheel($wheel);
                         $sent = true;
                         break;
                     }
+                }
             }
         }
 
@@ -417,8 +416,9 @@ class TeamController extends BaseController
     private function getPersons()
     {
         $persons = [];
-        foreach (Person::browse()->all() as $person)
+        foreach (Person::browse()->all() as $person) {
             $persons[$person->id] = $person->fullname;
+        }
         return $persons;
     }
 
@@ -448,5 +448,4 @@ class TeamController extends BaseController
             }
         }
     }
-
 }

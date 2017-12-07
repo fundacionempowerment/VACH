@@ -13,7 +13,6 @@ use app\controllers\SiteController;
  */
 class UserController extends Controller
 {
-
     public $layout = '//inner';
 
     /**
@@ -41,7 +40,7 @@ class UserController extends Controller
     {
         if (!isset(Yii::$app->user->identity)) {
             $this->redirect(['/site']);
-        } else if ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
+        } elseif ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
             \Yii::$app->session->addFlash('error', \Yii::t('app', 'Access denied'));
             $this->redirect(['/site']);
         }
@@ -54,7 +53,6 @@ class UserController extends Controller
 
         $data['results'] = [];
         if ($name) {
-
             $users = User::findByName($name)->all();
             foreach ($users as $user) {
                 $newElement['id'] = $user->id;
@@ -95,5 +93,4 @@ class UserController extends Controller
                     'return' => '/site',
         ]);
     }
-
 }

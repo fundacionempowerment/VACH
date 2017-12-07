@@ -26,6 +26,14 @@ $detailProvider = new ArrayDataProvider([
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a(Yii::t('team', 'Edit team type'), ['edit', 'id' => $teamType->id], ['class' => 'btn btn-primary']) ?>
+        <?=
+        $teamType->deletable ?
+                Html::a(Yii::t('team', 'Delete team type'), ['delete', 'id' => $teamType->id, 'delete' => '1',], ['class' => 'btn btn-danger',
+                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                    'data-method' => 'post',
+                    'data-pjax' => '0',
+                ]) : ''
+        ?>
     </p>
     <?=
     DetailView::widget([

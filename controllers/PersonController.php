@@ -9,7 +9,6 @@ use app\models\Person;
 
 class PersonController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()

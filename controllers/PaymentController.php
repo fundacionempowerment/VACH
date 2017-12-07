@@ -18,7 +18,6 @@ use app\models\Payment;
 
 class PaymentController extends BaseController
 {
-
     public $layout = 'inner';
     public $enableCsrfValidation = false;
 
@@ -102,7 +101,7 @@ class PaymentController extends BaseController
                 return $this->render('response_pending');
             case 'declined':
                 return $this->render('response_declined');
-            default :
+            default:
                 $this->notifyAdmin($referenceCode);
                 return $this->render('response_error');
         }
@@ -144,7 +143,7 @@ class PaymentController extends BaseController
                     $stock->status = Stock::STATUS_INVALID;
                     $stock->save();
                     break;
-                default :
+                default:
                     if ($payment->status != Payment::STATUS_PAID) {
                         $payment->status = Payment::STATUS_ERROR;
                         $stock->status = Stock::STATUS_ERROR;
@@ -182,5 +181,4 @@ class PaymentController extends BaseController
                 ->setBcc(Yii::$app->params['adminEmail'])
                 ->send();
     }
-
 }

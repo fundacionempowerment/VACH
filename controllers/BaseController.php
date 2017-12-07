@@ -6,7 +6,6 @@ use Yii;
 
 class BaseController extends \yii\web\Controller
 {
-
     public function init()
     {
         parent::init();
@@ -25,5 +24,4 @@ class BaseController extends \yii\web\Controller
 
         return parent::beforeAction($action);
     }
-
 }

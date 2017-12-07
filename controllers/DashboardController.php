@@ -16,7 +16,6 @@ use app\models\Person;
 
 class DashboardController extends BaseController
 {
-
     public $layout = 'inner';
 
     public function actionIndex()
@@ -59,11 +58,12 @@ class DashboardController extends BaseController
                 }
             } else {
                 $exists = false;
-                foreach ($teams as $id => $fullname)
+                foreach ($teams as $id => $fullname) {
                     if ($id == $filter->teamId) {
                         $exists = true;
                         break;
                     }
+                }
 
                 if (!$exists) {
                     $filter->teamId = 0;
@@ -74,8 +74,9 @@ class DashboardController extends BaseController
 
         if ($filter->teamId > 0) {
             $team = Team::findOne(['id' => $filter->teamId]);
-            foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember)
+            foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember) {
                 $members[$teamMember->person_id] = $teamMember->member->fullname;
+            }
         }
 
         $members[0] = Yii::t('app', 'All');
@@ -95,7 +96,6 @@ class DashboardController extends BaseController
         $emergents = [];
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
-
             $projectedIndividualWheel = Wheel::getProjectedIndividualWheel($filter->teamId, $filter->memberId);
             $projectedGroupWheel = Wheel::getProjectedGroupWheel($filter->teamId, $filter->memberId);
             $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($filter->teamId, $filter->memberId);
@@ -103,7 +103,7 @@ class DashboardController extends BaseController
             $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($filter->teamId, $filter->memberId);
 
             $emergents = Wheel::getMemberEmergents($filter->teamId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
-        } else if ($filter->teamId > 0 && $filter->wheelType > 0) {
+        } elseif ($filter->teamId > 0 && $filter->wheelType > 0) {
             $performanceMatrix = Wheel::getPerformanceMatrix($filter->teamId, $filter->wheelType);
             $relationsMatrix = Wheel::getRelationsMatrix($filter->teamId, $filter->wheelType);
 
@@ -138,5 +138,4 @@ class DashboardController extends BaseController
                     'emergents' => $emergents,
         ]);
     }
-
 }

@@ -9,6 +9,8 @@ use yii\db\ActiveRecord;
 class Product extends ActiveRecord
 {
 
+    public $deletable;
+
     /**
      * @inheritdoc
      */
@@ -23,7 +25,8 @@ class Product extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'price', 'created_at', 'updated_at'], 'required'],
+            [['name', 'price'], 'required'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -42,12 +45,21 @@ class Product extends ActiveRecord
         return [
             'name' => Yii::t('app', 'Name'),
             'price' => Yii::t('product', 'Price'),
+            'description' => Yii::t('app', 'Description'),
         ];
     }
 
     public static function browse()
     {
         return Product::find()->orderBy('id desc');
+    }
+
+    public function afterFind()
+    {
+        $stocks = $this->hasMany(Stock::className(), ['product_id' => 'id']);
+        $this->deletable = $stocks->count() == 0;
+
+        parent::afterFind();
     }
 
     public static function getList()

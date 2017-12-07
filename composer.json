@@ -27,7 +27,8 @@
         "phpoffice/phpword": "dev-master",
         "onmotion/yii2-telegram": "*",
         "kartik-v/yii2-export": "*",
-        "2amigos/yii2-file-upload-widget": "~1.0"
+        "2amigos/yii2-file-upload-widget": "~1.0",
+        "swiftmailer/swiftmailer": "^5"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
