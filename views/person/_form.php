@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\Person;
 use kartik\widgets\Select2;
-use dosamigos\fileupload\FileUpload;
+use kartik\widgets\FileInput;
 
 $genders = Person::getGenders();
 ?>
@@ -29,24 +29,15 @@ $genders = Person::getGenders();
     </div>
     <div class="col-md-6">
         <?=
-        FileUpload::widget([
-            'model' => $person,
-            'attribute' => 'photo',
-            'url' => ['person/photo', 'id' => $person->id],
-            'clientOptions' => [
-                'maxFileSize' => 2000000
-            ],
-            'clientEvents' => [
-                'fileuploaddone' => 'function(e, data) {
-    	                            console.log(e);
-    	                            console.log(data);
-    	                        }',
-                'fileuploadfail' => 'function(e, data) {
-    	                            console.log(e);
-    	                            console.log(data);
-                                }',
-            ],
-        ]);
+        $form->field($person, 'photo')->widget(FileInput::classname(), [
+            'pluginOptions' => [
+                'showPreview' => true,
+                'showCaption' => false,
+                'showRemove' => true,
+                'showUpload' => false,
+                'overwriteInitial' => true,
+                'initialPreview' => ($person->photo ? [Html::img($person->photoUrl, ['class' => 'file-preview-image img-responsive', 'alt' => '', 'title' => ''])] : false ),
+        ]]);
         ?>
     </div>
     <div class="clearfix"></div>

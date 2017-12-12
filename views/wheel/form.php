@@ -32,7 +32,7 @@ if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel', 'wheelid' => $wheel->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-wheel">
+<div class="site-wheel col-md-push-2 col-md-8">
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
     <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />

@@ -9,6 +9,7 @@ use app\models\Person;
 
 class PersonController extends BaseController
 {
+
     public $layout = 'inner';
 
     public function actionIndex()
@@ -36,11 +37,15 @@ class PersonController extends BaseController
     {
         $person = new Person();
 
-        if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $person->fullname]));
-            return $this->redirect(['/person']);
-        } else {
-            SiteController::FlashErrors($person);
+        if ($person->load(Yii::$app->request->post())) {
+            $this->upload($person, 'photo');
+
+            if ($person->save()) {
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $person->fullname]));
+                return $this->redirect(['/person']);
+            } else {
+                SiteController::FlashErrors($person);
+            }
         }
 
         return $this->render('form', [
@@ -56,11 +61,15 @@ class PersonController extends BaseController
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
-        if ($person->load(Yii::$app->request->post()) && $person->save()) {
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $person->fullname]));
-            return $this->redirect(['/person']);
-        } else {
-            SiteController::FlashErrors($person);
+        if ($person->load(Yii::$app->request->post())) {
+            self::upload($person, 'photo');
+
+            if ($person->save()) {
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $person->fullname]));
+                return $this->redirect(['/person']);
+            } else {
+                SiteController::FlashErrors($person);
+            }
         }
 
         return $this->render('form', [
@@ -84,45 +93,21 @@ class PersonController extends BaseController
         }
     }
 
-    public function actionPhoto($id)
+    public static function upload($model, $attr)
     {
-        $tour = Tour::findOne($id);
-        if (!$tour) {
-            throw new NotFoundHttpException(Yii::t('app', 'Page not found'));
-        }
-        $picture = new TourPicture(['scenario' => 'upload']);
-        $picture->tour_id = $id;
-        $picture->image = UploadedFile::getInstance($picture, 'image');
-        if ($picture->image !== null && $picture->validate(['image'])) {
+        $file = \yii\web\UploadedFile::getInstance($model, $attr);
 
-            Yii::$app->response->getHeaders()->set('Vary', 'Accept');
-            Yii::$app->response->format = Response::FORMAT_JSON;
+        if ($file && $model->validate()) {
+            $fileName = uniqid($attr) . '.' . $file->extension;
+            $filePath = Yii::getAlias('@app/web/photos/' . $fileName);
 
-            $response = [];
+            $file->saveAs($filePath);
+            $model->$attr = $fileName;
 
-            if ($picture->save(false)) {
-                // THIS IS THE RESPONSE UPLOADER REQUIRES!
-                $response['files'][] = [
-                    'name' => $picture->image->name,
-                    'type' => $picture->image->type,
-                    'size' => $picture->image->size,
-                    'url' => $picture->getImageUrl(),
-                    'thumbnailUrl' => $picture->getImageUrl(TourPicture::SMALL_IMAGE),
-                    'deleteUrl' => Url::to(['delete', 'id' => $picture->id]),
-                    'deleteType' => 'POST'
-                ];
-            } else {
-                $response[] = ['error' => Yii::t('app', 'Unable to save picture')];
-            }
-            @unlink($picture->image->tempName);
+            return true;
         } else {
-            if ($picture->hasErrors(['picture'])) {
-                $response[] = ['error' => HtmlHelper::errors($picture)];
-            } else {
-                throw new HttpException(500, Yii::t('app', 'Could not upload file.'));
-            }
+            return false;
         }
-        return $response;
     }
 
 }

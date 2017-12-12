@@ -21,13 +21,21 @@ if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
 $instructions_shown = Yii::$app->session->get('instructions_shown');
 $show_instructions = $instructions_shown == true ? false : true;
 ?>
-<div class="site-wheel">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <h2>
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br />
-        <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
-        <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
-    </h2>
+<div class="site-wheel col-md-push-2 col-md-8">
+    <div>
+        <h1><?= Html::encode($this->title) ?></h1>
+        <h2>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br />
+            <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
+            <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
+        </h2>
+    </div>
+    <?php if ($wheel->observed->photo) { ?>
+        <div class="col-md-push-1 col-md-10">
+            <img src="<?= $wheel->observed->photoUrl ?>" class="img-responsive  text-center" style="box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important"/>
+        </div>
+    <?php } ?>
+    <div class="clearfix"></div>
     <div id="collapsedDiv" class="panel-collapse <?= $show_instructions == true ? '' : 'collapse' ?> row col-md-12" aria-expanded="<?= $show_instructions == true ? 'true' : 'false' ?>">
         <h4>
             <ol>

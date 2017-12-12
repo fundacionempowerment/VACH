@@ -78,6 +78,7 @@ return [
     'Payment success' => 'Pago exitoso',
     'Payment wait' => 'Pago en espera',
     'Phone' => 'Teléfono',
+    'Photo' => 'Foto',
     'Please choose your new password:' => 'Por favor elija su nueva contraseña:',
     'Please fill out your email. A link to reset password will be sent there.' => 'Por favor complete con su correo eletrónico. Allí se le enviará un link para reiniciar su contraseña.',
     'Please, try again.' => 'Por favor, intente nuevamente.',

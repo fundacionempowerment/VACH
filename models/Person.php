@@ -9,7 +9,8 @@ use yii\db\ActiveRecord;
 /**
  * LoginForm is the model behind the login form.
  */
-class Person extends ActiveRecord {
+class Person extends ActiveRecord
+{
 
     public $fullname;
     public $deletable;
@@ -21,17 +22,20 @@ class Person extends ActiveRecord {
     /**
      * @return array the validation rules.
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-// username and password are both required
+            // username and password are both required
             [['name', 'surname', 'email', 'coach_id', 'gender'], 'required'],
             [['shortname', 'phone'], 'safe'],
             [['name', 'surname', 'shortname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
+            [['photo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             TimestampBehavior::className(),
         ];
@@ -40,7 +44,8 @@ class Person extends ActiveRecord {
     /**
      * @return array customized attribute labels
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('user', 'Surname'),
@@ -49,10 +54,12 @@ class Person extends ActiveRecord {
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
             'gender' => Yii::t('app', 'Gender'),
+            'photo' => Yii::t('app', 'Foto'),
         ];
     }
 
-    public function afterFind() {
+    public function afterFind()
+    {
         $this->fullname = $this->name . ' ' . $this->surname;
 
         $sponsored_teams = $this->hasMany(Team::className(), ['sponsor_id' => 'id'])->count();
@@ -64,35 +71,46 @@ class Person extends ActiveRecord {
         parent::afterFind();
     }
 
-    public function afterSave($insert, $changedAttributes) {
+    public function afterSave($insert, $changedAttributes)
+    {
         parent::afterSave($insert, $changedAttributes);
         $this->afterFind();
     }
 
-    public function beforeValidate() {
+    public function beforeValidate()
+    {
         if (!isset($this->coach_id)) {
             $this->coach_id = Yii::$app->user->id;
         }
-        
+
         return parent::beforeValidate();
     }
 
-    public static function browse() {
+    public static function browse()
+    {
         return Person::find()
-                ->where(['coach_id' => Yii::$app->user->id])
-                ->orderBy('name, surname');
+                        ->where(['coach_id' => Yii::$app->user->id])
+                        ->orderBy('name, surname');
     }
 
-    public function getCoach() {
+    public function getCoach()
+    {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }
 
-    public function getWheels() {
+    public function getWheels()
+    {
         return $this->hasMany(Wheel::className(), ['observed_id' => 'id'])
                         ->where(['type' => '0']);
     }
 
-    static public function getGenders() {
+    public function getPhotoUrl()
+    {
+        return Yii::getAlias('photos/' . $this->photo);
+    }
+
+    static public function getGenders()
+    {
         return [
             self::GENDER_MALE => Yii::t('app', 'Male'),
             self::GENDER_FEMALE => Yii::t('app', 'Female'),

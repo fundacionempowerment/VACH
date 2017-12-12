@@ -22,6 +22,7 @@ use app\models\Stock;
 
 class TeamController extends BaseController
 {
+
     public $layout = 'inner';
 
     public function actionIndex()
@@ -252,9 +253,14 @@ class TeamController extends BaseController
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
-        if ($member->load(Yii::$app->request->post()) && $member->save()) {
-            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $member->fullname]));
-            return $this->redirect(['/team/view', 'id' => $team->id]);
+        if ($member->load(Yii::$app->request->post())) {
+
+            PersonController::upload($member, 'photo');
+
+            if ($member->save()) {
+                SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $member->fullname]));
+                return $this->redirect(['/team/view', 'id' => $team->id]);
+            }
         }
         return $this->render('member-form', [
                     'team' => $team,
@@ -448,4 +454,5 @@ class TeamController extends BaseController
             }
         }
     }
+
 }
