@@ -227,6 +227,14 @@ class TeamController extends BaseController
                 }
                 SiteController::addFlash('success', Yii::t('team', 'Wheel forms has been successfully created.'));
 
+                Yii::$app->mailer->compose('teamFulfilled', [
+                            'team' => $team,
+                        ])
+                        ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
+                        ->setFrom(Yii::$app->params['senderEmail'])
+                        ->setTo(Yii::$app->params['adminEmail'])
+                        ->send();
+
                 if (Yii::$app->params['monetize']) {
                     Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
                 }
@@ -440,8 +448,7 @@ class TeamController extends BaseController
                 ]))
                 ->setFrom(Yii::$app->params['senderEmail'])
                 ->setTo($wheel->observer->email)
-                ->setBcc(Yii::$app->params['adminEmail'])
-                ->setReplyTo(Yii::$app->params['adminEmail'])
+                ->setReplyTo($wheel->coach->email)
                 ->send();
 
         SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));

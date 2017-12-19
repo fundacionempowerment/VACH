@@ -72,8 +72,7 @@ class StockController extends AdminBaseController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-
-            Stock::saveBuyMode($model);
+            Stock::saveBuyModel($model);
 
             return $this->render('/payment/redirect', [
                         'model' => $model,
@@ -111,6 +110,14 @@ class StockController extends AdminBaseController
             $success = Stock::saveAddModel($model);
 
             if ($success) {
+                Yii::$app->mailer->compose('stockAdded', [
+                            'model' => $model,
+                        ])
+                        ->setSubject(Yii::t('team', 'CPC: stock added'))
+                        ->setFrom(Yii::$app->params['senderEmail'])
+                        ->setTo(Yii::$app->params['adminEmail'])
+                        ->send();
+
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $model->quantity . ' ' . $product->name]));
                 return $this->redirect(['/admin/stock']);
             }

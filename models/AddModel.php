@@ -42,7 +42,20 @@ class AddModel extends Model
             'price' => Yii::t('stock', 'Price in USD $'),
             'quantity' => Yii::t('stock', 'Quantity'),
             'coach_id' => Yii::t('app', 'Coach'),
+            'coach' => Yii::t('app', 'Coach'),
+            'product_id' => Yii::t('app', 'Product'),
+            'product' => Yii::t('app', 'Product'),
         ];
+    }
+
+    public function getCoach()
+    {
+        return User::findOne(['id' => $this->coach_id]);
+    }
+
+    public function getProduct()
+    {
+        return Product::findOne(['id' => $this->product_id]);
     }
 
 }
