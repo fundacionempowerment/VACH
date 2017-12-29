@@ -9,6 +9,9 @@ if (count($groupEmergents) > 0) {
         'emergents' => $groupEmergents,
         'type' => Wheel::TYPE_GROUP,
         'memberId' => 0,
+        'member' => null,
+        'team' => $team,
+        'company' => $team->company,
     ]);
 }
 ?>
@@ -18,6 +21,9 @@ if (count($organizationalEmergents) > 0) {
         'emergents' => $organizationalEmergents,
         'type' => Wheel::TYPE_ORGANIZATIONAL,
         'memberId' => 0,
+        'member' => null,
+        'team' => $team,
+        'company' => $team->company,
     ]);
 }
 ?>

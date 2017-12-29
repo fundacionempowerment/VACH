@@ -11,6 +11,8 @@ use app\models\Wheel;
             'type' => Wheel::TYPE_GROUP,
             'memberId' => $report->member->id,
             'member' => $report->member,
+            'team' => $team,
+            'company' => $team->company,
         ]);
     }
     ?>
@@ -23,6 +25,8 @@ use app\models\Wheel;
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => $report->member->id,
             'member' => $report->member,
+            'team' => $team,
+            'company' => $team->company,
         ]);
     }
     ?>
