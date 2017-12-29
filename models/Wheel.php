@@ -236,6 +236,7 @@ class Wheel extends ActiveRecord
                     $result[] = [
                         'id' => $reflectedValue['observed_id'],
                         'name' => empty($projectedValue['shortname']) ? ($projectedValue['name'] . ' ' . $projectedValue['surname']) : $projectedValue['shortname'],
+                        'fullname' => $projectedValue['name'] . ' ' . $projectedValue['surname'],
                         'productivity' => $reflectedValue['value'] / 4 * 100,
                         'steem' => $projectedValue['value'] / 4 * 100,
                         'consciousness' => ($projectedValue['value'] - $reflectedValue['value']) / 4 * 100

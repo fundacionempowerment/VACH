@@ -533,18 +533,23 @@ class Presentation
 
         $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_GROUP);
 
-        $members = [];
-        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        $rowsData = [];
+        $activeTeamMembers = TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all();
+        foreach ($activeTeamMembers as $teamMember) {
+            foreach ($performanceMatrix as $row) {
+                if ($teamMember->person_id == $row['id']) {
+                    $rowsData[] = $row;
+                }
+            }
         }
 
         // Prepare numbers
         $sumConsciousness = 0;
         $sumProductivity = 0;
 
-        foreach ($performanceMatrix as $data) {
-            $sumConsciousness += abs($data['consciousness']);
-            $sumProductivity += $data['productivity'];
+        foreach ($rowsData as $rowData) {
+            $sumConsciousness += abs($rowData['consciousness']);
+            $sumProductivity += $rowData['productivity'];
         }
 
         $avgConsciousness = $sumConsciousness / count($performanceMatrix);
@@ -553,7 +558,7 @@ class Presentation
         $standar_deviation = Utils::standard_deviation(ArrayHelper::getColumn($performanceMatrix, 'consciousness'));
         $productivityDelta = Utils::variance(ArrayHelper::getColumn($performanceMatrix, 'productivity'));
 
-        $tableShape = $currentSlide->createTableShape(count($members) + 1);
+        $tableShape = $currentSlide->createTableShape(count($rowsData) + 1);
         $tableShape->setWidth(920);
         $tableShape->setHeight(750);
         $tableShape->setOffsetX(10);
@@ -563,48 +568,48 @@ class Presentation
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('app', 'Description'))->getFont()->setSize(8);
-        foreach ($members as $index => $name) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun($name)->getFont()->setSize(8);
+            $cell->createTextRun($rowData['fullname'])->getFont()->setSize(8);
         }
 
         // How I see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How I see me'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['steem'] * 4 / 100, 2))->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['steem'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
         // How they see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How they see me'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'] * 4 / 100, 2))->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['productivity'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
         // Monofactorial productivity
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Monofactorial productivity'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'], 1) . '%')->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['productivity'], 1) . '%')->getFont()->setSize(8);
         }
 
         // Responsability
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Responsability'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(Utils::productivityText($data['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
+            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($data['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                    ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         // Avg
@@ -622,19 +627,19 @@ class Presentation
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Cons. gap'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round(abs($data['consciousness']), 1) . '%')->getFont()->setSize(8);
+            $cell->createTextRun(round(abs($rowData['consciousness']), 1) . '%')->getFont()->setSize(8);
         }
 
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Consciousness'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(abs($data['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
+            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($data['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                    ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         $row = $tableShape->createRow();
@@ -664,18 +669,22 @@ class Presentation
 
         $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
 
-        $members = [];
-        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        $rowsData = [];
+        foreach ($activeTeamMembers as $teamMember) {
+            foreach ($performanceMatrix as $row) {
+                if ($teamMember->person_id == $row['id']) {
+                    $rowsData[] = $row;
+                }
+            }
         }
 
         // Prepare numbers
         $sumConsciousness = 0;
         $sumProductivity = 0;
 
-        foreach ($performanceMatrix as $data) {
-            $sumConsciousness += abs($data['consciousness']);
-            $sumProductivity += $data['productivity'];
+        foreach ($rowsData as $rowData) {
+            $sumConsciousness += abs($rowData['consciousness']);
+            $sumProductivity += $rowData['productivity'];
         }
 
         $avgConsciousness = $sumConsciousness / count($performanceMatrix);
@@ -684,7 +693,7 @@ class Presentation
         $standar_deviation = Utils::standard_deviation(ArrayHelper::getColumn($performanceMatrix, 'consciousness'));
         $productivityDelta = Utils::variance(ArrayHelper::getColumn($performanceMatrix, 'productivity'));
 
-        $tableShape = $currentSlide->createTableShape(count($members) + 1);
+        $tableShape = $currentSlide->createTableShape(count($rowsData) + 1);
         $tableShape->setWidth(920);
         $tableShape->setHeight(750);
         $tableShape->setOffsetX(10);
@@ -694,48 +703,48 @@ class Presentation
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('app', 'Description'))->getFont()->setSize(8);
-        foreach ($members as $index => $name) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun($name)->getFont()->setSize(8);
+            $cell->createTextRun($rowData['fullname'])->getFont()->setSize(8);
         }
 
         // How I see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How I see me'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['steem'] * 4 / 100, 2))->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['steem'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
         // How they see me
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'How they see me'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'] * 4 / 100, 2))->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['productivity'] * 4 / 100, 2))->getFont()->setSize(8);
         }
 
         // Monofactorial productivity
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Monofactorial productivity'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round($data['productivity'], 1) . '%')->getFont()->setSize(8);
+            $cell->createTextRun(round($rowData['productivity'], 1) . '%')->getFont()->setSize(8);
         }
 
         // Responsability
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Responsability'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(Utils::productivityText($data['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
+            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($data['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                    ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         // Avg
@@ -753,19 +762,19 @@ class Presentation
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Cons. gap'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(round(abs($data['consciousness']), 1) . '%')->getFont()->setSize(8);
+            $cell->createTextRun(round(abs($rowData['consciousness']), 1) . '%')->getFont()->setSize(8);
         }
 
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
         $cell->createTextRun(Yii::t('dashboard', 'Consciousness'))->getFont()->setSize(8);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(abs($data['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
+            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($data['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                    ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         $row = $tableShape->createRow();
