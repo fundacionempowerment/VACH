@@ -99,7 +99,7 @@ class PersonController extends BaseController
 
         if ($file && $model->validate()) {
             $fileName = uniqid($attr) . '.' . $file->extension;
-            $filePath = Yii::getAlias('@app/web/photos/' . $fileName);
+            $filePath = Yii::getAlias('@webroot/photos/' . $fileName);
 
             $file->saveAs($filePath);
             $model->$attr = $fileName;
