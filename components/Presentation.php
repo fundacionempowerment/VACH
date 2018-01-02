@@ -33,6 +33,7 @@ class Presentation
         self::addFunctionalThinkingSlide();
         self::addCompetenceTableSlide();
         self::addPercetualAdjustmentSlide();
+        self::addObservationProtocolSlide();
 
         self::addTeamTitleSlide();
         self::addTeamRelationsSlide();
@@ -327,6 +328,74 @@ class Presentation
                 ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
+    }
+
+    private static function addObservationProtocolSlide()
+    {
+        $currentSlide = self::$ppt->createSlide();
+
+        self::addCPCLogo($currentSlide);
+
+        $shape = $currentSlide->createRichTextShape()
+                ->setHeight(480)
+                ->setWidth(800)
+                ->setOffsetX(20)
+                ->setOffsetY(50);
+        $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $textRun = $shape->createParagraph()->createTextRun('protocolo de observación');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(50)
+                ->setColor(new Color('FFFF0000'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('1. Visión cromática');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FF000000'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('   (analogía con el semáforo: verde, amarillo y rojo)');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(26)
+                ->setColor(new Color('FF000000'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('2. El más crítico');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FF000000'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('3. El más benévolo');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FF000000'));
+
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('4. El menos o más autocrítico');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FF000000'));
+        $shape->createBreak();
+
+        $textRun = $shape->createParagraph()->createTextRun('5. Cruces interrelacionales');
+        $textRun->getFont()
+                ->setName('Coolvetica')
+                ->setSize(30)
+                ->setColor(new Color('FF000000'));
     }
 
     private static function addTeamTitleSlide()
