@@ -1,6 +1,5 @@
 <?php
 
-use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Stock;
@@ -35,7 +34,7 @@ DetailView::widget([
             'attribute' => 'price',
             'label' => Yii::t('stock', 'Price'),
             'value' => function ($data) {
-                return 'USD ' . Yii::$app->formatter->asDecimal($data['price'], 2);
+                return 'USD ' . \Yii::$app->formatter->asDecimal($data['price'], 2);
             },
         ],
     ],
