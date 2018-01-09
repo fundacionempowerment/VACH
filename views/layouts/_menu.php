@@ -38,8 +38,8 @@ if ($isAdministrator) {
 
 $userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account']];
 if (Yii::$app->params['monetize']) {
-    $userMenu[] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
     $userMenu[] = ['label' => Yii::t('stock', 'My Licences'), 'url' => ['/stock']];
+    $userMenu[] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
 }
 $userMenu[] = ['label' => Yii::t('app', 'Logout'),
     'url' => ['/site/logout'],
