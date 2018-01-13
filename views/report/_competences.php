@@ -3,32 +3,24 @@
 use yii\helpers\Html;
 use app\models\Wheel;
 ?>
-<h3>
-    Matrices de Competencias grupales y organizacionales
-</h3>
 <?php
 if (count($groupGauges) > 0) {
     echo $this->render('../dashboard/_gauges', [
-        'gauges' => $groupGauges,
-        'type' => Wheel::TYPE_GROUP,
+        'teamId' => $team->id,
+        'memberId' => 0,
+        'wheelType' => Wheel::TYPE_GROUP,
     ]);
 }
 ?>
 <?php
 if (count($organizationalGauges) > 0) {
     echo $this->render('../dashboard/_gauges', [
-        'gauges' => $organizationalGauges,
-        'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'teamId' => $team->id,
+        'memberId' => 0,
+        'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
     ]);
 }
 ?>
-<h3>
-    Descripción
-</h3>
-<?= $this->render('descriptions/competences') ?>
-<h3>
-    Análisis
-</h3>
 <p>
-    <?= $assessment->report->competences ?>
+    <?= empty($team->report->competences) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $team->report->competences ?>
 </p>

@@ -125,17 +125,18 @@ class m150527_035800_add_wheel_questions_table extends Migration {
         ];
 
         for ($i = 0; $i < count($questions); $i++) {
-            $this->addQuestion($i / 10, $questions[$i][0], $questions[$i][1]);
+            $this->addQuestion($i / 10, $questions[$i][0], $questions[$i][1], $i);
         }
-
-        $this->execute('update {{%wheel_question}} set `order` = `id`');
     }
 
-    private function addQuestion($dimension, $question, $answer) {
+    private function addQuestion($dimension, $question, $answer, $order) {
         $this->insert('{{%wheel_question}}', [
             'dimension' => $dimension,
             'question' => $question,
             'answer_type' => $answer,
+            'order' => $order,
+            'created_at' => time(),
+            'updated_at' => time(),
         ]);
     }
 

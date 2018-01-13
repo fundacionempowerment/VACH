@@ -11,79 +11,121 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\Assessment;
+use app\models\Team;
 use app\models\Report;
 use app\models\IndividualReport;
 use app\models\Wheel;
 use app\models\TeamMember;
-use kartik\mpdf\Pdf;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
+    const ANALYSIS_OPTIONS = [
+        'height' => '500px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
+    const SUMMARY_OPTIONS = [
+        'height' => '250px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
 
     public $layout = 'inner';
 
-    private function sanitize($string) {
-        $string = strip_tags($string, '<b><i><p><ul><li><ol><br>');
+    private function sanitize($string)
+    {
+        $string = strip_tags($string, '<b><i><p><br><strong><em><ul><li><ol>');
         $string = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $string);
         $string = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $string);
+        $string = preg_replace('/(<[^>]+) align=".*?"/i', '$1', $string);
+        $string = str_replace('<br>', '<br/>', $string);
+        $string = \yii\helpers\HtmlPurifier::process($string);
         return $string;
     }
 
-    public function actionView($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionView($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
-        if ($assessment->report == null) {
+        if ($team->report == null) {
             $newReport = new Report();
-            $assessment->link('report', $newReport);
+            $team->link('report', $newReport);
         }
 
-        foreach ($assessment->team->members as $teamMember) {
+        foreach ($team->members as $teamMember) {
             $exists = false;
-            if (count($assessment->report->individualReports) > 0) {
-                foreach ($assessment->report->individualReports as $individualReport)
-                    if ($individualReport->user_id == $teamMember->user_id) {
+            if (count($team->report->individualReports) > 0) {
+                foreach ($team->report->individualReports as $individualReport) {
+                    if ($individualReport->person_id == $teamMember->person_id) {
                         $exists = true;
                         break;
                     }
+                }
             }
 
             if (!$exists) {
                 $newIndividualReport = new IndividualReport();
-                $newIndividualReport->user_id = $teamMember->user_id;
-                $assessment->report->link('individualReports', $newIndividualReport);
+                $newIndividualReport->person_id = $teamMember->person_id;
+                $team->report->link('individualReports', $newIndividualReport);
             }
         }
 
         return $this->render('view', [
-                    'assessment' => $assessment,
+                    'team' => $team,
         ]);
     }
 
-    public function actionIntroduction($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionIntroduction($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->introduction = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->introduction = $analysis;
+            $team->report->introduction_keywords = $keywords;
+            $team->report->save();
+            $team->report->introduction = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'introduction']);
         }
 
         return $this->render('introduction', [
-                    'assessment' => $assessment,
+                    'team' => $team,
         ]);
     }
 
-    public function actionEffectiveness($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionEffectiveness($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->effectiveness = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->effectiveness = $analysis;
+            $team->report->effectiveness_keywords = $keywords;
+
+            $team->report->save();
+            $team->report->effectiveness = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'effectiveness']);
         }
@@ -93,30 +135,40 @@ class ReportController extends Controller {
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('effectiveness', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'members' => $members,
+                    'member' => null,
         ]);
     }
 
-    public function actionPerformance($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionPerformance($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->performance = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->performance = $analysis;
+            $team->report->performance_keywords = $keywords;
+            $team->report->save();
+            $team->report->performance = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'performance']);
         }
@@ -126,30 +178,39 @@ class ReportController extends Controller {
         $groupPerformanceMatrix = [];
         $organizationalPerformanceMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('performance', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
                     'members' => $members,
         ]);
     }
 
-    public function actionRelations($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionRelations($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->relations = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->relations = $analysis;
+            $team->report->relations_keywords = $keywords;
+            $team->report->save();
+            $team->report->relations = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'relations']);
         }
@@ -159,30 +220,39 @@ class ReportController extends Controller {
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('relations', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'members' => $members,
         ]);
     }
 
-    public function actionCompetences($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionCompetences($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->competences = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->competences = $analysis;
+            $team->report->competences_keywords = $keywords;
+            $team->report->save();
+            $team->report->competences = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
         }
@@ -191,30 +261,39 @@ class ReportController extends Controller {
         $groupGauges = [];
         $organizationalGauges = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('competences', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupGauges' => $groupGauges,
                     'organizationalGauges' => $organizationalGauges,
                     'members' => $members,
         ]);
     }
 
-    public function actionEmergents($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
+    public function actionEmergents($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
-            $assessment->report->emergents = $analysis;
-            $assessment->report->save();
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $team->report->emergents = $analysis;
+            $team->report->emergents_keywords = $keywords;
+            $team->report->save();
+            $team->report->emergents = $analysis;
+            $team->report->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'emergents']);
         }
@@ -223,19 +302,20 @@ class ReportController extends Controller {
         $groupEmergents = [];
         $organizationalEmergents = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('emergents', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
@@ -245,18 +325,44 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualPerformance($id) {
-        $individualReport = IndividualReport::findOne(['id' => $id]);
-
-        $assessment = $individualReport->report->assessment;
+    public function actionActionPlan($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+
+            $team->report->action_plan = $analysis;
+            $team->report->save();
+            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
+            return $this->redirect(['/report/view', 'id' => $id, '#' => 'action-plan']);
+        }
+
+        return $this->render('action_plan', [
+                    'team' => $team,
+        ]);
+    }
+
+    public function actionIndividualPerformance($id)
+    {
+        $individualReport = IndividualReport::findOne(['id' => $id]);
+
+        $team = $individualReport->report->team;
+        $this->checkAllowed($team);
+
+        if (Yii::$app->request->isPost) {
+            $analysis = Yii::$app->request->post('analysis');
+            $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->performance = $analysis;
+            $individualReport->performance_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'performance-' . $individualReport->id]);
+            return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'performance-' . $individualReport->id]);
         }
 
         $members = [];
@@ -264,20 +370,21 @@ class ReportController extends Controller {
         $groupPerformanceMatrix = [];
         $organizationalPerformanceMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_performance', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
                     'members' => $members,
@@ -286,28 +393,34 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualPerception($id) {
+    public function actionIndividualPerception($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
-        $assessment = $individualReport->report->assessment;
+        $team = $individualReport->report->team;
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->perception = $analysis;
+            $individualReport->perception_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'perception-' . $individualReport->id]);
+            return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'perception-' . $individualReport->id]);
         }
 
-        $projectedGroupWheel = Wheel::getProjectedGroupWheel($assessment->id, $individualReport->user_id);
-        $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($assessment->id, $individualReport->user_id);
-        $reflectedGroupWheel = Wheel::getReflectedGroupWheel($assessment->id, $individualReport->user_id);
-        $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($assessment->id, $individualReport->user_id);
+        $projectedGroupWheel = Wheel::getProjectedGroupWheel($team->id, $individualReport->person_id);
+        $projectedOrganizationalWheel = Wheel::getProjectedOrganizationalWheel($team->id, $individualReport->person_id);
+        $reflectedGroupWheel = Wheel::getReflectedGroupWheel($team->id, $individualReport->person_id);
+        $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($team->id, $individualReport->person_id);
 
         return $this->render('individual_perception', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'projectedGroupWheel' => $projectedGroupWheel,
                     'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
                     'reflectedGroupWheel' => $reflectedGroupWheel,
@@ -315,174 +428,168 @@ class ReportController extends Controller {
         ]);
     }
 
-    public function actionIndividualRelations($id) {
+    public function actionIndividualRelations($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
-        $assessment = $individualReport->report->assessment;
+        $team = $individualReport->report->team;
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
+            $individualReport->relations = $analysis;
+            $individualReport->relations_keywords = $keywords;
             $individualReport->relations = $analysis;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'relations-' . $individualReport->id]);
+            return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'relations-' . $individualReport->id]);
         }
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_relations', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'members' => $members,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
-    public function actionIndividualCompetences($id) {
+    public function actionIndividualCompetences($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
-        $assessment = $individualReport->report->assessment;
+        $team = $individualReport->report->team;
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->competences = $analysis;
+            $individualReport->competences_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-competences-' . $individualReport->id]);
+            return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-competences-' . $individualReport->id]);
         }
 
         $members = [];
         $groupGauges = [];
         $organizationalGauges = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getMemberGauges($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_competences', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupGauges' => $groupGauges,
                     'organizationalGauges' => $organizationalGauges,
                     'members' => $members,
         ]);
     }
 
-    public function actionIndividualEmergents($id) {
+    public function actionIndividualEmergents($id)
+    {
         $individualReport = IndividualReport::findOne(['id' => $id]);
 
-        $assessment = $individualReport->report->assessment;
+        $team = $individualReport->report->team;
+        $this->checkAllowed($team);
 
         if (Yii::$app->request->isPost) {
             $analysis = Yii::$app->request->post('analysis');
             $analysis = $this->sanitize($analysis);
+            $keywords = Yii::$app->request->post('keywords');
+            $keywords = $this->sanitize($keywords);
+
             $individualReport->emergents = $analysis;
+            $individualReport->emergents_keywords = $keywords;
             $individualReport->save();
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $assessment->id, '#' => 'individual-emergents-' . $individualReport->id]);
+            return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-emergents-' . $individualReport->id]);
         }
 
         $members = [];
         $groupEmergents = [];
         $organizationalEmergents = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_GROUP);
-        $organizationalEmergents = Wheel::getMemberEmergents($assessment->id, $individualReport->user_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_emergents', [
                     'report' => $individualReport,
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => $individualReport->user_id,
+                    'memberId' => $individualReport->person_id,
         ]);
     }
 
-    public function actionSummary($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        if (Yii::$app->request->isPost) {
-            $analysis = Yii::$app->request->post('analysis');
-            $analysis = $this->sanitize($analysis);
-            $assessment->report->summary = $analysis;
-            $assessment->report->save();
-            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id, '#' => 'summary']);
-        }
-
-        return $this->render('summary', [
-                    'assessment' => $assessment,
-        ]);
-    }
-
-    public function actionActionPlan($id) {
-        $assessment = Assessment::findOne(['id' => $id]);
-
-        if (Yii::$app->request->isPost) {
-            $analysis = Yii::$app->request->post('analysis');
-            $analysis = $this->sanitize($analysis);
-            $assessment->report->action_plan = $analysis;
-            $assessment->report->save();
-            \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
-            return $this->redirect(['/report/view', 'id' => $id, '#' => 'action-plan']);
-        }
-
-        return $this->render('action_plan', [
-                    'assessment' => $assessment,
-        ]);
-    }
-
-    public function actionDownload($id) {
+    public function actionDownload($id)
+    {
         $this->layout = 'printable';
 
-        $assessment = Assessment::findOne(['id' => $id]);
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
 
         $members = [];
 
         $groupRelationsMatrix = [];
         $organizationalRelationsMatrix = [];
 
-        foreach (TeamMember::find()->where(['team_id' => $assessment->team->id])->all() as $teamMember)
-            $members[$teamMember->user_id] = $teamMember->member->fullname;
+        foreach (TeamMember::find()->where([
+            'team_id' => $team->id,
+            'active' => true,
+        ])->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
+        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
-        $groupEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_GROUP);
-        $organizationalEmergents = Wheel::getEmergents($assessment->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_GROUP);
+        $organizationalEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('download', [
-                    'assessment' => $assessment,
+                    'team' => $team,
                     'groupRelationsMatrix' => $groupRelationsMatrix,
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
@@ -495,4 +602,38 @@ class ReportController extends Controller {
         ]);
     }
 
+    public function actionPresentation($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
+
+        $ppt = \app\components\Presentation::create($team);
+
+        $oWriterPPTX = \PhpOffice\PhpPresentation\IOFactory::createWriter($ppt, 'PowerPoint2007');
+
+        $uuid = uniqid('', true);
+        $oWriterPPTX->save("/tmp/$uuid.pptx");
+
+        return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $team->fullname . '.' . date('Y-m-d') . '.pptx');
+    }
+
+    public function actionWord($id)
+    {
+        $team = Team::findOne(['id' => $id]);
+        $this->checkAllowed($team);
+
+        $phpWord = \app\components\Word::create($team);
+
+        $uuid = uniqid('', true);
+        $phpWord->save("/tmp/$uuid.docx", 'Word2007');
+
+        return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $team->fullname . '.' . date('Y-m-d') . '.docx');
+    }
+
+    private function checkAllowed($team)
+    {
+        if (!$team->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+    }
 }

@@ -6,25 +6,33 @@ use Yii;
 use yii\web\Controller;
 use app\models\Company;
 
-class CompanyController extends BaseController {
-
+class CompanyController extends BaseController
+{
     public $layout = 'inner';
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $companies = Company::browse();
         return $this->render('index', [
                     'companies' => $companies,
         ]);
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
         $company = Company::findOne(['id' => $id]);
+
+        if ($company->userNotAllowed()) {
+            throw new \yii\web\ForbiddenHttpException();
+        }
+
         return $this->render('view', [
                     'company' => $company,
         ]);
     }
 
-    public function actionNew() {
+    public function actionNew()
+    {
         $company = new Company();
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
@@ -39,8 +47,13 @@ class CompanyController extends BaseController {
         ]);
     }
 
-    public function actionEdit($id) {
+    public function actionEdit($id)
+    {
         $company = Company::findOne(['id' => $id]);
+
+        if (!$company || $company->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
 
         if ($company->load(Yii::$app->request->post()) && $company->save()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $company->name]));
@@ -54,8 +67,14 @@ class CompanyController extends BaseController {
         ]);
     }
 
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $company = Company::findOne(['id' => $id]);
+
+        if (!$company || $company->coach_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
         if ($company->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $company->name]));
         } else {
@@ -64,5 +83,4 @@ class CompanyController extends BaseController {
 
         return $this->redirect(['/company']);
     }
-
 }

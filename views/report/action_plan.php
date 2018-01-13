@@ -6,7 +6,8 @@ use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
 use yii\bootstrap\Button;
 use app\models\Wheel;
-use franciscomaya\sceditor\SCEditor;
+use dosamigos\ckeditor\CKEditor;
+use app\controllers\ReportController;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -14,9 +15,8 @@ use franciscomaya\sceditor\SCEditor;
 
 $this->title = Yii::t('report', 'Action Plan');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
@@ -24,21 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('report', 'Action Plan') ?>
     </h1>
     <div class="row col-md-12">
+        <?php $form = ActiveForm::begin(['id' => 'report-form']); ?>
+        <h3><?= Yii::t('report', 'Analysis') ?></h3>
         <p>
-            <?php
-            $form = ActiveForm::begin([
-                        'id' => 'newassessment-form',
-            ]);
-            ?>
             <?=
-            SCEditor::widget([
+            CKEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->action_plan,
-                'options' => ['rows' => 15],
-                'clientOptions' => [
-                    'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
-                    'width' => '100%',
-                ]
+                'value' => $team->report->action_plan,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::ANALYSIS_OPTIONS
             ])
             ?>
         </p>

@@ -23,7 +23,7 @@ class PasswordResetRequestForm extends Model {
             ['email', 'exist',
                 'targetClass' => '\app\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with such email.'
+                'message' => \Yii::t('app','There is no user with such email.'),
             ],
         ];
     }
@@ -44,7 +44,6 @@ class PasswordResetRequestForm extends Model {
         $user = User::findOne([
                     'status' => User::STATUS_ACTIVE,
                     'email' => $this->email,
-                    'is_coach' => 1,
         ]);
 
         if ($user) {
@@ -54,7 +53,7 @@ class PasswordResetRequestForm extends Model {
 
             if ($user->save()) {
                 return \Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
-                                ->setFrom(\Yii::$app->params['adminEmail'])
+                                ->setFrom(\Yii::$app->params['senderEmail'])
                                 ->setTo($this->email)
                                 ->setSubject(\Yii::t('app', 'Password reset for VACH'))
                                 ->send();

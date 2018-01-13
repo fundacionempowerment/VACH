@@ -30,12 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data['fullname'], Url::to(['person/edit', 'id' => $data['id'],])); // $data['name'] for array data, e.g. using SqlDataProvider.
                 },
             ],
+            'shortname',
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '60px'],
-                'urlCreator' => function( $action, $model, $key, $index ) {
+                'urlCreator' => function ($action, $model, $key, $index) {
                     switch ($action) {
-                        case 'delete' : return Url::to(['person/delete', 'id' => $model['id'], 'delete' => '1',]);
+                        case 'delete': return Url::to(['person/delete', 'id' => $model['id'], 'delete' => '1',]);
                     };
                 }
             ]

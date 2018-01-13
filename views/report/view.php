@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
-use app\models\Assessment;
+use app\models\Team;
 use app\models\Wheel;
 use app\models\WheelQuestion;
 use yii\bootstrap\Modal;
@@ -14,125 +14,182 @@ use yii\bootstrap\Modal;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = Yii::t('report', 'Report') . ' ' . $assessment->fullname;
+$this->title = Yii::t('report', 'Report') . ' ' . $team->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row col-md-6">
-        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($assessment->team->coach->fullname) ?><br />
-        <?= Yii::t('team', 'Company') ?>: <?= Html::label($assessment->team->company->name) ?><br />
-        <?= Yii::t('team', 'Team') ?>: <?= Html::label($assessment->team->name) ?><br />
-        <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($assessment->team->sponsor->fullname) ?><br />
-        <?= Yii::t('assessment', 'Assessment') ?>: <?= Html::label($assessment->fullname) ?>
+        <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
+        <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
+        <?= Yii::t('team', 'Team') ?>: <?= Html::label($team->name) ?><br />
+        <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?><br />
     </div>
     <div class="col-md-6 text-right">
-        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $assessment->id]), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $team->id]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $team->id]), ['class' => 'btn btn-info']) ?>
     </div>
     <div class="clearfix"></div>
     <h3>
         <?= Yii::t('report', 'Introduction'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/introduction', 'id' => $assessment->id]), ['id' => 'introduction', 'class' => 'btn ' . ($assessment->report->introduction === '' ? 'btn-success' : 'btn-default')]) ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/introduction', 'id' => $team->id]), [
+            'id' => 'introduction', 'class' => 'btn ' . (empty($team->report->introduction) ? 'btn-success' : 'btn-default')
+        ])
+        ?>
     </h3>
     <p>
-        <?= $assessment->report->introduction ?>
-    </p>
-    <h3>
-        <?= Yii::t('report', 'Effectiveness Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/effectiveness', 'id' => $assessment->id]), ['id' => 'effectiveness', 'class' => 'btn ' . ($assessment->report->effectiveness === '' ? 'btn-success' : 'btn-default')]) ?>
-    </h3>
-    <p>
-        <?= $assessment->report->effectiveness ?>
-    </p>
-    <h3>
-        <?= Yii::t('report', 'Performance Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/performance', 'id' => $assessment->id]), ['id' => 'performance', 'class' => 'btn ' . ($assessment->report->performance === '' ? 'btn-success' : 'btn-default')]) ?>
-    </h3>
-    <p>
-        <?= $assessment->report->performance ?>
+        <?= $team->report->introduction ?>
     </p>
     <h3>
         <?= Yii::t('report', 'Relations Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $assessment->id]), ['id' => 'relations', 'class' => 'btn ' . ($assessment->report->relations === '' ? 'btn-success' : 'btn-default')]) ?>    </h3>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $team->id]), [
+            'id' => 'relations', 'class' => 'btn ' . (empty($team->report->relations) ? 'btn-success' : 'btn-default')
+        ])
+        ?>    </h3>
     <p>
-        <?= $assessment->report->relations ?>
+        <?= $team->report->relations ?>
+    </p>
+    <h3>
+        <?= Yii::t('report', 'Effectiveness Matrix'); ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/effectiveness', 'id' => $team->id]), [
+            'id' => 'effectiveness', 'class' => 'btn ' . (empty($team->report->effectiveness) ? 'btn-success' : 'btn-default')
+        ])
+        ?>
+    </h3>
+    <p>
+        <?= $team->report->effectiveness ?>
+    </p>
+    <h3>
+        <?= Yii::t('report', 'Performance Matrix'); ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/performance', 'id' => $team->id]), [
+            'id' => 'performance', 'class' => 'btn ' . (empty($team->report->performance) ? 'btn-success' : 'btn-default')
+        ])
+        ?>
+    </h3>
+    <p>
+        <?= $team->report->performance ?>
     </p>
     <h3>
         <?= Yii::t('report', 'Competences Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/competences', 'id' => $assessment->id]), ['id' => 'competences', 'class' => 'btn ' . ($assessment->report->competences === '' ? 'btn-success' : 'btn-default')]) ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/competences', 'id' => $team->id]), [
+            'id' => 'competences', 'class' => 'btn ' . (empty($team->report->competences) ? 'btn-success' : 'btn-default')
+        ])
+        ?>
     </h3>
     <p>
-        <?= $assessment->report->competences ?>
+        <?= $team->report->competences ?>
     </p>
     <h3>
         <?= Yii::t('report', 'Emergents Matrix'); ?>
-        <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/emergents', 'id' => $assessment->id]), ['id' => 'emergents', 'class' => 'btn ' . ($assessment->report->emergents === '' ? 'btn-success' : 'btn-default')]) ?>
+        <?=
+        Html::a(\Yii::t('app', 'Edit'), Url::to(['report/emergents', 'id' => $team->id]), [
+            'id' => 'emergents', 'class' => 'btn ' . (empty($team->report->emergents) ? 'btn-success' : 'btn-default')
+        ])
+        ?>
     </h3>
     <p>
-        <?= $assessment->report->emergents ?>
+        <?= $team->report->emergents ?>
     </p>
-    <div class="">
-        <?php foreach ($assessment->report->individualReports as $individualReport) { ?>
+    <?php
+    foreach ($team->report->individualReports as $individualReport) {
+        if ($individualReport->teamMember->active) {
+            ?>
             <div class="clearfix"></div>
             <h1>
                 <?= $individualReport->member->fullname ?>
             </h1>
             <div class="col-md-push-1 col-md-11">
                 <h3>
-                    <?= Yii::t('report', 'Performance Matrix'); ?>
-                    <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-performance', 'id' => $individualReport->id]), ['id' => 'performance-' . $individualReport->id, 'class' => 'btn ' . ($individualReport->performance === '' ? 'btn-success' : 'btn-default')]) ?>
-                </h3>
-                <p>
-                    <?= $individualReport->performance ?>
-                </p>
-                <h3>
                     <?= Yii::t('report', 'Perception Matrix'); ?>
-                    <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-perception', 'id' => $individualReport->id]), ['id' => 'perception-' . $individualReport->id, 'class' => 'btn ' . ($individualReport->perception === '' ? 'btn-success' : 'btn-default')]) ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-perception',
+                                'id' => $individualReport->id]), ['id' => 'perception-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->perception) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
                 </h3>
                 <p>
                     <?= $individualReport->perception ?>
                 </p>
                 <h3>
-                    <?= Yii::t('report', 'Relations Matrix'); ?>
-                    <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-relations', 'id' => $individualReport->id]), ['id' => 'relations-' . $individualReport->id, 'class' => 'btn ' . ($individualReport->relations === '' ? 'btn-success' : 'btn-default')]) ?>
-                </h3>
-                <p>
-                    <?= $individualReport->relations ?>
-                </p>
-                <h3>
                     <?= Yii::t('report', 'Competence Matrix'); ?>
-                    <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-competences', 'id' => $individualReport->id]), ['id' => 'individual-competences-' . $individualReport->id, 'class' => 'btn ' . ($individualReport->competences === '' ? 'btn-success' : 'btn-default')]) ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-competences', 'id' => $individualReport->id]), [
+                        'id' => 'individual-competences-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->competences) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
                 </h3>
                 <p>
                     <?= $individualReport->competences ?>
                 </p>
                 <h3>
                     <?= Yii::t('report', 'Emergent Matrix'); ?>
-                    <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-emergents', 'id' => $individualReport->id]), ['id' => 'individual-emergents-' . $individualReport->id, 'class' => 'btn ' . ($individualReport->emergents === '' ? 'btn-success' : 'btn-default')]) ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-emergents', 'id' => $individualReport->id]), [
+                        'id' => 'individual-emergents-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->emergents) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
                 </h3>
                 <p>
                     <?= $individualReport->emergents ?>
                 </p>
+                <h3>
+                    <?= Yii::t('report', 'Relations Matrix'); ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-relations', 'id' => $individualReport->id]), [
+                        'id' => 'relations-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->relations) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
+                </h3>
+                <p>
+                    <?= $individualReport->relations ?>
+                </p>
+                <h3>
+                    <?= Yii::t('report', 'Performance Matrix'); ?>
+                    <?=
+                    Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-performance', 'id' => $individualReport->id]), [
+                        'id' => 'performance-' . $individualReport->id,
+                        'class' => 'btn ' . (empty($individualReport->performance) ? 'btn-success' : 'btn-default'),
+                    ])
+                    ?>
+                </h3>
+                <p>
+                    <?= $individualReport->performance ?>
+                </p>
             </div>
-        <?php } ?>
-    </div>
+            <?php
+
+        }
+    }
+    ?>
     <div class="col-md-12">
         <h3>
             <?= Yii::t('report', 'Summary'); ?>
-            <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/summary', 'id' => $assessment->id]), ['id' => 'summary', 'class' => 'btn ' . ($assessment->report->summary === '' ? 'btn-success' : 'btn-default')]) ?>
         </h3>
         <p>
-            <?= $assessment->report->summary ?>
+            <?= $team->report->summary ?>
         </p>
         <h3>
             <?= Yii::t('report', 'Action Plan'); ?>
-            <?= Html::a(\Yii::t('app', 'Edit'), Url::to(['report/action-plan', 'id' => $assessment->id]), ['id' => 'action-plan', 'class' => 'btn ' . ($assessment->report->action_plan === '' ? 'btn-success' : 'btn-default')]) ?>
+            <?=
+            Html::a(\Yii::t('app', 'Edit'), Url::to(['report/action-plan', 'id' => $team->id]), [
+                'id' => 'action-plan', 'class' => 'btn ' . (empty($team->report->action_plan) ? 'btn-success' : 'btn-default')
+            ])
+            ?>
         </h3>
         <p>
-            <?= $assessment->report->action_plan ?>
+<?= $team->report->action_plan ?>
         </p>
     </div>
 </div>

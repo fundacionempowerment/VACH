@@ -24,7 +24,7 @@ class Log extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['coach_id', 'text', 'datetime'], 'required'],
+            [['text', 'datetime'], 'required'],
         ];
     }
 

@@ -14,6 +14,10 @@ body {
     padding: 70px 15px 20px;
 }
 
+.wrap > .container-fluid {
+    padding: 70px 15px 20px;
+}
+
 .footer {
     height: 60px;
     background-color: #f5f5f5;
@@ -88,4 +92,125 @@ a.desc:after {
     border-left: 3px solid #eed3d7;
     padding: 10px 20px;
     margin: 0 0 15px 0;
+}
+
+h1, h2, h3 {
+    font-family: 'coolvetica';
+    color: #d60000;
+}
+
+.btn-vach {
+  color: #fff;
+  background-color: #d60000;
+  border-color: #d43f3a;
+}
+.btn-vach:focus,
+.btn-vach.focus {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #761c19;
+}
+.btn-vach:hover {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.btn-vach:active,
+.btn-vach.active,
+.open > .dropdown-toggle.btn-vach {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.btn-vach:active:hover,
+.btn-vach.active:hover,
+.open > .dropdown-toggle.btn-vach:hover,
+.btn-vach:active:focus,
+.btn-vach.active:focus,
+.open > .dropdown-toggle.btn-vach:focus,
+.btn-vach:active.focus,
+.btn-vach.active.focus,
+.open > .dropdown-toggle.btn-vach.focus {
+  color: #fff;
+  background-color: #ac2925;
+  border-color: #761c19;
+}
+.btn-vach:active,
+.btn-vach.active,
+.open > .dropdown-toggle.btn-vach {
+  background-image: none;
+}
+.btn-vach.disabled:hover,
+.btn-vach[disabled]:hover,
+fieldset[disabled] .btn-vach:hover,
+.btn-vach.disabled:focus,
+.btn-vach[disabled]:focus,
+fieldset[disabled] .btn-vach:focus,
+.btn-vach.disabled.focus,
+.btn-vach[disabled].focus,
+fieldset[disabled] .btn-vach.focus {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+.btn-vach .badge {
+  color: #d9534f;
+  background-color: #fff;
+}
+
+.btn-vach-border {
+  color: #d60000;
+  background-color: #fff;
+  border-color: #d60000;
+}
+.btn-vach-border:focus,
+.btn-vach-border.focus {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #761c19;
+}
+.btn-vach-border:hover {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.btn-vach-border:active,
+.btn-vach-border.active,
+.open > .dropdown-toggle.btn-vach-border {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.btn-vach-border:active:hover,
+.btn-vach-border.active:hover,
+.open > .dropdown-toggle.btn-vach-border:hover,
+.btn-vach-border:active:focus,
+.btn-vach-border.active:focus,
+.open > .dropdown-toggle.btn-vach-border:focus,
+.btn-vach-border:active.focus,
+.btn-vach-border.active.focus,
+.open > .dropdown-toggle.btn-vach-border.focus {
+  color: #fff;
+  background-color: #ac2925;
+  border-color: #761c19;
+}
+.btn-vach-border:active,
+.btn-vach-border.active,
+.open > .dropdown-toggle.btn-vach-border {
+  background-image: none;
+}
+.btn-vach-border.disabled:hover,
+.btn-vach-border[disabled]:hover,
+fieldset[disabled] .btn-vach-border:hover,
+.btn-vach-border.disabled:focus,
+.btn-vach-border[disabled]:focus,
+fieldset[disabled] .btn-vach-border:focus,
+.btn-vach-border.disabled.focus,
+.btn-vach-border[disabled].focus,
+fieldset[disabled] .btn-vach-border.focus {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+.btn-vach-border .badge {
+  color: #d9534f;
+  background-color: #fff;
 }

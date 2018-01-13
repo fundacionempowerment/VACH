@@ -1,0 +1,136 @@
+<?php
+
+$modules = require(__DIR__ . '/modules.php');
+$params = require(__DIR__ . '/params.php');
+$test_db = require(__DIR__ . '/test_db.php');
+
+/**
+ * Application configuration shared by all test types
+ */
+$web = [
+    'id' => 'basic-tests',
+    'basePath' => dirname(__DIR__),
+    'language' => 'es-AR',
+    'components' => [
+        'mailer' => [
+            'useFileTransport' => true,
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js' => [
+                        YII_ENV_DEV ? 'jquery.js' : 'jquery.min.js'
+                    ]
+        ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [
+                        YII_ENV_DEV ? 'css/bootstrap.css' : 'css/bootstrap.min.css',
+                    ]
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js' => [
+                        YII_ENV_DEV ? 'js/bootstrap.js' : 'js/bootstrap.min.js',
+                    ]
+                ]
+            ],
+        ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'user' => [
+            'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+            // Comment this if you don't want to record user logins
+            'on afterLogin' => function($event) {
+                \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+            }
+        ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+//            'transport' => [
+//                'class' => 'Swift_SmtpTransport',
+//                'host' => 'smtp.gmail.com', // e.g. smtp.mandrillapp.com or smtp.gmail.com
+//                'username' => '************',
+//                'password' => '************',
+//                'port' => '587', // Port 25 is a very common port too
+//                'encryption' => 'tls', // It is often used, check your provider or mail server specs
+//            ],
+            'useFileTransport' => true,
+        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'app' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'help' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'import' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'backup' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'afip' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'accounting' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'paycheck' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'ticket' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'modules/user-management/*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        'modules/user-management/back' => 'modules/user-management/back.php',
+                        'modules/user-management/front' => 'modules/user-management/front.php',
+                    ],
+                ]
+            ],
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'php:d-m-Y',
+            'datetimeFormat' => 'php:d-m-Y H:i:s',
+            'timeFormat' => 'php:H:i:s',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
+            //'currencyCode' => 'ARS',
+        ],
+        'request' => [
+            'cookieValidationKey' => 'test',
+            'enableCsrfValidation' => false,
+            // but if you absolutely need it set cookie domain to localhost
+            /*
+            'csrfCookie' => [
+                'domain' => 'localhost',
+            ],
+            */
+        ],
+    ],
+    'modules' => $modules,
+    'params' => $params,
+];
+
+
+$web['components'] = yii\helpers\ArrayHelper::merge(
+    $web['components'], $test_db
+);
+
+return $web;

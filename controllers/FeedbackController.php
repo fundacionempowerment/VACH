@@ -11,15 +11,20 @@ use app\models\RegisterModel;
 use app\models\User;
 use app\models\CoachModel;
 use app\models\ClientModel;
-use app\models\AccountModel;
 use app\models\Feedback;
 
-class FeedbackController extends BaseController {
+class FeedbackController extends BaseController
+{
+    public function actionIndex()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $this->layout = 'inner';
+        }
 
-    public function actionIndex() {
         $previous_feedback = Feedback::getPrevious();
-        if (count($previous_feedback) > 0)
+        if (count($previous_feedback) > 0) {
             return $this->render('already');
+        }
 
         $feedback = new Feedback();
 
@@ -29,20 +34,19 @@ class FeedbackController extends BaseController {
             $feedback->satisfaction = Yii::$app->request->post('satisfaction');
             $feedback->comment = Yii::$app->request->post('comment');
 
-            if (!Yii::$app->user->isGuest)
+            if (!Yii::$app->user->isGuest) {
                 $feedback->user_id = Yii::$app->user->identity->id;
+            }
 
             if ($feedback->save()) {
                 return $this->render('thanks');
-            }
-            else
+            } else {
                 SiteController::FlashErrors($feedback);
+            }
         }
 
         return $this->render('index', [
                     'feedback' => $feedback,
         ]);
     }
-
 }
-

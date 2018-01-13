@@ -1,6 +1,6 @@
 <?php
 
-$this->title = Yii::t('user', 'My Account');
+$this->title = Yii::t('user', 'My Data');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?=

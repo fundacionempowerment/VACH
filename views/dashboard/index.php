@@ -14,19 +14,7 @@ $this->title = Yii::t('dashboard', 'Dashboard');
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var radars = new Array();
-    var radarsData = new Array();
-    var lineals = new Array();
-    var linealsData = new Array();
-    var matrixes = new Array();
-    var matrixesData = new Array();
-    var relations = new Array();
-    var relationsData = new Array();
-</script>
 <div class="dashboard">
-    <script src="<?= Url::to('@web/js/Chart.min.js') ?>"></script>
-    <script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
     <script src="<?= Url::to('@web/js/relations.js') ?>"></script>
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
@@ -34,120 +22,115 @@ $this->params['breadcrumbs'][] = $this->title;
         'filter' => $filter,
         'companies' => $companies,
         'teams' => $teams,
-        'assessments' => $assessments,
         'members' => $members,
     ]);
 
-    if (count($projectedIndividualWheel) > 0)
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
         echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual Wheel'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_INDIVIDUAL,
-        ]);
-
-    if (count($projectedIndividualWheel) > 0 && count($projectedGroupWheel) > 0)
-        echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual projection toward the group'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-
-    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0)
-        echo $this->render('_lineal', [
-            'title' => Yii::t('dashboard', 'Group Perception Matrix'),
-            'wheel' => $reflectedGroupWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedGroupWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_GROUP,
-        ]);
-
-    if (count($projectedIndividualWheel) > 0 && count($projectedOrganizationalWheel) > 0)
-        echo $this->render('_radar', [
-            'title' => Yii::t('dashboard', 'Individual projection toward the organization'),
-            'wheel' => $projectedIndividualWheel,
-            'wheelName' => Yii::t('dashboard', 'How I see me'),
-            'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How they see me'),
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-
-    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0)
-        echo $this->render('_lineal', [
-            'title' => Yii::t('dashboard', 'Organizational Perception Matrix'),
-            'wheel' => $reflectedOrganizationalWheel,
-            'wheelName' => Yii::t('dashboard', 'How they see me'),
-            'comparedWheel' => $projectedOrganizationalWheel,
-            'comparedWheelName' => Yii::t('dashboard', 'How I see me'),
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
-        ]);
-
-    if (count($gauges) > 0)
-        echo $this->render('_gauges', [
-            'gauges' => $gauges,
-            'type' => $filter->wheelType,
-        ]);
-
-    if (count($performanceMatrix) > 0) {
-        echo $this->render('_matrix', [
-            'data' => $performanceMatrix,
-            'type' => $filter->wheelType,
+            'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
+            'wheelType' => Wheel::TYPE_INDIVIDUAL,
+        ]);
+    }
+
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
+        echo $this->render('_radar', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => Wheel::TYPE_GROUP,
+        ]);
+    }
+
+    if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
+        echo $this->render('_lineal', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => Wheel::TYPE_GROUP,
+        ]);
+    }
+
+    if ($filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
+        echo $this->render('_radar', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
+        ]);
+    }
+
+    if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
+        echo $this->render('_lineal', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
+        ]);
+    }
+
+    if (count($gauges) > 0) {
+        echo $this->render('_gauges', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => $filter->wheelType,
         ]);
     }
 
     if (count($relationsMatrix) > 0) {
-        echo $this->render('_relation', [
-            'data' => $relationsMatrix,
-            'members' => $members,
-            'type' => $filter->wheelType,
-            'memberId' => $filter->memberId,
-        ]);
-        echo $this->render('_relation_table', [
-            'data' => $relationsMatrix,
-            'members' => $members,
-            'type' => $filter->wheelType,
-            'memberId' => $filter->memberId,
-        ]);
-
         echo $this->render('_number_matrix', [
             'data' => $relationsMatrix,
             'members' => $members,
             'type' => $filter->wheelType,
             'memberId' => $filter->memberId,
+            'member' => $member,
+            'team' => $team,
         ]);
     }
 
-    if (count($emergents))
+    if (count($performanceMatrix) > 0) {
+        echo $this->render('_matrix', [
+            'teamId' => $filter->teamId,
+            'memberId' => $filter->memberId,
+            'wheelType' => $filter->wheelType,
+        ]);
+    }
+
+    if (count($relationsMatrix) > 0) {
+        if ($filter->memberId > 0) {
+            echo $this->render('_relation', [
+                'teamId' => $filter->teamId,
+                'memberId' => $filter->memberId,
+                'wheelType' => $filter->wheelType,
+            ]);
+        }
+        echo $this->render('_relation_table', [
+            'data' => $relationsMatrix,
+            'members' => $members,
+            'type' => $filter->wheelType,
+            'memberId' => $filter->memberId,
+            'member' => $member,
+        ]);
+    }
+
+    if (count($emergents)) {
         echo $this->render('_emergents', [
             'data' => $relationsMatrix,
             'members' => $members,
             'memberId' => $filter->memberId,
             'emergents' => $emergents,
             'type' => $filter->wheelType,
+            'member' => $member,
+            'team' => $team,
+            'company' => $company,
         ]);
+    }
+    echo $this->render('_detailed_emergents', [
+        'data' => $relationsMatrix,
+        'members' => $members,
+        'memberId' => $filter->memberId,
+        'emergents' => $emergents,
+        'type' => $filter->wheelType,
+        'member' => $member,
+    ]);
     ?>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in radars) {
-            new Chart(document.getElementById("canvas" + radars[i]).getContext("2d")).Radar(radarsData[i], {responsive: true, scaleBeginAtZero: true, pointLabelFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0});
-        }
-        for (var i in lineals) {
-            new Chart(document.getElementById("canvas" + lineals[i]).getContext("2d")).Line(linealsData[i], {responsive: true, scaleBeginAtZero: true, scaleFontSize: 15, scaleOverride: true, scaleSteps: 4, scaleStepWidth: 1, scaleStartValue: 0, bezierCurve: false});
-        }
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
-        }
-        for (var i in relations) {
-            doRelations(document.getElementById("canvas" + relations[i]).getContext("2d"), relationsData[i]);
-        }
-    }
-</script>
 <script src="<?= Url::to('@web/js/html2canvas/html2canvas.js') ?>"></script>
 <script src="<?= Url::to('@web/js/FileSaver.js') ?>"></script>
 <script>
@@ -161,5 +144,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
     }
 </script>
-
-

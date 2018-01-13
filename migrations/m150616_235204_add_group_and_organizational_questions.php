@@ -152,8 +152,8 @@ class m150616_235204_add_group_and_organizational_questions extends Migration {
         ['¿Reconoce esta competencia como una exigencia propia del contexto del mercado?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         ['¿Se considera una persona que trabaja “mirando más allá”?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         ['¿Considera que sus compañeros l@ ven como una persona con visión a futuro?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
+        ['¿Promueve la planificación?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         ['¿Alienta y valoriza el análisis estratégico de la gestión que hace su Equipo?', self::ANSWER_NEVER_TO_ALWAYS],
-        ['¿Cree que le da lo suficiente a su Equipo?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         ['¿Está de acuerdo con que la visión estratégica permite adelantarse al futuro y optimizar decisiones?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         ['¿Está comprometid@ con la visión estratégica de la Org.?', self::ANSWER_NOTHING_TO_ABSOLUTLY],
         //IDENTIDAD
@@ -186,6 +186,8 @@ class m150616_235204_add_group_and_organizational_questions extends Migration {
             'question' => $question,
             'answer_type' => $answer,
             'order' => $order,
+            'created_at' => time(),
+            'updated_at' => time(),
         ]);
     }
 

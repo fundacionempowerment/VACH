@@ -11,6 +11,7 @@ $config = require(__DIR__ . '/../config/web.php');
 
 $app = new yii\web\Application($config);
 $language = $app->session->get('language');
-if (isset($language))
+if (isset($language)) {
     $app->language = $language;
+}
 $app->run();

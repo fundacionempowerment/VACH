@@ -8,9 +8,11 @@ use yii\db\Query;
 use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
-class Feedback extends ActiveRecord {
+class Feedback extends ActiveRecord
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->ip = Yii::$app->request->userIP;
         $this->datetime = date("Y-m-d H:i:s");
     }
@@ -18,7 +20,8 @@ class Feedback extends ActiveRecord {
     /**
      * @return array the validation rules.
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['ip',
             'effectiveness',
@@ -29,7 +32,8 @@ class Feedback extends ActiveRecord {
         ];
     }
 
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'ip' => Yii::t('feedback', 'IP'),
             'effectiveness' => Yii::t('feedback', 'Effectiveness'),
@@ -40,9 +44,11 @@ class Feedback extends ActiveRecord {
         ];
     }
 
-    public static function getPrevious() {
-        if (!Yii::$app->user->isGuest)
+    public static function getPrevious()
+    {
+        if (!Yii::$app->user->isGuest) {
             return [];
+        }
 
         return Feedback::find()->where("user_id is null and ip = '" . Yii::$app->request->userIP . "' and datetime >= '" . date('Y-m-d', strtotime("-30 days")) . '\'')->all();
     }
