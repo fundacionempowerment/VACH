@@ -6,7 +6,8 @@ use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
 use yii\bootstrap\Button;
 use app\models\Wheel;
-use franciscomaya\sceditor\SCEditor;
+use dosamigos\ckeditor\CKEditor;
+use app\controllers\ReportController;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -16,9 +17,8 @@ use franciscomaya\sceditor\SCEditor;
 
 $this->title = Yii::t('report', 'Effectiveness Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script>
@@ -32,20 +32,24 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupRelationsMatrix) > 0) {
         echo $this->render('../dashboard/_number_matrix', [
+            'team' => $team,
             'data' => $groupRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_GROUP,
             'memberId' => 0,
+            'member' => null,
         ]);
     }
     ?>
     <?php
     if (count($organizationalRelationsMatrix) > 0) {
         echo $this->render('../dashboard/_number_matrix', [
+            'team' => $team,
             'data' => $organizationalRelationsMatrix,
             'members' => $members,
             'type' => Wheel::TYPE_ORGANIZATIONAL,
             'memberId' => 0,
+            'member' => null,
         ]);
     }
     ?>
@@ -60,24 +64,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('descriptions/effectiveness') ?>
     </div>
     <div class="row col-md-12">
-        <h3>
-            Análisis
-        </h3>
+        <?php $form = ActiveForm::begin(['id' => 'report-form']); ?>
+        <h3><?= Yii::t('report', 'Analysis') ?></h3>
         <p>
-            <?php
-            $form = ActiveForm::begin([
-                        'id' => 'newassessment-form',
-            ]);
-            ?>
             <?=
-            SCEditor::widget([
+            CKEditor::widget([
                 'name' => 'analysis',
-                'value' => $assessment->report->effectiveness,
-                'options' => ['rows' => 10],
-                'clientOptions' => [
-                    'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
-                    'width' => '100%',
-                ]
+                'value' => $team->report->effectiveness,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::ANALYSIS_OPTIONS
+            ])
+            ?>
+        </p>
+        <h3><?= Yii::t('report', 'Keywords') ?></h3>
+        <p>
+            <?=
+            CKEditor::widget([
+                'name' => 'keywords',
+                'value' => $team->report->effectiveness_keywords,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::SUMMARY_OPTIONS
             ])
             ?>
         </p>

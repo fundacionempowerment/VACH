@@ -1,0 +1,9 @@
+<?php
+
+$test_host = 'localhost';
+
+return yii\helpers\ArrayHelper::merge(
+    require(__DIR__ . '/db.php'), [
+            'dsn' => "mysql:host=$test_host;dbname=vach_test",
+    ]
+);

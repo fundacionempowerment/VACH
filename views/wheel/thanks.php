@@ -11,7 +11,7 @@ use app\models\WheelAnswer;
 
 $this->title = Yii::t('app', 'Thanks!');
 ?>
-<div class="site-wheel">
+<div class="site-wheel col-md-push-2 col-md-8">
     <h2>
         <?= Yii::t('wheel', 'You\'ve successfully answered all questions!') ?>
     </h2>

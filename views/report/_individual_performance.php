@@ -3,32 +3,22 @@
 use yii\helpers\Html;
 use app\models\Wheel;
 ?>
-<h3>
-    <?= $subtitle_letter ?> - Matriz de Desempeño, grupal y organizacional de <?= $report->member->fullname ?>
-</h3>
 <?php
 if (count($groupPerformanceMatrix) > 0) {
     echo $this->render('../dashboard/_matrix', [
-        'data' => $groupPerformanceMatrix,
-        'type' => Wheel::TYPE_GROUP,
+        'teamId' => $team->id,
         'memberId' => $report->member->id,
+        'wheelType' => Wheel::TYPE_GROUP,
     ]);
 }
 if (count($organizationalPerformanceMatrix) > 0) {
     echo $this->render('../dashboard/_matrix', [
-        'data' => $organizationalPerformanceMatrix,
-        'type' => Wheel::TYPE_ORGANIZATIONAL,
+        'teamId' => $team->id,
         'memberId' => $report->member->id,
+        'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
     ]);
 }
 ?>
-<h3>
-    Descripción
-</h3>
-<?= $this->render('descriptions/individual_performance') ?>
-<h3>
-    Análisis
-</h3>
 <p>
-    <?= $report->perception ?>
+    <?= empty($report->performance) ? Yii::t('report', 'Since graphic clarity, farther analisis is not required') : $report->performance ?>
 </p>

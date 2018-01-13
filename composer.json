@@ -12,24 +12,39 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widgets": "*",
-        "franciscomaya/yii2-sceditor": "dev-master",
-        "kartik-v/yii2-mpdf": "*"
+        "2amigos/yii2-ckeditor-widget": "*",
+        "kartik-v/yii2-checkbox-x": "*",
+        "yiisoft/yii2-httpclient": "*",
+        "phpoffice/phppresentation": "dev-master",
+        "phpoffice/phpword": "dev-master",
+        "onmotion/yii2-telegram": "*",
+        "kartik-v/yii2-export": "*",
+        "swiftmailer/swiftmailer": "^5"
     },
     "require-dev": {
-        "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
-        "yiisoft/yii2-faker": "*"
+        "captbaritone/mailcatcher-codeception-module": "*"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "installer-paths": {
+                "npm-asset-library": "vendor/npm",
+                "bower-asset-library": "vendor/bower"
+            }
+        },
+        "preferred-install": {
+            "*": "dist"
+        }
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -48,10 +63,6 @@
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
-        },
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
         }
     }
 }

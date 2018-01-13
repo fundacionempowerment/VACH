@@ -1,11 +1,13 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 
-class BaseController extends \yii\web\Controller {
-
-    public function init() {
+class BaseController extends \yii\web\Controller
+{
+    public function init()
+    {
         parent::init();
 
         $currentLanguage = Yii::$app->session->get('language');
@@ -14,4 +16,12 @@ class BaseController extends \yii\web\Controller {
         }
     }
 
+    public function beforeAction($action)
+    {
+        if (!SiteController::checkUserSession()) {
+            return false;
+        }
+
+        return parent::beforeAction($action);
+    }
 }

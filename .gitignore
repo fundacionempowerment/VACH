@@ -44,3 +44,5 @@ phpunit.phar
 
 # rendered documents
 *.pdf
+
+controllers/DemoController.php

@@ -6,7 +6,8 @@ use yii\bootstrap\ActiveForm;
 use app\models\WheelAnswer;
 use yii\bootstrap\Button;
 use app\models\Wheel;
-use franciscomaya\sceditor\SCEditor;
+use dosamigos\ckeditor\CKEditor;
+use app\controllers\ReportController;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -14,16 +15,10 @@ use franciscomaya\sceditor\SCEditor;
 
 $this->title = Yii::t('report', 'Performance Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
-$this->params['breadcrumbs'][] = ['label' => $assessment->team->fullname, 'url' => ['/team/view', 'id' => $assessment->team->id]];
-$this->params['breadcrumbs'][] = ['label' => $assessment->fullname, 'url' => ['/assessment/view', 'id' => $assessment->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $assessment->id]];
+$this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script>
-    var matrixes = new Array();
-    var matrixesData = new Array();
-</script>
-<script src="<?= Url::to('@web/js/matrix.js') ?>"></script>
 <div class="report-technical">
 
     <h1>
@@ -32,18 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (count($groupPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $groupPerformanceMatrix,
-            'type' => Wheel::TYPE_GROUP,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
+            'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     ?>
     <?php
     if (count($organizationalPerformanceMatrix) > 0) {
         echo $this->render('../dashboard/_matrix', [
-            'data' => $organizationalPerformanceMatrix,
-            'type' => Wheel::TYPE_ORGANIZATIONAL,
+            'teamId' => $team->id,
             'memberId' => $report->member->id,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
     ?>
@@ -58,24 +53,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('descriptions/individual_performance') ?>
     </div>
     <div class="row col-md-12">
-        <h3>
-            Análisis
-        </h3>
+        <?php $form = ActiveForm::begin(['id' => 'report-form']); ?>
+        <h3><?= Yii::t('report', 'Analysis') ?></h3>
         <p>
-            <?php
-            $form = ActiveForm::begin([
-                        'id' => 'newassessment-form',
-            ]);
-            ?>
             <?=
-            SCEditor::widget([
+            CKEditor::widget([
                 'name' => 'analysis',
                 'value' => $report->performance,
-                'options' => ['rows' => 10],
-                'clientOptions' => [
-                    'toolbar' => "bold,italic,underline|bulletlist,orderedlist|removeformat",
-                    'width' => '100%',
-                ]
+                'preset' => 'custom',
+                'clientOptions' => ReportController::ANALYSIS_OPTIONS
+            ])
+            ?>
+        </p>
+        <h3><?= Yii::t('report', 'Keywords') ?></h3>
+        <p>
+            <?=
+            CKEditor::widget([
+                'name' => 'keywords',
+                'value' => $report->performance_keywords,
+                'preset' => 'custom',
+                'clientOptions' => ReportController::SUMMARY_OPTIONS
             ])
             ?>
         </p>
@@ -85,10 +82,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<script>
-    window.onload = function () {
-        for (var i in matrixes) {
-            doMatrix(document.getElementById("canvas" + matrixes[i]).getContext("2d"), matrixesData[i]);
-        }
-    }
-</script>
