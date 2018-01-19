@@ -109,6 +109,16 @@ class Team extends ActiveRecord
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
+    public function getActiveMemberList()
+    {
+        $activeMembers = [];
+        foreach ($this->getMembers()->where(['active' => true])->all() as $teamMember) {
+            $activeMembers[$teamMember->person_id] = $teamMember->member->fullname;
+        }
+
+        return $activeMembers;
+    }
+
     public function hasMember($personId)
     {
         return TeamMember::find()

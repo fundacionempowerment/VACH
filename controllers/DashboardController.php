@@ -74,9 +74,7 @@ class DashboardController extends BaseController
 
         if ($filter->teamId > 0) {
             $team = Team::findOne(['id' => $filter->teamId]);
-            foreach (TeamMember::find()->where(['team_id' => $filter->teamId, 'active' => true])->all() as $teamMember) {
-                $members[$teamMember->person_id] = $teamMember->member->fullname;
-            }
+            $members = $team->activeMemberList;
         }
 
         $members[0] = Yii::t('app', 'All');

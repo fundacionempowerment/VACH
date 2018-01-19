@@ -462,10 +462,7 @@ class Presentation
     {
         $teamId = self::$team->id;
 
-        $members = [];
-        foreach (TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = self::$team->activeMemberList;
 
         $currentSlide = self::$ppt->createSlide();
         $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
