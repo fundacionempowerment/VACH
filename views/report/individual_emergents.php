@@ -32,9 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data' => $groupRelationsMatrix,
                 'members' => $members,
                 'memberId' => $memberId,
+                'member' => $report->member,
+                'team' => $team,
+                'company' => $team->company,
                 'emergents' => $groupEmergents,
                 'type' => Wheel::TYPE_GROUP,
-                'member' => $report->member,
             ]);
         }
         ?>
@@ -46,9 +48,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data' => $organizationalRelationsMatrix,
                 'members' => $members,
                 'memberId' => $memberId,
+                'member' => $report->member,
+                'team' => $team,
+                'company' => $team->company,
                 'emergents' => $organizationalEmergents,
                 'type' => Wheel::TYPE_ORGANIZATIONAL,
-                'member' => $report->member,
             ]);
         }
         ?>
