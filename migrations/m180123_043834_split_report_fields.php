@@ -13,10 +13,16 @@ class m180123_043834_split_report_fields extends Migration
      */
     public function safeUp()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('report_field', [
             'report_field_id' => $this->primaryKey(),
             'content' => $this->text(),
-        ]);
+                ], $tableOptions);
 
         $this->addColumn('report', 'introduction_id', $this->integer());
         $this->addColumn('report', 'effectiveness_id', $this->integer());
