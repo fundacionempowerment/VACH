@@ -200,7 +200,7 @@ class Wheel extends ActiveRecord
         return self::getReflectedWheel($teamId, $memberId, Wheel::TYPE_ORGANIZATIONAL);
     }
 
-    public static function getPerformanceMatrix($teamId, $type)
+    public static function getProdConsMatrix($teamId, $type)
     {
         $reflectedValues = (new Query)->select('wheel.observed_id, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
@@ -246,7 +246,7 @@ class Wheel extends ActiveRecord
         return $result;
     }
 
-    public static function getGauges($teamId, $type)
+    public static function getPerceptions($teamId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')
@@ -265,7 +265,7 @@ class Wheel extends ActiveRecord
         return $answers;
     }
 
-    public static function getMemberGauges($teamId, $memberId, $type)
+    public static function getMemberCompetences($teamId, $memberId, $type)
     {
         $rawAnswers = (new Query())->select('wheel_answer.dimension, avg(wheel_answer.answer_value) as value')
                 ->from('wheel_answer')

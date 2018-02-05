@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('report', 'Competences Matrix of {member}', ['member' => $report->member->fullname]) ?>
     </h1>
     <?php
-    if (count($groupGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
+    if (count($groupCompetences) > 0) {
+        echo $this->render('../dashboard/_competences', [
             'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
@@ -36,8 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <?php
-    if (count($organizationalGauges) > 0) {
-        echo $this->render('../dashboard/_gauges', [
+    if (count($organizationalCompetences) > 0) {
+        echo $this->render('../dashboard/_competences', [
             'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,

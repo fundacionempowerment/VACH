@@ -65,8 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
     }
 
-    if (count($gauges) > 0) {
-        echo $this->render('_gauges', [
+    if (count($competences) > 0) {
+        echo $this->render('_competences', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($relationsMatrix) > 0) {
-        echo $this->render('_number_matrix', [
+        echo $this->render('_effectiveness', [
             'data' => $relationsMatrix,
             'members' => $members,
             'type' => $filter->wheelType,
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($performanceMatrix) > 0) {
-        echo $this->render('_matrix', [
+        echo $this->render('_performance', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,

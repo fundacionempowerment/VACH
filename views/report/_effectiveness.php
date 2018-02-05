@@ -8,7 +8,7 @@ use app\models\Wheel;
 </h3>
 <?php
 if (count($groupRelationsMatrix) > 0) {
-    echo $this->render('../dashboard/_number_matrix', [
+    echo $this->render('../dashboard/_effectiveness', [
         'team' => $team,
         'data' => $groupRelationsMatrix,
         'members' => $members,
@@ -20,7 +20,7 @@ if (count($groupRelationsMatrix) > 0) {
 ?>
 <?php
 if (count($organizationalRelationsMatrix) > 0) {
-    echo $this->render('../dashboard/_number_matrix', [
+    echo $this->render('../dashboard/_effectiveness', [
         'team' => $team,
         'data' => $organizationalRelationsMatrix,
         'members' => $members,

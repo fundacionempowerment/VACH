@@ -37,8 +37,8 @@ class Presentation
 
         self::addTeamTitleSlide();
         self::addTeamRelationsSlide();
-        self::addTeamNumberMatrixSlide();
-        self::addTeamMatrixSlide();
+        self::addTeamEffectivenessSlide();
+        self::addTeamPerformanceSlide();
         self::addTeamCompentencesSlide();
         self::addTeamEmergentsSlide();
 
@@ -51,7 +51,7 @@ class Presentation
                 self::addMemberCompentencesSlide($member);
                 self::addMemberEmergentsSlide($member);
                 self::addMemberRelationsSlide($member);
-                self::addMemberMatrixSlide($member);
+                self::addMemberPerformanceSlide($member);
             }
         }
 
@@ -428,7 +428,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
@@ -443,7 +443,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
@@ -460,8 +460,6 @@ class Presentation
 
     private static function addTeamRelationsSlide()
     {
-        $teamId = self::$team->id;
-
         $members = self::$team->activeMemberList;
 
         $currentSlide = self::$ppt->createSlide();
@@ -578,7 +576,7 @@ class Presentation
         }
     }
 
-    private static function addTeamNumberMatrixSlide()
+    private static function addTeamEffectivenessSlide()
     {
         $teamId = self::$team->id;
 
@@ -597,13 +595,13 @@ class Presentation
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
-        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_GROUP);
+        $performanceMatrix = Wheel::getProdConsMatrix($teamId, Wheel::TYPE_GROUP);
 
         $rowsData = [];
-        $activeTeamMembers = TeamMember::find()->where(['team_id' => self::$team->id, 'active' => true])->all();
-        foreach ($activeTeamMembers as $teamMember) {
+        $members = self::$team->activeMemberList;
+        foreach ($members as $index => $name) {
             foreach ($performanceMatrix as $row) {
-                if ($teamMember->person_id == $row['id']) {
+                if ($index == $row['id']) {
                     $rowsData[] = $row;
                 }
             }
@@ -733,12 +731,12 @@ class Presentation
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
 
-        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
+        $performanceMatrix = Wheel::getProdConsMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
 
         $rowsData = [];
-        foreach ($activeTeamMembers as $teamMember) {
+        foreach ($members as $index => $name) {
             foreach ($performanceMatrix as $row) {
-                if ($teamMember->person_id == $row['id']) {
+                if ($index == $row['id']) {
                     $rowsData[] = $row;
                 }
             }
@@ -852,7 +850,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addTeamMatrixSlide()
+    private static function addTeamPerformanceSlide()
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -861,7 +859,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
@@ -876,7 +874,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => $teamId,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
@@ -980,7 +978,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/lineal',
+                            '/graph/perceptions',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
@@ -995,7 +993,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/lineal',
+                            '/graph/perceptions',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
@@ -1020,7 +1018,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
@@ -1035,7 +1033,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
@@ -1050,7 +1048,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberMatrixSlide($member)
+    private static function addMemberPerformanceSlide($member)
     {
         $currentSlide = self::$ppt->createSlide();
 
@@ -1060,7 +1058,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_GROUP], true));
@@ -1075,7 +1073,7 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => $teamId,
                             'memberId' => $memberId,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));

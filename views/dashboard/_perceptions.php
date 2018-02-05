@@ -15,7 +15,7 @@ $token = rand(100000, 999999);
 <div class="clearfix"></div>
 <div id="div<?= $token ?>" class="col-sm-12 col-md-push-1 col-md-10 text-center" >
     <?=
-    Html::img(Url::toRoute(["/graph/lineal",
+    Html::img(Url::toRoute(["/graph/perceptions",
                 'teamId' => $teamId,
                 'memberId' => $memberId,
                 'wheelType' => $wheelType]), ['class' => 'img-responsive'])

@@ -7,7 +7,7 @@ use app\models\Person;
 use app\models\Wheel;
 use app\models\WheelQuestion;
 
-class Gauges
+class Competences
 {
 
     const width = 2000;
@@ -32,12 +32,12 @@ class Gauges
         $maxValue = -10000;
 
         if ($memberId > 0) {
-            $gauges = Wheel::getMemberGauges($teamId, $memberId, $wheelType);
+            $competences = Wheel::getMemberCompetences($teamId, $memberId, $wheelType);
         } else {
-            $gauges = Wheel::getGauges($teamId, $wheelType);
+            $competences = Wheel::getPerceptions($teamId, $wheelType);
         }
 
-        foreach ($gauges as $gauge) {
+        foreach ($competences as $gauge) {
             if ($gauge > $maxValue) {
                 $maxValue = $gauge;
             }
@@ -83,8 +83,8 @@ class Gauges
         $t->SetColor("black");
         $t->Stroke($g->img);
 
-        for ($i = 0; $i < count($gauges); $i++) {
-            self::drawGauge($g, $gauges[$i], self::cells[$i], $wheelType, $minValue, $maxValue);
+        for ($i = 0; $i < count($competences); $i++) {
+            self::drawGauge($g, $competences[$i], self::cells[$i], $wheelType, $minValue, $maxValue);
         }
 
         $g->Stroke();

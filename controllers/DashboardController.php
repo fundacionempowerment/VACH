@@ -90,7 +90,7 @@ class DashboardController extends BaseController
 
         $relationsMatrix = [];
 
-        $gauges = [];
+        $competences = [];
         $emergents = [];
 
         if ($filter->memberId > 0 && $filter->wheelType == Wheel::TYPE_INDIVIDUAL) {
@@ -102,14 +102,14 @@ class DashboardController extends BaseController
 
             $emergents = Wheel::getMemberEmergents($filter->teamId, $filter->memberId, Wheel::TYPE_INDIVIDUAL);
         } elseif ($filter->teamId > 0 && $filter->wheelType > 0) {
-            $performanceMatrix = Wheel::getPerformanceMatrix($filter->teamId, $filter->wheelType);
+            $performanceMatrix = Wheel::getProdConsMatrix($filter->teamId, $filter->wheelType);
             $relationsMatrix = Wheel::getRelationsMatrix($filter->teamId, $filter->wheelType);
 
             if ($filter->memberId > 0) {
-                $gauges = Wheel::getMemberGauges($filter->teamId, $filter->memberId, $filter->wheelType);
+                $competences = Wheel::getMemberCompetences($filter->teamId, $filter->memberId, $filter->wheelType);
                 $emergents = Wheel::getMemberEmergents($filter->teamId, $filter->memberId, $filter->wheelType);
             } else {
-                $gauges = Wheel::getGauges($filter->teamId, $filter->wheelType);
+                $competences = Wheel::getPerceptions($filter->teamId, $filter->wheelType);
                 $emergents = Wheel::getEmergents($filter->teamId, $filter->wheelType);
             }
         }
@@ -131,7 +131,7 @@ class DashboardController extends BaseController
                     'individualPerformanceMatrix' => $individualPerformanceMatrix,
                     // group wheel
                     'performanceMatrix' => $performanceMatrix,
-                    'gauges' => $gauges,
+                    'competences' => $competences,
                     'relationsMatrix' => $relationsMatrix,
                     'emergents' => $emergents,
         ]);

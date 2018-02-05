@@ -9,12 +9,12 @@ use app\models\Wheel;
 use app\models\WheelQuestion;
 use app\components\Utils;
 
-class Matrix
+class Performance
 {
 
     static public function draw($teamId, $memberId, $wheelType)
     {
-        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, $wheelType);
+        $performanceMatrix = Wheel::getProdConsMatrix($teamId, $wheelType);
 
         if ($wheelType == Wheel::TYPE_GROUP)
             $title = Yii::t('dashboard', 'Group Performance Matrix');

@@ -7,7 +7,7 @@ use app\models\Person;
 use app\models\Wheel;
 use app\models\WheelQuestion;
 
-class Lineal
+class Perception
 {
 
     static public function draw($teamId, $memberId, $wheelType)

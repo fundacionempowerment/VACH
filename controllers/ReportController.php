@@ -177,8 +177,8 @@ class ReportController extends Controller
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('performance', [
                     'team' => $team,
@@ -246,20 +246,20 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
         }
 
-        $groupGauges = [];
-        $organizationalGauges = [];
+        $groupCompetences = [];
+        $organizationalCompetences = [];
 
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('competences', [
                     'team' => $team,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
+                    'groupCompetences' => $groupCompetences,
+                    'organizationalCompetences' => $organizationalCompetences,
                     'members' => $members,
         ]);
     }
@@ -355,8 +355,8 @@ class ReportController extends Controller
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
@@ -464,21 +464,21 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-competences-' . $individualReport->id]);
         }
 
-        $groupGauges = [];
-        $organizationalGauges = [];
+        $groupCompetences = [];
+        $organizationalCompetences = [];
 
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_competences', [
                     'report' => $individualReport,
                     'team' => $team,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
+                    'groupCompetences' => $groupCompetences,
+                    'organizationalCompetences' => $organizationalCompetences,
                     'members' => $members,
         ]);
     }
@@ -544,10 +544,10 @@ class ReportController extends Controller
 
         $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         $groupEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_GROUP);
         $organizationalEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_ORGANIZATIONAL);
@@ -558,8 +558,8 @@ class ReportController extends Controller
                     'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
                     'groupPerformanceMatrix' => $groupPerformanceMatrix,
                     'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
+                    'groupCompetences' => $groupCompetences,
+                    'organizationalCompetences' => $organizationalCompetences,
                     'groupEmergents' => $groupEmergents,
                     'organizationalEmergents' => $organizationalEmergents,
                     'members' => $members,
