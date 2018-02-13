@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use PhpOffice\PhpWord\Style\Image;
 use Yii;
 use app\models\Person;
 use app\models\Wheel;
@@ -102,7 +103,7 @@ class Word
             'marginTop' => 0,
             'marginLeft' => 0,
             'width' => 455,
-            'wrappingStyle' => 'tight'
+            'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAP_TOPBOTTOM,
         ]);
     }
 
@@ -287,9 +288,9 @@ class Word
 
             $table->addCell(600, self::$cell_style)->addText($observer, $cell_font, $cell_paragraph);
 
-            foreach (self::$team->activeMemberList as $observed) {
+            foreach (self::$team->activeMemberList as $observedId => $observed) {
                 foreach ($data as $datum) {
-                    if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observerId) {
+                    if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
                         if ($datum['value'] > Yii::$app->params['good_consciousness'])
                             $class = self::$good_cell;
                         else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
@@ -303,10 +304,10 @@ class Word
 
                         $observer_sum += $datum['value'];
                         $observer_count++;
-                        if (!isset($observed_sum[$observerId])) {
-                            $observed_sum[$observerId] = 0;
+                        if (!isset($observed_sum[$observedId])) {
+                            $observed_sum[$observedId] = 0;
                         }
-                        $observed_sum[$observerId] += $datum['value'];
+                        $observed_sum[$observedId] += $datum['value'];
                     }
                 }
             }
