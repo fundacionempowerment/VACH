@@ -716,6 +716,12 @@ class Presentation
 
         // --------- Organizational
 
+        $performanceMatrix = Wheel::getProdConsMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
+
+        if (count($performanceMatrix) == 0) {
+            return;
+        }
+
         $currentSlide = self::$ppt->createSlide();
 
         $shape = $currentSlide->createRichTextShape()
@@ -730,8 +736,6 @@ class Presentation
         $textRun->getFont()->setName('Coolvetica')
                 ->setSize(20)
                 ->setColor(new Color('FFFF0000'));
-
-        $performanceMatrix = Wheel::getProdConsMatrix($teamId, Wheel::TYPE_ORGANIZATIONAL);
 
         $rowsData = [];
         foreach ($members as $index => $name) {

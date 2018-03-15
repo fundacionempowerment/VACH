@@ -373,6 +373,10 @@ class Word
             }
         }
 
+        if (count($rowsData) == 0) {
+            return;
+        }
+
         $cell_font = ['size' => 9];
 
         $cell_paragraph = [
