@@ -227,17 +227,18 @@ class TeamController extends BaseController
                 }
                 SiteController::addFlash('success', Yii::t('team', 'Wheel forms has been successfully created.'));
 
-                Yii::$app->mailer->compose('teamFulfilled', [
-                            'team' => $team,
-                        ])
-                        ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
-                        ->setFrom(Yii::$app->params['senderEmail'])
-                        ->setTo(Yii::$app->params['adminEmail'])
-                        ->send();
-
                 if (Yii::$app->params['monetize']) {
                     Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
                 }
+
+                Yii::$app->mailer->compose('teamFulfilled', [
+                    'team' => $team,
+                ])
+                    ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
+                    ->setFrom(Yii::$app->params['senderEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->send();
+
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             }
         }
