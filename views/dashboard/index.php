@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($relationsMatrix) > 0) {
         if ($filter->memberId > 0) {
-            echo $this->render('_relation', [
+            echo $this->render('_relation_graph', [
                 'teamId' => $filter->teamId,
                 'memberId' => $filter->memberId,
                 'wheelType' => $filter->wheelType,
