@@ -1,5 +1,4 @@
 <?php
-
 //=======================================================================
 // File:        JPG-CONFIG.INC
 // Description: Configuration file for JpGraph library
@@ -8,6 +7,8 @@
 //
 // Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
+
+
 //------------------------------------------------------------------------
 // Directories for cache and font directory.
 //
