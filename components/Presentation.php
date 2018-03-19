@@ -21,6 +21,7 @@ class Presentation
 
     private static $team;
     private static $ppt;
+    public static $paths;
 
     public static function create($team)
     {
@@ -63,12 +64,12 @@ class Presentation
     private static function addBackground($slide)
     {
         $slide->createRichTextShape()
-                ->setHeight(768)
-                ->setWidth(1024)
-                ->getFill()
-                ->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color('FF000000'))
-                ->setEndColor(new Color('FF000000'));
+            ->setHeight(768)
+            ->setWidth(1024)
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('FF000000'))
+            ->setEndColor(new Color('FF000000'));
     }
 
     private static function addCPCLogo($slide)
@@ -76,11 +77,11 @@ class Presentation
         $shape = $slide->createDrawingShape();
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath(Yii::getAlias("@app/web/images/logo_cpc.png"))
-                ->setHeight(36)
-                ->setOffsetX(800)
-                ->setOffsetY(10);
+            ->setDescription('CPC logo')
+            ->setPath(Yii::getAlias("@app/web/images/logo_cpc.png"))
+            ->setHeight(36)
+            ->setOffsetX(800)
+            ->setOffsetY(10);
     }
 
     private static function addFirstSlide()
@@ -91,26 +92,26 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(640)
-                ->setOffsetX(20)
-                ->setOffsetY(50);
+            ->setHeight(480)
+            ->setWidth(640)
+            ->setOffsetX(20)
+            ->setOffsetY(50);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->company->name);
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(40)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(40)
+            ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(40)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(40)
+            ->setColor(new Color('FFFFFFFF'));
     }
 
     private static function addGoldenRuleSlide()
@@ -120,42 +121,42 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(800)
-                ->setOffsetX(20)
-                ->setOffsetY(50);
+            ->setHeight(480)
+            ->setWidth(800)
+            ->setOffsetX(20)
+            ->setOffsetY(50);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('reglas de oro');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(50)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(50)
+            ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('Ésta es la voz del equipo');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(35)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(35)
+            ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('Hipótesis sujeta a validación');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(35)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(35)
+            ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('No tomarlo personal');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(35)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(35)
+            ->setColor(new Color('FF000000'));
     }
 
     private static function addFunctionalThinkingSlide()
@@ -165,27 +166,27 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun('ajuste perceptual');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FFFF0000'));
 
         $shape = $currentSlide->createDrawingShape();
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath(Yii::getAlias("@app/web/images/funcional_thinking.png"))
-                ->setHeight(440)
-                ->setOffsetX(40)
-                ->setOffsetY(160);
+            ->setDescription('CPC logo')
+            ->setPath(Yii::getAlias("@app/web/images/funcional_thinking.png"))
+            ->setHeight(440)
+            ->setOffsetX(40)
+            ->setOffsetY(160);
     }
 
     private static function addCompetenceTableSlide()
@@ -195,27 +196,27 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun('cuadro integrado de competencias');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FFFF0000'));
 
         $shape = $currentSlide->createDrawingShape();
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath(Yii::getAlias("@app/web/images/integration_table.png"))
-                ->setHeight(560)
-                ->setOffsetX(30)
-                ->setOffsetY(130);
+            ->setDescription('CPC logo')
+            ->setPath(Yii::getAlias("@app/web/images/integration_table.png"))
+            ->setHeight(560)
+            ->setOffsetX(30)
+            ->setOffsetY(130);
     }
 
     private static function addPercetualAdjustmentSlide()
@@ -225,24 +226,24 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun('pensamiento funcional y disfuncional');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FFFF0000'));
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(240)
-                ->setWidth(400)
-                ->setOffsetX(30)
-                ->setOffsetY(150);
+            ->setHeight(240)
+            ->setWidth(400)
+            ->setOffsetX(30)
+            ->setOffsetY(150);
         $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FFFF0000'));
 
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -250,26 +251,26 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que era?');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creo que soy');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
 
         ///////////////
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(240)
-                ->setWidth(400)
-                ->setOffsetX(30)
-                ->setOffsetY(380);
+            ->setHeight(240)
+            ->setWidth(400)
+            ->setOffsetX(30)
+            ->setOffsetY(380);
         $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FF008000'));
 
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -277,18 +278,18 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿A qué me comprometo y cómo?');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
 
         ///////////////
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(240)
-                ->setWidth(400)
-                ->setOffsetX(520)
-                ->setOffsetY(150);
+            ->setHeight(240)
+            ->setWidth(400)
+            ->setOffsetX(520)
+            ->setOffsetY(150);
         $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FFFF0000'));
 
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -296,26 +297,26 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que eras?');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién he descubierto que eres?');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
 
         ///////////////
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(240)
-                ->setWidth(400)
-                ->setOffsetX(520)
-                ->setOffsetY(380);
+            ->setHeight(240)
+            ->setWidth(400)
+            ->setOffsetX(520)
+            ->setOffsetY(380);
         $shape->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color('FF008000'));
 
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -323,9 +324,9 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Cómo vamos a prevenir el conflicto?');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FFFFFFFF'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FFFFFFFF'));
 
         $shape->createBreak();
     }
@@ -337,65 +338,65 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(800)
-                ->setOffsetX(20)
-                ->setOffsetY(50);
+            ->setHeight(480)
+            ->setWidth(800)
+            ->setOffsetX(20)
+            ->setOffsetY(50);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('protocolo de observación');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(50)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(50)
+            ->setColor(new Color('FFFF0000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('1. Visión cromática');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('   (analogía con el semáforo: verde, amarillo y rojo)');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(26)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(26)
+            ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('2. El más crítico');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('3. El más benévolo');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('4. El menos o más autocrítico');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FF000000'));
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('5. Cruces interrelacionales');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(30)
-                ->setColor(new Color('FF000000'));
+            ->setName('Coolvetica')
+            ->setSize(30)
+            ->setColor(new Color('FF000000'));
     }
 
     private static function addTeamTitleSlide()
@@ -405,18 +406,18 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(700)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(700)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('Equipo');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(70)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(70)
+            ->setColor(new Color('FFFF0000'));
     }
 
     private static function addTeamCompentencesSlide()
@@ -428,32 +429,34 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/competences',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(250)
-                ->setOffsetX(70)
-                ->setOffsetY(100);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(250)
+            ->setOffsetX(70)
+            ->setOffsetY(100);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/competences',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(250)
-                ->setOffsetX(70)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(250)
+            ->setOffsetX(70)
+            ->setOffsetY(370);
 
         self::addCPCLogo($currentSlide);
     }
@@ -474,17 +477,17 @@ class Presentation
     private static function addRelationsSlide($currentSlide, $title, $members, $data)
     {
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(5);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(5);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun($title);
         $textRun->getFont()->setName('Coolvetica')
-                ->setSize(20)
-                ->setColor(new Color('FFFF0000'));
+            ->setSize(20)
+            ->setColor(new Color('FFFF0000'));
 
         $tableShape = $currentSlide->createTableShape(count($members) + 2);
         $tableShape->setWidth(920);
@@ -583,17 +586,17 @@ class Presentation
         $currentSlide = self::$ppt->createSlide();
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(5);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(5);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'));
         $textRun->getFont()->setName('Coolvetica')
-                ->setSize(20)
-                ->setColor(new Color('FFFF0000'));
+            ->setSize(20)
+            ->setColor(new Color('FFFF0000'));
 
         $performanceMatrix = Wheel::getProdConsMatrix($teamId, Wheel::TYPE_GROUP);
 
@@ -673,7 +676,7 @@ class Presentation
             $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         // Avg
@@ -703,7 +706,7 @@ class Presentation
             $cell = $row->nextCell();
             $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         $row = $tableShape->createRow();
@@ -725,17 +728,17 @@ class Presentation
         $currentSlide = self::$ppt->createSlide();
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(480)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(5);
+            ->setHeight(480)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(5);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'));
         $textRun->getFont()->setName('Coolvetica')
-                ->setSize(20)
-                ->setColor(new Color('FFFF0000'));
+            ->setSize(20)
+            ->setColor(new Color('FFFF0000'));
 
         $rowsData = [];
         foreach ($members as $index => $name) {
@@ -812,7 +815,7 @@ class Presentation
             $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         // Avg
@@ -842,7 +845,7 @@ class Presentation
             $cell = $row->nextCell();
             $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                    ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
         }
 
         $row = $tableShape->createRow();
@@ -863,32 +866,36 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/performance',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(310)
-                ->setOffsetX(70)
-                ->setOffsetY(20);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(310)
+            ->setOffsetX(70)
+            ->setOffsetY(20);
+
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/performance',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(310)
-                ->setOffsetX(70)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(310)
+            ->setOffsetX(70)
+            ->setOffsetY(370);
+
 
         self::addCPCLogo($currentSlide);
     }
@@ -902,32 +909,34 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/emergents',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setWidth(800)
-                ->setOffsetX(70)
-                ->setOffsetY(50);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setWidth(800)
+            ->setOffsetX(70)
+            ->setOffsetY(50);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => $teamId,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/emergents',
+            'teamId' => $teamId,
+            'memberId' => 0,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setWidth(800)
-                ->setOffsetX(70)
-                ->setOffsetY(350);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setWidth(800)
+            ->setOffsetX(70)
+            ->setOffsetY(350);
 
         self::addCPCLogo($currentSlide);
     }
@@ -939,17 +948,17 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(700)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(700)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('Miembros');
         $textRun->getFont()->setName('Coolvetica')
-                ->setSize(70)
-                ->setColor(new Color('FFFF0000'));
+            ->setSize(70)
+            ->setColor(new Color('FFFF0000'));
     }
 
     private static function addMemberTitleSlide($member)
@@ -959,17 +968,17 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(700)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(700)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun($member->member->fullname);
         $textRun->getFont()->setName('Coolvetica')
-                ->setSize(60)
-                ->setColor(new Color('FFFF0000'));
+            ->setSize(60)
+            ->setColor(new Color('FFFF0000'));
     }
 
     private static function addMemberPerceptionSlide($member)
@@ -982,32 +991,34 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/perceptions',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/perceptions',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(350)
-                ->setOffsetX(70)
-                ->setOffsetY(20);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(350)
+            ->setOffsetX(70)
+            ->setOffsetY(20);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/perceptions',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/perceptions',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(350)
-                ->setOffsetX(70)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(350)
+            ->setOffsetX(70)
+            ->setOffsetY(370);
 
         self::addCPCLogo($currentSlide);
     }
@@ -1022,32 +1033,34 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/competences',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(250)
-                ->setOffsetX(70)
-                ->setOffsetY(100);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(250)
+            ->setOffsetX(70)
+            ->setOffsetY(100);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/competences',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(250)
-                ->setOffsetX(70)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(250)
+            ->setOffsetX(70)
+            ->setOffsetY(370);
 
         self::addCPCLogo($currentSlide);
     }
@@ -1062,32 +1075,34 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/performance',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(310)
-                ->setOffsetX(70)
-                ->setOffsetY(20);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(310)
+            ->setOffsetX(70)
+            ->setOffsetY(20);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/performance',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(310)
-                ->setOffsetX(70)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(310)
+            ->setOffsetX(70)
+            ->setOffsetY(370);
 
         self::addCPCLogo($currentSlide);
     }
@@ -1102,32 +1117,35 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/relations',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/relations',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setHeight(370)
-                ->setOffsetX(90)
-                ->setOffsetY(20);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setHeight(370)
+            ->setOffsetX(90)
+            ->setOffsetY(20);
 
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/relations',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/relations',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
+
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setHeight(370)
-                ->setOffsetX(90)
-                ->setOffsetY(370);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setHeight(370)
+            ->setOffsetX(90)
+            ->setOffsetY(370);
 
         self::addCPCLogo($currentSlide);
     }
@@ -1142,17 +1160,18 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
+            '/graph/emergents',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
 
         $shape->setName("CPC")
-                ->setDescription('CPC')
-                ->setPath($path)
-                ->setWidth(800)
-                ->setOffsetX(70)
-                ->setOffsetY(100);
+            ->setDescription('CPC')
+            ->setPath($path)
+            ->setWidth(800)
+            ->setOffsetX(70)
+            ->setOffsetY(100);
 
         self::addCPCLogo($currentSlide);
 
@@ -1161,17 +1180,18 @@ class Presentation
         $shape = $currentSlide->createDrawingShape();
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => $teamId,
-                            'memberId' => $memberId,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            '/graph/emergents',
+            'teamId' => $teamId,
+            'memberId' => $memberId,
+            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
 
         $shape->setName('CPC logo')
-                ->setDescription('CPC logo')
-                ->setPath($path)
-                ->setWidth(800)
-                ->setOffsetX(70)
-                ->setOffsetY(100);
+            ->setDescription('CPC logo')
+            ->setPath($path)
+            ->setWidth(800)
+            ->setOffsetX(70)
+            ->setOffsetY(100);
 
         self::addCPCLogo($currentSlide);
     }
@@ -1184,18 +1204,18 @@ class Presentation
         self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
-                ->setHeight(700)
-                ->setWidth(1000)
-                ->setOffsetX(10)
-                ->setOffsetY(10);
+            ->setHeight(700)
+            ->setWidth(1000)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('¡Muchas gracias!');
         $textRun->getFont()
-                ->setName('Coolvetica')
-                ->setSize(60)
-                ->setColor(new Color('FFFF0000'));
+            ->setName('Coolvetica')
+            ->setSize(60)
+            ->setColor(new Color('FFFF0000'));
     }
 
 }

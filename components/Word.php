@@ -25,6 +25,7 @@ class Word
     private static $bad_cell;
     private static $regular_cell;
     private static $good_cell;
+    public static $paths;
 
     static public function create($team)
     {
@@ -489,6 +490,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -496,6 +498,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->performance);
@@ -511,6 +514,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -518,6 +522,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->competences);
@@ -533,6 +538,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -540,6 +546,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->emergents);
@@ -573,6 +580,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -580,6 +588,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->perception);
@@ -595,6 +604,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -602,6 +612,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->competences);
@@ -617,6 +628,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -624,6 +636,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->emergents);
@@ -639,6 +652,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -646,6 +660,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->relations);
@@ -661,6 +676,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -668,6 +684,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->performance);

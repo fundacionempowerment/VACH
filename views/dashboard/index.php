@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,

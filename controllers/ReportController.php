@@ -81,7 +81,7 @@ class ReportController extends Controller
         }
 
         return $this->render('view', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -106,7 +106,7 @@ class ReportController extends Controller
         }
 
         return $this->render('introduction', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -142,11 +142,11 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('effectiveness', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'members' => $members,
-                    'member' => null,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'members' => $members,
+            'member' => null,
         ]);
     }
 
@@ -181,10 +181,10 @@ class ReportController extends Controller
         $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('performance', [
-                    'team' => $team,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'members' => $members,
+            'team' => $team,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
         ]);
     }
 
@@ -219,10 +219,10 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('relations', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'members' => $members,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'members' => $members,
         ]);
     }
 
@@ -257,10 +257,10 @@ class ReportController extends Controller
         $organizationalCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('competences', [
-                    'team' => $team,
-                    'groupCompetences' => $groupCompetences,
-                    'organizationalCompetences' => $organizationalCompetences,
-                    'members' => $members,
+            'team' => $team,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'members' => $members,
         ]);
     }
 
@@ -298,13 +298,13 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('emergents', [
-                    'team' => $team,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => 0,
+            'team' => $team,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'memberId' => 0,
         ]);
     }
 
@@ -324,7 +324,7 @@ class ReportController extends Controller
         }
 
         return $this->render('action_plan', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -362,13 +362,13 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_performance', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
@@ -398,12 +398,12 @@ class ReportController extends Controller
         $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($team->id, $individualReport->person_id);
 
         return $this->render('individual_perception', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'projectedGroupWheel' => $projectedGroupWheel,
-                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
-                    'reflectedGroupWheel' => $reflectedGroupWheel,
-                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
+            'report' => $individualReport,
+            'team' => $team,
+            'projectedGroupWheel' => $projectedGroupWheel,
+            'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+            'reflectedGroupWheel' => $reflectedGroupWheel,
+            'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
         ]);
     }
 
@@ -436,11 +436,11 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_relations', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'report' => $individualReport,
+            'team' => $team,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
@@ -475,11 +475,11 @@ class ReportController extends Controller
         $organizationalCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_competences', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupCompetences' => $groupCompetences,
-                    'organizationalCompetences' => $organizationalCompetences,
-                    'members' => $members,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'members' => $members,
         ]);
     }
 
@@ -517,14 +517,14 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_emergents', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => $individualReport->person_id,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'memberId' => $individualReport->person_id,
         ]);
     }
 
@@ -553,16 +553,16 @@ class ReportController extends Controller
         $organizationalEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('download', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'groupCompetences' => $groupCompetences,
-                    'organizationalCompetences' => $organizationalCompetences,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
         ]);
     }
 
@@ -578,6 +578,10 @@ class ReportController extends Controller
         $uuid = uniqid('', true);
         $oWriterPPTX->save("/tmp/$uuid.pptx");
 
+        foreach (\app\components\Presentation::$paths as $path) {
+            unlink($path);
+        }
+
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $team->fullname . '.' . date('Y-m-d') . '.pptx');
     }
 
@@ -590,6 +594,10 @@ class ReportController extends Controller
 
         $uuid = uniqid('', true);
         $phpWord->save("/tmp/$uuid.docx", 'Word2007');
+
+        foreach (\app\components\Word::$paths as $path) {
+            unlink($path);
+        }
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $team->fullname . '.' . date('Y-m-d') . '.docx');
     }
