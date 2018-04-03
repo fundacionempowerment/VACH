@@ -301,6 +301,7 @@ class SiteController extends BaseController
             ],
         ]);
         \Yii::$app->runAction('migrate/up', ['migrationPath' => '@app/migrations/', 'interactive' => false]);
+        \Yii::$app->runAction('migrate/up', ['migrationPath' => '@vendor/onmotion/yii2-telegram/migrations', 'interactive' => false]);
         \Yii::$app = $oldApp;
     }
 
