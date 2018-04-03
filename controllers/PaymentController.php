@@ -167,26 +167,30 @@ class PaymentController extends BaseController
 
     private function notifyAdmin($referenceCode)
     {
-        Yii::$app->mailer->compose('payment_error', [
+        $mail = Utils::newMailer();
+        $mail->addAddress(Yii::$app->params['adminEmail']);
+        $mail->setFrom(Yii::$app->params['senderEmail']);
+        $mail->Subject = 'Payment with issues';
+        $mail->Body = Yii::$app->view->renderFile('@app/mail/payment_error.php', [
             'referenceCode' => $referenceCode,
-        ])
-            ->setSubject('Payment with issues')
-            ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo(Yii::$app->params['adminEmail'])
-            ->send();
+        ]);
+
+        $mail->send();
     }
 
     private function notifyPayed($referenceCode)
     {
         $model = Payment::findOne(['uuid' => $referenceCode]);
 
-        Yii::$app->mailer->compose('payment_success', [
+        $mail = Utils::newMailer();
+        $mail->addAddress($model->coach->email);
+        $mail->addBCC(Yii::$app->params['adminEmail']);
+        $mail->setFrom(Yii::$app->params['senderEmail']);
+        $mail->Subject = 'Payment successful';
+        $mail->Body = Yii::$app->view->renderFile('@app/mail/payment_success.php', [
             'model' => $model,
-        ])
-            ->setSubject('Payment successful')
-            ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo($model->coach->email)
-            ->setBcc(Yii::$app->params['adminEmail'])
-            ->send();
+        ]);
+
+        $mail->send();
     }
 }

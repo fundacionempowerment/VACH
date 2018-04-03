@@ -6,9 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\httpclient\Client;
-use app\models\Log;
 use app\controllers\LogController;
-use app\models\Currency;
 
 class Currency extends ActiveRecord
 {
@@ -94,11 +92,12 @@ class Currency extends ActiveRecord
         if (!$response->isOk) {
             LogController::log('Error: fail to get data from BCRA');
 
-            Yii::$app->mailer->compose('currency_error')
-                    ->setSubject('Currency fetch error')
-                    ->setFrom(Yii::$app->params['senderEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
-                    ->send();
+            $mail = Utils::newMailer();
+            $mail->addAddress(Yii::$app->params['adminEmail']);
+            $mail->setFrom(Yii::$app->params['senderEmail']);
+            $mail->Subject = 'Currency fetch error';
+            $mail->Body = Yii::$app->view->renderFile('@app/mail/currency_error.php', [
+            ]);
 
             return;
         }

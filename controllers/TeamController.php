@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\components\Utils;
+use PHPMailer\PHPMailer\PHPMailer;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -30,7 +32,7 @@ class TeamController extends BaseController
         $teams = Team::browse();
 
         return $this->render('index', [
-                    'teams' => $teams,
+            'teams' => $teams,
         ]);
     }
 
@@ -66,8 +68,8 @@ class TeamController extends BaseController
         $persons = $this->getPersons();
 
         return $this->render('view', [
-                    'team' => $team,
-                    'persons' => $persons,
+            'team' => $team,
+            'persons' => $persons,
         ]);
     }
 
@@ -83,9 +85,9 @@ class TeamController extends BaseController
         }
 
         return $this->render('form', [
-                    'team' => $team,
-                    'companies' => $this->getCompanies(),
-                    'persons' => $this->getPersons(),
+            'team' => $team,
+            'companies' => $this->getCompanies(),
+            'persons' => $this->getPersons(),
         ]);
     }
 
@@ -107,9 +109,9 @@ class TeamController extends BaseController
         }
 
         return $this->render('form', [
-                    'team' => $team,
-                    'companies' => $this->getCompanies(),
-                    'persons' => $this->getPersons(),
+            'team' => $team,
+            'companies' => $this->getCompanies(),
+            'persons' => $this->getPersons(),
         ]);
     }
 
@@ -145,9 +147,9 @@ class TeamController extends BaseController
             if (Yii::$app->request->isPost) {
                 foreach ($team->members as $observerMember) {
                     $wheel = Wheel::findOne([
-                                'team_id' => $team->id,
-                                'observer_id' => $observerMember->member->id,
-                                'type' => Wheel::TYPE_INDIVIDUAL,
+                        'team_id' => $team->id,
+                        'observer_id' => $observerMember->member->id,
+                        'type' => Wheel::TYPE_INDIVIDUAL,
                     ]);
 
                     if (!$wheel) {
@@ -164,9 +166,9 @@ class TeamController extends BaseController
                     }
 
                     $wheel = Wheel::findOne([
-                                'team_id' => $team->id,
-                                'observer_id' => $observerMember->member->id,
-                                'type' => Wheel::TYPE_GROUP,
+                        'team_id' => $team->id,
+                        'observer_id' => $observerMember->member->id,
+                        'type' => Wheel::TYPE_GROUP,
                     ]);
 
                     if ($wheel) {
@@ -177,10 +179,10 @@ class TeamController extends BaseController
 
                     foreach ($team->members as $observedMember) {
                         $wheel = Wheel::findOne([
-                                    'team_id' => $team->id,
-                                    'observer_id' => $observerMember->member->id,
-                                    'observed_id' => $observedMember->member->id,
-                                    'type' => Wheel::TYPE_GROUP,
+                            'team_id' => $team->id,
+                            'observer_id' => $observerMember->member->id,
+                            'observed_id' => $observedMember->member->id,
+                            'type' => Wheel::TYPE_GROUP,
                         ]);
 
                         if (!$wheel) {
@@ -195,9 +197,9 @@ class TeamController extends BaseController
                     }
 
                     $wheel = Wheel::findOne([
-                                'team_id' => $team->id,
-                                'observer_id' => $observerMember->member->id,
-                                'type' => Wheel::TYPE_ORGANIZATIONAL,
+                        'team_id' => $team->id,
+                        'observer_id' => $observerMember->member->id,
+                        'type' => Wheel::TYPE_ORGANIZATIONAL,
                     ]);
 
                     if ($wheel) {
@@ -208,10 +210,10 @@ class TeamController extends BaseController
                     $token = Wheel::getNewToken();
                     foreach ($team->members as $observedMember) {
                         $wheel = Wheel::findOne([
-                                    'team_id' => $team->id,
-                                    'observer_id' => $observerMember->member->id,
-                                    'observed_id' => $observedMember->member->id,
-                                    'type' => Wheel::TYPE_ORGANIZATIONAL,
+                            'team_id' => $team->id,
+                            'observer_id' => $observerMember->member->id,
+                            'observed_id' => $observedMember->member->id,
+                            'type' => Wheel::TYPE_ORGANIZATIONAL,
                         ]);
 
                         if (!$wheel) {
@@ -231,23 +233,24 @@ class TeamController extends BaseController
                     Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
                 }
 
-                Yii::$app->mailer->compose('teamFulfilled', [
+                $mail = Utils::newMailer();
+                $mail->addAddress(Yii::$app->params['adminEmail']);
+                $mail->setFrom(Yii::$app->params['senderEmail']);
+                $mail->addReplyTo($wheel->coach->email);
+                $mail->Subject = Yii::t('team', 'CPC: team fulfilled');
+                $mail->Body = Yii::$app->view->renderFile('@app/mail/teamFulfilled.php', [
                     'team' => $team,
-                ])
-                    ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
-                    ->setFrom(Yii::$app->params['senderEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
-                    ->send();
+                ]);
 
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             }
         }
 
         return $this->render('fulfill', [
-                    'team' => $team,
-                    'balance' => $balance,
-                    'licences_required' => $licences_required,
-                    'licences_to_buy' => $licences_to_buy,
+            'team' => $team,
+            'balance' => $balance,
+            'licences_required' => $licences_required,
+            'licences_to_buy' => $licences_to_buy,
         ]);
     }
 
@@ -272,8 +275,8 @@ class TeamController extends BaseController
             }
         }
         return $this->render('member-form', [
-                    'team' => $team,
-                    'member' => $member,
+            'team' => $team,
+            'member' => $member,
         ]);
     }
 
@@ -314,8 +317,8 @@ class TeamController extends BaseController
         }
 
         return $this->render('delete_team', [
-                    'team' => $team,
-                    'team' => $team,
+            'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -440,26 +443,30 @@ class TeamController extends BaseController
     private function sendWheel($wheel)
     {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
-        Yii::$app->mailer->compose('wheel', [
-                    'wheel' => $wheel,
-                ])
-                ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
-                            'wheel_type' => $wheel_type,
-                            'team' => $wheel->team->name,
-                ]))
-                ->setFrom(Yii::$app->params['senderEmail'])
-                ->setTo($wheel->observer->email)
-                ->setReplyTo($wheel->coach->email)
-                ->send();
 
-        SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+        $mail = Utils::newMailer();
+        $mail->setFrom(Yii::$app->params['senderEmail']);
+        $mail->addAddress($wheel->observer->email);     // Add a recipient
+        $mail->addReplyTo($wheel->coach->email);
+        $mail->Subject = Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
+            'wheel_type' => $wheel_type,
+            'team' => $wheel->team->name,
+        ]);
+        $mail->Body = Yii::$app->view->renderFile('@app/mail/wheel.php', [
+            'wheel' => $wheel,
+        ]);
 
-        $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
-        foreach ($wheels as $wheel) {
-            if ($wheel->status == 'created') {
-                $wheel->status = 'sent';
-                $wheel->save();
+        if ($mail->send()) {
+            SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+            $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
+            foreach ($wheels as $wheel) {
+                if ($wheel->status == 'created') {
+                    $wheel->status = 'sent';
+                    $wheel->save();
+                }
             }
+        } else {
+            SiteController::addFlash('error', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
         }
     }
 
