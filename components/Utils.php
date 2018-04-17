@@ -2,9 +2,6 @@
 
 namespace app\components;
 
-use yii;
-use PHPMailer\PHPMailer\PHPMailer;
-
 class Utils
 {
 
@@ -59,26 +56,6 @@ class Utils
                 return 'Alta';
             }
         }
-    }
-
-    public static function newMailer()
-    {
-        $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
-        //Server settings
-        //$mail->SMTPDebug = 4;                                 // Enable verbose debug output
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->CharSet = "utf-8";
-        $mail->Host = Yii::$app->params['email']['host'];  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = Yii::$app->params['email']['username'];                 // SMTP username
-        $mail->Password = Yii::$app->params['email']['password'];                           // SMTP password
-        $mail->Port = Yii::$app->params['email']['port'];                                    // TCP port to connect to
-        if (isset(Yii::$app->params['email']['encryption'])) {
-            $mail->SMTPSecure = Yii::$app->params['email']['encryption'];                            // Enable TLS encryption, `ssl` also accepted
-        }
-
-        return $mail;
     }
 
 }

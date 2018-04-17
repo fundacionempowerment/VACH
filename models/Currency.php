@@ -92,12 +92,11 @@ class Currency extends ActiveRecord
         if (!$response->isOk) {
             LogController::log('Error: fail to get data from BCRA');
 
-            $mail = Utils::newMailer();
-            $mail->addAddress(Yii::$app->params['adminEmail']);
-            $mail->setFrom(Yii::$app->params['senderEmail']);
-            $mail->Subject = 'Currency fetch error';
-            $mail->Body = Yii::$app->view->renderFile('@app/mail/currency_error.php', [
-            ]);
+            Yii::$app->mailer->compose('currency_error')
+                    ->setSubject('Currency fetch error')
+                    ->setFrom(Yii::$app->params['senderEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->send();
 
             return;
         }

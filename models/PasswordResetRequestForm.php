@@ -58,15 +58,11 @@ class PasswordResetRequestForm extends Model
             }
 
             if ($user->save(false, ['password_reset_token'])) {
-                $mail = Utils::newMailer();
-                $mail->addAddress($user->email);
-                $mail->setFrom(\Yii::$app->params['senderEmail']);
-                $mail->Subject = \Yii::t('app', 'Password reset for VACH');
-                $mail->Body = \Yii::$app->view->renderFile('@app/mail/passwordResetToken.php', [
-                    'user' => $user,
-                ]);
-
-                return $mail->send();
+                return \Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
+                    ->setFrom(\Yii::$app->params['senderEmail'])
+                    ->setTo($this->email)
+                    ->setSubject(\Yii::t('app', 'Password reset for VACH'))
+                    ->send();
             } else {
                 SiteController::FlashErrors($user);
             }

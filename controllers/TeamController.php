@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use app\components\Utils;
-use PHPMailer\PHPMailer\PHPMailer;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -233,14 +231,13 @@ class TeamController extends BaseController
                     Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
                 }
 
-                $mail = Utils::newMailer();
-                $mail->addAddress(Yii::$app->params['adminEmail']);
-                $mail->setFrom(Yii::$app->params['senderEmail']);
-                $mail->addReplyTo($wheel->coach->email);
-                $mail->Subject = Yii::t('team', 'CPC: team fulfilled');
-                $mail->Body = Yii::$app->view->renderFile('@app/mail/teamFulfilled.php', [
+                Yii::$app->mailer->compose('teamFulfilled', [
                     'team' => $team,
-                ]);
+                ])
+                    ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
+                    ->setFrom(Yii::$app->params['senderEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->send();
 
                 return $this->redirect(['/team/view', 'id' => $team->id]);
             }
@@ -443,20 +440,19 @@ class TeamController extends BaseController
     private function sendWheel($wheel)
     {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
+        $sent = Yii::$app->mailer->compose('wheel', [
+                    'wheel' => $wheel,
+                ])
+                ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
+                            'wheel_type' => $wheel_type,
+                            'team' => $wheel->team->name,
+                ]))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observer->email)
+                ->setReplyTo($wheel->coach->email)
+                ->send();
 
-        $mail = Utils::newMailer();
-        $mail->setFrom(Yii::$app->params['senderEmail']);
-        $mail->addAddress($wheel->observer->email);     // Add a recipient
-        $mail->addReplyTo($wheel->coach->email);
-        $mail->Subject = Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
-            'wheel_type' => $wheel_type,
-            'team' => $wheel->team->name,
-        ]);
-        $mail->Body = Yii::$app->view->renderFile('@app/mail/wheel.php', [
-            'wheel' => $wheel,
-        ]);
-
-        if ($mail->send()) {
+        if ($sent) {
             SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
             $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
             foreach ($wheels as $wheel) {
