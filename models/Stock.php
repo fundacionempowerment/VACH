@@ -90,7 +90,7 @@ class Stock extends ActiveRecord
 
     public static function adminBrowseOthers()
     {
-        return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID]);
+        return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID])->orderBy('consumed_stamp DESC');
     }
 
     public static function adminBrowse()
