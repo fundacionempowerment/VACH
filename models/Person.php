@@ -54,7 +54,7 @@ class Person extends ActiveRecord
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
             'gender' => Yii::t('app', 'Gender'),
-            'photo' => Yii::t('app', 'Foto'),
+            'photo' => Yii::t('app', 'Photo'),
         ];
     }
 

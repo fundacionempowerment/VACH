@@ -23,6 +23,7 @@ return [
     'I\'m coach' => 'Soy coach',
     'Is administrator' => 'Es administrador',
     'My Data' => 'Mis datos',
+    'My Password' => 'Mi contraseña',
     'New password' => 'Nueva contraseña',
     'New person' => 'Nueva persona',
     'New user' => 'Nuevo usuario',
@@ -34,6 +35,7 @@ return [
     'Persons' => 'Personas',
     'Please fill out the following fields with person data:' => 'Por favor, rellene el formulario con los datos de la persona:',
     'Please fill out the following fields with user personal data:' => 'Por favor, complete los campos con los datos personales del usuario:',
+    'Please fill out the following fields with your new password:' => 'Por favor, complete los campos con su nueva contraseña:',
     'Please fill out the following fields with your personal data:' => 'Por favor, complete los campos con sus datos personales:',
     'Re-enter password' => 'Re-ingrese contraseña',
     'Remember me' => 'Recuerdeme',
@@ -42,5 +44,6 @@ return [
     'Username' => 'Nombre usuario',
     'Users' => 'Usuarios',
     'Wrong old password.' => 'Antigua contraseña incorrecta',
+    'Your password data has been successfully saved.' => 'Su contraseña han sido salvada con éxito.',
     'Your personal data has been successfully saved.' => 'Sus datos personales han sido salvado con éxito.',
 ];
