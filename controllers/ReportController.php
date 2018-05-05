@@ -20,6 +20,25 @@ use app\models\TeamMember;
 class ReportController extends Controller
 {
 
+    const ANALYSIS_OPTIONS = [
+        'height' => '500px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
+    const SUMMARY_OPTIONS = [
+        'height' => '250px',
+        'toolbarGroups' => [
+            ['name' => 'undo'],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list']],
+        ],
+        'removeButtons' => 'Underline,Strike,Subscript,Superscript,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe',
+    ];
+
     public $layout = 'inner';
 
     private function sanitize($string)
