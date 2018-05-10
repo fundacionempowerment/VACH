@@ -205,7 +205,7 @@ class TeamController extends BaseController
                     } else {
                         $token = Wheel::getNewToken();
                     }
-                    $token = Wheel::getNewToken();
+
                     foreach ($team->members as $observedMember) {
                         $wheel = Wheel::findOne([
                             'team_id' => $team->id,
@@ -236,7 +236,7 @@ class TeamController extends BaseController
                 ])
                     ->setSubject(Yii::t('team', 'CPC: team fulfilled'))
                     ->setFrom(Yii::$app->params['senderEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setTo(User::getAdminEmails())
                     ->send();
 
                 return $this->redirect(['/team/view', 'id' => $team->id]);

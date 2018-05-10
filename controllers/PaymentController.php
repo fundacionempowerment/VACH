@@ -2,19 +2,14 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Account;
-use app\models\Stock;
-use app\models\BuyModel;
+use app\models\ClientModel;
+use app\models\LoginModel;
 use app\models\Payment;
+use app\models\RegisterModel;
+use app\models\Stock;
+use app\models\User;
+use Yii;
 
 class PaymentController extends BaseController
 {
@@ -102,7 +97,7 @@ class PaymentController extends BaseController
             case 'declined':
                 return $this->render('response_declined');
             default:
-                $this->notifyAdmin($referenceCode);
+                $this->notifyError($referenceCode);
                 return $this->render('response_error');
         }
     }
@@ -160,19 +155,21 @@ class PaymentController extends BaseController
                     }
                     break;
             }
-        } finally {
-            return 'OK';
+        } catch (Exception $e) {
+
         }
+
+        return 'OK';
     }
 
-    private function notifyAdmin($referenceCode)
+    private function notifyError($referenceCode)
     {
         Yii::$app->mailer->compose('payment_error', [
             'referenceCode' => $referenceCode,
         ])
             ->setSubject('Payment with issues')
             ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo(Yii::$app->params['adminEmail'])
+            ->setTo(User::getAdminEmails())
             ->send();
     }
 
@@ -186,7 +183,7 @@ class PaymentController extends BaseController
             ->setSubject('Payment successful')
             ->setFrom(Yii::$app->params['senderEmail'])
             ->setTo($model->coach->email)
-            ->setBcc(Yii::$app->params['adminEmail'])
+            ->setBcc(User::getAdminEmails())
             ->send();
     }
 }
