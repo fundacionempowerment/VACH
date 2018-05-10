@@ -10,6 +10,7 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+    const PASSWORD = 'password';
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -42,7 +43,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['name', 'surname', 'email', 'username', 'password', 'password_confirm'], 'required'],
+            [['name', 'surname', 'email', 'username'], 'required'],
+            [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
             [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator'], 'safe'],
             [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
@@ -64,10 +66,10 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByName($name)
     {
         return self::find()
-                        ->where(['like', 'name', $name])
-                        ->orWhere(['like', 'surname', $name])
-                        ->orWhere(['like', 'username', $name])
-                        ->andWhere(['status' => self::STATUS_ACTIVE]);
+            ->where(['like', 'name', $name])
+            ->orWhere(['like', 'surname', $name])
+            ->orWhere(['like', 'username', $name])
+            ->andWhere(['status' => self::STATUS_ACTIVE]);
     }
 
     public function attributeLabels()
@@ -117,8 +119,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return static::findOne([
-                    'password_reset_token' => $token,
-                    'status' => self::STATUS_ACTIVE,
+            'password_reset_token' => $token,
+            'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -159,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
+        $timestamp = (int)end($parts);
         return $timestamp + $expire >= time();
     }
 
@@ -242,9 +244,9 @@ class User extends ActiveRecord implements IdentityInterface
         return \yii\helpers\ArrayHelper::map(static::find()->orderBy('name,surname')->all(), 'id', 'userfullname');
     }
 
-    public static function adminBrowse()
+    public static function getAdminEmails()
     {
-        return static::find()->orderBy('name, surname, username');
+        return \yii\helpers\ArrayHelper::map(static::find()->where(['is_administrator' => true])->all(), 'id', 'email');
     }
 
 }

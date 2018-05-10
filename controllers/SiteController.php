@@ -152,6 +152,7 @@ class SiteController extends BaseController
     public function actionRegister()
     {
         $model = new \app\models\User();
+        $model->scenario = \app\models\User::PASSWORD;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->setPassword($model->password);
             if ($model->save()) {

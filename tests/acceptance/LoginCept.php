@@ -25,7 +25,7 @@ $I->amGoingTo('try to login with correct credentials');
 $I->login('admin', '123456');
 $I->see('(admin)');
 
-$I->clickMainMenu('(admin)', 'Mis datos');
+$I->clickMainMenu('(admin)', 'Mi contraseña');
 $I->wait(1);
 
 $I->fillField('User[password]', $password);
@@ -38,6 +38,9 @@ $I->see('éxito');
 
 $I->clickMainMenu('(admin)', 'Salir');
 $I->wait(1);
+
+$I->login('admin', '123456');
+$I->see('Nombre de usuario o contraseña incorrectos');
 
 $I->login('admin', $password);
 

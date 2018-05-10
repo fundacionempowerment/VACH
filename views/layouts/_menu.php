@@ -25,18 +25,26 @@ $assisstanceMenu[] = ['label' => Yii::t('log', 'Event Log'), 'url' => ['/log']];
 $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 
 if ($isAdministrator) {
+    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/admin/user']];
+    $admininistratorMenu[] = '<li class="divider"></li>';
     $admininistratorMenu[] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Payments'), 'url' => ['/admin/payment']];
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Liquidations'), 'url' => ['/admin/liquidation']];
-    $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/admin/user']];
+//    $admininistratorMenu[] = '<li class="divider"></li>';
+//    $admininistratorMenu[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/admin/company']];
+//    $admininistratorMenu[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/admin/person']];
+//    $admininistratorMenu[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/admin/team']];
+    $admininistratorMenu[] = '<li class="divider"></li>';
     $admininistratorMenu[] = ['label' => Yii::t('team', 'Team Types'), 'url' => ['/admin/team-type']];
     $admininistratorMenu[] = ['label' => Yii::t('stock', 'Licence Types'), 'url' => ['/admin/product']];
+    $admininistratorMenu[] = '<li class="divider"></li>';
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['/admin/feedback']];
     $admininistratorMenu[] = ['label' => Yii::t('app', 'Backup'), 'url' => ['/site/backup']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 
 $userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account']];
+$userMenu[] = ['label' => Yii::t('user', 'My Password'), 'url' => ['/user/my-password']];
 if (Yii::$app->params['monetize']) {
     $userMenu[] = ['label' => Yii::t('stock', 'My Licences'), 'url' => ['/stock']];
     $userMenu[] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
