@@ -2,11 +2,11 @@
 
 namespace app\modules\admin\controllers;
 
-use Yii;
-use yii\web\Controller;
-use app\models\User;
-use yii\filters\AccessControl;
 use app\controllers\SiteController;
+use app\models\User;
+use app\models\search\UserSearch;
+use Yii;
+use yii\filters\AccessControl;
 
 /**
  * User controller
@@ -40,27 +40,30 @@ class UserController extends AdminBaseController
     public function beforeAction($action)
     {
         if (!isset(Yii::$app->user->identity))
-            $this->redirect(['/site']);
+            return $this->redirect(['/site']);
         else if ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
             \Yii::$app->session->addFlash('error', \Yii::t('app', 'Access denied'));
-            $this->redirect(['/site']);
+            return $this->redirect(['/site']);
         }
         return parent::beforeAction($action);
     }
 
     public function actionIndex()
     {
-
-        $user = User::adminBrowse();
+        $filter = new UserSearch();
+        $filter->load(Yii::$app->request->queryParams);
+        $users = $filter->adminBrowse();
 
         return $this->render('index', [
-                    'user' => $user,
+            'filter' => $filter,
+            'users' => $users,
         ]);
     }
 
     public function actionNew($personId = null)
     {
         $user = new User();
+        $user->scenario = User::PASSWORD;
 
         if ($user->load(Yii::$app->request->post())) {
             $postUser = Yii::$app->request->post('User');
@@ -78,14 +81,15 @@ class UserController extends AdminBaseController
         }
 
         return $this->render('form', [
-                    'user' => $user,
-                    'return' => '/user',
+            'user' => $user,
+            'return' => '/user',
         ]);
     }
 
     public function actionEdit($id)
     {
         $user = User::findOne(['id' => $id]);
+        $user->scenario = User::PASSWORD;
 
         if ($user->load(Yii::$app->request->post())) {
             $postUser = Yii::$app->request->post('User');
@@ -104,8 +108,8 @@ class UserController extends AdminBaseController
         }
 
         return $this->render('form', [
-                    'user' => $user,
-                    'return' => '/user',
+            'user' => $user,
+            'return' => '/user',
         ]);
     }
 

@@ -14,15 +14,17 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a(Yii::t('user', 'New user'), Url::to(['user/new']), ['class' => 'btn btn-success']) ?>
     <?php
     $dataProvider = new ActiveDataProvider([
-        'query' => $user,
+        'query' => $users,
         'pagination' => [
             'pageSize' => 20,
         ],
     ]);
     echo GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $filter,
         'columns' => [
             [
                 'attribute' => 'name',
@@ -34,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email',
             'phone',
+            'is_administrator:boolean',
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '40px'],
