@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coach-persons">
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a(Yii::t('user', 'New person'), Url::to(['person/new']), ['class' => 'btn btn-success']) ?>
     <?php
     $dataProvider = new ActiveDataProvider([
         'query' => $persons,
