@@ -57,7 +57,7 @@ return [
     'Sponsor' => 'Patrocinador',
     'Team' => 'Equipo',
     'Team Type' => 'Tipo de equipo',
-    'Team Types' => 'Tipos de equipo',
+    'Team Types' => 'Tipos de equipos',
     'Team data' => 'Datos del equipo',
     'Team fullfilled' => 'Equipo completado',
     'Team has been successfully deleted.' => 'Equipo ha sido exitosamente eliminado.',
