@@ -23,8 +23,8 @@ modules:
     config:
         WebDriver:
             url: 'http://localhost/vach/web/'
-            browser: firefox
-            window_size: maximize
+            browser: chrome
+            window_size: 1360x768
             restart: false
         Db:
             dsn: 'mysql:host=127.0.0.1;port=3307;dbname=vach_test'
