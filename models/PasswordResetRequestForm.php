@@ -2,9 +2,6 @@
 
 namespace app\models;
 
-use app\components\Utils;
-use app\controllers\SiteController;
-use app\models\User;
 use yii\base\Model;
 
 /**
@@ -47,25 +44,24 @@ class PasswordResetRequestForm extends Model
     public function sendEmail()
     {
         /* @var $user User */
-        $user = User::findOne([
+        $users = User::find()->where([
             'status' => User::STATUS_ACTIVE,
             'email' => $this->email,
-        ]);
+        ])->all();
 
-        if ($user) {
-            if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
-                $user->generatePasswordResetToken();
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+                    $user->generatePasswordResetToken();
+                }
+                $user->save(false, ['password_reset_token']);
             }
 
-            if ($user->save(false, ['password_reset_token'])) {
-                return \Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
-                    ->setFrom(\Yii::$app->params['senderEmail'])
-                    ->setTo($this->email)
-                    ->setSubject(\Yii::t('app', 'Password reset for VACH'))
-                    ->send();
-            } else {
-                SiteController::FlashErrors($user);
-            }
+            return \Yii::$app->mailer->compose('passwordResetToken', ['users' => $users])
+                ->setFrom(\Yii::$app->params['senderEmail'])
+                ->setTo($this->email)
+                ->setSubject(\Yii::t('app', 'Password reset for VACH'))
+                ->send();
         }
 
         return false;
