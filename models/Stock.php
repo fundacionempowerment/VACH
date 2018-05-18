@@ -93,9 +93,9 @@ class Stock extends ActiveRecord
         return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID])->orderBy('consumed_stamp DESC');
     }
 
-    public static function adminBrowse()
+    public static function adminBrowse($coachId = null)
     {
-        return (new Query())
+        $query = (new Query())
                         ->select([
                             'stock.coach_id',
                             "CONCAT(coach.name, ' ', coach.surname) as coach_name",
@@ -115,6 +115,10 @@ class Stock extends ActiveRecord
                         ->innerJoin('payment', 'payment.id = stock.payment_id')
                         ->groupBy(['coach_id', 'product_id', 'price', 'status', 'created_stamp', 'creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'team_id'])
                         ->orderBy('created_stamp DESC, consumed_stamp DESC');
+
+        $query->filterWhere(['stock.coach_id' => $coachId]);
+
+        return $query;
     }
 
     public function getCoach()

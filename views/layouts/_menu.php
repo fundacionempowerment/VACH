@@ -26,6 +26,7 @@ $items[] = ['label' => Yii::t('help', 'Help'), 'items' => $assisstanceMenu];
 
 if ($isAdministrator) {
     $admininistratorMenu[] = ['label' => Yii::t('user', 'Users'), 'url' => ['/admin/user']];
+    $admininistratorMenu[] = ['label' => Yii::t('user', 'Fuse Users'), 'url' => ['/admin/user/fuse']];
     $admininistratorMenu[] = '<li class="divider"></li>';
     $admininistratorMenu[] = ['label' => Yii::t('stock', 'Licences'), 'url' => ['/admin/stock']];
     $admininistratorMenu[] = ['label' => Yii::t('payment', 'Payments'), 'url' => ['/admin/payment']];

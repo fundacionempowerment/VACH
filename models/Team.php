@@ -81,7 +81,7 @@ class Team extends ActiveRecord
                         ->leftJoin('team_coach', '`team_coach`.`team_id` = `team`.`id`')
                         ->where(['team.coach_id' => Yii::$app->user->id])
                         ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
-                        ->orderBy('team.id desc');
+                        ->orderBy('team.created_at desc');
     }
 
     public function getTeamType()
