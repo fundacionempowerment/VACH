@@ -2,19 +2,14 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Account;
-use app\models\Stock;
-use app\models\BuyModel;
+use app\models\ClientModel;
+use app\models\LoginModel;
 use app\models\Payment;
+use app\models\RegisterModel;
+use app\models\Stock;
+use app\models\User;
+use Yii;
 
 class PaymentController extends BaseController
 {
@@ -34,7 +29,7 @@ class PaymentController extends BaseController
         $models = Payment::browse();
 
         return $this->render('index', [
-                    'models' => $models,
+            'models' => $models,
         ]);
     }
 
@@ -43,7 +38,7 @@ class PaymentController extends BaseController
         $model = Payment::findOne(['id' => $id]);
 
         return $this->render('view', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -102,7 +97,7 @@ class PaymentController extends BaseController
             case 'declined':
                 return $this->render('response_declined');
             default:
-                $this->notifyAdmin($referenceCode);
+                $this->notifyError($referenceCode);
                 return $this->render('response_error');
         }
     }
@@ -113,7 +108,7 @@ class PaymentController extends BaseController
             $referenceCode = Yii::$app->request->post('reference_sale');
 
             $payment = Payment::findOne(['uuid' => $referenceCode]);
-            $stock = $payment->stock;
+            $stocks = Stock::find()->where(['payment_id' => $payment->id])->all();
 
             $payment->external_id = Yii::$app->request->post('reference_pol');
             $payment->external_data = serialize($_POST);
@@ -127,8 +122,11 @@ class PaymentController extends BaseController
                     $payment->commision = Yii::$app->request->post('commision_pol');
                     $payment->commision_currency = Yii::$app->request->post('commision_pol_currency');
                     $payment->save();
-                    $stock->status = Stock::STATUS_VALID;
-                    $stock->save();
+
+                    foreach ($stocks as $stock) {
+                        $stock->status = Stock::STATUS_VALID;
+                        $stock->save();
+                    }
 
                     $this->notifyPayed($referenceCode);
                     break;
@@ -140,32 +138,39 @@ class PaymentController extends BaseController
                 case 6:
                     $payment->status = Payment::STATUS_REJECTED;
                     $payment->save();
-                    $stock->status = Stock::STATUS_INVALID;
-                    $stock->save();
+
+                    foreach ($stocks as $stock) {
+                        $stock->status = Stock::STATUS_INVALID;
+                        $stock->save();
+                    }
                     break;
                 default:
                     if ($payment->status != Payment::STATUS_PAID) {
                         $payment->status = Payment::STATUS_ERROR;
-                        $stock->status = Stock::STATUS_ERROR;
                         $payment->save();
-                        $stock->save();
+                        foreach ($stocks as $stock) {
+                            $stock->status = Stock::STATUS_ERROR;
+                            $stock->save();
+                        }
                     }
                     break;
             }
-        } finally {
-            return 'OK';
+        } catch (Exception $e) {
+
         }
+
+        return 'OK';
     }
 
-    private function notifyAdmin($referenceCode)
+    private function notifyError($referenceCode)
     {
         Yii::$app->mailer->compose('payment_error', [
-                    'referenceCode' => $referenceCode,
-                ])
-                ->setSubject('Payment with issues')
-                ->setFrom(Yii::$app->params['senderEmail'])
-                ->setTo(Yii::$app->params['adminEmail'])
-                ->send();
+            'referenceCode' => $referenceCode,
+        ])
+            ->setSubject('Payment with issues')
+            ->setFrom(Yii::$app->params['senderEmail'])
+            ->setTo(User::getAdminEmails())
+            ->send();
     }
 
     private function notifyPayed($referenceCode)
@@ -173,12 +178,12 @@ class PaymentController extends BaseController
         $model = Payment::findOne(['uuid' => $referenceCode]);
 
         Yii::$app->mailer->compose('payment_success', [
-                    'model' => $model,
-                ])
-                ->setSubject('Payment successful')
-                ->setFrom(Yii::$app->params['senderEmail'])
-                ->setTo($model->coach->email)
-                ->setBcc(Yii::$app->params['adminEmail'])
-                ->send();
+            'model' => $model,
+        ])
+            ->setSubject('Payment successful')
+            ->setFrom(Yii::$app->params['senderEmail'])
+            ->setTo($model->coach->email)
+            ->setBcc(User::getAdminEmails())
+            ->send();
     }
 }

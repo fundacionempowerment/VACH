@@ -35,7 +35,7 @@ class LinePlot extends Plot{
 
     //---------------
     // CONSTRUCTOR
-    function LinePlot($datay,$datax=false) {
+    function __construct($datay,$datax=false) {
         parent::__construct($datay,$datax);
         $this->mark = new PlotMark() ;
         $this->color = ColorFactory::getColor();
@@ -90,7 +90,7 @@ class LinePlot extends Plot{
         if( $this->legend!="" ) {
             if( $this->filled && !$this->fillgrad ) {
                 $graph->legend->Add($this->legend,
-                $this->color,$this->mark,0,
+                $this->fill_color,$this->mark,0,
                 $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
             }
             elseif( $this->fillgrad ) {

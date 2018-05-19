@@ -81,7 +81,7 @@ class Team extends ActiveRecord
                         ->leftJoin('team_coach', '`team_coach`.`team_id` = `team`.`id`')
                         ->where(['team.coach_id' => Yii::$app->user->id])
                         ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])
-                        ->orderBy('team.id desc');
+                        ->orderBy('team.created_at desc');
     }
 
     public function getTeamType()
@@ -107,6 +107,16 @@ class Team extends ActiveRecord
     public function getMembers()
     {
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
+    }
+
+    public function getActiveMemberList()
+    {
+        $activeMembers = [];
+        foreach ($this->getMembers()->where(['active' => true])->all() as $teamMember) {
+            $activeMembers[$teamMember->person_id] = $teamMember->member->fullname;
+        }
+
+        return $activeMembers;
     }
 
     public function hasMember($personId)

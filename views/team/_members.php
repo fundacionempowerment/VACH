@@ -13,9 +13,7 @@ use kartik\widgets\Select2;
     <?php
     $membersDataProvider = new ArrayDataProvider([
         'allModels' => $team->members,
-        'pagination' => [
-            'pageSize' => 20,
-        ],
+        'pagination' => false,
     ]);
 
     $columns = [

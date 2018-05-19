@@ -1,14 +1,12 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
 use Yii;
-use yii\web\Controller;
-use app\models\Company;
+use app\modules\admin\models\Company;
 
-class CompanyController extends BaseController {
+class CompanyController extends AdminBaseController {
 
-    public $layout = 'inner';
 
     public function actionIndex() {
         $companies = Company::browse();

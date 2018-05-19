@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use PhpOffice\PhpWord\Style\Image;
 use Yii;
 use app\models\Person;
 use app\models\Wheel;
@@ -17,7 +18,6 @@ class Word
 {
 
     private static $team;
-    private static $members;
     private static $phpWord;
     private static $section;
     private static $paragraph;
@@ -25,17 +25,11 @@ class Word
     private static $bad_cell;
     private static $regular_cell;
     private static $good_cell;
+    public static $paths;
 
     static public function create($team)
     {
         self::$team = $team;
-
-
-        foreach (self::$team->members as $teamMember) {
-            if ($teamMember->active) {
-                self::$members[] = $teamMember->member;
-            }
-        }
 
         self::$phpWord = new PhpWord();
 
@@ -106,11 +100,11 @@ class Word
     static private function i($image)
     {
         self::$section->addImage(Yii::getAlias($image), [
-            'positioning' => 'relative',
+            'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
             'marginTop' => 0,
             'marginLeft' => 0,
-            'width' => 605,
-            'wrappingStyle' => 'tight'
+            'width' => 455,
+            'wrappingStyle' => \PhpOffice\PhpWord\Style\Image::WRAP_TOPBOTTOM,
         ]);
     }
 
@@ -157,8 +151,8 @@ class Word
         self::$section->addText(Yii::t('team', 'Sponsor') . ': ' . self::$team->sponsor->fullname, null, $space);
         self::$section->addText('', null, ['spaceAfter' => 0,]);
         self::$section->addText(Yii::t('report', 'Natural Team') . ':', null, $space);
-        foreach (self::$members as $member) {
-            self::$section->addListItem($member->fullname, null, null, null, $space);
+        foreach (self::$team->activeMemberList as $id => $name) {
+            self::$section->addListItem($name, null, null, null, $space);
         }
     }
 
@@ -279,25 +273,25 @@ class Word
 
         $table->addRow();
         $table->addCell()->addText('', $cell_font, $cell_paragraph);
-        foreach (self::$members as $id => $member) {
-            $table->addCell(600, self::$cell_style)->addText($member->fullname, $cell_font, $cell_paragraph);
+        foreach (self::$team->activeMemberList as $id => $name) {
+            $table->addCell(600, self::$cell_style)->addText($name, $cell_font, $cell_paragraph);
         }
         $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Avg.'), $cell_font, $cell_paragraph);
 
 // Add values
 
         $observed_sum = [];
-        foreach (self::$members as $observer) {
+        foreach (self::$team->activeMemberList as $observerId => $observer) {
             $observer_sum = 0;
             $observer_count = 0;
 
             $table->addRow();
 
-            $table->addCell(600, self::$cell_style)->addText($observer->fullname, $cell_font, $cell_paragraph);
+            $table->addCell(600, self::$cell_style)->addText($observer, $cell_font, $cell_paragraph);
 
-            foreach (self::$members as $observed) {
+            foreach (self::$team->activeMemberList as $observedId => $observed) {
                 foreach ($data as $datum) {
-                    if ($datum['observer_id'] == $observer->id && $datum['observed_id'] == $observed->id) {
+                    if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
                         if ($datum['value'] > Yii::$app->params['good_consciousness'])
                             $class = self::$good_cell;
                         else if ($datum['value'] < Yii::$app->params['minimal_consciousness'])
@@ -311,10 +305,10 @@ class Word
 
                         $observer_sum += $datum['value'];
                         $observer_count++;
-                        if (!isset($observed_sum[$observed->id])) {
-                            $observed_sum[$observed->id] = 0;
+                        if (!isset($observed_sum[$observedId])) {
+                            $observed_sum[$observedId] = 0;
                         }
-                        $observed_sum[$observed->id] += $datum['value'];
+                        $observed_sum[$observedId] += $datum['value'];
                     }
                 }
             }
@@ -357,19 +351,33 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Effectiveness Matrix'), 1);
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix(self::$team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
-
+        $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_GROUP);
         self::$section->addTitle(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'), 2);
-        self::addPerformanceTable($groupPerformanceMatrix);
+        self::addEffectivenessTable($data);
+
+        $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
         self::$section->addTitle(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'), 2);
-        self::addPerformanceTable($organizationalPerformanceMatrix);
+        self::addEffectivenessTable($data);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->effectiveness);
     }
 
-    static private function addPerformanceTable($performanceMatrix)
+    static private function addEffectivenessTable($effectivenessData)
     {
+        $rowsData = [];
+        $members = self::$team->activeMemberList;
+        foreach ($members as $index => $name) {
+            foreach ($effectivenessData as $row) {
+                if ($index == $row['id']) {
+                    $rowsData[] = $row;
+                }
+            }
+        }
+
+        if (count($rowsData) == 0) {
+            return;
+        }
+
         $cell_font = ['size' => 9];
 
         $cell_paragraph = [
@@ -382,16 +390,16 @@ class Word
         $sumConsciousness = 0;
         $sumProductivity = 0;
 
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $sumConsciousness += abs($data['consciousness']);
             $sumProductivity += $data['productivity'];
         }
 
-        $avgConsciousness = $sumConsciousness / count($performanceMatrix);
-        $avgProductivity = $sumProductivity / count($performanceMatrix);
+        $avgConsciousness = $sumConsciousness / count($rowsData);
+        $avgProductivity = $sumProductivity / count($rowsData);
 
-        $standar_deviation = Utils::standard_deviation(ArrayHelper::getColumn($performanceMatrix, 'consciousness'));
-        $productivityDelta = Utils::variance(ArrayHelper::getColumn($performanceMatrix, 'productivity'));
+        $standar_deviation = Utils::standard_deviation(ArrayHelper::getColumn($rowsData, 'consciousness'));
+        $productivityDelta = Utils::variance(ArrayHelper::getColumn($rowsData, 'productivity'));
 
         $table = self::$section->addTable(['borderSize' => 1, 'borderColor' => '000000']);
 
@@ -400,35 +408,35 @@ class Word
         $table->addRow();
 
         $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Description'), $cell_font, $cell_paragraph);
-        foreach (self::$members as $id => $member) {
-            $table->addCell(600, self::$cell_style)->addText($member->fullname, $cell_font, $cell_paragraph);
+        foreach (self::$team->activeMemberList as $id => $name) {
+            $table->addCell(600, self::$cell_style)->addText($name, $cell_font, $cell_paragraph);
         }
 
 // How I see me
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'How I see me'), $cell_font, $cell_paragraph);
-        foreach (self::$members as $id => $member) {
+        foreach ($rowsData as $data) {
             $table->addCell(600, self::$cell_style)->addText(round($data['steem'] * 4 / 100, 2), $cell_font, $cell_paragraph);
         }
 
 // How they see me
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'How they see me'), $cell_font, $cell_paragraph);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $table->addCell(600, self::$cell_style)->addText(round($data['productivity'] * 4 / 100, 2), $cell_font, $cell_paragraph);
         }
 
 // Monofactorial productivity
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'Monofactorial productivity'), $cell_font, $cell_paragraph);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $table->addCell(600, self::$cell_style)->addText(round($data['productivity'], 1) . '%', $cell_font, $cell_paragraph);
         }
 
 // Responsability
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'Responsability'), $cell_font, $cell_paragraph);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $value = Utils::productivityText($data['productivity'], $avgProductivity, $productivityDelta, 2);
 
             if ($data['productivity'] < $avgProductivity)
@@ -450,13 +458,13 @@ class Word
 // Consciousness
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'Cons. gap'), $cell_font, $cell_paragraph);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $table->addCell(600, self::$cell_style)->addText(round(abs($data['consciousness']), 1) . '%', $cell_font, $cell_paragraph);
         }
 
         $table->addRow();
         $table->addCell(600, self::$cell_style)->addText(Yii::t('dashboard', 'Consciousness'), $cell_font, $cell_paragraph);
-        foreach ($performanceMatrix as $data) {
+        foreach ($rowsData as $data) {
             $value = abs($data['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High');
 
             if (abs($data['consciousness']) > $avgConsciousness)
@@ -478,17 +486,19 @@ class Word
         self::$section->addTitle(Yii::t('report', 'Performance Matrix'), 1);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->performance);
@@ -500,17 +510,19 @@ class Word
         self::$section->addTitle(Yii::t('report', 'Competences Matrix'), 1);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->competences);
@@ -526,6 +538,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -533,6 +546,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => 0,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->emergents);
@@ -562,17 +576,19 @@ class Word
         self::$section->addTitle(Yii::t('report', 'Perception Matrix'), 2);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/lineal',
+                            '/graph/perceptions',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/lineal',
+                            '/graph/perceptions',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->perception);
@@ -584,17 +600,19 @@ class Word
         self::$section->addTitle(Yii::t('report', 'Competences Matrix'), 2);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/gauges',
+                            '/graph/competences',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->competences);
@@ -610,6 +628,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -617,6 +636,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->emergents);
@@ -632,6 +652,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
@@ -639,6 +660,7 @@ class Word
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->relations);
@@ -650,17 +672,19 @@ class Word
         self::$section->addTitle(Yii::t('report', 'Performance Matrix'), 2);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_GROUP], true));
+        self::$paths[] = $path;
         self::i($path);
 
         $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/matrix',
+                            '/graph/performance',
                             'teamId' => self::$team->id,
                             'memberId' => $individualReport->member->id,
                             'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+        self::$paths[] = $path;
         self::i($path);
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->performance);

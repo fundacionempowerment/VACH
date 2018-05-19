@@ -43,13 +43,14 @@ class ResetPasswordForm extends Model {
     public function rules() {
         return [
             ['password', 'required'],
+            ['username', 'safe'],
             ['password', 'string', 'min' => 6],
         ];
     }
 
     public function attributeLabels() {
         return [
-            'password' => \Yii::t('user', 'Password'),
+            'password' => \Yii::t('user', 'New password'),
         ];
     }
 
@@ -64,6 +65,10 @@ class ResetPasswordForm extends Model {
         $user->removePasswordResetToken();
 
         return $user->save(false);
+    }
+
+    public function getUsername() {
+        return $this->_user->username;
     }
 
 }

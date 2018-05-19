@@ -45,7 +45,7 @@ return [
     'VACH' => 'VACH',
     'VACH administrators has been notified.' => 'Los administradores de VACH han sido notificados',
     'We are going to contact you soon.' => 'Nos pondremos en contacto con usted pronto.',
-    'We are going to notify you when it is fulfilled.' => 'Le notificaremos cuando esté completo.',
+    'We are going to notify you when it is received.' => 'Le notificaremos cuando lo recibamos.',
     'We are waiting payment broker confirmation.' => 'Estamos esperando la confirmación del intermediario.',
     'Your payment has been declined. Please try again.' => 'Su pago ha sido desestimado. Por favor intente nuevamente.',
     'Your payment is pending.' => 'Su está pendiente.',

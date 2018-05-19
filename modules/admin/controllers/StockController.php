@@ -115,7 +115,7 @@ class StockController extends AdminBaseController
                         ])
                         ->setSubject(Yii::t('team', 'CPC: stock added'))
                         ->setFrom(Yii::$app->params['senderEmail'])
-                        ->setTo(Yii::$app->params['adminEmail'])
+                        ->setTo(User::getAdminEmails())
                         ->send();
 
                 SiteController::addFlash('success', Yii::t('app', '{name} has been successfully created.', ['name' => $model->quantity . ' ' . $product->name]));

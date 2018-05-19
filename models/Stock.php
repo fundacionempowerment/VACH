@@ -90,12 +90,12 @@ class Stock extends ActiveRecord
 
     public static function adminBrowseOthers()
     {
-        return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID]);
+        return static::adminBrowse()->andWhere(['<>', 'stock.status', self::STATUS_VALID])->orderBy('consumed_stamp DESC');
     }
 
-    public static function adminBrowse()
+    public static function adminBrowse($coachId = null)
     {
-        return (new Query())
+        $query = (new Query())
                         ->select([
                             'stock.coach_id',
                             "CONCAT(coach.name, ' ', coach.surname) as coach_name",
@@ -115,6 +115,10 @@ class Stock extends ActiveRecord
                         ->innerJoin('payment', 'payment.id = stock.payment_id')
                         ->groupBy(['coach_id', 'product_id', 'price', 'status', 'created_stamp', 'creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'team_id'])
                         ->orderBy('created_stamp DESC, consumed_stamp DESC');
+
+        $query->filterWhere(['stock.coach_id' => $coachId]);
+
+        return $query;
     }
 
     public function getCoach()
@@ -184,12 +188,12 @@ class Stock extends ActiveRecord
         $product = Product::findOne(['id' => $model->product_id]);
         $created_stamp = date('Y-m-d H:i:s');
 
+        $payment = new Payment();
         $payment->coach_id = Yii::$app->user->id;
         $payment->creator_id = Yii::$app->user->id;
-        $payment->stock_id = $stock->id;
         $payment->concept = $model->quantity . ' ' . $product->name;
         $payment->currency = 'USD';
-        $payment->amount = $stock->total;
+        $payment->amount = $model->quantity * $model->price;
         $payment->rate = 0;
         $payment->status = Payment::STATUS_INIT;
         $payment->is_manual = false;
@@ -210,6 +214,7 @@ class Stock extends ActiveRecord
             $stock->created_stamp = $created_stamp;
             if (!$stock->save()) {
                 \app\controllers\SiteController::FlashErrors($stock);
+                $success = false;
             }
         }
 

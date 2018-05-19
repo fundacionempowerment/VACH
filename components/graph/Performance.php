@@ -9,12 +9,12 @@ use app\models\Wheel;
 use app\models\WheelQuestion;
 use app\components\Utils;
 
-class Matrix
+class Performance
 {
 
     static public function draw($teamId, $memberId, $wheelType)
     {
-        $performanceMatrix = Wheel::getPerformanceMatrix($teamId, $wheelType);
+        $performanceMatrix = Wheel::getProdConsMatrix($teamId, $wheelType);
 
         if ($wheelType == Wheel::TYPE_GROUP)
             $title = Yii::t('dashboard', 'Group Performance Matrix');
@@ -59,6 +59,23 @@ class Matrix
             $sumProductivity += $data['productivity'];
         }
 
+        require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
+        require Yii::getAlias("@app/components/jpgraph/jpgraph_canvas.php");
+        require Yii::getAlias("@app/components/jpgraph/jpgraph_canvtools.php");
+
+        // Setup a basic canvas we can work
+        $g = new \CanvasGraph($width, $height);
+        $g->SetFrame(false);
+
+        // We need to stroke the plotarea and margin before we add the
+        // text since we otherwise would overwrite the text.
+        $g->InitFrame();
+
+        if (count($performanceMatrix) == 0) {
+            $g->Stroke();
+            exit();
+        }
+
         $avgConsciousness = $sumConsciousness / count($performanceMatrix);
         $avgProductivity = $sumProductivity / count($performanceMatrix);
         $deltax = $maxx - $minx;
@@ -89,18 +106,6 @@ class Matrix
         $goodProductivityX2 = ($avgProductivity + $avgDeltaProductivity - $minProductivity) / $deltaProductivity * $deltax + $minx;
 
         // Lets draw
-
-        require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
-        require Yii::getAlias("@app/components/jpgraph/jpgraph_canvas.php");
-        require Yii::getAlias("@app/components/jpgraph/jpgraph_canvtools.php");
-
-        // Setup a basic canvas we can work
-        $g = new \CanvasGraph($width, $height);
-        $g->SetFrame(false);
-
-        // We need to stroke the plotarea and margin before we add the
-        // text since we otherwise would overwrite the text.
-        $g->InitFrame();
 
         //high conciouness zone
         $g->img->SetColor('#d9edf7');

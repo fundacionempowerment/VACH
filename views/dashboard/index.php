@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
@@ -58,15 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
 
-    if (count($gauges) > 0) {
-        echo $this->render('_gauges', [
+    if (count($competences) > 0) {
+        echo $this->render('_competences', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($relationsMatrix) > 0) {
-        echo $this->render('_number_matrix', [
+        echo $this->render('_effectiveness', [
             'data' => $relationsMatrix,
             'members' => $members,
             'type' => $filter->wheelType,
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($performanceMatrix) > 0) {
-        echo $this->render('_matrix', [
+        echo $this->render('_performance', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($relationsMatrix) > 0) {
         if ($filter->memberId > 0) {
-            echo $this->render('_relation', [
+            echo $this->render('_relation_graph', [
                 'teamId' => $filter->teamId,
                 'memberId' => $filter->memberId,
                 'wheelType' => $filter->wheelType,

@@ -178,7 +178,7 @@ $token = rand(100000, 999999);
 <?php } ?>
 <div class="clearfix"></div>
 <?=
-$this->render('_ranking', [
+$this->render('_rankings', [
     'type' => $type,
     'memberId' => $memberId,
     'member' => $member,

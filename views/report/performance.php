@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <?php
     if (count($groupPerformanceMatrix) > 0) {
-        echo $this->render('../dashboard/_matrix', [
+        echo $this->render('../dashboard/_performance', [
             'teamId' => $team->id,
             'memberId' => 0,
             'wheelType' => Wheel::TYPE_GROUP,
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?php
     if (count($organizationalPerformanceMatrix) > 0) {
-        echo $this->render('../dashboard/_matrix', [
+        echo $this->render('../dashboard/_performance', [
             'teamId' => $team->id,
             'memberId' => 0,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,

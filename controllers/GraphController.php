@@ -23,16 +23,16 @@ class GraphController extends Controller
         \app\components\graph\Radar::draw($teamId, $memberId, $wheelType);
     }
 
-    public function actionLineal($teamId, $memberId, $wheelType)
+    public function actionPerceptions($teamId, $memberId, $wheelType)
     {
         $this->checkAllowed($teamId);
-        \app\components\graph\Lineal::draw($teamId, $memberId, $wheelType);
+        \app\components\graph\Perception::draw($teamId, $memberId, $wheelType);
     }
 
-    public function actionMatrix($teamId, $memberId, $wheelType)
+    public function actionPerformance($teamId, $memberId, $wheelType)
     {
         $this->checkAllowed($teamId);
-        \app\components\graph\Matrix::draw($teamId, $memberId, $wheelType);
+        \app\components\graph\Performance::draw($teamId, $memberId, $wheelType);
     }
 
     public function actionRelations($teamId, $memberId, $wheelType)
@@ -41,10 +41,10 @@ class GraphController extends Controller
         \app\components\graph\Relations::draw($teamId, $memberId, $wheelType);
     }
 
-    public function actionGauges($teamId, $memberId, $wheelType)
+    public function actionCompetences($teamId, $memberId, $wheelType)
     {
         $this->checkAllowed($teamId);
-        \app\components\graph\Gauges::draw($teamId, $memberId, $wheelType);
+        \app\components\graph\Competences::draw($teamId, $memberId, $wheelType);
     }
 
     public function actionEmergents($teamId, $memberId, $wheelType)

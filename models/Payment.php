@@ -99,11 +99,12 @@ class Payment extends ActiveRecord
                         ->andWhere(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
     }
 
-    public static function adminBrowse()
+    public static function adminBrowse($coachId = null)
     {
         return Payment::find()
                         ->where(['>', 'amount', 0])
                         ->andWhere(['>', 'rate', 0])
+                        ->andFilterWhere(['coach_id' => $coachId])
                         ->orderBy('id desc');
     }
 
