@@ -24,7 +24,7 @@ for ($i = 0; $i < 3; $i++) {
 }
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('ensure that assessment crud works');
+$I->wantTo('ensure that extended assessment crud works');
 
 // Agrego licencias
 
@@ -109,23 +109,26 @@ $I->selectOptionForSelect2('Team[sponsor_id]', $sponsor['name']);
 $I->click('Guardar');
 $I->wait(1);
 
-// Agrego miembros
-
-foreach ($persons as $person) {
-    $I->selectOptionForSelect2('new_member', $person['name']);
+for ($i = 0; $i < 3; $i++) {
+    // Agrego un miembro
+    $I->selectOptionForSelect2('new_member', $persons[$i]['name']);
     $I->click('Agregar');
     $I->wait(1);
+
+    // Completo relevamiento
+    if ($i== 0)    {
+        $I->click('Equipo completado');
+    } else {
+        $I->click('Actualizar equipo');
+    }
+
+    $I->wait(1);
+
+    $I->see('Licencias requeridas: 1');
+
+    $I->click('Guardar');
+    $I->wait(1);
 }
-
-// Creo nuevo relevamiento
-
-$I->click('Equipo completado');
-$I->wait(1);
-
-$I->see('Licencias requeridas: ' . count($persons));
-
-$I->click('Guardar');
-$I->wait(1);
 
 // grab all tokens
 

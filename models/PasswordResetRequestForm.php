@@ -54,7 +54,9 @@ class PasswordResetRequestForm extends Model
                 if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
                     $user->generatePasswordResetToken();
                 }
-                $user->save(false, ['password_reset_token']);
+                if (!$user->save(false, ['password_reset_token'])) {
+                    return false;
+                }
             }
 
             return \Yii::$app->mailer->compose('passwordResetToken', ['users' => $users])

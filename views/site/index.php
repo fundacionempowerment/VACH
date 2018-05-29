@@ -32,7 +32,7 @@ $this->title = 'VACH';
                 </div>
                 <div class="text-right form-group" style="margin-top: 20px;">
                     <?= Yii::$app->params['allow_register'] ? Html::a(Yii::t('app', 'Sign up'), ['site/register'], ['class' => 'btn btn-vach-border pull-left']) : '' ?>
-                    <?= Html::a(Yii::t('app', 'Forgot your password?'), ['site/request-password-reset'], ['class' => 'text-danger']) ?>
+                    <?= Html::a(Yii::t('app', 'Reset password'), ['site/request-password-reset'], ['class' => 'text-danger']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

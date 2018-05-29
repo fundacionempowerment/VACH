@@ -5,10 +5,12 @@ $I->wantTo('ensure that wheel question works');
 
 $I->loginAsAdmin();
 
-$I->clickMainMenu('Admin','Preguntas de ruedas');
+$I->clickMainMenu('Admin','Tipos de equipos');
 $I->wait(1);
 
-$I->click('Guardar');
+$I->click("Duplicar");
+$I->acceptPopup();
+
 $I->wait(1);
 
-$I->see('guardadas');
+$I->see('(copy)');
