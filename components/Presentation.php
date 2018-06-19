@@ -18,6 +18,10 @@ use yii\helpers\ArrayHelper;
 
 class Presentation
 {
+    const FONT = 'Coolvetica Rg';
+    const RED_BACKGROUND = 'FFD9534F';
+    const YELLOW_BACKGROUND = 'FFF0AD4E';
+    const GREEN_BACKGROUND = 'FF5CB85C';
 
     private static $team;
     private static $ppt;
@@ -101,7 +105,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->company->name);
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(40)
             ->setColor(new Color('FFFF0000'));
 
@@ -109,7 +113,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun(self::$team->name);
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(40)
             ->setColor(new Color('FFFFFFFF'));
     }
@@ -130,7 +134,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('reglas de oro');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(50)
             ->setColor(new Color('FFFF0000'));
 
@@ -138,7 +142,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('Ésta es la voz del equipo');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(35)
             ->setColor(new Color('FF000000'));
 
@@ -146,7 +150,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('Hipótesis sujeta a validación');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(35)
             ->setColor(new Color('FFFF0000'));
 
@@ -154,7 +158,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('No tomarlo personal');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(35)
             ->setColor(new Color('FF000000'));
     }
@@ -175,7 +179,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('ajuste perceptual');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FFFF0000'));
 
@@ -205,7 +209,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('cuadro integrado de competencias');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FFFF0000'));
 
@@ -235,7 +239,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('pensamiento funcional y disfuncional');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FFFF0000'));
 
@@ -251,7 +255,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que era?');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -259,7 +263,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creo que soy');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -278,7 +282,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿A qué me comprometo y cómo?');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -297,7 +301,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién creía que eras?');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -305,7 +309,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Quién he descubierto que eres?');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -324,7 +328,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¿Cómo vamos a prevenir el conflicto?');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FFFFFFFF'));
 
@@ -347,7 +351,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('protocolo de observación');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(50)
             ->setColor(new Color('FFFF0000'));
 
@@ -355,7 +359,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('1. Visión cromática');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FF000000'));
 
@@ -363,7 +367,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('   (analogía con el semáforo: verde, amarillo y rojo)');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(26)
             ->setColor(new Color('FF000000'));
 
@@ -371,7 +375,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('2. El más crítico');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FF000000'));
 
@@ -379,7 +383,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('3. El más benévolo');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FF000000'));
 
@@ -387,14 +391,14 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('4. El menos o más autocrítico');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FF000000'));
         $shape->createBreak();
 
         $textRun = $shape->createParagraph()->createTextRun('5. Cruces interrelacionales');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(30)
             ->setColor(new Color('FF000000'));
     }
@@ -415,7 +419,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('Equipo');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(70)
             ->setColor(new Color('FFFF0000'));
     }
@@ -485,7 +489,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun($title);
-        $textRun->getFont()->setName('Coolvetica')
+        $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FFFF0000'));
 
@@ -522,14 +526,14 @@ class Presentation
                         foreach ($data as $datum) {
                             if ($datum['observer_id'] == $observerId && $datum['observed_id'] == $observedId) {
                                 if ($datum['value'] > Yii::$app->params['good_consciousness']) {
-                                    $class = 'FFDFF0D8';
+                                    $class = self::GREEN_BACKGROUND;
                                 } elseif ($datum['value'] < Yii::$app->params['minimal_consciousness']) {
-                                    $class = 'FFF2DEDE';
+                                    $class = self::RED_BACKGROUND;
                                 } else {
-                                    $class = 'FFFCF8E3';
+                                    $class = self::YELLOW_BACKGROUND;
                                 }
 
-                                $cell->createTextRun(round($datum['value'] * 100 / 4, 1) . '%')->getFont()->setSize(8);
+                                $cell->createTextRun(round($datum['value'] * 100 / 4, 1) . '%')->getFont()->setColor(new Color("FFFFFFFF"))->setSize(10);
 
                                 $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
 
@@ -545,15 +549,15 @@ class Presentation
                 }
                 if ($observer_count > 0) {
                     if ($observer_sum / $observer_count > Yii::$app->params['good_consciousness']) {
-                        $class = 'FFDFF0D8';
+                        $class = self::GREEN_BACKGROUND;
                     } elseif ($observer_sum / $observer_count < Yii::$app->params['minimal_consciousness']) {
-                        $class = 'FFF2DEDE';
+                        $class = self::RED_BACKGROUND;
                     } else {
-                        $class = 'FFFCF8E3';
+                        $class = self::YELLOW_BACKGROUND;
                     }
 
                     $cell = $row->nextCell();
-                    $cell->createTextRun(round($observer_sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setSize(8);
+                    $cell->createTextRun(round($observer_sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setColor(new Color("FFFFFFFF"))->setSize(10);
                     $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
                 }
             }
@@ -565,15 +569,15 @@ class Presentation
         if ($observer_count > 0) {
             foreach ($observed_sum as $sum) {
                 if ($sum / $observer_count > Yii::$app->params['good_consciousness']) {
-                    $class = 'FFDFF0D8';
+                    $class = self::GREEN_BACKGROUND;
                 } elseif ($sum / $observer_count < Yii::$app->params['minimal_consciousness']) {
-                    $class = 'FFF2DEDE';
+                    $class = self::RED_BACKGROUND;
                 } else {
-                    $class = 'FFFCF8E3';
+                    $class = self::YELLOW_BACKGROUND;
                 }
 
                 $cell = $row->nextCell();
-                $cell->createTextRun(round($sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setSize(8);
+                $cell->createTextRun(round($sum / $observer_count * 100 / 4, 1) . '%')->getFont()->setColor(new Color("FFFFFFFF"))->setSize(10);
                 $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
             }
         }
@@ -594,7 +598,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'));
-        $textRun->getFont()->setName('Coolvetica')
+        $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FFFF0000'));
 
@@ -673,10 +677,10 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Responsability'))->getFont()->setSize(8);
         foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
+            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setColor(new Color("FFFFFFFF"))->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         // Avg
@@ -704,9 +708,9 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Consciousness'))->getFont()->setSize(8);
         foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
+            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setColor(new Color("FFFFFFFF"))->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         $row = $tableShape->createRow();
@@ -736,7 +740,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
         $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'));
-        $textRun->getFont()->setName('Coolvetica')
+        $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FFFF0000'));
 
@@ -815,7 +819,7 @@ class Presentation
             $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         // Avg
@@ -845,7 +849,7 @@ class Presentation
             $cell = $row->nextCell();
             $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? 'FFFCF8E3' : 'FFDFF0D8'));
+                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         $row = $tableShape->createRow();
@@ -956,7 +960,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun('Miembros');
-        $textRun->getFont()->setName('Coolvetica')
+        $textRun->getFont()->setName(self::FONT)
             ->setSize(70)
             ->setColor(new Color('FFFF0000'));
     }
@@ -976,7 +980,7 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
         $textRun = $shape->createParagraph()->createTextRun($member->member->fullname);
-        $textRun->getFont()->setName('Coolvetica')
+        $textRun->getFont()->setName(self::FONT)
             ->setSize(60)
             ->setColor(new Color('FFFF0000'));
     }
@@ -1213,7 +1217,7 @@ class Presentation
 
         $textRun = $shape->createParagraph()->createTextRun('¡Muchas gracias!');
         $textRun->getFont()
-            ->setName('Coolvetica')
+            ->setName(self::FONT)
             ->setSize(60)
             ->setColor(new Color('FFFF0000'));
     }
