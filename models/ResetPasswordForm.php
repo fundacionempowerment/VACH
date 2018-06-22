@@ -13,6 +13,7 @@ use Yii;
 class ResetPasswordForm extends Model {
 
     public $password;
+    public $password_confirm;
 
     /**
      * @var \app\models\User
@@ -42,15 +43,17 @@ class ResetPasswordForm extends Model {
      */
     public function rules() {
         return [
-            ['password', 'required'],
+            [['password', 'password_confirm'], 'required'],
             ['username', 'safe'],
             ['password', 'string', 'min' => 6],
+            ['password_confirm', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 
     public function attributeLabels() {
         return [
             'password' => \Yii::t('user', 'New password'),
+            'password_confirm' => Yii::t('user', 'Password confirmation'),
         ];
     }
 

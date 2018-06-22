@@ -54,13 +54,14 @@ class SiteController extends BaseController
         return true;
     }
 
-    public function actionIndex()
+    public function actionIndex($username = '')
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->redirect(['/team']);
         }
 
         $model = new LoginForm();
+        $model->username = $username;
         $wheel = new Wheel();
 
         $nowheel = Yii::$app->request->get('nowheel');
@@ -213,7 +214,7 @@ class SiteController extends BaseController
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'New password was saved.'));
-            return $this->goHome();
+            return $this->redirect(['index', 'username' => $model->username]);
         }
         return $this->render('resetPassword', [
             'model' => $model,
@@ -284,6 +285,21 @@ class SiteController extends BaseController
                 self::addFlash('error', \Yii::t('app', 'Problem:') . ' ' . $message);
             }
         }
+    }
+
+    public static function Errors($record)
+    {
+        if (!isset($record)) {
+            return '';
+        }
+
+        $result = '';
+        foreach ($record->getErrors() as $attribute => $messages) {
+            foreach ($messages as $message) {
+                $result .= $message . ' ';
+            }
+        }
+        return $result;
     }
 
     public function actionMigrateUp()
