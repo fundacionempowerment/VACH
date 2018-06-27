@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
+use app\components\SpinnerAnchor;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('user', 'Persons');
@@ -12,7 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coach-persons">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a(Yii::t('user', 'New person'), Url::to(['person/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('user', 'New person'),
+            'url' => Url::to(['person/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
     <?php
     $dataProvider = new ActiveDataProvider([
         'query' => $persons,
@@ -44,5 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('user', 'New person'), Url::to(['person/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('user', 'New person'),
+            'url' => Url::to(['person/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
 </div>

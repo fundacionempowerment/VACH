@@ -1,9 +1,8 @@
 <?php
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 use kartik\widgets\Select2;
-use kartik\widgets\DepDrop;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -19,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p><?= Yii::t('team', 'Please fill out the following fields with team data:') ?></p>
     <?php
     $form = ActiveForm::begin([
-                'id' => 'newteam-form',
+        'id' => 'newteam-form',
     ]);
     ?>
     <?= $form->field($team, 'name') ?>
@@ -39,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($team->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
+        <?= \app\components\SpinnerSubmitButton::widget([
+            'caption' => \Yii::t('app', 'Save'),
+            'options' => ['class' => 'btn ' . ($team->isNewRecord ? 'btn-success' : 'btn-primary')]
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

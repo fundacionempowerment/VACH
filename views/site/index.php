@@ -23,7 +23,12 @@ $this->title = 'VACH';
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Sign in'), ['class' => 'btn btn-vach col-md-12', 'name' => 'login-button']) ?>
+                    <?= \app\components\SpinnerSubmitButton::widget([
+                        'caption' => Yii::t('app', 'Sign in'),
+                        'options' => [
+                            'name' => 'login-button',
+                            'class' => 'btn btn-vach col-md-12',
+                        ]]) ?>
                     <br/>
                 </div>
                 <div class="text-right form-group" style="margin-top: 20px;">
@@ -38,7 +43,12 @@ $this->title = 'VACH';
                 <?php $wheelForm = ActiveForm::begin(['id' => 'token-form', 'action' => ['token'],]); ?>
                 <?= $wheelForm->field($wheel, 'token') ?>
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Run'), ['class' => 'btn btn-vach-border col-md-12', 'name' => 'run-button']) ?>
+                    <?= \app\components\SpinnerSubmitButton::widget([
+                        'caption' => Yii::t('app', 'Run'),
+                        'options' => [
+                            'name' => 'run-button',
+                            'class' => 'btn btn-vach-border col-md-12',
+                        ]]) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

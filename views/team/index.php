@@ -1,9 +1,10 @@
 <?php
 
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
+use app\components\SpinnerAnchor;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('team', 'Teams');
@@ -12,7 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="coach-teams">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a(Yii::t('team', 'New team'), Url::to(['team/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('team', 'New team'),
+            'url' => Url::to(['team/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
     <?php
     $dataProvider = new ActiveDataProvider([
         'query' => $teams,
@@ -41,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'IndividualWheelStatus',
                 'format' => 'html',
-                'value' => function($data) {
+                'value' => function ($data) {
                     return Html::a($data->individualWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
                 },
             ],
@@ -55,22 +62,30 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'OrganizationalWheelStatus',
                 'format' => 'html',
-                'value' => function($data) {
+                'value' => function ($data) {
                     return Html::a($data->organizationalWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
                 },
             ],
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'options' => ['width' => '110px'],
-                'urlCreator' => function( $action, $model, $key, $index ) {
+                'urlCreator' => function ($action, $model, $key, $index) {
                     switch ($action) {
-                        case 'update' : return Url::to(['team/edit', 'id' => $model['id']]);
-                        case 'delete' : return Url::to(['team/delete', 'id' => $model['id'], 'delete' => '1',]);
+                        case 'update' :
+                            return Url::to(['team/edit', 'id' => $model['id']]);
+                        case 'delete' :
+                            return Url::to(['team/delete', 'id' => $model['id'], 'delete' => '1',]);
                     };
                 }
             ]
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('team', 'New team'), Url::to(['team/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('team', 'New team'),
+            'url' => Url::to(['team/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
 </div>

@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\ActiveForm;
-use app\models\WheelAnswer;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -19,6 +17,10 @@ $this->title = Yii::t('app', 'Thanks!');
         <?= Html::encode($this->title) ?>
     </h1>
     <p>
-        <?= Html::a(Yii::t('app', 'Home'), ['/site'], ['class' => 'btn btn-default']) ?>
+        <?= \app\components\SpinnerAnchor::widget([
+            'caption' => Yii::t('app', 'Home'),
+            'url' => Url::to(['/site']),
+            'options' => ['class' => 'btn btn-default'],
+        ]) ?>
     </p>
 </div>

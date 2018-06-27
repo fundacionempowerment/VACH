@@ -1,9 +1,9 @@
 <?php
 
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -21,8 +21,8 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
     <div class="row col-md-12">
         <h4><?= Yii::t('team', 'Team data') ?> </h4>
         <p>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
-            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br/>
+            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br/>
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
     </div>
@@ -45,12 +45,8 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
             ],
         ]);
         ?>
-        <?php
-        $form = ActiveForm::begin([
-                    'id' => 'newteam-form',
-        ]);
-        ?>
     </div>
+
     <?php if (Yii::$app->params['monetize']) { ?>
         <div class="form-group">
             <h4><?= Yii::t('stock', 'Licences') ?></h4>
@@ -76,7 +72,18 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
             <?php } ?>
         </div>
     <?php } ?>
+    <?php
+    $form = ActiveForm::begin([
+        'id' => 'newteam-form',
+    ]);
+    ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-' . ($lock_button ? 'default' : 'primary'), 'disabled' => $lock_button, 'name' => 'save-button']) ?>
-        <?php ActiveForm::end(); ?>
+        <?= \app\components\SpinnerSubmitButton::widget([
+            'caption' => \Yii::t('app', 'Save'),
+            'options' => [
+                'class' => 'btn btn-' . ($lock_button ? 'default' : 'primary'),
+                'disabled' => $lock_button,
+            ]
+        ]) ?>
     </div>
+    <?php ActiveForm::end(); ?>

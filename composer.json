@@ -28,7 +28,8 @@
         "phpoffice/phppresentation": "dev-master",
         "phpoffice/phpword": "dev-master",
         "onmotion/yii2-telegram": "*",
-        "swiftmailer/swiftmailer": "*"
+        "swiftmailer/swiftmailer": "*",
+        "rmrevin/yii2-fontawesome": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

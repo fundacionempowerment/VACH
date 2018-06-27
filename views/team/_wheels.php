@@ -1,10 +1,11 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
+use app\components\Icons;
+use app\components\SpinnerAnchor;
 use app\models\Wheel;
 use yii\bootstrap\Modal;
-use app\components\Icons;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 if (count($team->wheels) == 0) {
     return '';
@@ -37,7 +38,8 @@ if ($wheels_completed)
 <div class="row col-md-6">
     <h2>
         <?= Yii::t('team', 'Individual wheels') ?>
-        <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('individual_modal');" >
+        <button id="cell_individual" type="button" class="btn btn-default btn-xs"
+                onclick="showTokens('individual_modal');">
             <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
         </button>
     </h2>
@@ -46,13 +48,20 @@ if ($wheels_completed)
             <tr>
                 <th style="text-align: right;">
                     <?= $observerMember->member->fullname ?>
-                    <?= Html::a($mail_icon . $team->notifyIcon(Wheel::TYPE_INDIVIDUAL, $observerMember->member->id), Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]), ['class' => "btn btn-default btn-xs ", 'title' => Yii::t('wheel', 'Send by email')]) ?>
-
+                    <?= SpinnerAnchor::widget([
+                        'caption' => $mail_icon . $team->notifyIcon(Wheel::TYPE_INDIVIDUAL, $observerMember->member->id),
+                        'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]),
+                        'options' => [
+                            'class' => "btn btn-default btn-xs ",
+                            'title' => Yii::t('wheel', 'Send by email')],
+                    ]) ?>
                     <?php
                     foreach ($team->individualWheels as $wheel)
                         if ($wheel->observer_id == $observerMember->person_id) {
                             ?>
-                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs"
+                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"
+                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon ?>!
                             </button>
                             <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
@@ -79,7 +88,7 @@ if ($wheels_completed)
 <div class="row col-md-12">
     <h2>
         <?= Yii::t('team', 'Group wheels') ?>
-        <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('group_modal');" >
+        <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('group_modal');">
             <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
         </button>
     </h2>
@@ -98,12 +107,20 @@ if ($wheels_completed)
             <tr>
                 <th style="text-align: right;">
                     <?= $observerMember->member->fullname ?>
-                    <?= Html::a($mail_icon . $team->notifyIcon(Wheel::TYPE_GROUP, $observerMember->member->id), Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                    <?= SpinnerAnchor::widget([
+                        'caption' => $mail_icon . $team->notifyIcon(Wheel::TYPE_GROUP, $observerMember->member->id),
+                        'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]),
+                        'options' => [
+                            'class' => "btn btn-default btn-xs ",
+                            'title' => Yii::t('wheel', 'Send by email')],
+                    ]) ?>
                     <?php
                     foreach ($team->groupWheels as $wheel)
                         if ($wheel->observer_id == $observerMember->person_id) {
                             ?>
-                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');" title="<?= Yii::t('wheel', 'Manual email') ?>">
+                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs"
+                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"
+                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon ?>!
                             </button>
                             <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
@@ -132,7 +149,8 @@ if ($wheels_completed)
 <div class="row col-md-12">
     <h2>
         <?= Yii::t('team', 'Organizational wheels') ?>
-        <button id="cell_individual" type="button" class="btn btn-default btn-xs" onclick="showTokens('organizational_modal');" >
+        <button id="cell_individual" type="button" class="btn btn-default btn-xs"
+                onclick="showTokens('organizational_modal');">
             <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
         </button>
     </h2>
@@ -151,12 +169,20 @@ if ($wheels_completed)
             <tr>
                 <th style="text-align: right;">
                     <?= $observerMember->member->fullname ?>
-                    <?= Html::a($mail_icon . $team->notifyIcon(Wheel::TYPE_ORGANIZATIONAL, $observerMember->member->id), Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]), ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('wheel', 'Send by email')]) ?>
+                    <?= SpinnerAnchor::widget([
+                        'caption' => $mail_icon . $team->notifyIcon(Wheel::TYPE_ORGANIZATIONAL, $observerMember->member->id),
+                        'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]),
+                        'options' => [
+                            'class' => "btn btn-default btn-xs ",
+                            'title' => Yii::t('wheel', 'Send by email')],
+                    ]) ?>
                     <?php
                     foreach ($team->organizationalWheels as $wheel)
                         if ($wheel->observer_id == $observerMember->person_id) {
                             ?>
-                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs" onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"  title="<?= Yii::t('wheel', 'Manual email') ?>">
+                            <button id="cell_<?= $buttonId ?>" type="button" class="btn btn-default btn-xs"
+                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $wheel->token], true) ?>', '<?= $wheel->token ?>');"
+                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon ?>!
                             </button>
                             <?= Html::a(Icons::PLAY, Url::toRoute(['wheel/run', 'token' => $wheel->token]), ['class' => 'btn btn-default btn-xs', 'target' => '_blank']); ?>
@@ -316,19 +342,17 @@ Modal::begin([
 </div>
 <?php Modal::end(); ?>
 <script type="text/javascript">
-    function showEmail(member, email, url, token)
-    {
+    function showEmail(member, email, url, token) {
         $('#email_modal').modal('show');
         $('#member').html(member);
         $('#member_email').html(email);
         $('#url').html(url);
-<?php if (YII_ENV_TEST) { ?>
-            $('#token').html(token);
-<?php } ?>
+        <?php if (YII_ENV_TEST) { ?>
+        $('#token').html(token);
+        <?php } ?>
     }
 
-    function showTokens(modal)
-    {
+    function showTokens(modal) {
         $('#' + modal).modal('show');
     }
 </script>

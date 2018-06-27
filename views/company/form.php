@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $form = ActiveForm::begin([
-                'id' => 'newcompany-form',
+        'id' => 'newcompany-form',
     ]);
     ?>
 
@@ -26,7 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($company, 'email') ?>
     <?= $form->field($company, 'phone') ?>
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn ' . ($company->isNewRecord ? 'btn-success' : 'btn-primary'), 'name' => 'save-button']) ?>
+        <?= \app\components\SpinnerSubmitButton::widget([
+            'caption' => \Yii::t('app', 'Save'),
+            'options' => ['class' => 'btn ' . ($company->isNewRecord ? 'btn-success' : 'btn-primary')]
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
