@@ -41,6 +41,7 @@ class Company extends ActiveRecord
         return [
             'name' => Yii::t('app', 'Name'),
             'email' => Yii::t('app', 'Email'),
+            'phone' => Yii::t('app', 'Phone'),
             'fullname' => Yii::t('app', 'Name'),
         ];
     }
