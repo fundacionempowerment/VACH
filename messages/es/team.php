@@ -19,6 +19,7 @@
 return [
     'Access granted' => 'Acceso concedido',
     'Access removed' => 'Acceso quitado',
+    'All wheels already fullfilled. Emails not sent.' => 'Todas las ruedas ya completadas. Correos electrónicos no enviados.',
     'Allowed coaches' => 'Coaches invitados',
     'Are you sure that you want to delete this team?' => '¿Está seguro que quiere eliminar este equipo?',
     'Are you sure you want to duplicate this team type?' => '¿Está seguro que quiere duplicar ese tipo de equipo?',

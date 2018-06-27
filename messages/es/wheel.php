@@ -19,6 +19,7 @@
 return [
     'Answer type' => 'Tipo de respuesta',
     'Appropriateness' => 'Pertinencia',
+    'Are you sure you want to send all wheels?' => '¿Está seguro que quiere enviar todas las ruedas?',
     'Back to team board' => 'Volver al tablero del equipo',
     'Belonging' => 'Pertenencia',
     'CPC: {wheel} answers' => 'CPC: respuesta de {wheel}',
@@ -73,6 +74,7 @@ return [
     'Running organizational wheel' => 'Ejecutando rueda organizacional',
     'Save and next competence...' => 'Guardar y próxima competencia...',
     'Save and next dimension...' => 'Guardar y próxima dimensión...',
+    'Send all by email' => 'Enviar todo por correo electrónico',
     'Send by email' => 'Enviar por correo electrónico',
     'Show instructions' => 'Mostrar instrucciones',
     'Some answers left.' => 'Faltan alguna respuestas',
