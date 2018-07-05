@@ -207,11 +207,18 @@ class SiteController extends BaseController
      */
     public function actionResetPassword($token)
     {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+        if (empty($token) || !is_string($token)) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Password reset token cannot be blank.'));
+            return $this->redirect(['index']);
         }
+
+        $model = new ResetPasswordForm($token);
+
+        if (!$model->user) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Wrong password reset token.'));
+            return $this->redirect(['index']);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'New password was saved.'));
             return $this->redirect(['index', 'username' => $model->username]);
