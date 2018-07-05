@@ -81,7 +81,7 @@ $show_instructions = $instructions_shown == true ? false : true;
     <?php
     if (isset(Yii::$app->user))
         if (isset(Yii::$app->user->identity)) {
-            echo SpinnerAnchor::widget([
+            echo \app\components\SpinnerAnchor::widget([
                 'caption' => Yii::t('wheel', 'Back to team board'),
                 'url' => Url::to(['team/view', 'id' => $wheel->team->id]),
                 'options' => ['class' => 'btn btn-default'],
