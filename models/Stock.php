@@ -222,7 +222,7 @@ class Stock extends ActiveRecord
         $model->amount = $payment->amount;
         $model->referenceCode = $payment->uuid;
 
-        return $success;
+        return $success ? $payment : null;
     }
 
     public static function saveAddModel($model)

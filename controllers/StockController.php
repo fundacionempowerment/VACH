@@ -2,22 +2,15 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Account;
-use app\models\Payment;
-use app\models\Stock;
-use app\models\Product;
 use app\models\BuyModel;
-use app\models\AddModel;
-use app\models\RemoveModel;
+use app\models\ClientModel;
+use app\models\LoginModel;
+use app\models\Product;
+use app\models\RegisterModel;
+use app\models\Stock;
+use app\models\User;
+use Yii;
 
 class StockController extends BaseController
 {
@@ -53,19 +46,38 @@ class StockController extends BaseController
         }
 
         $product = Product::findOne(['id' => $product_id]);
+        $user = User::findOne(['id' => Yii::$app->user->id]);
 
         $model = new BuyModel([
             'product_id' => $product_id,
             'quantity' => $quantity,
             'price' => $product->price,
+            'buyerEmail' => $user->email,
         ]);
 
+        $action = Yii::$app->request->post('pay-button');
         if ($model->load(Yii::$app->request->post())) {
-            Stock::saveBuyModel($model);
+            if ($action == 'send' && !$model->payerEmail) {
+                $model->addError('payerEmail', \Yii::t('stock', 'Email required to send link'));
+            } else {
+                Stock::saveBuyModel($model);
 
-            return $this->render('/payment/redirect', [
-                        'model' => $model,
-            ]);
+                $paymentLink = Yii::$app->urlManager->createAbsoluteUrl(['payment/init', 'referenceCode' => $model->referenceCode]);
+
+                if ($action == 'send') {
+                    Yii::$app->mailer->compose('payment_send', [
+                        'paymentLink' => $paymentLink,
+                    ])
+                        ->setSubject(\Yii::t('stock', 'VACH licences payment link'))
+                        ->setFrom(Yii::$app->params['senderEmail'])
+                        ->setTo($model->payerEmail)
+                        ->send();
+
+                    return $this->redirect(['/payment/sent']);
+                } else {
+                    return $this->redirect($paymentLink);
+                }
+            }
         }
 
         return $this->render('new', [

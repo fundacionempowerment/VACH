@@ -165,9 +165,9 @@ class Payment extends ActiveRecord
         return $this->hasMany(PaymentLog::className(), ['payment_id' => 'id']);
     }
 
-    public function getStock()
+    public function getStocks()
     {
-        return $this->hasOne(Stock::className(), ['id' => 'stock_id']);
+        return $this->hasMany(Stock::className(), ['payment_id' => 'id']);
     }
 
     public function getPart1Amount()

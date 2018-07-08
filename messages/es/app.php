@@ -82,6 +82,7 @@ return [
     'Payment declined' => 'Pago desestimado',
     'Payment error' => 'Pago erroneo',
     'Payment pending' => 'Pago pendiente',
+    'Payment sent' => 'Pago enviado',
     'Payment success' => 'Pago exitoso',
     'Payment wait' => 'Pago en espera',
     'Phone' => 'Teléfono',

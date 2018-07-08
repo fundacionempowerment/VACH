@@ -51,6 +51,9 @@ $userMenu[] = ['label' => Yii::t('user', 'My Data'), 'url' => ['/user/my-account
 $userMenu[] = ['label' => Yii::t('user', 'My Password'), 'url' => ['/user/my-password']];
 if (Yii::$app->params['monetize']) {
     $userMenu[] = ['label' => Yii::t('stock', 'My Licences'), 'url' => ['/stock']];
+    if (!Yii::$app->params['manual_mode']) {
+        $userMenu[] = ['label' => Yii::t('stock', 'Buy Licences'), 'url' => ['/stock/new']];
+    }
     $userMenu[] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
 }
 $userMenu[] = ['label' => Yii::t('app', 'Logout'),

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Account;
+use app\models\BuyModel;
 use app\models\ClientModel;
 use app\models\LoginModel;
 use app\models\Payment;
@@ -18,7 +19,7 @@ class PaymentController extends BaseController
 
     public function beforeAction($action)
     {
-        if ($action->id == 'confirmation') {
+        if ($action->id == 'confirmation' || $action->id == 'response' || $action->id == 'init') {
             return true;
         }
         return parent::beforeAction($action);
@@ -42,8 +43,31 @@ class PaymentController extends BaseController
         ]);
     }
 
+    public function actionSent(){
+        return $this->render('sent');
+    }
+
+    public function actionInit($referenceCode)
+    {
+        $this->layout = Yii::$app->user->isGuest ? 'printable' : 'inner';
+
+        $payment = Payment::findOne(['uuid' => $referenceCode]);
+
+        if (!$payment) {
+            return $this->goHome();
+        }
+
+        $buyModel = BuyModel::fromPayment($payment);
+
+        return $this->render('/payment/redirect', [
+            'model' => $buyModel,
+        ]);
+    }
+
     public function actionResponse()
     {
+        $this->layout = Yii::$app->user->isGuest ? 'printable' : 'inner';
+
         $referenceCode = Yii::$app->request->get('referenceCode');
         $lapTransactionState = Yii::$app->request->get('lapTransactionState');
 

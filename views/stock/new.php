@@ -21,7 +21,6 @@ $this->registerJs("function updateTotal(quantity) {
     <?php
     $form = ActiveForm::begin([
                 'id' => 'buy-form',
-                'options' => ['class' => 'form-inline'],
     ]);
     ?>
     <div class="text-center">
@@ -34,7 +33,7 @@ $this->registerJs("function updateTotal(quantity) {
         </div>
         <?=
         $form->field($model, 'quantity', ['options' => [
-                'class' => 'col-sm-push-4 col-sm-4',
+                'class' => 'col-sm-push-5 col-sm-2',
                 'onchange' => "updateTotal();"]
         ])
         ?>
@@ -43,11 +42,22 @@ $this->registerJs("function updateTotal(quantity) {
         </div>
         <div class="clearfix"></div>
         <div class="col-sm-push-4 col-sm-4">
-            <?= $form->field($model, 'product_id')->hiddenInput()->label('') ?>
-            <?= Html::submitButton(\Yii::t('stock', 'Begin payment'), ['class' => 'btn btn-lg btn-success', 'name' => 'pay-button']) ?>         
+            <?= Html::submitButton(\Yii::t('stock', 'Begin payment'), ['class' => 'btn btn-lg btn-success', 'name' => 'pay-button']) ?>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-sm-push-4 col-sm-4">
+            <br/>
+            <?= \Yii::t('app', 'or') ?>
+            <br/>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-sm-push-4 col-sm-4">
+            <?= $form->field($model, 'payerEmail') ?>
+            <?= Html::submitButton(\Yii::t('stock', 'Send payment link'), ['class' => 'btn btn-primary', 'name' => 'pay-button', 'value' => 'send']) ?>
         </div>
         <div class="clearfix"></div>
     </div>
+    <?= $form->field($model, 'product_id')->hiddenInput()->label('') ?>
     <?php ActiveForm::end(); ?>
 </div>
 <img src="images/red-loading.gif" style="opacity: 0.01;" />
