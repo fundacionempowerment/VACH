@@ -41,9 +41,8 @@ class SpinnerSubmitButton extends Widget
 
         $js .= "jQuery('#$id').click(function() {";
         $js .= "$(this).html('" . $this->caption . ' ' . FontAwesome::icon('cog')->spin() . "');";
-        if (!YII_ENV_TEST) {
-            $js .= "$(this).attr('disabled','disabled');";
-        }
+        $js .= "$(this).attr('disabled','disabled');";
+        $js .= "$(this).parents('form:first').submit();";
         $js .= '});';
 
         $js .= "jQuery('#$id').parents('form:first').on('afterValidate', function(event, messages, errorAttributes) {";

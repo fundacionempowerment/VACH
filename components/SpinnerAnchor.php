@@ -43,6 +43,7 @@ class SpinnerAnchor extends Widget
         $js .= "jQuery('#$id').click(function() {";
         $js .= "$(this).html('" . $this->caption . ' ' . FontAwesome::icon('cog')->spin() . "');";
         $js .= "$(this).attr('disabled','true');";
+        $js .= "$(this).click();";
         $js .= '});';
 
         $view->registerJs($js);
