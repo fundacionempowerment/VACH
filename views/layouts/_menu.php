@@ -44,6 +44,8 @@ if ($isAdministrator) {
     $admininistratorMenu[] = '<li class="divider"></li>';
     $admininistratorMenu[] = ['label' => Yii::t('feedback', 'Feedbacks'), 'url' => ['/admin/feedback']];
     $admininistratorMenu[] = ['label' => Yii::t('app', 'Backup'), 'url' => ['/site/backup']];
+    $admininistratorMenu[] = '<li class="divider"></li>';
+    $admininistratorMenu[] = ['label' => Yii::t('app', 'Test email'), 'url' => ['/admin/test/email']];
     $items[] = ['label' => Yii::t('app', 'Admin'), 'items' => $admininistratorMenu];
 }
 
