@@ -710,7 +710,7 @@ class Presentation
             $cell = $row->nextCell();
             $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setColor(new Color("FFFFFFFF"))->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
+                ->setStartColor(new Color(abs($rowData['consciousness']) > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         $row = $tableShape->createRow();
@@ -816,7 +816,7 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Responsability'))->getFont()->setSize(8);
         foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setSize(8);
+            $cell->createTextRun(Utils::productivityText($rowData['productivity'], $avgProductivity, $productivityDelta, 2))->getFont()->setColor(new Color("FFFFFFFF"))->setSize(8);
 
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
                 ->setStartColor(new Color($rowData['productivity'] < $avgProductivity ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
@@ -847,9 +847,9 @@ class Presentation
         $cell->createTextRun(Yii::t('dashboard', 'Consciousness'))->getFont()->setSize(8);
         foreach ($rowsData as $rowData) {
             $cell = $row->nextCell();
-            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setSize(8);
+            $cell->createTextRun(abs($rowData['consciousness']) > $avgConsciousness ? Yii::t('app', 'Low') : Yii::t('app', 'High'))->getFont()->setColor(new Color("FFFFFFFF"))->setSize(8);
             $cell->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color($rowData['consciousness'] > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
+                ->setStartColor(new Color(abs($rowData['consciousness']) > $avgConsciousness ? self::YELLOW_BACKGROUND : self::GREEN_BACKGROUND));
         }
 
         $row = $tableShape->createRow();
