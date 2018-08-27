@@ -2,23 +2,19 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\TeamCoach;
-use app\models\Team;
-use app\models\TeamMember;
 use app\models\Company;
-use app\models\Person;
 use app\models\DashboardFilter;
-use app\models\Wheel;
+use app\models\LoginModel;
+use app\models\Person;
+use app\models\RegisterModel;
 use app\models\Stock;
+use app\models\Team;
+use app\models\TeamCoach;
+use app\models\TeamMember;
+use app\models\User;
+use app\models\Wheel;
+use Yii;
+use yii\helpers\ArrayHelper;
 
 class TeamController extends BaseController
 {
@@ -419,6 +415,40 @@ class TeamController extends BaseController
 
         if ($sent == false) {
             \Yii::$app->session->addFlash('info', \Yii::t('team', 'Wheel already fullfilled. Email not sent.'));
+        }
+        return $this->redirect(['/team/view', 'id' => $team->id]);
+    }
+
+    public function actionSendAllWheel($id, $type)
+    {
+        $team = Team::findOne(['id' => $id]);
+
+        $sent = false;
+        foreach ($team->members as $teamMember) {
+            $wheels = [];
+            switch ($type) {
+                case Wheel::TYPE_INDIVIDUAL:
+                    $wheels = $team->individualWheels;
+                    break;
+                case Wheel::TYPE_GROUP:
+                    $wheels = $team->groupWheels;
+                    break;
+                default:
+                    $wheels = $team->organizationalWheels;
+                    break;
+            }
+
+            foreach ($wheels as $wheel) {
+                if ($wheel->observer_id == $teamMember->person_id && $wheel->answerStatus != '100%') {
+                    $this->sendWheel($wheel);
+                    $sent = true;
+                    break;
+                }
+            }
+        }
+
+        if ($sent == false) {
+            \Yii::$app->session->addFlash('info', \Yii::t('team', 'All wheels already fullfilled. Emails not sent.'));
         }
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }

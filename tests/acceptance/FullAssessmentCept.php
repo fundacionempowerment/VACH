@@ -158,7 +158,7 @@ for ($i = 0; $i < count($persons); $i++) {
         for ($q = 0; $q < 10; $q++) {
             $answer = 'answer' . (($d * 10) + $q);
             $random = rand(0, 4);
-            $I->selectOption("form input[name=$answer]", $random);
+            $I->click("//input[@value=$random and @name='$answer']/..");
         }
 
         if ($d < 7)
@@ -195,7 +195,7 @@ for ($i = 3; $i < count($persons) * 3; $i++) {
             for ($q = 0; $q < 8; $q++) {
                 $answer = 'answer' . (($d * 8) + $q);
                 $random = rand(0, 4);
-                $I->selectOption("form input[name=$answer]", $random);
+                $I->click("//input[@value=$random and @name='$answer']/..");
             }
 
             if ($d < 7)

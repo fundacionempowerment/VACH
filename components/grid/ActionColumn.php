@@ -56,7 +56,7 @@ class ActionColumn extends Column {
      *
      * @see buttons
      */
-    public $template = '{view} {update} {delete}';
+    public $template = '{view} {edit} {delete}';
 
     /**
      * @var array button rendering callbacks. The array keys are the button names (without curly brackets),
@@ -103,7 +103,8 @@ class ActionColumn extends Column {
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $contentOptions = [
-        'class' => 'hidden-print'
+        'class' => 'hidden-print',
+        'style' => 'width:150px; text-align:center;'
     ];
 
     /**
@@ -135,8 +136,8 @@ class ActionColumn extends Column {
                 ]);
             };
         }
-        if (!isset($this->buttons['update'])) {
-            $this->buttons['update'] = function ($url, $model, $key) {
+        if (!isset($this->buttons['edit'])) {
+            $this->buttons['edit'] = function ($url, $model, $key) {
                 return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
                             'title' => Yii::t('yii', 'Edit'),
                             'data-pjax' => '0',

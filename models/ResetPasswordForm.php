@@ -13,6 +13,7 @@ use Yii;
 class ResetPasswordForm extends Model {
 
     public $password;
+    public $password_confirm;
 
     /**
      * @var \app\models\User
@@ -27,13 +28,7 @@ class ResetPasswordForm extends Model {
      * @throws \yii\base\InvalidParamException if token is empty or not valid
      */
     public function __construct($token, $config = []) {
-        if (empty($token) || !is_string($token)) {
-            throw new InvalidParamException('Password reset token cannot be blank.');
-        }
         $this->_user = User::findByPasswordResetToken($token);
-        if (!$this->_user) {
-            throw new InvalidParamException('Wrong password reset token.');
-        }
         parent::__construct($config);
     }
 
@@ -42,15 +37,17 @@ class ResetPasswordForm extends Model {
      */
     public function rules() {
         return [
-            ['password', 'required'],
+            [['password', 'password_confirm'], 'required'],
             ['username', 'safe'],
             ['password', 'string', 'min' => 6],
+            ['password_confirm', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 
     public function attributeLabels() {
         return [
             'password' => \Yii::t('user', 'New password'),
+            'password_confirm' => Yii::t('user', 'Password confirmation'),
         ];
     }
 
@@ -65,6 +62,10 @@ class ResetPasswordForm extends Model {
         $user->removePasswordResetToken();
 
         return $user->save(false);
+    }
+
+    public function getUser() {
+        return $this->_user;
     }
 
     public function getUsername() {

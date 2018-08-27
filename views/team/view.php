@@ -1,11 +1,11 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
+use kartik\widgets\Select2;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
-use kartik\widgets\Select2;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $coachesProvider = new ArrayDataProvider([
     'allModels' => $team->teamCoaches,
-        ]);
+]);
 
 $pluginOptions = [
     'allowClear' => true,
@@ -39,18 +39,19 @@ $pluginOptions = [
     <div class="row col-md-6">
         <h3><?= Yii::t('team', 'Team data') ?> </h3>
         <p>
-            <?= Yii::t('app', 'Type') ?>: <?= Html::label($team->teamType->name) ?><br />
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br />
-            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br />
+            <?= Yii::t('app', 'Type') ?>: <?= Html::label($team->teamType->name) ?><br/>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br/>
+            <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br/>
             <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
         </p>
         <p>
             <?=
             $team->coach_id == Yii::$app->user->identity->id ?
-                    Html::a(Yii::t('app', 'Edit'), ['team/edit', 'id' => $team->id], [
-                        'title' => Yii::t('yii', 'Edit'),
-                        'class' => 'btn btn-primary',
-                    ]) : ''
+                \app\components\SpinnerAnchor::widget([
+                    'caption' => Yii::t('app', 'Edit'),
+                    'url' => Url::to(['team/edit', 'id' => $team->id]),
+                    'options' => ['class' => 'btn btn-primary'],
+                ]) : ''
             ?>
         </p>
         <h3><?= $team->getAttributeLabel('coaches') ?></h3>
@@ -68,8 +69,8 @@ $pluginOptions = [
                                 return '';
                             } else {
                                 return Html::a(app\components\Icons::REMOVE, Url::to(['remove-coach', 'id' => $model['id']]), [
-                                            'title' => Yii::t('team', 'Remove access'),
-                                            'class' => 'btn btn-danger',
+                                    'title' => Yii::t('team', 'Remove access'),
+                                    'class' => 'btn btn-danger',
                                 ]);
                             }
                         },
@@ -96,7 +97,10 @@ $pluginOptions = [
                         ?>
                     </td>
                     <td>
-                        <?= Html::submitButton(\Yii::t('team', 'Grant access'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+                        <?= \app\components\SpinnerSubmitButton::widget([
+                            'caption' => \Yii::t('team', 'Grant access'),
+                            'options' => ['class' => 'btn btn-primary']
+                        ]) ?>
                     </td>
                 </tr>
             </table>

@@ -20,6 +20,7 @@ $this->registerJs(
 <div class="col-md-12">    
     <div class="text-center">
         <div class="jumbotron">
+            <?= Yii::$app->user->isGuest ? Html::img('@web/images/logo.png') . '<br><br>' : '' ?>
             <h3><?= Yii::t('app', 'Redirecting...') ?></h3>
             <img src="images/red-loading.gif" />
         </div>

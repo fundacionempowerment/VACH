@@ -23,9 +23,7 @@ $I->fillField('Company[email]', $email);
 $I->fillField('Company[phone]', $phone);
 
 $I->click('Guardar');
-$I->wait(1);
-
-$I->see('exitosamente');
+$I->waitForText('exitosamente');
 $I->see($name);
 
 $I->click($name);

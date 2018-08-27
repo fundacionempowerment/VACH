@@ -17,7 +17,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public $password;
     public $password_confirm;
-    public $deletable;
+    public $resetPassword;
 
     /**
      * @inheritdoc
@@ -45,7 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['name', 'surname', 'email', 'username'], 'required'],
             [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
-            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator'], 'safe'],
+            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword'], 'safe'],
             [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
             ['email', 'email'],
@@ -84,6 +84,7 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
+            'resetPassword' => Yii::t('user', 'Send reset password email'),
         ];
     }
 
@@ -247,6 +248,27 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getAdminEmails()
     {
         return \yii\helpers\ArrayHelper::map(static::find()->where(['is_administrator' => true])->all(), 'id', 'email');
+    }
+
+    public function getDeletable()
+    {
+        if (Company::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Person::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Team::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (TeamCoach::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Log::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+
+        return true;
     }
 
 }

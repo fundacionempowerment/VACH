@@ -1,12 +1,9 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
-use yii\bootstrap\ActiveForm;
 use app\models\Wheel;
 use kartik\widgets\Select2;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 ?>
@@ -19,17 +16,17 @@ use kartik\widgets\Select2;
 <div id="filter-div" class="col-md-12">
     <?php
     $form = ActiveForm::begin([
-                'id' => 'dashboard-form',
-                'fieldConfig' => [
-                    'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
-                    'horizontalCssClasses' => [
-                        'label' => 'col-sm-3',
-                        'offset' => '',
-                        'wrapper' => '',
-                        'error' => '',
-                        'hint' => '',
-                    ],
-                ],
+        'id' => 'dashboard-form',
+        'fieldConfig' => [
+            'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+            'horizontalCssClasses' => [
+                'label' => 'col-sm-3',
+                'offset' => '',
+                'wrapper' => '',
+                'error' => '',
+                'hint' => '',
+            ],
+        ],
     ]);
     ?>
     <div class="form-group">
@@ -86,10 +83,12 @@ use kartik\widgets\Select2;
         <div class="col-md-2 text-right">
             <?php
             if ($filter->teamId > 0)
-                echo Html::a(\Yii::t('team', 'Go to report...'), Url::to(['report/view', 'id' => $filter->teamId]), [
-                    'class' => 'btn btn-default'
-                ])
-                ?>
+                echo \app\components\SpinnerAnchor::widget([
+                    'caption' => \Yii::t('team', 'Go to report...'),
+                    'url' => Url::to(['report/view', 'id' => $filter->teamId]),
+                    'options' => ['class' => 'btn btn-default'],
+                ]);
+            ?>
         </div>
 
     </div>

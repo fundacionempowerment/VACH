@@ -23,6 +23,13 @@ class Downloader
         curl_setopt($process, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($process, CURLOPT_FOLLOWLOCATION, 1);
         $request = curl_exec($process);
+
+        if(curl_error($process))
+        {
+            echo 'error:' . curl_error($process);
+            die();
+        }
+
         curl_close($process);
 
         $name = uniqid('', true) . '.png';
