@@ -34,7 +34,7 @@ $columns = [
         'attribute' => 'status',
         'label' => Yii::t('app', 'Status'),
         'value' => function ($data) {
-            return Stock::getStatusList()[$data['status']];
+            return Stock::getStatusList()[$data['stock_status']];
         },
     ],
     [
@@ -86,6 +86,16 @@ $columns = [
         'attribute' => 'consumed_stamp',
         'label' => Yii::t('stock', 'Consumed'),
         'format' => 'date',
+    ],
+    [
+        'label' => Yii::t('stock', 'Payed'),
+        'value' => function ($data) {
+            if ($data['payment_status'] == \app\models\Payment::STATUS_PAID) {
+                return Yii::$app->formatter->asDate($data['payment_date']);
+            }
+            return '';
+        },
+        'format' => 'html',
     ],
 ];
 ?>

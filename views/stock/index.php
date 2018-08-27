@@ -1,11 +1,11 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
 use app\models\Stock;
 use kartik\export\ExportMenu;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('stock', 'My Licences');
@@ -17,20 +17,20 @@ $availableDataProvider = new ActiveDataProvider([
     'pagination' => [
         'pageSize' => 20,
     ],
-        ]);
+]);
 $othersDataProvider = new ActiveDataProvider([
     'query' => $othersModels,
     'pagination' => [
         'pageSize' => 20,
     ],
-        ]);
+]);
 
 $columns = [
     [
-        'attribute' => 'status',
+        'attribute' => 'stock_status',
         'label' => Yii::t('app', 'Status'),
         'value' => function ($data) {
-            return Stock::getStatusList()[$data['status']];
+            return Stock::getStatusList()[$data['stock_status']];
         },
     ],
     [
@@ -75,6 +75,18 @@ $columns = [
         'attribute' => 'consumed_stamp',
         'label' => Yii::t('stock', 'Consumed'),
         'format' => 'date',
+    ],
+    [
+        'label' => Yii::t('stock', 'Payed'),
+        'value' => function ($data) {
+            if ($data['payment_status'] == \app\models\Payment::STATUS_PENDING) {
+                return Html::a(Yii::t('payment', 'Pay'), ['payment/select', 'referenceCode' => $data['payment_uuid']], ['class' => 'btn btn-success']);
+            } else if ($data['payment_status'] == \app\models\Payment::STATUS_PAID) {
+                return Yii::$app->formatter->asDate($data['payment_date']);
+            }
+            return '';
+        },
+        'format' => 'html',
     ],
 ];
 ?>

@@ -3,16 +3,10 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Model;
-use yii\db\Query;
-use \yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
-use app\models\PaymentLog;
+use yii\db\ActiveRecord;
 
-class Payment extends ActiveRecord
-{
+class Payment extends ActiveRecord {
 
-    const STATUS_INIT = 'init';
     const STATUS_PENDING = 'pending';
     const STATUS_PAID = 'paid';
     const STATUS_REJECTED = 'rejected';
@@ -20,26 +14,24 @@ class Payment extends ActiveRecord
 
     public $external_data;
 
-    public function init()
-    {
+    public function init() {
         parent::init();
         $this->uuid = uniqid('', true);
         $this->stamp = date('Y-m-d H:i:s');
+        $this->creator_id = Yii::$app->user->id;
     }
 
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['coach_id', 'uuid', 'concept', 'amount', 'currency', 'status', 'stamp'], 'required'],
             [['external_id', 'rate', 'commision', 'commision_currency'], 'safe'],
         ];
     }
 
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'coach_id' => Yii::t('team', 'Coach'),
             'uuid' => Yii::t('app', 'Unique ID'),
@@ -54,20 +46,19 @@ class Payment extends ActiveRecord
             'statusName' => Yii::t('app', 'Status'),
             'stamp' => Yii::t('app', 'Date and Time'),
             'log' => Yii::t('app', 'Log'),
+            'transactions' => Yii::t('payment', 'Transactions'),
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
         ];
     }
 
-    public function beforeValidate()
-    {
+    public function beforeValidate() {
         if (!isset($this->coach_id)) {
             $this->coach_id = Yii::$app->user->id;
         }
@@ -75,52 +66,47 @@ class Payment extends ActiveRecord
         return parent::beforeValidate();
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
+    public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
 
         $log = new PaymentLog();
         $log->payment_id = $this->id;
         $log->status = $this->status;
-        $log->external_id = $this->external_id;
-        $log->external_data = $this->external_data;
         $log->stamp = date('Y-m-d H:i:s');
+        if (!Yii::$app->user->isGuest) {
+            $log->creator_id = Yii::$app->user->id;
+        }
 
         if (!$log->save()) {
             \app\controllers\SiteController::FlashErrors($log);
         }
     }
 
-    public static function browse()
-    {
+    public static function browse() {
         return Payment::find()
-                        ->where(['>', 'amount', 0])
-                        ->andWhere(['>', 'rate', 0])
-                        ->andWhere(['coach_id' => Yii::$app->user->id])->orderBy('id desc');
+            ->where(['coach_id' => Yii::$app->user->id])
+            ->andwhere(['>', 'amount', 0])
+            ->orderBy('id desc');
     }
 
-    public static function adminBrowse($coachId = null)
-    {
+    public static function adminBrowse($coachId = null) {
         return Payment::find()
-                        ->where(['>', 'amount', 0])
-                        ->andWhere(['>', 'rate', 0])
-                        ->andFilterWhere(['coach_id' => $coachId])
-                        ->orderBy('id desc');
+            ->where(['>', 'amount', 0])
+            ->andWhere(['>', 'rate', 0])
+            ->andFilterWhere(['coach_id' => $coachId])
+            ->orderBy('id desc');
     }
 
-    public static function adminBrowsePendings()
-    {
+    public static function adminBrowsePendings() {
         return Payment::find()
-                        ->where(['status' => 'pending'])
-                        ->andWhere(['>', 'amount', 0])
-                        ->andWhere(['>', 'rate', 0])
-                        ->orderBy('id desc');
+            ->where(['status' => 'pending'])
+            ->andWhere(['>', 'amount', 0])
+            ->andWhere(['>', 'rate', 0])
+            ->orderBy('id desc');
     }
 
-    public static function getStatusList()
-    {
+    public static function getStatusList() {
         $list = [
-            self::STATUS_INIT => Yii::t('app', self::STATUS_INIT),
             self::STATUS_PENDING => Yii::t('app', self::STATUS_PENDING),
             self::STATUS_PAID => Yii::t('app', self::STATUS_PAID),
             self::STATUS_REJECTED => Yii::t('app', self::STATUS_REJECTED),
@@ -130,54 +116,59 @@ class Payment extends ActiveRecord
         return $list;
     }
 
-    public function getName()
-    {
+    public function getName() {
         return Yii::t('payment', 'Payment') . ' ' . $this->id;
     }
 
-    public function getLocalAmount()
-    {
+    public function getLocalAmount() {
         return $this->amount * $this->rate;
     }
 
-    public function getNetAmount()
-    {
+    public function getNetAmount() {
         return $this->amount * $this->rate - $this->commision;
     }
 
-    public function getStatusName()
-    {
+    public function getStatusName() {
         return self::getStatusList()[$this->status];
     }
 
-    public function getCoach()
-    {
+    public function getCoach() {
         return $this->hasOne(User::className(), ['id' => 'coach_id']);
     }
 
-    public function getCreator()
-    {
+    public function getCreator() {
         return $this->hasOne(User::className(), ['id' => 'creator_id']);
     }
 
-    public function getLogs()
-    {
+    public function getLogs() {
         return $this->hasMany(PaymentLog::className(), ['payment_id' => 'id']);
     }
 
-    public function getStocks()
-    {
+    public function getStocks() {
         return $this->hasMany(Stock::className(), ['payment_id' => 'id']);
     }
 
-    public function getPart1Amount()
-    {
+    public function getPart1Amount() {
         return $this->netAmount * $this->part_distribution / 100;
     }
 
-    public function getPart2Amount()
-    {
+    public function getPart2Amount() {
         return $this->netAmount * (100 - $this->part_distribution) / 100;
+    }
+
+    public function getTransactions() {
+        return $this->hasMany(Transaction::className(), ['payment_id' => 'id']);
+    }
+
+    public function newTransaction() {
+        $transaction = new Transaction();
+
+        $transaction->payment_id = $this->id;
+        $transaction->amount = $this->amount;
+        $transaction->currency = $this->currency;
+        $transaction->save();
+
+        return $transaction;
     }
 
 }

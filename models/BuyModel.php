@@ -91,9 +91,27 @@ class BuyModel extends Model
         $model = new BuyModel([
             'product_id' => $payment->stocks[0]->product_id,
             'quantity' => count($payment->stocks),
-            'price' => $payment->stocks[0]->product->price,
+            'price' => $payment->stocks[0]->price,
             'referenceCode' => $payment->uuid,
             'amount' => $payment->amount,
+            'currency' => $payment->currency,
+            'buyerEmail' => $payment->coach->email,
+        ]);
+
+        return $model;
+    }
+
+    public static function fromTransaction(Transaction $transaction)
+    {
+        $payment = $transaction->payment;
+
+        $model = new BuyModel([
+            'product_id' => $payment->stocks[0]->product_id,
+            'quantity' => count($payment->stocks),
+            'price' => $payment->stocks[0]->price,
+            'referenceCode' => $transaction->uuid,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
             'buyerEmail' => $payment->coach->email,
         ]);
 

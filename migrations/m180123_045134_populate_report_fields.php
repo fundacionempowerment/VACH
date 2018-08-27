@@ -58,8 +58,8 @@ class m180123_045134_populate_report_fields extends Migration
 
     private function createField($table, $data, $field)
     {
-        $content = $data[$field];
-        if (!empty(trim($content))) {
+        $content = trim($data[$field]);
+        if (!empty($content)) {
             Yii::$app->db->createCommand()->insert('report_field', [
                 'content' => $content,
             ])->execute();

@@ -15,9 +15,13 @@ $this->title = $model->concept . ' - ' . Yii::$app->formatter->asDatetime($model
 $this->params['breadcrumbs'][] = ['label' => Yii::t('payment', 'My Payments'), 'url' => ['/payment']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$detailProvider = new ArrayDataProvider([
+$paymentLogProvider = new ArrayDataProvider([
     'allModels' => $model->logs,
         ]);
+
+$transactionProvider = new ArrayDataProvider([
+    'allModels' => $model->transactions,
+]);
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -38,7 +42,18 @@ $detailProvider = new ArrayDataProvider([
     <h2><?= $model->getAttributeLabel('log') ?></h2>
     <?=
     GridView::widget([
-        'dataProvider' => $detailProvider,
+        'dataProvider' => $paymentLogProvider,
+        'columns' => [
+            'stamp:datetime',
+            'statusName',
+        ],
+    ]);
+    ?>
+
+    <h2><?= $model->getAttributeLabel('transactions') ?></h2>
+    <?=
+    GridView::widget([
+        'dataProvider' => $transactionProvider,
         'columns' => [
             'stamp:datetime',
             'statusName',

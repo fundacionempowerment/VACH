@@ -18,6 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 $detailProvider = new ArrayDataProvider([
     'allModels' => $model->logs,
         ]);
+
+$transactionProvider = new ArrayDataProvider([
+    'allModels' => $model->transactions,
+]);
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -85,4 +89,14 @@ $detailProvider = new ArrayDataProvider([
     ]);
     ?>
 
+    <h2><?= $model->getAttributeLabel('transactions') ?></h2>
+    <?=
+    GridView::widget([
+        'dataProvider' => $transactionProvider,
+        'columns' => [
+            'stamp:datetime',
+            'statusName',
+        ],
+    ]);
+    ?>
 </div>

@@ -37,6 +37,7 @@ return [
     'My Licences' => 'Mis licencias',
     'New Licence Type' => 'Nuevo tipo de licencia',
     'Not available licences' => 'Licencias no disponibles',
+    'Payed' => 'Pagado',
     'Price' => 'Precio',
     'Price in USD $' => 'Precio es USD $',
     'Product' => 'Producto',
