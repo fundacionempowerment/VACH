@@ -261,6 +261,7 @@ class Stock extends ActiveRecord {
             $available_stock_id = Yii::$app->db->createCommand('SELECT `id` FROM `stock` '
                 . 'WHERE `consumed_stamp` is null '
                 . 'AND `coach_id` = ' . $consumer_id
+                . " AND `status` = 'valid'"
                 . ' ORDER BY `id` ASC LIMIT 1')->queryScalar();
 
             Yii::$app->db->createCommand()
