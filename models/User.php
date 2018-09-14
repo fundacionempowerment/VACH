@@ -6,6 +6,8 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
@@ -269,6 +271,29 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return true;
+    }
+
+    public function getStock($product_id = null) {
+
+        if (!$product_id) {
+            $product_id = Product::find()->all()[0]->id;
+        }
+
+        $query = new Query();
+
+        $balance = $query->select(new Expression('count(id) as balance'))
+            ->from('stock')
+            ->where([
+                'coach_id' => $this->id,
+                'product_id' => $product_id,
+                'status' => Stock::STATUS_VALID,
+            ])
+            ->one();
+
+        if ($balance && $balance['balance']) {
+            return $balance['balance'];
+        }
+        return 0;
     }
 
 }

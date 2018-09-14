@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Stock;
 use kartik\slider\Slider;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -24,7 +23,8 @@ $this->registerJs("function updateTotal(quantity) {
     ?>
     <div class="text-center">
         <div class="col-sm-12">
-            Su stock de licencias actual: <?= Yii::$app->formatter->asDecimal(Stock::getStock(1)) ?> licencias
+            Su stock de licencias actual: <?= Yii::$app->formatter->asDecimal(Yii::$app->user->identity->getStock()) ?>
+            licencias
             <hr>
         </div>
         <div class="col-sm-12">

@@ -150,24 +150,6 @@ class Stock extends ActiveRecord {
         return self::getStatusList()[$this->status];
     }
 
-    public static function getStock($product_id, $user_id = null) {
-        $query = new Query();
-
-        $balance = $query->select(new Expression('count(id) as balance'))
-            ->from('stock')
-            ->where([
-                'coach_id' => ($user_id ? $user_id : Yii::$app->user->id),
-                'product_id' => $product_id,
-                'status' => self::STATUS_VALID,
-            ])
-            ->one();
-
-        if ($balance && $balance['balance']) {
-            return $balance['balance'];
-        }
-        return 0;
-    }
-
     public static function saveBuyModel($model) {
         $success = true;
         $product = Product::findOne(['id' => $model->product_id]);

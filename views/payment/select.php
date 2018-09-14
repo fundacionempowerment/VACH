@@ -1,11 +1,8 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\bootstrap\ActiveForm;
 use kartik\slider\Slider;
-use app\models\Stock;
-use yii\web\View;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 $this->title = Yii::t('stock', 'Buy Licences');
 
@@ -14,12 +11,13 @@ $this->title = Yii::t('stock', 'Buy Licences');
     <h1><?= $this->title ?></h1>
     <?php
     $form = ActiveForm::begin([
-                'id' => 'buy-form',
+        'id' => 'buy-form',
     ]);
     ?>
     <div class="text-center">
         <div class="col-sm-12">
-            Su stock de licencias actual: <?= Yii::$app->formatter->asDecimal(Stock::getStock(1)) ?> licencias
+            Su stock de licencias actual: <?= Yii::$app->formatter->asDecimal(Yii::$app->user->identity->getStock()) ?>
+            licencias
             <hr>
         </div>
         <div class="col-sm-12">
@@ -29,7 +27,7 @@ $this->title = Yii::t('stock', 'Buy Licences');
             Precio por licencia: <?= Yii::$app->formatter->asCurrency($model->price) ?><br><br>
         </div>
         <div class="col-sm-12">
-            Total:  <b><span id="total"><?= Yii::$app->formatter->asCurrency($model->price * $model->quantity) ?></span></b><br/><br>
+            Total: <b><span id="total"><?= Yii::$app->formatter->asCurrency($model->price * $model->quantity) ?></span></b><br/><br>
         </div>
         <div class="clearfix"></div>
         <div class="col-sm-push-4 col-sm-4">
@@ -51,4 +49,4 @@ $this->title = Yii::t('stock', 'Buy Licences');
     <?= $form->field($model, 'product_id')->hiddenInput()->label('') ?>
     <?php ActiveForm::end(); ?>
 </div>
-<img src="images/red-loading.gif" style="opacity: 0.01;" />
+<img src="images/red-loading.gif" style="opacity: 0.01;"/>
