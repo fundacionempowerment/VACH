@@ -46,6 +46,7 @@ return [
     'Individual Wheel' => 'Rueda individual',
     'Individual projection toward the group' => 'Proyección individual hacia el grupo',
     'Individual projection toward the organization' => 'Proyección individual hacia la organización',
+    'M. Productivity' => 'Productividad M.',
     'Monofactorial productivity' => 'Productividad monofactorial',
     'Organiz. Emergents Matrix' => 'Matriz de emergentes organiz.',
     'Organizational Competence Matrix' => 'Matriz de competencias organizacionales',

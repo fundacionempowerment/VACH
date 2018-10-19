@@ -507,7 +507,7 @@ class Presentation
             $cell->createTextRun($name)->getFont()->setSize(8);
         }
         $cell = $row->nextCell();
-        $cell->createTextRun(Yii::t('app', 'Avg.'))->getFont()->setSize(8);
+        $cell->createTextRun(Yii::t('app', 'Critical'))->getFont()->setSize(8);
 
         $observed_sum = [];
         foreach ($members as $observerId => $observer) {
@@ -537,12 +537,14 @@ class Presentation
 
                                 $cell->getFill()->setFillType(Fill::FILL_SOLID)->setStartColor(new Color($class));
 
-                                $observer_sum += $datum['value'];
-                                $observer_count++;
-                                if (!isset($observed_sum[$observedId])) {
-                                    $observed_sum[$observedId] = 0;
+                                if ($observedId != $observerId) {
+                                    $observer_sum += $datum['value'];
+                                    $observer_count++;
+                                    if (!isset($observed_sum[$observedId])) {
+                                        $observed_sum[$observedId] = 0;
+                                    }
+                                    $observed_sum[$observedId] += $datum['value'];
                                 }
-                                $observed_sum[$observedId] += $datum['value'];
                             }
                         }
                     }
@@ -565,9 +567,13 @@ class Presentation
 
         $row = $tableShape->createRow();
         $cell = $row->nextCell();
-        $cell->createTextRun(Yii::t('app', 'Avg.'))->getFont()->setSize(8);
+        $cell->createTextRun(Yii::t('dashboard', 'M. Productivity'))->getFont()->setSize(8);
         if ($observer_count > 0) {
-            foreach ($observed_sum as $sum) {
+            foreach ($members as $id => $member) {
+                if ($id == 0) {
+                    continue;
+                }
+                $sum = $observed_sum[$id];
                 if ($sum / $observer_count > Yii::$app->params['good_consciousness']) {
                     $class = self::GREEN_BACKGROUND;
                 } elseif ($sum / $observer_count < Yii::$app->params['minimal_consciousness']) {
