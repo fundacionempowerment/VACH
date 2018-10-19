@@ -9,6 +9,11 @@ use \yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * Class Team
+ * @package app\models
+ * @property string notes
+ */
 class Team extends ActiveRecord
 {
 
@@ -23,6 +28,9 @@ class Team extends ActiveRecord
         return [
             [['name', 'coach_id', 'sponsor_id', 'company_id', 'team_type_id'], 'required'],
             [['name', 'company_id'], 'unique', 'targetAttribute' => ['name', 'company_id']],
+            ['notes', 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['notes'], 'filter', 'filter' => 'trim'],
         ];
     }
 

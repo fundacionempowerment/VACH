@@ -10,6 +10,11 @@ use yii\db\Expression;
 use yii\db\Query;
 use yii\web\IdentityInterface;
 
+/**
+ * Class User
+ * @package app\models
+ * @property string notes
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
     const PASSWORD = 'password';
@@ -47,8 +52,9 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['name', 'surname', 'email', 'username'], 'required'],
             [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
-            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword'], 'safe'],
-            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['name', 'surname', 'email', 'phone', 'notes'], 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],

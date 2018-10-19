@@ -26,6 +26,7 @@ $genders = Person::getGenders();
         <?= $form->field($person, 'email') ?>
         <?= $form->field($person, 'phone') ?>
         <?= $form->field($person, 'gender')->widget(Select2::classname(), ['data' => $genders]) ?>
+        <?= $form->field($person, 'notes')->textarea() ?>
     </div>
     <div class="col-md-6">
         <?=

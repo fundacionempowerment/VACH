@@ -7,6 +7,18 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class Company
+ * @package app\models
+ * @property string name
+ * @property string email
+ * @property string phone
+ * @property integer coach_id
+ * @property integer created_at
+ * @property integer updated_at
+ * @property string notes
+ */
+
 class Company extends ActiveRecord
 {
 
@@ -20,8 +32,9 @@ class Company extends ActiveRecord
         return [
             // username and password are both required
             [['name', 'email', 'coach_id'], 'required'],
-            [['phone'], 'safe'],
-            [['name', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['phone', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['name', 'email', 'phone', 'notes'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
         ];
     }
