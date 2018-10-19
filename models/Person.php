@@ -68,6 +68,7 @@ class Person extends ActiveRecord
             'phone' => Yii::t('app', 'Phone'),
             'gender' => Yii::t('app', 'Gender'),
             'photo' => Yii::t('app', 'Photo'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 

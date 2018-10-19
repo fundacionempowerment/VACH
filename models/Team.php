@@ -46,6 +46,7 @@ class Team extends ActiveRecord
             'IndividualWheelStatus' => Yii::t('wheel', 'Individual Wheels'),
             'GroupWheelStatus' => Yii::t('wheel', 'Group Wheels'),
             'OrganizationalWheelStatus' => Yii::t('wheel', 'Organizational Wheels'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 

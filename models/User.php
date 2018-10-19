@@ -93,6 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
             'resetPassword' => Yii::t('user', 'Send reset password email'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 
