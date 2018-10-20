@@ -276,7 +276,7 @@ class Word
         foreach (self::$team->activeMemberList as $id => $name) {
             $table->addCell(600, self::$cell_style)->addText($name, $cell_font, $cell_paragraph);
         }
-        $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Avg.'), $cell_font, $cell_paragraph);
+        $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Critical'), $cell_font, $cell_paragraph);
 
 // Add values
 
@@ -303,12 +303,14 @@ class Word
 
                         $table->addCell(600, $class)->addText($value, $cell_font, $cell_paragraph);
 
-                        $observer_sum += $datum['value'];
-                        $observer_count++;
-                        if (!isset($observed_sum[$observedId])) {
-                            $observed_sum[$observedId] = 0;
+                        if ($observedId != $observerId) {
+                            $observer_sum += $datum['value'];
+                            $observer_count++;
+                            if (!isset($observed_sum[$observedId])) {
+                                $observed_sum[$observedId] = 0;
+                            }
+                            $observed_sum[$observedId] += $datum['value'];
                         }
-                        $observed_sum[$observedId] += $datum['value'];
                     }
                 }
             }
@@ -329,9 +331,13 @@ class Word
 // Add footer
 
         $table->addRow();
-        $table->addCell()->addText(Yii::t('app', 'Avg.'), $cell_font, $cell_paragraph);
+        $table->addCell()->addText(Yii::t('dashboard', 'M. Productivity'), $cell_font, $cell_paragraph);
         if ($observer_count > 0) {
-            foreach ($observed_sum as $sum) {
+            foreach (self::$team->activeMemberList as $id => $member) {
+                if ($id == 0) {
+                    continue;
+                }
+                $sum = $observed_sum[$id];
                 if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
                     $class = self::$good_cell;
                 else if ($sum / $observer_count < Yii::$app->params['minimal_consciousness'])
