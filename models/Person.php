@@ -32,6 +32,13 @@ class Person extends ActiveRecord
     const GENDER_OTHER = 2;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function tableName() {
+        return 'person';
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

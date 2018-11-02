@@ -10,6 +10,14 @@ use yii\helpers\Url;
 $this->title = Yii::t('company', 'Companies');
 
 $this->params['breadcrumbs'][] = $this->title;
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $companies,
+    'sort' => false,
+    'pagination' => [
+        'pageSize' => 20,
+    ],
+]);
 ?>
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -20,15 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'btn btn-success'],
         ]) ?>
     </p>
-    <?php
-    $dataProvider = new ActiveDataProvider([
-        'query' => $companies,
-        'pagination' => [
-            'pageSize' => 20,
-        ],
-    ]);
-    echo GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             [
                 'attribute' => 'name',

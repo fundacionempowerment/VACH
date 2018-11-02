@@ -25,6 +25,13 @@ class Company extends ActiveRecord
     public $deletable;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function tableName() {
+        return 'company';
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

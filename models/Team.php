@@ -10,15 +10,28 @@ use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * Class Team
+ * This is the model class for table "team".
  * @package app\models
- * @property string notes
+ * @property integer $id
+ * @property string $name
+ * @property integer $sponsor_id
+ * @property integer $company_id
+ * @property integer $coach_id
+ * @property integer $team_type_id
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class Team extends ActiveRecord
 {
-
     public $fullname;
     public $deletable;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName() {
+        return 'team';
+    }
 
     /**
      * @return array the validation rules.
@@ -62,8 +75,9 @@ class Team extends ActiveRecord
 
     public function beforeValidate()
     {
-        if (!isset($this->coach_id))
+        if (!isset($this->coach_id)) {
             $this->coach_id = Yii::$app->user->id;
+        }
 
         return parent::beforeValidate();
     }
@@ -86,7 +100,7 @@ class Team extends ActiveRecord
     public static function browse()
     {
         return Team::find()
-                        ->select('team.*')
+            ->innerJoin('company', 'company.id = team.company_id')
                         ->leftJoin('team_coach', '`team_coach`.`team_id` = `team`.`id`')
                         ->where(['team.coach_id' => Yii::$app->user->id])
                         ->orWhere(['team_coach.coach_id' => Yii::$app->user->id])

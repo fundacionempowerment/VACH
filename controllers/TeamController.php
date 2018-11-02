@@ -7,6 +7,7 @@ use app\models\DashboardFilter;
 use app\models\LoginModel;
 use app\models\Person;
 use app\models\RegisterModel;
+use app\models\search\TeamSearch;
 use app\models\Stock;
 use app\models\Team;
 use app\models\TeamCoach;
@@ -21,10 +22,12 @@ class TeamController extends BaseController {
     public $layout = 'inner';
 
     public function actionIndex() {
-        $teams = Team::browse();
+        $searchModel = new TeamSearch();
+        $teams = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'teams' => $teams,
+            'searchModel' => $searchModel,
         ]);
     }
 

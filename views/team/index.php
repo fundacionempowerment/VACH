@@ -10,6 +10,14 @@ use app\components\SpinnerAnchor;
 $this->title = Yii::t('team', 'Teams');
 
 $this->params['breadcrumbs'][] = $this->title;
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $teams,
+    'sort' => false,
+    'pagination' => [
+        'pageSize' => 20,
+    ],
+]);
 ?>
 <div class="coach-teams">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -20,15 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'btn btn-success'],
         ]) ?>
     </p>
-    <?php
-    $dataProvider = new ActiveDataProvider([
-        'query' => $teams,
-        'pagination' => [
-            'pageSize' => 20,
-        ],
-    ]);
-    echo GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             [
                 'attribute' => 'name',
@@ -44,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return $data->teamType->name;
                 },
+                'filter' => \app\models\TeamType::getList(),
             ],
             [
                 'attribute' => 'IndividualWheelStatus',
@@ -67,16 +70,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             ['class' => 'app\components\grid\ActionColumn',
-                'template' => '{update} {delete}',
-                'options' => ['width' => '110px'],
+                'template' => '{delete}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     switch ($action) {
-                        case 'update' :
-                            return Url::to(['team/edit', 'id' => $model['id']]);
                         case 'delete' :
                             return Url::to(['team/delete', 'id' => $model['id'], 'delete' => '1',]);
                     };
-                }
+                },
+                'contentOptions' => [
+                    'style' => 'width:70px; text-align:center;'
+                ],
             ]
         ],
     ]);
