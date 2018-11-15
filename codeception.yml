@@ -9,6 +9,7 @@ settings:
     memory_limit: 1024M
     log: true
     colors: true
+    shuffle: true
 modules:
     config:
         Yii2:
@@ -16,7 +17,13 @@ modules:
             part: orm
             entryScript: index-test.php
             cleanup: false
-
+        Db:
+            dsn: 'mysql:host=vach-data;port=3306;dbname=vach_test'
+            user: 'root'
+            password: 'secret'
+            dump: tests/_data/dump.sql
+            populate: true
+            cleanup: true
 # To enable code coverage:
 #coverage:
 #    #c3_url: http://localhost:8080/index-test.php/

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ReportHelper;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -58,8 +59,8 @@ class ReportController extends Controller
         $this->checkAllowed($team);
 
         if ($team->report == null) {
-            $newReport = new Report();
-            $team->link('report', $newReport);
+            ReportHelper::populate($team);
+            $team->refresh();
         }
 
         foreach ($team->members as $teamMember) {

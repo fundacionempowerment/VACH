@@ -6,6 +6,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+CREATE DATABASE IF NOT EXISTS `vach_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `vach_test`;
 
 CREATE TABLE `company` (
   `id` int(11) NOT NULL,
@@ -14,12 +16,13 @@ CREATE TABLE `company` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL
+  `updated_at` int(11) NOT NULL,
+  `notes` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `company` (`id`, `coach_id`, `name`, `email`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895),
-(2, 2, 'Yotsuba', 'info@yotsuba.com.jp', '(11)2323423423', 1492320953, 1492320953);
+INSERT INTO `company` (`id`, `coach_id`, `name`, `email`, `phone`, `created_at`, `updated_at`, `notes`) VALUES
+(1, 2, 'ACME', 'acme@c.com', '(123)4567890', 1492196895, 1492196895, NULL),
+(2, 2, 'Yotsuba', 'info@yotsuba.com.jp', '(11)2323423423', 1492320953, 1492320953, NULL);
 
 CREATE TABLE `currency` (
   `id` int(11) NOT NULL,
@@ -159,7 +162,17 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m180123_043834_split_report_fields', 1525752167),
 ('m180123_045134_populate_report_fields', 1525752167),
 ('m180123_051733_drop_report_texts', 1525752167),
-('m180327_234428_add_unique_username', 1525752167);
+('m180327_234428_add_unique_username', 1525752167),
+('m180825_004150_add_status_payment_log', 1541182936),
+('m180825_004151_add_transactions', 1541182936),
+('m180825_004152_populate_transactions', 1541182936),
+('m180825_220142_drop_unused_field_payment', 1541182936),
+('m180826_233158_drop_init_payment_status', 1541182936),
+('m180827_024140_add_payment_log_creator', 1541182936),
+('m180827_030448_add_fk_payment_creator', 1541183063),
+('m180829_234218_add_transactions_fk', 1541183063),
+('m180929_200905_drop_init_transaction_status', 1541183063),
+('m181018_004525_add_notes', 1541183063);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -168,7 +181,6 @@ CREATE TABLE `payment` (
   `concept` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `status` enum('init','pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'init',
-  `external_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `stamp` datetime NOT NULL,
   `creator_id` int(11) NOT NULL,
   `currency` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USD',
@@ -183,10 +195,11 @@ CREATE TABLE `payment` (
 CREATE TABLE `payment_log` (
   `id` int(11) NOT NULL,
   `payment_id` int(11) NOT NULL,
-  `status` enum('init','pending','paid','partial','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'init',
+  `status` enum('pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending',
   `external_id` text COLLATE utf8_unicode_ci,
   `external_data` text COLLATE utf8_unicode_ci,
-  `stamp` datetime NOT NULL
+  `stamp` datetime NOT NULL,
+  `creator_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `person` (
@@ -200,18 +213,19 @@ CREATE TABLE `person` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   `shortname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `notes` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`, `shortname`, `photo`) VALUES
-(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)12345678', 2, 1492196613, 1492196994, 'Ariel A', NULL),
-(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(234)12345678', 1, 1492196616, 1492196954, 'Beatriz B', NULL),
-(3, 2, 'Carlos', 'C', 'carlos@c.com', '(345)12345678', 0, 1492196619, 1492196987, 'Carlos C', NULL),
-(4, 2, 'Patricio', 'P', 'patricio@p.com', '(456)12345678', 0, 1492197048, 1492197048, 'Patricio P', NULL),
-(5, 2, 'Dallas', 'D', 'dallas@d.com', '(567)12345678', 2, 1492321092, 1492321092, 'Dallas D', NULL),
-(6, 2, 'Esteban', 'E', 'esteben@e.com', '(678)12345678', 0, 1492321137, 1492321137, 'Esteban E', NULL),
-(7, 2, 'Fernanda', 'F', 'fernanda@f.com', '(789)12345678', 1, 1492321158, 1492321158, 'Fernanda F', NULL),
-(8, 2, 'Quinn', 'Q', 'quinn@q.com', '(890)12345678', 1, 1492321269, 1492321269, 'Quinn Q', NULL);
+INSERT INTO `person` (`id`, `coach_id`, `name`, `surname`, `email`, `phone`, `gender`, `created_at`, `updated_at`, `shortname`, `photo`, `notes`) VALUES
+(1, 2, 'Ariel', 'A', 'ariel@a.com', '(123)12345678', 2, 1492196613, 1492196994, 'Ariel A', NULL, NULL),
+(2, 2, 'Beatriz', 'B', 'beatriz@b.com', '(234)12345678', 1, 1492196616, 1492196954, 'Beatriz B', NULL, NULL),
+(3, 2, 'Carlos', 'C', 'carlos@c.com', '(345)12345678', 0, 1492196619, 1492196987, 'Carlos C', NULL, NULL),
+(4, 2, 'Patricio', 'P', 'patricio@p.com', '(456)12345678', 0, 1492197048, 1492197048, 'Patricio P', NULL, NULL),
+(5, 2, 'Dallas', 'D', 'dallas@d.com', '(567)12345678', 2, 1492321092, 1492321092, 'Dallas D', NULL, NULL),
+(6, 2, 'Esteban', 'E', 'esteben@e.com', '(678)12345678', 0, 1492321137, 1492321137, 'Esteban E', NULL, NULL),
+(7, 2, 'Fernanda', 'F', 'fernanda@f.com', '(789)12345678', 1, 1492321158, 1492321158, 'Fernanda F', NULL, NULL),
+(8, 2, 'Quinn', 'Q', 'quinn@q.com', '(890)12345678', 1, 1492321269, 1492321269, 'Quinn Q', NULL, NULL);
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
@@ -501,13 +515,14 @@ CREATE TABLE `team` (
   `coach_id` int(11) NOT NULL,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
-  `team_type_id` int(11) NOT NULL
+  `team_type_id` int(11) NOT NULL,
+  `notes` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `team` (`id`, `name`, `sponsor_id`, `company_id`, `coach_id`, `created_at`, `updated_at`, `team_type_id`) VALUES
-(1, 'Núcleo Inicial', 4, 1, 2, 1492197123, 1492197123, 1),
-(2, 'Núcleo Final', 4, 1, 2, 1492197137, 1492197137, 1),
-(3, 'Ventas', 8, 2, 2, 1492321286, 1492321316, 1);
+INSERT INTO `team` (`id`, `name`, `sponsor_id`, `company_id`, `coach_id`, `created_at`, `updated_at`, `team_type_id`, `notes`) VALUES
+(1, 'Núcleo Inicial', 4, 1, 2, 1492197123, 1492197123, 1, NULL),
+(2, 'Núcleo Final', 4, 1, 2, 1492197137, 1492197137, 1, NULL),
+(3, 'Ventas', 8, 2, 2, 1492321286, 1492321316, 1, NULL);
 
 CREATE TABLE `team_coach` (
   `id` int(11) NOT NULL,
@@ -547,6 +562,31 @@ CREATE TABLE `team_type` (
 INSERT INTO `team_type` (`id`, `name`, `product_id`) VALUES
 (1, 'Empresa', 1);
 
+CREATE TABLE `transaction` (
+  `id` int(11) NOT NULL,
+  `uuid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `payment_id` int(11) NOT NULL,
+  `status` enum('init','pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'init',
+  `external_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `stamp` datetime NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USD',
+  `rate` decimal(10,2) DEFAULT NULL,
+  `commision` decimal(10,2) DEFAULT NULL,
+  `commision_currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `transaction_log` (
+  `id` int(11) NOT NULL,
+  `transaction_id` int(11) NOT NULL,
+  `status` enum('pending','paid','rejected','error') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending',
+  `external_id` text COLLATE utf8_unicode_ci,
+  `external_data` text COLLATE utf8_unicode_ci,
+  `stamp` datetime NOT NULL,
+  `creator_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -560,13 +600,14 @@ CREATE TABLE `user` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   `is_administrator` tinyint(1) NOT NULL DEFAULT '0',
-  `phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `notes` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `status`, `created_at`, `updated_at`, `is_administrator`, `phone`) VALUES
-(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'admin@example.com', 'Administror', 'A', 10, 1429313351, 1492197214, 1, '(345)1234567'),
-(2, 'coach', 'bn7LboYGkEEvp2BIQtbhBF3qf8V4KL3-', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'coach@example.com', 'Coach', 'C', 10, 1430540056, 1492197337, 0, '(432)1098765'),
-(3, 'assisstant', 'Wb7v9hgzxjTrmiZ2NFxQhfoMN2oamovk', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'assisstant@example.com', 'Assisstant', 'A', 10, 0, 1492197406, 0, '(012)1234567');
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `name`, `surname`, `status`, `created_at`, `updated_at`, `is_administrator`, `phone`, `notes`) VALUES
+(1, 'admin', 'TKOsEC2v04JpORUhnbQEuuHS3PnaFGmf', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'admin@example.com', 'Administror', 'A', 10, 1429313351, 1492197214, 1, '(345)1234567', NULL),
+(2, 'coach', 'bn7LboYGkEEvp2BIQtbhBF3qf8V4KL3-', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'coach@example.com', 'Coach', 'C', 10, 1430540056, 1492197337, 0, '(432)1098765', NULL),
+(3, 'assisstant', 'Wb7v9hgzxjTrmiZ2NFxQhfoMN2oamovk', '$2y$13$3FyxUh9XpoBYsn39Y7X1FO1Qa06SdFKpZohrbc3QCFd5I2vjhfbK2', NULL, 'assisstant@example.com', 'Assisstant', 'A', 10, 0, 1492197406, 0, '(012)1234567', NULL);
 
 CREATE TABLE `user_session` (
   `id` int(11) NOT NULL,
@@ -905,12 +946,13 @@ ALTER TABLE `migration`
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_payment_coach` (`coach_id`),
-  ADD KEY `fk_payment_creator` (`creator_id`),
-  ADD KEY `fk_payment_liquidation` (`liquidation_id`);
+  ADD KEY `fk_payment_liquidation` (`liquidation_id`),
+  ADD KEY `fk_payment_creator` (`creator_id`);
 
 ALTER TABLE `payment_log`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_payment_log_payment` (`payment_id`);
+  ADD KEY `fk_payment_log_payment` (`payment_id`),
+  ADD KEY `fk_payment_log_creator` (`creator_id`);
 
 ALTER TABLE `person`
   ADD PRIMARY KEY (`id`),
@@ -964,6 +1006,16 @@ ALTER TABLE `team_member`
 ALTER TABLE `team_type`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_team_type_product` (`product_id`);
+
+ALTER TABLE `transaction`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_transaction_payment` (`payment_id`),
+  ADD KEY `fk_transaction_creator` (`creator_id`);
+
+ALTER TABLE `transaction_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_transaction_log_transaction` (`transaction_id`),
+  ADD KEY `fk_transaction_log_creator` (`creator_id`);
 
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
@@ -1045,6 +1097,12 @@ ALTER TABLE `team_member`
 ALTER TABLE `team_type`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `transaction`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `transaction_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -1090,6 +1148,7 @@ ALTER TABLE `payment`
   ADD CONSTRAINT `fk_payment_liquidation` FOREIGN KEY (`liquidation_id`) REFERENCES `liquidation` (`id`);
 
 ALTER TABLE `payment_log`
+  ADD CONSTRAINT `fk_payment_log_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `fk_payment_log_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`);
 
 ALTER TABLE `person`
@@ -1124,6 +1183,14 @@ ALTER TABLE `team`
 
 ALTER TABLE `team_type`
   ADD CONSTRAINT `fk_team_type_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+ALTER TABLE `transaction`
+  ADD CONSTRAINT `fk_transaction_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_transaction_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`);
+
+ALTER TABLE `transaction_log`
+  ADD CONSTRAINT `fk_transaction_log_creator` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_transaction_log_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`);
 
 ALTER TABLE `user_session`
   ADD CONSTRAINT `fk_user_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);

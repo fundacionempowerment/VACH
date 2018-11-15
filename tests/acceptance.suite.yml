@@ -26,13 +26,6 @@ modules:
             browser: chrome
             window_size: 1360x768
             restart: false
-        Db:
-            dsn: 'mysql:host=127.0.0.1;port=3307;dbname=vach_test'
-            user: 'root'
-            password: 'secret'
-            dump: tests/_data/dump.sql
-            populate: true
-            cleanup: true
         MailCatcher:
             url: 'http://localhost'
             port: '1080'
