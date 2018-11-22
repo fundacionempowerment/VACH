@@ -129,7 +129,7 @@ class TeamController extends BaseController {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
 
-        $balance = Yii::$app->user->identity->getStock(1);
+        $balance = Yii::$app->user->identity->getStock($team->teamType->product_id);
         $licences_required = count($team->members) - count($team->individualWheels);
         $licences_to_buy = $licences_required - $balance;
 
@@ -220,7 +220,7 @@ class TeamController extends BaseController {
                 SiteController::addFlash('success', Yii::t('team', 'Wheel forms has been successfully created.'));
 
                 if (Yii::$app->params['monetize']) {
-                    Stock::consume(Yii::$app->user->id, $licences_required, $team->id);
+                    Stock::consume(Yii::$app->user->id, $licences_required, $team->id, $team->teamType->product_id);
                 }
 
                 Yii::$app->mailer->compose('teamFulfilled', [

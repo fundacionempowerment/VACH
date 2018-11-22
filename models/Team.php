@@ -22,6 +22,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property Person $sponsor
  * @property Company $company
+ * @property TeamType $teamType
  *
  * @property array $relationStatistics
  */

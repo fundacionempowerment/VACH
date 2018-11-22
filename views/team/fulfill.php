@@ -8,6 +8,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
+/* @var $team app\models\Team */
 
 $this->title = $team->id == 0 ? Yii::t('team', 'New team') : $team->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
@@ -51,7 +52,9 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
         <div class="form-group">
             <h4><?= Yii::t('stock', 'Licences') ?></h4>
             <p>
-                <?= Yii::t('stock', 'Your balance') ?>: <b><?= $balance ?></b>
+                <?= Yii::t('stock', 'Your balance of {licence type}', [
+                    'licence type' => $team->teamType->product->name
+                ]) ?>: <b><?= $balance ?></b>
             </p>
             <p>
                 <?= Yii::t('stock', 'Licences required') ?>: <b><?= $licences_required ?></b>
@@ -79,7 +82,7 @@ $lock_button = Yii::$app->params['monetize'] && $licences_to_buy > 0;
     ?>
     <div class="form-group">
         <?= \app\components\SpinnerSubmitButton::widget([
-            'caption' => \Yii::t('app', 'Save'),
+            'caption' => \Yii::t('app', 'Fulfill'),
             'options' => [
                 'class' => 'btn btn-' . ($lock_button ? 'default' : 'primary'),
                 'disabled' => $lock_button,
