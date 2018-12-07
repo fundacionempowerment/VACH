@@ -69,6 +69,7 @@ return [
     'Run group wheel' => 'Ejecutar rueda grupal',
     'Run individual wheel' => 'Ejecutar rueda individual',
     'Run organizational wheel' => 'Ejecutar rueda organizacional',
+    'Running' => 'Ejecutando',
     'Running group wheel' => 'Ejecutando rueda grupal',
     'Running individual wheel' => 'Ejecutando rueda individual',
     'Running organizational wheel' => 'Ejecutando rueda organizacional',

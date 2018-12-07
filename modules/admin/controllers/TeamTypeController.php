@@ -2,37 +2,28 @@
 
 namespace app\modules\admin\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\Question;
-use app\models\Wheel;
-use app\models\WheelAnswer;
-use app\models\WheelQuestion;
-use app\models\TeamType;
 use app\controllers\SiteController;
+use app\models\LoginModel;
+use app\models\Question;
+use app\models\RegisterModel;
+use app\models\TeamType;
+use app\models\TeamTypeDimension;
+use app\models\WheelQuestion;
+use Yii;
 
-class TeamTypeController extends AdminBaseController
-{
+class TeamTypeController extends AdminBaseController {
 
     public $layout = '//admin';
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $teamTypes = TeamType::browse();
 
         return $this->render('index', [
-                    'teamTypes' => $teamTypes,
+            'teamTypes' => $teamTypes,
         ]);
     }
 
-    public function actionView($id)
-    {
+    public function actionView($id) {
         $teamType = TeamType::findOne($id);
 
         if (!isset($teamType)) {
@@ -40,12 +31,11 @@ class TeamTypeController extends AdminBaseController
         }
 
         return $this->render('view', [
-                    'teamType' => $teamType,
+            'teamType' => $teamType,
         ]);
     }
 
-    public function actionEdit($id)
-    {
+    public function actionEdit($id) {
         $teamType = TeamType::findOne(['id' => $id]);
 
         if (!isset($teamType)) {
@@ -53,7 +43,12 @@ class TeamTypeController extends AdminBaseController
         }
 
         if ($teamType->load(Yii::$app->request->post()) && $teamType->save()) {
-            $this->saveQuestions($teamType);
+            if (Yii::$app->request->post('action') == 'questions') {
+                return $this->redirect(['questions', 'id' => $teamType->id]);
+            } else if (Yii::$app->request->post('action') == 'dimensions') {
+                return $this->redirect(['dimensions', 'id' => $teamType->id]);
+            }
+
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $teamType->name]));
             return $this->redirect(['view', 'id' => $teamType->id]);
         } else {
@@ -61,12 +56,51 @@ class TeamTypeController extends AdminBaseController
         }
 
         return $this->render('form', [
-                    'teamType' => $teamType,
+            'teamType' => $teamType,
         ]);
     }
 
-    public function actionDuplicate($id)
-    {
+    public function actionQuestions($id) {
+        $teamType = TeamType::findOne(['id' => $id]);
+
+        if (!isset($teamType)) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $this->saveQuestions($teamType);
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $teamType->name]));
+            return $this->redirect(['view', 'id' => $teamType->id]);
+        } else {
+            SiteController::FlashErrors($teamType);
+        }
+
+        return $this->render('questions', [
+            'teamType' => $teamType,
+        ]);
+    }
+
+    public function actionDimensions($id) {
+        $teamType = TeamType::findOne(['id' => $id]);
+
+        if (!isset($teamType)) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $this->saveDimensions($teamType);
+            SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => $teamType->name]));
+            return $this->redirect(['view', 'id' => $teamType->id]);
+        } else {
+            SiteController::FlashErrors($teamType);
+        }
+
+        return $this->render('dimensions', [
+            'teamType' => $teamType,
+        ]);
+    }
+
+    public function actionDuplicate($id) {
         $teamType = TeamType::findOne($id);
 
         if (!isset($teamType)) {
@@ -78,17 +112,23 @@ class TeamTypeController extends AdminBaseController
         do {
             $new_name = "$teamType->name (copy" . ($count == 1 ? ')' : "-$count)");
             $exists = TeamType::findOne(['name' => $new_name]);
-            $count ++;
+            $count++;
         } while ($exists);
 
         $new_teamType = new TeamType();
 
         $new_teamType->name = $new_name;
         $new_teamType->product_id = $teamType->product_id;
+        $new_teamType->level_0_name = $teamType->level_0_name;
+        $new_teamType->level_0_enabled = $teamType->level_0_enabled;
+        $new_teamType->level_1_name = $teamType->level_1_name;
+        $new_teamType->level_1_enabled = $teamType->level_1_enabled;
+        $new_teamType->level_2_name = $teamType->level_2_name;
+        $new_teamType->level_2_enabled = $teamType->level_2_enabled;
 
         $new_teamType->save();
 
-        foreach ($teamType->wheelQuestions as $wheelQuestion) {
+        foreach ($teamType->rawWheelQuestions as $wheelQuestion) {
             $new_question = new WheelQuestion();
             $new_question->dimension = $wheelQuestion->dimension;
             $new_question->order = $wheelQuestion->order;
@@ -99,13 +139,22 @@ class TeamTypeController extends AdminBaseController
             $new_question->save();
         }
 
+        foreach ($teamType->dimensions as $dimension) {
+            $new_dimension = new TeamTypeDimension();
+            $new_dimension->name = $dimension->name;
+            $new_dimension->order = $dimension->order;
+            $new_dimension->level = $dimension->level;
+            $new_dimension->team_type_id = $new_teamType->id;
+
+            $new_dimension->save();
+        }
+
         SiteController::addFlash('success', Yii::t('app', '{name} has been successfully duplicated.', ['name' => $teamType->name]));
 
         return $this->redirect(['index']);
     }
 
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $teamType = TeamType::findOne($id);
 
         if (!isset($teamType)) {
@@ -120,8 +169,7 @@ class TeamTypeController extends AdminBaseController
         return $this->redirect(['index']);
     }
 
-    private function saveQuestions($teamType)
-    {
+    private function saveQuestions($teamType) {
         foreach (Yii::$app->request->post() as $key => $post) {
             if (strpos($key, 'q-') === false) {
                 continue;
@@ -148,8 +196,38 @@ class TeamTypeController extends AdminBaseController
             }
 
             $questionId = Question::getId($post);
-            $wheelQuestion->question_id = $questionId;
-            $wheelQuestion->save();
+            $current_wheelQuestion->question_id = $questionId;
+            $current_wheelQuestion->save();
+        }
+    }
+
+    private function saveDimensions($teamType) {
+        foreach (Yii::$app->request->post() as $key => $post) {
+            if (strpos($key, 'd-') === false) {
+                continue;
+            }
+
+            $parts = explode('-', $key);
+            $level = $parts[1];
+            $order = $parts[2];
+
+            $current_dimension = null;
+            foreach ($teamType->dimensions as $dimension) {
+                if ($dimension->level == $level && $dimension->order == $order) {
+                    $current_dimension = $dimension;
+                    break;
+                }
+            }
+
+            if (!$current_dimension) {
+                $current_dimension = new TeamTypeDimension();
+                $current_dimension->level = $level;
+                $current_dimension->order = $order;
+                $current_dimension->team_type_id= $teamType->id;
+            }
+
+            $current_dimension->name = $post;
+            $current_dimension->save();
         }
     }
 

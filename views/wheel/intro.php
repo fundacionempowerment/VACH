@@ -8,15 +8,9 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $wheel app\models\ContactForm */
+/* @var $wheel app\models\Wheel */
 
-if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
-    $this->title = Yii::t('wheel', 'Running individual wheel');
-} else if ($wheel->type == Wheel::TYPE_GROUP) {
-    $this->title = Yii::t('wheel', 'Running group wheel');
-} else {
-    $this->title = Yii::t('wheel', 'Running organizational wheel');
-}
+$this->title = Yii::t('wheel', 'Running') . ' ' . $wheel->levelName;
 
 $instructions_shown = Yii::$app->session->get('instructions_shown');
 $show_instructions = $instructions_shown == true ? false : true;

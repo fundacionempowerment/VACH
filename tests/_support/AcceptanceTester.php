@@ -15,8 +15,7 @@
  *
  * @SuppressWarnings(PHPMD)
  */
-class AcceptanceTester extends \Codeception\Actor
-{
+class AcceptanceTester extends \Codeception\Actor {
 
     use _generated\AcceptanceTesterActions;
 
@@ -24,8 +23,7 @@ class AcceptanceTester extends \Codeception\Actor
      * @param string $username
      * @param string $password
      */
-    public function login($username, $password)
-    {
+    public function login($username, $password) {
         $I = $this;
 
         $this->amOnPage(Yii::$app->homeUrl);
@@ -35,23 +33,19 @@ class AcceptanceTester extends \Codeception\Actor
         $this->wait(3);
     }
 
-    public function loginAsAdmin()
-    {
+    public function loginAsAdmin() {
         $this->login('admin', '123456');
     }
 
-    public function loginAsCoach()
-    {
+    public function loginAsCoach() {
         $this->login('coach', '123456');
     }
 
-    public function loginAsAssisstant()
-    {
+    public function loginAsAssisstant() {
         $this->login('assisstant', '123456');
     }
 
-    public function logout()
-    {
+    public function logout() {
         $I = $this;
 
         $I->click(".//span[@class = 'glyphicon glyphicon-user']/..");
@@ -65,8 +59,7 @@ class AcceptanceTester extends \Codeception\Actor
      * @param string $secondaryMenuItem Text of menu entry child of main menu entry
      * @param string $tercearyMenuItem Text of menu entry child of previous menu entry
      */
-    public function clickMainMenu($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "")
-    {
+    public function clickMainMenu($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "") {
         $this->wait(1);
         if ($secondaryMenuItem === "") {
             $mainAnchor = "//ul[@id='navbar']/li/a[contains(text(), '$mainMenuItem')]";
@@ -92,8 +85,7 @@ class AcceptanceTester extends \Codeception\Actor
      * @param string $checkTitles string expected to be visible in title
      * @param string $inPageTag Tag of string expected to be visible in page
      */
-    function checkMenuItem($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "", $checkTitles = true, $inPageTag = 'h1')
-    {
+    function checkMenuItem($mainMenuItem, $secondaryMenuItem = "", $tercearyMenuItem = "", $checkTitles = true, $inPageTag = 'h1') {
         $I = $this;
 
         $I->clickMainMenu($mainMenuItem, $secondaryMenuItem, $tercearyMenuItem);
@@ -118,18 +110,19 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    public function selectOptionForSelect2($select, $option)
-    {
-        $this->click("//select[@name='$select']/../span/span[@class='selection']/span/span[@class='select2-selection__arrow']");
-        $this->waitForElement('.select2-search__field');
+    public function selectOptionForSelect2($select, $option) {
+        $menu = "//select[@name='$select']/../span/span[@class='selection']/span/span[@class='select2-selection__arrow']";
+        $this->waitForElementVisible($menu, 5); // secs
+        $this->click($menu);
         try {
+            $this->waitForElementVisible('.select2-search__field', 5);
             $this->presskey('.select2-search__field', $option);
-            $this->wait(1);
-            $this->click("(//li[contains(@class, 'select2-results__option')])[1]");
+            $action = '(//li[contains(@class, \'select2-results__option\')])[1]';
+            $this->waitForElementVisible($action, 5); // secs
+            $this->click($action);
         } catch (Exception $e) {
             $this->click(".//li[text() = '$option']");
         }
-        $this->wait(1);
     }
 
 }

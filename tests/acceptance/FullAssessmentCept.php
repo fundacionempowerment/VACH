@@ -103,6 +103,7 @@ $I->click('Nuevo equipo');
 $I->wait(1);
 
 $I->fillField('Team[name]', $team['name']);
+$I->selectOptionForSelect2('Team[team_type_id]', 'Empresa');
 $I->selectOptionForSelect2('Team[company_id]', $company['name']);
 $I->selectOptionForSelect2('Team[sponsor_id]', $sponsor['name']);
 
@@ -124,7 +125,7 @@ $I->wait(1);
 
 $I->see('Licencias requeridas: ' . count($persons));
 
-$I->click('Guardar');
+$I->click('Completar');
 $I->wait(1);
 
 // grab all tokens

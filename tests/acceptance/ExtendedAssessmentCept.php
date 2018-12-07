@@ -126,7 +126,7 @@ for ($i = 0; $i < 3; $i++) {
 
     $I->see('Licencias requeridas: 1');
 
-    $I->click('Guardar');
+    $I->click('Completar');
     $I->wait(1);
 }
 

@@ -63,7 +63,7 @@ class WheelController extends BaseController
             $current_dimension = Yii::$app->request->post('current_dimension');
             $id = Yii::$app->request->post('id');
             $current_wheel = Wheel::findOne(['id' => $id]);
-            $questions = WheelQuestion::getQuestions($current_wheel);
+            $questions = $current_wheel->getQuestions();
             $questionCount = count($questions);
             $setSize = $questionCount / 8;
 
@@ -150,7 +150,7 @@ class WheelController extends BaseController
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
-            $questions = WheelQuestion::getQuestions($wheel);
+            $questions = $wheel->getQuestions();
             $questionCount = count($questions);
             $setSize = $questionCount / 8;
 

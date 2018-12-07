@@ -1,10 +1,10 @@
 <?php
 
+use app\components\SpinnerAnchor;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\SpinnerAnchor;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('team', 'Teams');
@@ -52,21 +52,33 @@ $dataProvider = new ActiveDataProvider([
                 'attribute' => 'IndividualWheelStatus',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data->individualWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    if ($data->teamType->level_0_enabled) {
+                        return Html::a($data->individualWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    } else {
+                        return "";
+                    }
                 },
             ],
             [
                 'attribute' => 'GroupWheelStatus',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data->groupWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    if ($data->teamType->level_1_enabled) {
+                        return Html::a($data->groupWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    } else {
+                        return "";
+                    }
                 },
             ],
             [
                 'attribute' => 'OrganizationalWheelStatus',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a($data->organizationalWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    if ($data->teamType->level_2_enabled) {
+                        return Html::a($data->organizationalWheelStatus, Url::to(['team/view', 'id' => $data['id'],]));
+                    } else {
+                        return "";
+                    }
                 },
             ],
             ['class' => 'app\components\grid\ActionColumn',

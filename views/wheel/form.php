@@ -1,7 +1,6 @@
 <?php
 
 use app\models\Wheel;
-use app\models\WheelQuestion;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
@@ -9,26 +8,23 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $wheel app\models\ContactForm */
+/* @var $wheel app\models\Wheel */
 
-$dimensions = WheelQuestion::getDimensionNames($wheel->type);
-$questions = WheelQuestion::getQuestions($wheel);
+$dimensions = $wheel->getDimensions();
+$questions = $wheel->getQuestions();
 $setQuantity = count($questions) / 8;
 
-for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++)
+for ($i = $current_dimension * $setQuantity; $i < ($current_dimension + 1) * $setQuantity; $i++) {
     $answers[$i] = null;
-
-foreach ($wheel->answers as $answer)
-    if ($answer->answer_order >= $current_dimension * $setQuantity && $answer->answer_order < ($current_dimension + 1) * $setQuantity)
-        $answers[$answer->answer_order] = $answer->answer_value;
-
-if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
-    $this->title = Yii::t('wheel', 'Running individual wheel');
-} else if ($wheel->type == Wheel::TYPE_GROUP) {
-    $this->title = Yii::t('wheel', 'Running group wheel');
-} else {
-    $this->title = Yii::t('wheel', 'Running organizational wheel');
 }
+
+foreach ($wheel->answers as $answer) {
+    if ($answer->answer_order >= $current_dimension * $setQuantity && $answer->answer_order < ($current_dimension + 1) * $setQuantity) {
+        $answers[$answer->answer_order] = $answer->answer_value;
+    }
+}
+
+$this->title = Yii::t('wheel', 'Running') . ' ' . $wheel->levelName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel', 'wheelid' => $wheel->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
         <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
         <div class="row col-md-12">
-            <h3><?= $dimensions[$current_dimension] ?></h3>
+            <h3><?= $dimensions[$current_dimension]->name ?></h3>
             <h5>
                 <b><?= Yii::t('app', 'Description') ?>
                     :</b> <?= app\components\Dimensions::descriptions[$wheel->type][$current_dimension] ?>

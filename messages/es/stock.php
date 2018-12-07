@@ -52,5 +52,6 @@ return [
     'VACH licences payment link' => '',
     'You need {count} more licences' => 'Necesita {count} licencias más',
     'Your balance' => 'Su saldo',
+    'Your balance of {licence type}' => 'Su saldo de {licence type}',
     'consumed' => 'consumido',
 ];
