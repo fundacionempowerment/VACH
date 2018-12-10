@@ -132,9 +132,6 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'effectiveness']);
         }
 
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
-
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
@@ -171,9 +168,6 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'performance']);
         }
 
-        $groupPerformanceMatrix = [];
-        $organizationalPerformanceMatrix = [];
-
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
@@ -208,9 +202,6 @@ class ReportController extends Controller
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'relations']);
         }
-
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
 
         $members = $team->activeMemberList;
 
@@ -247,9 +238,6 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
         }
 
-        $groupCompetences = [];
-        $organizationalCompetences = [];
-
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
@@ -284,9 +272,6 @@ class ReportController extends Controller
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'emergents']);
         }
-
-        $groupEmergents = [];
-        $organizationalEmergents = [];
 
         $members = $team->activeMemberList;
 
@@ -348,9 +333,6 @@ class ReportController extends Controller
             \Yii::$app->session->addFlash('success', \Yii::t('report', 'Analysis saved.'));
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'performance-' . $individualReport->id]);
         }
-
-        $groupPerformanceMatrix = [];
-        $organizationalPerformanceMatrix = [];
 
         $members = $team->activeMemberList;
 
@@ -465,9 +447,6 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-competences-' . $individualReport->id]);
         }
 
-        $groupCompetences = [];
-        $organizationalCompetences = [];
-
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
@@ -504,9 +483,6 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-emergents-' . $individualReport->id]);
         }
 
-        $groupEmergents = [];
-        $organizationalEmergents = [];
-
         $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
@@ -535,9 +511,6 @@ class ReportController extends Controller
 
         $team = Team::findOne(['id' => $id]);
         $this->checkAllowed($team);
-
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
 
         $members = $team->activeMemberList;
 
