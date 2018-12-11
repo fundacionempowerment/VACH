@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
+/* @var $team \app\models\Team */
 ?>
 <script type="text/javascript">
     function lockAndSubmit(form) {
@@ -59,7 +60,7 @@ use yii\helpers\Url;
         <div class="col-md-offset-2 col-md-4">
             <?=
             $form->field($filter, 'wheelType')->widget(Select2::classname(), [
-                'data' => Wheel::getWheelTypes(),
+                'data' => isset($team) ? $team->teamType->getWheelTypeList() : [],
                 'hideSearch' => true,
                 'options' => ['placeholder' => Yii::t('dashboard', 'Select wheel type ...'), 'onchange' => "lockAndSubmit(this.form);",],
                 'pluginOptions' => [

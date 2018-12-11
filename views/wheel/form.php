@@ -24,21 +24,19 @@ foreach ($wheel->answers as $answer) {
     }
 }
 
-$this->title = Yii::t('wheel', 'Running') . ' ' . $wheel->levelName;
+$this->title = Yii::t('wheel', 'Running wheel of ') . ' ' . $wheel->levelName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel', 'wheelid' => $wheel->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="site-wheel col-md-push-2 col-md-8">
         <h1><?= Html::encode($this->title) ?></h1>
-        <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
-        <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
-        <div class="row col-md-12">
-            <h3><?= $dimensions[$current_dimension]->name ?></h3>
-            <h5>
-                <b><?= Yii::t('app', 'Description') ?>
-                    :</b> <?= app\components\Dimensions::descriptions[$wheel->type][$current_dimension] ?>
-            </h5>
-        </div>
+        <h4><?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?></h4>
+        <h4><?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?></h4>
+        <h3><?= $dimensions[$current_dimension]->name ?></h3>
+        <h5>
+            <b><?= Yii::t('app', 'Description') ?>:</b>
+            <?= $dimensions[$current_dimension]->description ?>
+        </h5>
         <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
         <?= Html::hiddenInput('id', $wheel->id) ?>
         <?= Html::hiddenInput('current_dimension', $current_dimension) ?>

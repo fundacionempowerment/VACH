@@ -4,7 +4,6 @@ modules:
         - WebDriver
         - Db
         - Yii2
-        #- Codeception\Extension\Recorder
     config:
         WebDriver:
             url: 'http://vach-web/web/'
@@ -14,7 +13,7 @@ modules:
             restart: false
         Yii2:
           configFile: 'config/test.php'
-          part: ORM
+          part: orm, email
           transaction: true
           cleanup: false
           entryScript: index-test.php

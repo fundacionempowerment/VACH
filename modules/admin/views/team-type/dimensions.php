@@ -1,6 +1,5 @@
 <?php
 
-use app\models\WheelQuestion;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -39,9 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 $div_open = true;
             }
             ?>
-            <p>
-                <?= Html::input('text', "d-$dimension->level-$dimension->order", $dimension->name, ['class' => 'col-xs-12']) ?>
-            </p>
+            <div class="form-group">
+                <?= Html::input('text', "name-$dimension->level-$dimension->order", $dimension->name, ['class' => 'form-control']) ?>
+                <?= Html::textarea("desc-$dimension->level-$dimension->order", $dimension->description, ['class' => 'form-control']) ?>
+            </div>
         <?php } ?>
         <?= '</div>' ?>
     </div>

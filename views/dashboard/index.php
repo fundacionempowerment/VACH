@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filter' => $filter,
         'companies' => $companies,
         'teams' => $teams,
+        'team' => $team,
         'members' => $members,
     ]);
 

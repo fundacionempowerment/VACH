@@ -1,6 +1,6 @@
 <?php
 
-$initial_stock = 20;
+$initial_stock = 0;
 $price = rand(100, 300) / 10;
 $add = rand(10, 20);
 $remove = rand(1, 9);

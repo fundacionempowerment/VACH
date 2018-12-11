@@ -202,14 +202,15 @@ class TeamTypeController extends AdminBaseController {
     }
 
     private function saveDimensions($teamType) {
-        foreach (Yii::$app->request->post() as $key => $post) {
-            if (strpos($key, 'd-') === false) {
+        foreach (Yii::$app->request->post() as $key => $name) {
+            if (strpos($key, 'name-') === false) {
                 continue;
             }
 
             $parts = explode('-', $key);
             $level = $parts[1];
             $order = $parts[2];
+            $description = Yii::$app->request->post("desc-$level-$order");
 
             $current_dimension = null;
             foreach ($teamType->dimensions as $dimension) {
@@ -223,10 +224,11 @@ class TeamTypeController extends AdminBaseController {
                 $current_dimension = new TeamTypeDimension();
                 $current_dimension->level = $level;
                 $current_dimension->order = $order;
-                $current_dimension->team_type_id= $teamType->id;
+                $current_dimension->team_type_id = $teamType->id;
             }
 
-            $current_dimension->name = $post;
+            $current_dimension->name = $name;
+            $current_dimension->description = $description;
             $current_dimension->save();
         }
     }

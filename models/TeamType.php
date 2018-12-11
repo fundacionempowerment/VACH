@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "team_type".
@@ -145,4 +144,22 @@ class TeamType extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getWheelTypeList() {
+        $result = [];
+
+        if ($this->level_0_enabled) {
+            $result[0] = $this->level_0_name;
+        }
+        if ($this->level_1_enabled) {
+            $result[1] = $this->level_1_name;
+        }
+        if ($this->level_2_enabled) {
+            $result[2] = $this->level_2_name;
+        }
+
+        return $result;
+    }
 }

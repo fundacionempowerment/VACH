@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Wheel;
 use yii\db\Migration;
 
 /**
@@ -35,7 +34,7 @@ class m181201_132648_populate_team_type_dimension extends Migration {
 
     private function getData() {
         return [
-            Wheel::TYPE_INDIVIDUAL => [
+            0 => [
                 Yii::t('wheel', 'Free time'),
                 Yii::t('wheel', 'Work'),
                 Yii::t('wheel', 'Family'),
@@ -45,7 +44,7 @@ class m181201_132648_populate_team_type_dimension extends Migration {
                 Yii::t('wheel', 'Existential Dimension'),
                 Yii::t('wheel', 'Spiritual Dimension'),
             ],
-            Wheel::TYPE_GROUP => [
+            1 => [
                 Yii::t('wheel', 'Initiative'),
                 Yii::t('wheel', 'Appropriateness'),
                 Yii::t('wheel', 'Belonging'),
@@ -55,7 +54,7 @@ class m181201_132648_populate_team_type_dimension extends Migration {
                 Yii::t('wheel', 'Leadership'),
                 Yii::t('wheel', 'Legitimation'),
             ],
-            Wheel::TYPE_ORGANIZATIONAL => [
+            2 => [
                 Yii::t('wheel', 'Creativity'),
                 Yii::t('wheel', 'Results guidance'),
                 Yii::t('wheel', 'Client guidance'),

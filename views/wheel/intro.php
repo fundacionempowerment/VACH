@@ -19,10 +19,14 @@ $show_instructions = $instructions_shown == true ? false : true;
     <div>
         <h1><?= Html::encode($this->title) ?></h1>
         <h2>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br/>
             <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
             <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
         </h2>
+        <h3>
+            <?= Yii::t('company', 'Company') ?>: <?= Html::label($wheel->team->company->name) ?><br/>
+            <?= Yii::t('team', 'Team') ?>: <?= Html::label($wheel->team->name) ?><br/>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br/>
+        </h3>
     </div>
     <?php if ($wheel->observed->photo) { ?>
         <div class="col-md-push-1 col-md-10">

@@ -28,7 +28,6 @@ class DashboardController extends BaseController
             $this->redirect(['/dashboard']);
         }
 
-        $companies = [];
         $company = null;
         $teams = [];
         $team = null;
