@@ -24,7 +24,7 @@ foreach ($wheel->answers as $answer) {
     }
 }
 
-$this->title = Yii::t('wheel', 'Running wheel of ') . ' ' . $wheel->levelName;
+$this->title = Yii::t('wheel', 'Running wheel') . ' ' . $wheel->levelName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('wheel', 'Wheel'), 'url' => ['/wheel', 'wheelid' => $wheel->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

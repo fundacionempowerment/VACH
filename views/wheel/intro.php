@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\Wheel */
 
-$this->title = Yii::t('wheel', 'Running') . ' ' . $wheel->levelName;
+$this->title = Yii::t('wheel', 'Running wheel') . ' ' . $wheel->levelName;
 
 $instructions_shown = Yii::$app->session->get('instructions_shown');
 $show_instructions = $instructions_shown == true ? false : true;
@@ -44,8 +44,9 @@ $show_instructions = $instructions_shown == true ? false : true;
                     <br/><br/>
                 </li>
                 <li>
-                    Antes de responder a cada pregunta haga el ejercicio de visualizar a su compañero:
-                    asóciese con él y dese el permiso de que su Dación (Comunicación) sea en el
+                    Antes de responder a cada pregunta haga el ejercicio de visualizar
+                    <?= $wheel->team->teamType->level_0_enabled ? "a su compañero" : "al área que está observando" ?>:
+                    asóciese con <?= $wheel->team->teamType->level_0_enabled ? "él/ella" : "ella" ?>  y dese el permiso de que su Dación (Comunicación) sea en el
                     marco de los valores esenciales que vimos durante el taller.
                     <br/><br/>
                 </li>

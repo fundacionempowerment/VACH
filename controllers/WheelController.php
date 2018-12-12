@@ -2,33 +2,22 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginModel;
-use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\Question;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
+use Yii;
 
-class WheelController extends BaseController
-{
+class WheelController extends BaseController {
     public $layout = 'inner';
 
-    public function beforeAction($action)
-    {
+    public function beforeAction($action) {
         if ($action->id == 'manual-form') {
             return parent::beforeAction($action);
         }
         return true;
     }
 
-    public function actionRun()
-    {
+    public function actionRun() {
         $this->layout = 'printable';
         $showMissingAnswers = false;
         $current_dimension = 0;
@@ -126,21 +115,20 @@ class WheelController extends BaseController
             return $this->render('thanks');
         } elseif ($current_dimension == -1) {
             return $this->render('intro', [
-                        'wheel' => $current_wheel,
-                        'current_dimension' => $current_dimension,
+                'wheel' => $current_wheel,
+                'current_dimension' => $current_dimension,
             ]);
         }
 
         Yii::$app->session->set('instructions_shown', true);
         return $this->render('form', [
-                    'wheel' => $current_wheel,
-                    'current_dimension' => $current_dimension,
-                    'showMissingAnswers' => $showMissingAnswers,
+            'wheel' => $current_wheel,
+            'current_dimension' => $current_dimension,
+            'showMissingAnswers' => $showMissingAnswers,
         ]);
     }
 
-    public function actionManualForm($id)
-    {
+    public function actionManualForm($id) {
         $wheel = Wheel::findOne(['id' => $id]);
 
         if (!$wheel || !$wheel->team->isUserAllowed()) {
@@ -207,19 +195,18 @@ class WheelController extends BaseController
         }
 
         return $this->render('manual-form', [
-                    'wheel' => $wheel,
-                    'invalids' => $invalids,
+            'wheel' => $wheel,
+            'invalids' => $invalids,
         ]);
     }
 
-    public function actionReceived($token)
-    {
+    public function actionReceived($token) {
         $this->layout = 'printable';
 
         $wheels = Wheel::find()
-                ->where(['token' => $token])
-                ->andWhere(['in', 'status', ['created', 'sent']])
-                ->all();
+            ->where(['token' => $token])
+            ->andWhere(['in', 'status', ['created', 'sent']])
+            ->all();
 
         foreach ($wheels as $wheel) {
             $wheel->status = 'received';
@@ -227,7 +214,7 @@ class WheelController extends BaseController
         }
 
         return $this->render('received', [
-                    'wheels' => $wheels,
+            'wheels' => $wheels,
         ]);
     }
 }

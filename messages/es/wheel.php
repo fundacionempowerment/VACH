@@ -73,7 +73,7 @@ return [
     'Running group wheel' => 'Ejecutando rueda grupal',
     'Running individual wheel' => 'Ejecutando rueda individual',
     'Running organizational wheel' => 'Ejecutando rueda organizacional',
-    'Running wheel of ' => 'Ejecutando rueda de ',
+    'Running wheel' => 'Ejecutando rueda',
     'Save and next competence...' => 'Guardar y próxima competencia...',
     'Save and next dimension...' => 'Guardar y próxima dimensión...',
     'Send all by email' => 'Enviar todo por correo electrónico',
