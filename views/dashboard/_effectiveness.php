@@ -8,13 +8,8 @@ use app\components\Utils;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if ($type == Wheel::TYPE_GROUP) {
-    $title = Yii::t('dashboard', 'Group Consciousness and Responsability Matrix');
-} else if ($type == Wheel::TYPE_ORGANIZATIONAL) {
-    $title = Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix');
-} else {
-    $title = Yii::t('dashboard', 'Individual Consciousness and Responsability Matrix');
-}
+$title = Yii::t('dashboard', 'Consciousness and Responsability Matrix') . ' ' .
+    ($type == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
 if (!empty($member)) {
     $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
@@ -182,6 +177,7 @@ $this->render('_rankings', [
     'type' => $type,
     'memberId' => $memberId,
     'member' => $member,
+    'team' => $team,
     'members' => $members,
     'howISeeMe' => $howISeeMe,
     'howTheySeeMe' => $howTheySeeMe,

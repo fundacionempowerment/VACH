@@ -9,12 +9,9 @@ use app\models\WheelQuestion;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Rankings');
-else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organizational Rankings');
-else
-    $title = Yii::t('dashboard', 'Individual Rankings');
+
+$title = Yii::t('dashboard', 'Ranking') . ' ' .
+    ($type == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
 if (!empty($member)) {
     $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;

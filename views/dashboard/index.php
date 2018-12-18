@@ -1,10 +1,8 @@
 <?php
 
+use app\models\Wheel;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\models\Wheel;
-use app\models\WheelQuestion;
-use yii\bootstrap\Progress;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -135,8 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="<?= Url::to('@web/js/html2canvas/html2canvas.js') ?>"></script>
 <script src="<?= Url::to('@web/js/FileSaver.js') ?>"></script>
 <script>
-    function printDiv(div)
-    {
+    function printDiv(div) {
         html2canvas(document.querySelector("#" + div)).then(function (canvas) {
             canvas.toBlob(function (blob) {
                 saveAs(blob, "image.png");

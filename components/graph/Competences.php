@@ -2,13 +2,12 @@
 
 namespace app\components\graph;
 
-use Yii;
 use app\models\Person;
+use app\models\Team;
 use app\models\Wheel;
-use app\models\WheelQuestion;
+use Yii;
 
-class Competences
-{
+class Competences {
 
     const width = 2000;
     const height = 600;
@@ -26,8 +25,7 @@ class Competences
         ['dimension' => 7, 'row' => 2, 'col' => 1],
     ];
 
-    static public function draw($teamId, $memberId, $wheelType)
-    {
+    static public function draw($teamId, $memberId, $wheelType) {
         $minValue = 10000;
         $maxValue = -10000;
 
@@ -46,14 +44,9 @@ class Competences
             }
         }
 
-        $dimensions = WheelQuestion::getDimensionNames($wheelType, true);
-
-        if ($wheelType == Wheel::TYPE_GROUP)
-            $title = Yii::t('dashboard', 'Group Competence Matrix');
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            $title = Yii::t('dashboard', 'Organizational Competence Matrix');
-        else
-            $title = Yii::t('dashboard', 'Individual Competence Matrix');
+        $team = Team::findOne($teamId);
+        $title = Yii::t('dashboard', 'Competence Matrix') . ' ' .
+            ($wheelType == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
         $member = Person::findOne(['id' => $memberId]);
 
@@ -84,15 +77,14 @@ class Competences
         $t->Stroke($g->img);
 
         for ($i = 0; $i < count($competences); $i++) {
-            self::drawGauge($g, $competences[$i], self::cells[$i], $wheelType, $minValue, $maxValue);
+            self::drawGauge($g, $team, $competences[$i], self::cells[$i], $wheelType, $minValue, $maxValue);
         }
 
         $g->Stroke();
         exit();
     }
 
-    static private function drawGauge($g, $value, $cell, $wheelType, $minValue, $maxValue)
-    {
+    static private function drawGauge($g, $team, $value, $cell, $wheelType, $minValue, $maxValue) {
         $x1 = self::width * $cell['col'] / 3;
         $x2 = self::width * ($cell['col'] + 1) / 3;
 
@@ -104,30 +96,39 @@ class Competences
 
         // Write dimensions
 
-        $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_INDIVIDUAL, true) . ' - ';
-        $t = new \Text($text, $x1 + self::margin_inner, $ytitle);
-        $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_INDIVIDUAL ? FS_BOLD : FS_NORMAL), 20);
-        $t->Align('left', 'top');
-        $t->SetColor($wheelType == Wheel::TYPE_INDIVIDUAL ? "black" : "gray7");
-        $t->Stroke($g->img);
+        $x_next = $x1 + self::margin_inner;
 
-        $x_next = $x1 + self::margin_inner + $t->GetWidth($g->img);
+        if ($team->teamType->level_0_enabled) {
+            $dimensions = $team->teamType->getDimensionNames(Wheel::TYPE_INDIVIDUAL, true);
+            $text = $dimensions[$cell['dimension']] . ' - ';
+            $t = new \Text($text, $x1 + self::margin_inner, $ytitle);
+            $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_INDIVIDUAL ? FS_BOLD : FS_NORMAL), 20);
+            $t->Align('left', 'top');
+            $t->SetColor($wheelType == Wheel::TYPE_INDIVIDUAL ? "black" : "gray7");
+            $t->Stroke($g->img);
+            $x_next = $x_next + $t->GetWidth($g->img);
+        }
 
-        $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_GROUP, true) . ' - ';
-        $t = new \Text($text, $x_next + 2, $ytitle);
-        $t->SetFont(FF_COOL, FS_NORMAL, 20);
-        $t->Align('left', 'top');
-        $t->SetColor($wheelType == Wheel::TYPE_GROUP ? "black" : "gray7" );
-        $t->Stroke($g->img);
+        if ($team->teamType->level_1_enabled) {
+            $dimensions = $team->teamType->getDimensionNames(Wheel::TYPE_GROUP, false);
+            $text = $dimensions[$cell['dimension']] . ' - ';
+            $t = new \Text($text, $x_next + 2, $ytitle);
+            $t->SetFont(FF_COOL, FS_NORMAL, 20);
+            $t->Align('left', 'top');
+            $t->SetColor($wheelType == Wheel::TYPE_GROUP ? "black" : "gray7");
+            $t->Stroke($g->img);
+            $x_next = $x_next + 2 + $t->GetWidth($g->img);
+        }
 
-        $x_next = $x_next + 2 + $t->GetWidth($g->img);
-
-        $text = WheelQuestion::getDimentionName($cell['dimension'], Wheel::TYPE_ORGANIZATIONAL, true);
-        $t = new \Text($text, $x_next + 2, $ytitle);
-        $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_ORGANIZATIONAL ? FS_BOLD : FS_NORMAL), 20);
-        $t->Align('left', 'top');
-        $t->SetColor($wheelType == Wheel::TYPE_ORGANIZATIONAL ? "black" : "gray7");
-        $t->Stroke($g->img);
+        if ($team->teamType->level_2_enabled) {
+            $dimensions = $team->teamType->getDimensionNames(Wheel::TYPE_ORGANIZATIONAL, false);
+            $text = $dimensions[$cell['dimension']];
+            $t = new \Text($text, $x_next + 2, $ytitle);
+            $t->SetFont(FF_COOL, ($wheelType == Wheel::TYPE_ORGANIZATIONAL ? FS_BOLD : FS_NORMAL), 20);
+            $t->Align('left', 'top');
+            $t->SetColor($wheelType == Wheel::TYPE_ORGANIZATIONAL ? "black" : "gray7");
+            $t->Stroke($g->img);
+        }
 
         // Draw rectangles
 
@@ -160,8 +161,8 @@ class Competences
             $g->img->SetColor('#67b168');
         }
         if ($value == $minValue || $value == $maxValue) {
-            for($i = 1; $i <= 6; $i++){
-            $g->img->Rectangle($x1 + self::margin_inner - $i, $y2 - $i, $x2 - self::margin_inner + $i, $y3 - self::margin_inner * 2 + $i);
+            for ($i = 1; $i <= 6; $i++) {
+                $g->img->Rectangle($x1 + self::margin_inner - $i, $y2 - $i, $x2 - self::margin_inner + $i, $y3 - self::margin_inner * 2 + $i);
             }
         }
 

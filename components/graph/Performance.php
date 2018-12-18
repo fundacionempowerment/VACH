@@ -2,26 +2,20 @@
 
 namespace app\components\graph;
 
+use app\components\Utils;
+use app\models\Person;
+use app\models\Team;
+use app\models\Wheel;
 use Yii;
 use yii\helpers\ArrayHelper;
-use app\models\Person;
-use app\models\Wheel;
-use app\models\WheelQuestion;
-use app\components\Utils;
 
-class Performance
-{
+class Performance {
 
-    static public function draw($teamId, $memberId, $wheelType)
-    {
+    static public function draw($teamId, $memberId, $wheelType) {
+        $team = Team::findOne($teamId);
+        $title = Yii::t('dashboard', 'Performance Matrix') . ' ' .
+            ($wheelType == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
         $performanceMatrix = Wheel::getProdConsMatrix($teamId, $wheelType);
-
-        if ($wheelType == Wheel::TYPE_GROUP)
-            $title = Yii::t('dashboard', 'Group Performance Matrix');
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            $title = Yii::t('dashboard', 'Organizational Performance Matrix');
-        else
-            $title = Yii::t('dashboard', 'Individual Performance Matrix');
 
         $member = Person::findOne(['id' => $memberId]);
 
@@ -100,7 +94,7 @@ class Performance
         }
 
         $goodConsciousnessY1 = floor(($avgConsciousness - $maxy) * $m) + $topMargin;
-        $goodConsciousnessY2 = floor((- $avgConsciousness - $maxy) * $m) + $topMargin;
+        $goodConsciousnessY2 = floor((-$avgConsciousness - $maxy) * $m) + $topMargin;
         $goodConsciousnessYAxe = floor(($height - $topMargin - $bottomMargin) / 2) + $topMargin;
         $goodProductivityX1 = ($avgProductivity - $avgDeltaProductivity - $minProductivity) / $deltaProductivity * $deltax + $minx;
         $goodProductivityX2 = ($avgProductivity + $avgDeltaProductivity - $minProductivity) / $deltaProductivity * $deltax + $minx;

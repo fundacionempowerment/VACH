@@ -2,22 +2,15 @@
 
 namespace app\components;
 
-use Yii;
-use PhpOffice\PhpPresentation\PhpPresentation;
-use PhpOffice\PhpPresentation\IOFactory;
-use PhpOffice\PhpPresentation\Style\Color;
-use PhpOffice\PhpPresentation\Style\Alignment;
-use PhpOffice\PhpPresentation\Style\Fill;
-use app\models\Person;
 use app\models\Wheel;
-use app\models\WheelQuestion;
-use app\models\TeamMember;
-use app\components\Downloader;
-use app\components\Utils;
+use PhpOffice\PhpPresentation\PhpPresentation;
+use PhpOffice\PhpPresentation\Style\Alignment;
+use PhpOffice\PhpPresentation\Style\Color;
+use PhpOffice\PhpPresentation\Style\Fill;
+use Yii;
 use yii\helpers\ArrayHelper;
 
-class Presentation
-{
+class Presentation {
     const FONT = 'Coolvetica Rg';
     const RED_BACKGROUND = 'FFD9534F';
     const YELLOW_BACKGROUND = 'FFF0AD4E';
@@ -27,8 +20,7 @@ class Presentation
     private static $ppt;
     public static $paths;
 
-    public static function create($team)
-    {
+    public static function create($team) {
         self::$team = $team;
 
         self::$ppt = new PhpPresentation();
@@ -65,8 +57,7 @@ class Presentation
         return self::$ppt;
     }
 
-    private static function addBackground($slide)
-    {
+    private static function addBackground($slide) {
         $slide->createRichTextShape()
             ->setHeight(768)
             ->setWidth(1024)
@@ -76,8 +67,7 @@ class Presentation
             ->setEndColor(new Color('FF000000'));
     }
 
-    private static function addCPCLogo($slide)
-    {
+    private static function addCPCLogo($slide) {
         $shape = $slide->createDrawingShape();
 
         $shape->setName('CPC logo')
@@ -88,8 +78,7 @@ class Presentation
             ->setOffsetY(10);
     }
 
-    private static function addFirstSlide()
-    {
+    private static function addFirstSlide() {
         $currentSlide = self::$ppt->getActiveSlide();
 
         self::addBackground($currentSlide);
@@ -118,8 +107,7 @@ class Presentation
             ->setColor(new Color('FFFFFFFF'));
     }
 
-    private static function addGoldenRuleSlide()
-    {
+    private static function addGoldenRuleSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -163,8 +151,7 @@ class Presentation
             ->setColor(new Color('FF000000'));
     }
 
-    private static function addFunctionalThinkingSlide()
-    {
+    private static function addFunctionalThinkingSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -193,8 +180,7 @@ class Presentation
             ->setOffsetY(160);
     }
 
-    private static function addCompetenceTableSlide()
-    {
+    private static function addCompetenceTableSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -223,8 +209,7 @@ class Presentation
             ->setOffsetY(130);
     }
 
-    private static function addPercetualAdjustmentSlide()
-    {
+    private static function addPercetualAdjustmentSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -335,8 +320,7 @@ class Presentation
         $shape->createBreak();
     }
 
-    private static function addObservationProtocolSlide()
-    {
+    private static function addObservationProtocolSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -403,8 +387,7 @@ class Presentation
             ->setColor(new Color('FF000000'));
     }
 
-    private static function addTeamTitleSlide()
-    {
+    private static function addTeamTitleSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -424,62 +407,71 @@ class Presentation
             ->setColor(new Color('FFFF0000'));
     }
 
-    private static function addTeamCompentencesSlide()
-    {
+    private static function addTeamCompentencesSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/competences',
-            'teamId' => $teamId,
-            'memberId' => 0,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => $teamId,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setHeight(250)
-            ->setOffsetX(70)
-            ->setOffsetY(100);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setHeight(250)
+                ->setOffsetX(70)
+                ->setOffsetY(100);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/competences',
-            'teamId' => $teamId,
-            'memberId' => 0,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => $teamId,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setHeight(250)
-            ->setOffsetX(70)
-            ->setOffsetY(370);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setHeight(250)
+                ->setOffsetX(70)
+                ->setOffsetY(370);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addTeamRelationsSlide()
-    {
+    private static function addTeamRelationsSlide() {
         $members = self::$team->activeMemberList;
 
-        $currentSlide = self::$ppt->createSlide();
-        $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
-        self::addRelationsSlide($currentSlide, Yii::t('dashboard', 'Group Relations Matrix'), $members, $groupRelationsMatrix);
-
-        $currentSlide = self::$ppt->createSlide();
-        $organizationalRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
-        self::addRelationsSlide($currentSlide, Yii::t('dashboard', 'Organizational Relations Matrix'), $members, $organizationalRelationsMatrix);
+        if (self::$team->teamType->level_1_enabled) {
+            $currentSlide = self::$ppt->createSlide();
+            $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
+            self::addRelationsSlide($currentSlide,
+                Yii::t('dashboard', 'Relation Matrix') . ' ' . self::$team->teamType->level_1_name,
+                $members, $groupRelationsMatrix
+            );
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $currentSlide = self::$ppt->createSlide();
+            $organizationalRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
+            self::addRelationsSlide($currentSlide,
+                Yii::t('dashboard', 'Relation Matrix') . ' ' . self::$team->teamType->level_2_name,
+                $members, $organizationalRelationsMatrix);
+        }
     }
 
-    private static function addRelationsSlide($currentSlide, $title, $members, $data)
-    {
+    private static function addRelationsSlide($currentSlide, $title, $members, $data) {
         $shape = $currentSlide->createRichTextShape()
             ->setHeight(480)
             ->setWidth(1000)
@@ -589,8 +581,7 @@ class Presentation
         }
     }
 
-    private static function addTeamEffectivenessSlide()
-    {
+    private static function addTeamEffectivenessSlide() {
         $teamId = self::$team->id;
 
         $currentSlide = self::$ppt->createSlide();
@@ -603,7 +594,10 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
-        $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'));
+        $textRun = $shape->createParagraph()->createTextRun(
+            Yii::t('dashboard', 'Consciousness and Responsability Matrix')
+            . ' ' . self::$team->teamType->level_2_name
+        );
         $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FFFF0000'));
@@ -745,7 +739,10 @@ class Presentation
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
-        $textRun = $shape->createParagraph()->createTextRun(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'));
+        $textRun = $shape->createParagraph()->createTextRun(
+            Yii::t('dashboard', 'Consciousness and Responsability Matrix')
+            . ' ' . self::$team->teamType->level_2_name
+        );
         $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FFFF0000'));
@@ -867,8 +864,7 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addTeamPerformanceSlide()
-    {
+    private static function addTeamPerformanceSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
@@ -910,49 +906,51 @@ class Presentation
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addTeamEmergentsSlide()
-    {
+    private static function addTeamEmergentsSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/emergents',
-            'teamId' => $teamId,
-            'memberId' => 0,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => $teamId,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setWidth(800)
-            ->setOffsetX(70)
-            ->setOffsetY(50);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(50);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/emergents',
-            'teamId' => $teamId,
-            'memberId' => 0,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => $teamId,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setWidth(800)
-            ->setOffsetX(70)
-            ->setOffsetY(350);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(350);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMembersTitleSlide()
-    {
+    private static function addMembersTitleSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addCPCLogo($currentSlide);
@@ -971,11 +969,8 @@ class Presentation
             ->setColor(new Color('FFFF0000'));
     }
 
-    private static function addMemberTitleSlide($member)
-    {
+    private static function addMemberTitleSlide($member) {
         $currentSlide = self::$ppt->createSlide();
-
-        self::addCPCLogo($currentSlide);
 
         $shape = $currentSlide->createRichTextShape()
             ->setHeight(700)
@@ -989,225 +984,240 @@ class Presentation
         $textRun->getFont()->setName(self::FONT)
             ->setSize(60)
             ->setColor(new Color('FFFF0000'));
+
+        self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberPerceptionSlide($member)
-    {
+    private static function addMemberPerceptionSlide($member) {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
         $memberId = $member->person_id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/perceptions',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/perceptions',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setHeight(350)
-            ->setOffsetX(70)
-            ->setOffsetY(20);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setHeight(350)
+                ->setOffsetX(70)
+                ->setOffsetY(20);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/perceptions',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/perceptions',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setHeight(350)
-            ->setOffsetX(70)
-            ->setOffsetY(370);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setHeight(350)
+                ->setOffsetX(70)
+                ->setOffsetY(370);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberCompentencesSlide($member)
-    {
+    private static function addMemberCompentencesSlide($member) {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
         $memberId = $member->person_id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/competences',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setHeight(250)
-            ->setOffsetX(70)
-            ->setOffsetY(100);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setHeight(250)
+                ->setOffsetX(70)
+                ->setOffsetY(100);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/competences',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setHeight(250)
-            ->setOffsetX(70)
-            ->setOffsetY(370);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setHeight(250)
+                ->setOffsetX(70)
+                ->setOffsetY(370);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberPerformanceSlide($member)
-    {
+    private static function addMemberPerformanceSlide($member) {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
         $memberId = $member->person_id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/performance',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setHeight(310)
-            ->setOffsetX(70)
-            ->setOffsetY(20);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setHeight(310)
+                ->setOffsetX(70)
+                ->setOffsetY(20);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/performance',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setHeight(310)
-            ->setOffsetX(70)
-            ->setOffsetY(370);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setHeight(310)
+                ->setOffsetX(70)
+                ->setOffsetY(370);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberRelationsSlide($member)
-    {
+    private static function addMemberRelationsSlide($member) {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
         $memberId = $member->person_id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/relations',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/relations',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setHeight(370)
-            ->setOffsetX(90)
-            ->setOffsetY(20);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setHeight(370)
+                ->setOffsetX(90)
+                ->setOffsetY(20);
+        }
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_2_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/relations',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/relations',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setHeight(370)
-            ->setOffsetX(90)
-            ->setOffsetY(370);
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setHeight(370)
+                ->setOffsetX(90)
+                ->setOffsetY(370);
+        }
 
         self::addCPCLogo($currentSlide);
     }
 
-    private static function addMemberEmergentsSlide($member)
-    {
+    private static function addMemberEmergentsSlide($member) {
         $currentSlide = self::$ppt->createSlide();
 
         $teamId = self::$team->id;
         $memberId = $member->person_id;
 
-        $shape = $currentSlide->createDrawingShape();
+        if (self::$team->teamType->level_1_enabled) {
+            $shape = $currentSlide->createDrawingShape();
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/emergents',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
 
-        $shape->setName("CPC")
-            ->setDescription('CPC')
-            ->setPath($path)
-            ->setWidth(800)
-            ->setOffsetX(70)
-            ->setOffsetY(100);
+            $shape->setName("CPC")
+                ->setDescription('CPC')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(100);
+            self::addCPCLogo($currentSlide);
+        }
 
-        self::addCPCLogo($currentSlide);
+        if (self::$team->teamType->level_2_enabled) {
+            $currentSlide = self::$ppt->createSlide();
 
-        $currentSlide = self::$ppt->createSlide();
+            $shape = $currentSlide->createDrawingShape();
 
-        $shape = $currentSlide->createDrawingShape();
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => $teamId,
+                'memberId' => $memberId,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-            '/graph/emergents',
-            'teamId' => $teamId,
-            'memberId' => $memberId,
-            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
+            $shape->setName('CPC logo')
+                ->setDescription('CPC logo')
+                ->setPath($path)
+                ->setWidth(800)
+                ->setOffsetX(70)
+                ->setOffsetY(100);
 
-        $shape->setName('CPC logo')
-            ->setDescription('CPC logo')
-            ->setPath($path)
-            ->setWidth(800)
-            ->setOffsetX(70)
-            ->setOffsetY(100);
-
-        self::addCPCLogo($currentSlide);
+            self::addCPCLogo($currentSlide);
+        }
     }
 
-    private static function addThankYouSlide()
-    {
+    private static function addThankYouSlide() {
         $currentSlide = self::$ppt->createSlide();
 
         self::addBackground($currentSlide);

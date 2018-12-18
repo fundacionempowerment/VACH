@@ -162,4 +162,25 @@ class TeamType extends \yii\db\ActiveRecord {
 
         return $result;
     }
+
+    public function getDimensionNames($level, $short = false) {
+        $dimensions = [];
+        foreach ($this->getDimensions()->where(['level' =>$level])->all() as $d ) {
+            $dimensions[] = $d->name;
+        };
+
+        if ($short) {
+            for ($i = 0; $i < count($dimensions); $i++) {
+                $dimensions[$i] = str_replace('Orientación', 'O.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Orientation', 'O.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Resolución', 'Res.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Dimensión', 'D.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Gestión', 'G.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('Visión', 'V.', $dimensions[$i]);
+                $dimensions[$i] = str_replace('estratégica', 'estrat.', $dimensions[$i]);
+            }
+        }
+
+        return $dimensions;
+    }
 }

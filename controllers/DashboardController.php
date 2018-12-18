@@ -121,7 +121,7 @@ class DashboardController extends BaseController
                     'team' => $team,
                     'members' => $members,
                     'member' => $member,
-                    // Indivudual wheel
+                    // Individual wheel
                     'projectedIndividualWheel' => $projectedIndividualWheel,
                     'projectedGroupWheel' => $projectedGroupWheel,
                     'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
