@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($company, 'name') ?>
     <?= $form->field($company, 'email') ?>
     <?= $form->field($company, 'phone') ?>
+    <?= $form->field($company, 'notes')->textarea() ?>
     <div class="form-group">
         <?= \app\components\SpinnerSubmitButton::widget([
             'caption' => \Yii::t('app', 'Save'),

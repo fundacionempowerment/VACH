@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\search\CompanySearch;
 use Yii;
 use yii\web\Controller;
 use app\models\Company;
@@ -12,9 +13,11 @@ class CompanyController extends BaseController
 
     public function actionIndex()
     {
-        $companies = Company::browse();
+        $searchModel = new CompanySearch();
+        $companies = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
-                    'companies' => $companies,
+            'companies' => $companies,
+            'searchModel' => $searchModel,
         ]);
     }
 

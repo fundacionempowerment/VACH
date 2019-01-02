@@ -54,7 +54,12 @@ class UserFusionForm extends Model
             Yii::$app->db->createCommand()->update('team', ['coach_id' => $this->destinationUserId], ['coach_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('team_coach', ['coach_id' => $this->destinationUserId], ['coach_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('stock', ['coach_id' => $this->destinationUserId], ['coach_id' => $this->originUserId])->execute();
+            Yii::$app->db->createCommand()->update('stock', ['consumer_id' => $this->destinationUserId], ['consumer_id' => $this->originUserId])->execute();
+            Yii::$app->db->createCommand()->update('stock', ['creator_id' => $this->destinationUserId], ['creator_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('payment', ['coach_id' => $this->destinationUserId], ['coach_id' => $this->originUserId])->execute();
+            Yii::$app->db->createCommand()->update('payment_log', ['creator_id' => $this->destinationUserId], ['creator_id' => $this->originUserId])->execute();
+            Yii::$app->db->createCommand()->update('transaction', ['creator_id' => $this->destinationUserId], ['creator_id' => $this->originUserId])->execute();
+            Yii::$app->db->createCommand()->update('transaction_log', ['creator_id' => $this->destinationUserId], ['creator_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('user_session', ['user_id' => $this->destinationUserId], ['user_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('log', ['coach_id' => $this->destinationUserId], ['coach_id' => $this->originUserId])->execute();
             Yii::$app->db->createCommand()->update('feedback', ['user_id' => $this->destinationUserId], ['user_id' => $this->originUserId])->execute();

@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email',
             'phone',
+            'stock',
             'is_administrator:boolean',
             ['class' => 'app\components\grid\ActionColumn'],
         ],

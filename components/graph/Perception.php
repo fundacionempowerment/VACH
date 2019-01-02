@@ -2,16 +2,16 @@
 
 namespace app\components\graph;
 
-use Yii;
 use app\models\Person;
+use app\models\Team;
+use app\models\TeamType;
 use app\models\Wheel;
 use app\models\WheelQuestion;
+use Yii;
 
-class Perception
-{
+class Perception {
 
-    static public function draw($teamId, $memberId, $wheelType)
-    {
+    static public function draw($teamId, $memberId, $wheelType) {
         switch ($wheelType) {
             case Wheel::TYPE_GROUP:
                 $redLine = Wheel::getProjectedGroupWheel($teamId, $memberId);
@@ -23,19 +23,10 @@ class Perception
                 break;
         }
 
-        $dimensions = WheelQuestion::getDimensionNames($wheelType, true);
-
-        switch ($wheelType) {
-            case Wheel::TYPE_INDIVIDUAL:
-                $title = Yii::t('dashboard', 'Individual Perception Adjustment Matrix');
-                break;
-            case Wheel::TYPE_GROUP:
-                $title = Yii::t('dashboard', 'Group Perception Adjustment Matrix');
-                break;
-            case Wheel::TYPE_ORGANIZATIONAL:
-                $title = Yii::t('dashboard', 'Organizational Perception Adjustment Matrix');
-                break;
-        }
+        $team = Team::findOne($teamId);
+        $dimensions = $team->teamType->getDimensionNames($wheelType, true);
+        $title = Yii::t('dashboard', 'Perception Adjustment Matrix') . ' ' .
+            ($wheelType == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
         $member = Person::findOne(['id' => $memberId]);
 

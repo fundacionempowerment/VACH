@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'data' => $persons,
     ]);
     ?>
+    <?= $form->field($team, 'notes')->textarea() ?>
     <div class="form-group">
         <?= \app\components\SpinnerSubmitButton::widget([
             'caption' => \Yii::t('app', 'Save'),

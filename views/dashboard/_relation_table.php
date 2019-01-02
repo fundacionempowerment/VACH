@@ -1,11 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
 use app\models\Wheel;
-use app\models\WheelQuestion;
-use yii\bootstrap\Progress;
-use yii\helpers\Json;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -64,7 +60,7 @@ $token = rand(100000, 999999);
                 }
             } ?>
             <td>
-                <?= Yii::t('app', 'Avg.') ?>
+                <?= Yii::t('app', 'Critical') ?>
             </td>
         </tr>
         <?php
@@ -91,12 +87,14 @@ $token = rand(100000, 999999);
                                     }
 
                                     echo Html::tag('td', round($datum['value'] * 100 / 4, 1) . '%', ['class' => $class]);
-                                    $observer_sum += $datum['value'];
-                                    $observer_count++;
-                                    if (!isset($observed_sum[$observedId])) {
-                                        $observed_sum[$observedId] = 0;
+                                    if ($observedId != $observerId) {
+                                        $observer_sum += $datum['value'];
+                                        $observer_count++;
+                                        if (!isset($observed_sum[$observedId])) {
+                                            $observed_sum[$observedId] = 0;
+                                        }
+                                        $observed_sum[$observedId] += $datum['value'];
                                     }
-                                    $observed_sum[$observedId] += $datum['value'];
                                 }
                             }
                         }
@@ -118,11 +116,15 @@ $token = rand(100000, 999999);
         } ?>
         <tr>
             <td>
-                <?= Yii::t('app', 'Avg.') ?>
+                <?= Yii::t('dashboard', 'M. Productivity') ?>
             </td>
             <?php
             if ($observer_count > 0) {
-                foreach ($observed_sum as $sum) {
+                foreach ($members as $id => $member) {
+                    if ($id == 0) {
+                        continue;
+                    }
+                    $sum = $observed_sum[$id];
                     if ($sum / $observer_count > Yii::$app->params['good_consciousness']) {
                         $class = 'success';
                     } elseif ($sum / $observer_count < Yii::$app->params['minimal_consciousness']) {

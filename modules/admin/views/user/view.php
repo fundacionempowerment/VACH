@@ -17,7 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Edit'), ['edit', 'id' => $user->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('user', 'Set password'), ['set-password', 'id' => $user->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a(Yii::t('user', 'Send reset password email'), ['reset-password', 'id' => $user->id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a(Yii::t('user', 'Set random password and send email'), ['generate-password', 'id' => $user->id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a(Yii::t('user', 'Send reset password email'), ['reset-password', 'id' => $user->id], ['class' => 'btn btn-info']) ?>
         <?php if ($user->deletable) echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $user->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -33,6 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email:email',
             'phone',
+            'stock',
+            'notes',
         ],
     ]) ?>
 </div>

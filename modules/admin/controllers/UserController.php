@@ -23,22 +23,19 @@ use yii\web\UploadedFile;
 /**
  * User controller
  */
-class UserController extends AdminBaseController
-{
+class UserController extends AdminBaseController {
 
     public $layout = '//admin';
 
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function actions() {
         return [
         ];
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -49,8 +46,7 @@ class UserController extends AdminBaseController
         ];
     }
 
-    public function beforeAction($action)
-    {
+    public function beforeAction($action) {
         if (!isset(Yii::$app->user->identity))
             return $this->redirect(['/site']);
         else if ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
@@ -60,8 +56,7 @@ class UserController extends AdminBaseController
         return parent::beforeAction($action);
     }
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $filter = new UserSearch();
         $filter->load(Yii::$app->request->queryParams);
         $users = $filter->adminBrowse();
@@ -72,8 +67,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionView($id)
-    {
+    public function actionView($id) {
         $user = User::findOne(['id' => $id]);
 
         return $this->render('view', [
@@ -81,8 +75,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionNew()
-    {
+    public function actionNew() {
         $user = new User();
         $user->resetPassword = true;
 
@@ -106,8 +99,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionEdit($id)
-    {
+    public function actionEdit($id) {
         $user = User::findOne(['id' => $id]);
 
         if ($user->load(Yii::$app->request->post())) {
@@ -129,8 +121,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $user = User::findOne(['id' => $id]);
         if ($user->delete()) {
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully deleted.', ['name' => $user->fullname]));
@@ -141,8 +132,7 @@ class UserController extends AdminBaseController
         return $this->redirect(['index']);
     }
 
-    public function actionSetPassword($id)
-    {
+    public function actionSetPassword($id) {
         $user = User::findOne(['id' => $id]);
         $user->scenario = User::PASSWORD;
 
@@ -165,15 +155,38 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionResetPassword($id)
-    {
+    public function actionResetPassword($id) {
         $user = User::findOne(['id' => $id]);
         $this->sendResetPassword($user);
         return $this->redirect(['view', 'id' => $id]);
     }
 
-    private function sendResetPassword($user)
-    {
+    public function actionGeneratePassword($id) {
+        $user = User::findOne(['id' => $id]);
+        //$user->scenario = User::PASSWORD;
+
+        $password = Yii::$app->security->generateRandomString(6);
+        $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
+        $user->password_hash = $encryptedPassword;
+
+        $emailSent = \Yii::$app->mailer->compose('passwordGenerate', ['user' => $user, 'password' => $password])
+            ->setFrom(\Yii::$app->params['senderEmail'])
+            ->setTo($user->email)
+            ->setSubject(\Yii::t('app', 'Password for VACH'))
+            ->send();
+
+        if (!$emailSent) {
+            SiteController::addFlash('error', Yii::t('user', 'Fail to send generate password email.'));
+        } else if ($user->save()) {
+            SiteController::addFlash('success', Yii::t('user', 'Password has been successfully saved.'));
+        } else {
+            SiteController::FlashErrors($user);
+        }
+
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    private function sendResetPassword($user) {
         if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
             $user->generatePasswordResetToken();
         }
@@ -185,7 +198,7 @@ class UserController extends AdminBaseController
         $resetPasswordEmailSent = \Yii::$app->mailer->compose('passwordResetToken', ['users' => [$user]])
             ->setFrom(\Yii::$app->params['senderEmail'])
             ->setTo($user->email)
-            ->setSubject(\Yii::t('app', 'Password for VACH'))
+            ->setSubject(\Yii::t('app', 'Reset password for VACH'))
             ->send();
 
         if ($resetPasswordEmailSent) {
@@ -197,8 +210,7 @@ class UserController extends AdminBaseController
         return $resetPasswordEmailSent;
     }
 
-    public function actionFuse()
-    {
+    public function actionFuse() {
         $model = new UserFusionForm();
         if ($model->load(Yii::$app->request->post())) {
             LogController::log(Yii::t('user', 'User {origin} has been fused to {destination}.', [
@@ -219,8 +231,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionFusionPreview()
-    {
+    public function actionFusionPreview() {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (!Yii::$app->request->isAjax && !Yii::$app->request->isPost) {
@@ -257,8 +268,7 @@ class UserController extends AdminBaseController
         return $response;
     }
 
-    public function actionImport()
-    {
+    public function actionImport() {
         $model = new UserImport();
 
         if (Yii::$app->request->isPost) {
@@ -279,8 +289,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    public function actionImportPreview($tempFilename, $extension, $resetPassword)
-    {
+    public function actionImportPreview($tempFilename, $extension, $resetPassword) {
         $users = $this->readFile($tempFilename, $extension);
 
         if (Yii::$app->request->isPost) {
@@ -301,8 +310,7 @@ class UserController extends AdminBaseController
         ]);
     }
 
-    private function readFile($tempFilename, $extension)
-    {
+    private function readFile($tempFilename, $extension) {
         $reader = IOFactory::createReader(ucfirst($extension));
         $filePath = Yii::getAlias("@runtime/temp/$tempFilename");
         $spreadsheet = $reader->load($filePath);

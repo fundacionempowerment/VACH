@@ -166,8 +166,13 @@ class PaymentController extends BaseController {
             $referenceCode = Yii::$app->request->post('reference_sale');
 
             $transaction = Transaction::findOne(['uuid' => $referenceCode]);
+
+            if ($transaction->status == Payment::STATUS_PAID) {
+                return 'OK';
+            }
+
             $payment = $transaction->payment;
-            $stocks = Stock::find()->where(['payment_id' => $payment->id])->all();
+            $stocks = $payment->stocks;
 
             $transaction->external_id = Yii::$app->request->post('reference_pol');
             $transaction->external_data = serialize($_POST);
@@ -210,7 +215,7 @@ class PaymentController extends BaseController {
                     }
                     break;
                 default:
-                    if ($payment->status != Payment::STATUS_PAID) {
+                    if ($transaction->status != Payment::STATUS_PAID) {
                         $transaction->status = Payment::STATUS_ERROR;
                         $transaction->save();
                     }

@@ -244,15 +244,19 @@ class Word
     static private function addTeamRelations()
     {
         self::$section->addPageBreak();
-        self::$section->addTitle(Yii::t('report', 'Relations Matrix'), 1);
+        self::$section->addTitle(Yii::t('report', 'Relation Matrix'), 1);
 
-        $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
 
-        self::$section->addTitle(Yii::t('dashboard', 'Group Relations Matrix'), 2);
-        self::addRelationTable($groupRelationsMatrix);
-        self::$section->addTitle(Yii::t('dashboard', 'Organizational Relations Matrix'), 2);
-        self::addRelationTable($organizationalRelationsMatrix);
+        if (self::$team->teamType->level_1_enabled) {
+            $groupRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_GROUP);
+            self::$section->addTitle(Yii::t('dashboard', 'Group Relations Matrix'), 2);
+            self::addRelationTable($groupRelationsMatrix);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            self::$section->addTitle(Yii::t('dashboard', 'Organizational Relations Matrix'), 2);
+            self::addRelationTable($organizationalRelationsMatrix);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->relations);
     }
@@ -276,7 +280,7 @@ class Word
         foreach (self::$team->activeMemberList as $id => $name) {
             $table->addCell(600, self::$cell_style)->addText($name, $cell_font, $cell_paragraph);
         }
-        $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Avg.'), $cell_font, $cell_paragraph);
+        $table->addCell(600, self::$cell_style)->addText(Yii::t('app', 'Critical'), $cell_font, $cell_paragraph);
 
 // Add values
 
@@ -303,12 +307,14 @@ class Word
 
                         $table->addCell(600, $class)->addText($value, $cell_font, $cell_paragraph);
 
-                        $observer_sum += $datum['value'];
-                        $observer_count++;
-                        if (!isset($observed_sum[$observedId])) {
-                            $observed_sum[$observedId] = 0;
+                        if ($observedId != $observerId) {
+                            $observer_sum += $datum['value'];
+                            $observer_count++;
+                            if (!isset($observed_sum[$observedId])) {
+                                $observed_sum[$observedId] = 0;
+                            }
+                            $observed_sum[$observedId] += $datum['value'];
                         }
-                        $observed_sum[$observedId] += $datum['value'];
                     }
                 }
             }
@@ -329,9 +335,13 @@ class Word
 // Add footer
 
         $table->addRow();
-        $table->addCell()->addText(Yii::t('app', 'Avg.'), $cell_font, $cell_paragraph);
+        $table->addCell()->addText(Yii::t('dashboard', 'M. Productivity'), $cell_font, $cell_paragraph);
         if ($observer_count > 0) {
-            foreach ($observed_sum as $sum) {
+            foreach (self::$team->activeMemberList as $id => $member) {
+                if ($id == 0) {
+                    continue;
+                }
+                $sum = $observed_sum[$id];
                 if ($sum / $observer_count > Yii::$app->params['good_consciousness'])
                     $class = self::$good_cell;
                 else if ($sum / $observer_count < Yii::$app->params['minimal_consciousness'])
@@ -351,13 +361,16 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Effectiveness Matrix'), 1);
 
-        $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_GROUP);
-        self::$section->addTitle(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'), 2);
-        self::addEffectivenessTable($data);
-
-        $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
-        self::$section->addTitle(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'), 2);
-        self::addEffectivenessTable($data);
+        if (self::$team->teamType->level_1_enabled) {
+            $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_GROUP);
+            self::$section->addTitle(Yii::t('dashboard', 'Group Consciousness and Responsability Matrix'), 2);
+            self::addEffectivenessTable($data);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $data = Wheel::getProdConsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
+            self::$section->addTitle(Yii::t('dashboard', 'Organizational Consciousness and Responsability Matrix'), 2);
+            self::addEffectivenessTable($data);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->effectiveness);
     }
@@ -485,21 +498,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Performance Matrix'), 1);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->performance);
     }
@@ -509,21 +525,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Competences Matrix'), 1);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->competences);
     }
@@ -533,21 +552,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Emergents Matrix'), 1);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => self::$team->id,
-                            'memberId' => 0,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => self::$team->id,
+                'memberId' => 0,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->emergents);
     }
@@ -575,21 +597,24 @@ class Word
     {
         self::$section->addTitle(Yii::t('report', 'Perception Matrix'), 2);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/perceptions',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/perceptions',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/perceptions',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/perceptions',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->perception);
     }
@@ -599,21 +624,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Competences Matrix'), 2);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/competences',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/competences',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->competences);
     }
@@ -623,21 +651,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Emergents Matrix'), 2);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/emergents',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/emergents',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->emergents);
     }
@@ -645,23 +676,26 @@ class Word
     static private function addIndividualRelations($individualReport)
     {
         self::$section->addPageBreak();
-        self::$section->addTitle(Yii::t('report', 'Relations Matrix'), 2);
+        self::$section->addTitle(Yii::t('report', 'Relation Matrix'), 2);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/relations',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/relations',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/relations',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/relations',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->relations);
     }
@@ -671,21 +705,24 @@ class Word
         self::$section->addPageBreak();
         self::$section->addTitle(Yii::t('report', 'Performance Matrix'), 2);
 
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_GROUP], true));
-        self::$paths[] = $path;
-        self::i($path);
-
-        $path = Downloader::download(\yii\helpers\Url::toRoute([
-                            '/graph/performance',
-                            'teamId' => self::$team->id,
-                            'memberId' => $individualReport->member->id,
-                            'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
-        self::$paths[] = $path;
-        self::i($path);
+        if (self::$team->teamType->level_1_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_GROUP], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
+        if (self::$team->teamType->level_2_enabled) {
+            $path = Downloader::download(\yii\helpers\Url::toRoute([
+                '/graph/performance',
+                'teamId' => self::$team->id,
+                'memberId' => $individualReport->member->id,
+                'wheelType' => Wheel::TYPE_ORGANIZATIONAL], true));
+            self::$paths[] = $path;
+            self::i($path);
+        }
 
         \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, $individualReport->performance);
     }

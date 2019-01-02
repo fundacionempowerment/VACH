@@ -8,6 +8,19 @@ use yii\db\Query;
 use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * Class Rerpot
+ * @package app\models
+ * @property integer team_id
+ * @property integer introduction_id
+ * @property string introduction
+ * @property integer relations_id
+ * @property string relations
+ * @property integer created_at
+ * @property integer updated_at
+ *
+ * @property Team $team
+ */
 class Report extends ActiveRecord
 {
 

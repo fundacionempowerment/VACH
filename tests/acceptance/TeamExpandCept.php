@@ -17,7 +17,7 @@ $I->wait(1);
 
 $I->see('Licencias requeridas: 1');
 
-$I->click('Guardar');
+$I->click('Completar');
 $I->wait(1);
 
 $I->see('exitosamente');

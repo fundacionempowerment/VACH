@@ -2,6 +2,7 @@
 
 namespace app\components\graph;
 
+use app\models\Team;
 use Yii;
 use app\models\Person;
 use app\models\Wheel;
@@ -28,12 +29,9 @@ class Relations
 
         $member = Person::findOne(['id' => $memberId]);
 
-        if ($wheelType == Wheel::TYPE_GROUP)
-            $title = Yii::t('dashboard', 'Group Relations Matrix');
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            $title = Yii::t('dashboard', 'Organizational Relations Matrix');
-        else
-            $title = Yii::t('dashboard', 'Individual Relations Matrix');
+        $team = Team::findOne($teamId);
+        $title = Yii::t('dashboard', 'Relation Matrix') . ' ' .
+            ($wheelType == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
         if (!empty($member)) {
             $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;

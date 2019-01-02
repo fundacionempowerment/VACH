@@ -42,7 +42,8 @@ $pluginOptions = [
             <?= Yii::t('app', 'Type') ?>: <?= Html::label($team->teamType->name) ?><br/>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($team->coach->fullname) ?><br/>
             <?= Yii::t('team', 'Company') ?>: <?= Html::label($team->company->name) ?><br/>
-            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?>
+            <?= Yii::t('team', 'Sponsor') ?>: <?= Html::label($team->sponsor->fullname) ?><br/>
+            <?= Yii::t('app', 'Notes') ?>: <?= Html::label($team->notes) ?>
         </p>
         <p>
             <?=

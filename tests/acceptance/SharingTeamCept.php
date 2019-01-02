@@ -45,7 +45,7 @@ $I->wait(1);
 
 $I->see('Licencias requeridas: ' . count($persons));
 
-$I->click('Guardar');
+$I->click('Completar');
 $I->wait(1);
 
 $I->selectOptionForSelect2('coach_id', 'assisstant');

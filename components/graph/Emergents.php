@@ -2,11 +2,12 @@
 
 namespace app\components\graph;
 
-use Yii;
 use app\models\Person;
+use app\models\Question;
+use app\models\Team;
 use app\models\Wheel;
 use app\models\WheelQuestion;
-use app\models\Question;
+use Yii;
 
 class Emergents
 {
@@ -26,16 +27,14 @@ class Emergents
 
     static public function draw($teamId, $memberId, $wheelType)
     {
-        if ($wheelType == Wheel::TYPE_GROUP)
-            $title = Yii::t('dashboard', 'Group Emergents Matrix');
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            $title = Yii::t('dashboard', 'Organiz. Emergents Matrix');
-        else
-            $title = Yii::t('dashboard', 'Individual Emergents Matrix');
-
-        self::$team = \app\models\Team::findOne(['id' => $teamId]);
+        self::$team = Team::findOne(['id' => $teamId]);
         self::$company = self::$team->company;
         self::$member = Person::findOne(['id' => $memberId]);
+
+        self::$dimensions  = self::$team->teamType->getDimensionNames(1);
+
+        $title = Yii::t('dashboard', 'Emergent Matrix') . ' ' .
+            ($wheelType == 1 ? self::$team->teamType->level_1_name : self::$team->teamType->level_2_name);
 
         if (!empty(self::$member)) {
             $title .= ' ' . Yii::t('app', 'of') . ' ' . self::$member->fullname;
@@ -110,8 +109,6 @@ class Emergents
         while (count($gap_emergents) > self::max_emergent_shown) {
             array_shift($gap_emergents);
         }
-
-        self::$dimensions = WheelQuestion::getDimensionNames($wheelType, true);
 
         require Yii::getAlias("@app/components/jpgraph/jpgraph.php");
         require Yii::getAlias("@app/components/jpgraph/jpgraph_canvas.php");

@@ -6,8 +6,15 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
+/**
+ * Class User
+ * @package app\models
+ * @property string notes
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
     const PASSWORD = 'password';
@@ -45,8 +52,9 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['name', 'surname', 'email', 'username'], 'required'],
             [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
-            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword'], 'safe'],
-            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['name', 'surname', 'email', 'phone', 'notes'], 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -85,6 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
             'resetPassword' => Yii::t('user', 'Send reset password email'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 
@@ -269,6 +278,29 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return true;
+    }
+
+    public function getStock($product_id = null) {
+
+        if (!$product_id) {
+            $product_id = Product::find()->all()[0]->id;
+        }
+
+        $query = new Query();
+
+        $balance = $query->select(new Expression('count(id) as balance'))
+            ->from('stock')
+            ->where([
+                'coach_id' => $this->id,
+                'product_id' => $product_id,
+                'status' => Stock::STATUS_VALID,
+            ])
+            ->one();
+
+        if ($balance && $balance['balance']) {
+            return $balance['balance'];
+        }
+        return 0;
     }
 
 }

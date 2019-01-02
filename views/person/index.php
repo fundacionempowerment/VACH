@@ -10,6 +10,14 @@ use app\components\SpinnerAnchor;
 $this->title = Yii::t('user', 'Persons');
 
 $this->params['breadcrumbs'][] = $this->title;
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $persons,
+    'sort' => false,
+    'pagination' => [
+        'pageSize' => 20,
+    ],
+]);
 ?>
 <div class="coach-persons">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -20,18 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'btn btn-success'],
         ]) ?>
     </p>
-    <?php
-    $dataProvider = new ActiveDataProvider([
-        'query' => $persons,
-        'pagination' => [
-            'pageSize' => 20,
-        ],
-    ]);
-    echo GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             [
-                'attribute' => 'fullname',
+                'attribute' => 'name',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'format' => 'html',
                 'value' => function ($data) {

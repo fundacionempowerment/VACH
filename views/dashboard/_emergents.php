@@ -1,21 +1,16 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
+use app\models\Question;
 use app\models\Wheel;
 use app\models\WheelQuestion;
-use app\models\Question;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
-if ($type == Wheel::TYPE_GROUP)
-    $title = Yii::t('dashboard', 'Group Emergents Matrix');
-else if ($type == Wheel::TYPE_ORGANIZATIONAL)
-    $title = Yii::t('dashboard', 'Organiz. Emergents Matrix');
-else
-    $title = Yii::t('dashboard', 'Individual Emergents Matrix');
+$title = Yii::t('dashboard', 'Emergent Matrix') . ' ' .
+    ($type == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
 if (!empty($member)) {
     $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
@@ -23,7 +18,7 @@ if (!empty($member)) {
     $title .= ' ' . Yii::t('app', 'of the team');
 }
 
-$dimensions = WheelQuestion::getDimensionNames($type);
+$dimensions = $team->teamType->getDimensionNames(1);
 $questionCount = WheelQuestion::getQuestionCount($type) / 8;
 
 $max_emergents = [];

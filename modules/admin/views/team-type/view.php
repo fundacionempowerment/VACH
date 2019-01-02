@@ -55,7 +55,7 @@ $detailProvider = new ArrayDataProvider([
             [
                 'attribute' => 'dimension',
                 'value' => function ($data) {
-                    return app\models\WheelQuestion::getDimentionName($data['dimension'], $data['type']);
+                    return $data->teamTypeDimension->name;
                 },
             ],
             [

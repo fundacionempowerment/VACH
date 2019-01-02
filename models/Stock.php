@@ -7,6 +7,24 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
 
+/**
+ * Class Stock
+ * @package app\models
+ * @property integer id
+ * @property integer coach_id
+ * @property integer product_id
+ * @property integer payment_id
+ * @property integer team_id
+ * @property integer consumer_id
+ * @property float price
+ * @property string status
+ *
+ * @property User $coach
+ * @property Product $product
+ * @property Payment $payment
+ * @property User $consumer
+ * @property Team $team
+ */
 class Stock extends ActiveRecord {
 
     const STATUS_INVALID = 'invalid';
@@ -86,7 +104,8 @@ class Stock extends ActiveRecord {
                 'stock.coach_id',
                 "CONCAT(coach.name, ' ', coach.surname) as coach_name",
                 "CONCAT(creator.name, ' ', creator.surname) as creator_name",
-                'product_id', 'price', 'stock.status as stock_status',
+                'product_id', 'product.name as product_name',
+                'stock.price', 'stock.status as stock_status',
                 'created_stamp',
                 'stock.creator_id',
                 'payment_id',
@@ -107,6 +126,7 @@ class Stock extends ActiveRecord {
             ->leftJoin('team', 'team.id = stock.team_id')
             ->leftJoin('company', 'company.id = team.company_id')
             ->innerJoin('payment', 'payment.id = stock.payment_id')
+            ->innerJoin('product', 'product.id = stock.product_id')
             ->groupBy(['coach_id', 'product_id', 'price', 'stock.status', 'created_stamp', 'creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'team_id'])
             ->orderBy('created_stamp DESC, consumed_stamp DESC');
 
@@ -148,24 +168,6 @@ class Stock extends ActiveRecord {
 
     public function getStatusName() {
         return self::getStatusList()[$this->status];
-    }
-
-    public static function getStock($product_id, $user_id = null) {
-        $query = new Query();
-
-        $balance = $query->select(new Expression('count(id) as balance'))
-            ->from('stock')
-            ->where([
-                'coach_id' => ($user_id ? $user_id : Yii::$app->user->id),
-                'product_id' => $product_id,
-                'status' => self::STATUS_VALID,
-            ])
-            ->one();
-
-        if ($balance && $balance['balance']) {
-            return $balance['balance'];
-        }
-        return 0;
     }
 
     public static function saveBuyModel($model) {
@@ -255,12 +257,14 @@ class Stock extends ActiveRecord {
         return $success;
     }
 
-    public static function consume($consumer_id, $quantity, $team_id) {
+    public static function consume($consumer_id, $quantity, $team_id, $product_id) {
         $consumed_stamp = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $quantity; $i++) {
             $available_stock_id = Yii::$app->db->createCommand('SELECT `id` FROM `stock` '
                 . 'WHERE `consumed_stamp` is null '
                 . 'AND `coach_id` = ' . $consumer_id
+                . " AND `status` = 'valid'"
+                . " AND `product_id` = " . $product_id
                 . ' ORDER BY `id` ASC LIMIT 1')->queryScalar();
 
             Yii::$app->db->createCommand()

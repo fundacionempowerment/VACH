@@ -8,15 +8,9 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $wheel app\models\ContactForm */
+/* @var $wheel app\models\Wheel */
 
-if ($wheel->type == Wheel::TYPE_INDIVIDUAL) {
-    $this->title = Yii::t('wheel', 'Running individual wheel');
-} else if ($wheel->type == Wheel::TYPE_GROUP) {
-    $this->title = Yii::t('wheel', 'Running group wheel');
-} else {
-    $this->title = Yii::t('wheel', 'Running organizational wheel');
-}
+$this->title = Yii::t('wheel', 'Running wheel') . ' ' . $wheel->levelName;
 
 $instructions_shown = Yii::$app->session->get('instructions_shown');
 $show_instructions = $instructions_shown == true ? false : true;
@@ -25,10 +19,14 @@ $show_instructions = $instructions_shown == true ? false : true;
     <div>
         <h1><?= Html::encode($this->title) ?></h1>
         <h2>
-            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br/>
             <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
             <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
         </h2>
+        <h3>
+            <?= Yii::t('company', 'Company') ?>: <?= Html::label($wheel->team->company->name) ?><br/>
+            <?= Yii::t('team', 'Team') ?>: <?= Html::label($wheel->team->name) ?><br/>
+            <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br/>
+        </h3>
     </div>
     <?php if ($wheel->observed->photo) { ?>
         <div class="col-md-push-1 col-md-10">
@@ -46,8 +44,9 @@ $show_instructions = $instructions_shown == true ? false : true;
                     <br/><br/>
                 </li>
                 <li>
-                    Antes de responder a cada pregunta haga el ejercicio de visualizar a su compañero:
-                    asóciese con él y dese el permiso de que su Dación (Comunicación) sea en el
+                    Antes de responder a cada pregunta haga el ejercicio de visualizar
+                    <?= $wheel->team->teamType->level_0_enabled ? "a su compañero" : "al área que está observando" ?>:
+                    asóciese con <?= $wheel->team->teamType->level_0_enabled ? "él/ella" : "ella" ?>  y dese el permiso de que su Dación (Comunicación) sea en el
                     marco de los valores esenciales que vimos durante el taller.
                     <br/><br/>
                 </li>

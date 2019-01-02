@@ -3,9 +3,13 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
+/**
+ * @package app\models
+ * @property integer id
+ * @property string text
+ */
 class Question extends ActiveRecord
 {
 

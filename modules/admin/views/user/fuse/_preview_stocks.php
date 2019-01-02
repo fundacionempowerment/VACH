@@ -15,10 +15,10 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         [
-            'attribute' => 'status',
+            'attribute' => 'stock_status',
             'label' => Yii::t('app', 'Status'),
             'value' => function ($data) {
-                return Stock::getStatusList()[$data['status']];
+                return Stock::getStatusList()[$data['stock_status']];
             },
         ],
         [

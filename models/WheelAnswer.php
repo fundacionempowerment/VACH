@@ -5,10 +5,20 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use app\models\WheelAnswer;
 
 /**
- * LoginForm is the model behind the login form.
+ * @package app\models
+ * @property integer id
+ * @property integer wheel_id
+ * @property integer answer_value
+ * @property integer answer_order
+ * @property integer dimension
+ * @property integer question_id
+ * @property integer created_at
+ * @property integer updated_at
+ *
+ * @property Wheel wheel
+ * @property Question question
  */
 class WheelAnswer extends ActiveRecord
 {
