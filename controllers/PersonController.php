@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\search\PersonSearch;
 use Yii;
 use yii\web\Controller;
 use app\models\CoachModel;
@@ -14,9 +15,11 @@ class PersonController extends BaseController
 
     public function actionIndex()
     {
-        $persons = Person::browse();
+        $searchModel = new PersonSearch();
+        $persons = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
-                    'persons' => $persons,
+            'persons' => $persons,
+            'searchModel' => $searchModel,
         ]);
     }
 

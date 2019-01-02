@@ -1,10 +1,10 @@
 <?php
 
+use kartik\export\ExportMenu;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
-use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('payment', 'My Payments');
@@ -16,7 +16,7 @@ $dataProvider = new ActiveDataProvider([
     'pagination' => [
         'pageSize' => 20,
     ],
-        ]);
+]);
 $columns = [
     'uuid',
     'stamp:datetime',
@@ -30,8 +30,18 @@ $columns = [
     ],
     'statusName',
     ['class' => 'app\components\grid\ActionColumn',
-        'template' => '{view}',
+        'template' => '{view} {pay}',
         'options' => ['width' => '60px'],
+        'buttons' => [
+            'pay' => function ($url, $model, $key) {
+                if ($model['status'] == \app\models\Payment::STATUS_PENDING) {
+                    return Html::a(Yii::t('payment', 'Pay'), Url::to(['/payment/select', 'referenceCode' => $model['uuid']]), [
+                        'class' => 'btn btn-success',
+                    ]);
+                }
+                return '';
+            },
+        ]
     ]
 ];
 ?>

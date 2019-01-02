@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ReportHelper;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -19,6 +20,7 @@ use app\models\TeamMember;
 
 class ReportController extends Controller
 {
+
     const ANALYSIS_OPTIONS = [
         'height' => '500px',
         'toolbarGroups' => [
@@ -57,8 +59,8 @@ class ReportController extends Controller
         $this->checkAllowed($team);
 
         if ($team->report == null) {
-            $newReport = new Report();
-            $team->link('report', $newReport);
+            ReportHelper::populate($team);
+            $team->refresh();
         }
 
         foreach ($team->members as $teamMember) {
@@ -80,7 +82,7 @@ class ReportController extends Controller
         }
 
         return $this->render('view', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -105,7 +107,7 @@ class ReportController extends Controller
         }
 
         return $this->render('introduction', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -130,14 +132,7 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'effectiveness']);
         }
 
-        $members = [];
-
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -145,11 +140,11 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('effectiveness', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'members' => $members,
-                    'member' => null,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'members' => $members,
+            'member' => null,
         ]);
     }
 
@@ -173,25 +168,18 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'performance']);
         }
 
-        $members = [];
-
-        $groupPerformanceMatrix = [];
-        $organizationalPerformanceMatrix = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('performance', [
-                    'team' => $team,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'members' => $members,
+            'team' => $team,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
         ]);
     }
 
@@ -215,14 +203,7 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'relations']);
         }
 
-        $members = [];
-
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -230,10 +211,10 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('relations', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'members' => $members,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'members' => $members,
         ]);
     }
 
@@ -257,24 +238,18 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'competences']);
         }
 
-        $members = [];
-        $groupGauges = [];
-        $organizationalGauges = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('competences', [
-                    'team' => $team,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
-                    'members' => $members,
+            'team' => $team,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'members' => $members,
         ]);
     }
 
@@ -298,13 +273,7 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $id, '#' => 'emergents']);
         }
 
-        $members = [];
-        $groupEmergents = [];
-        $organizationalEmergents = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -315,13 +284,13 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('emergents', [
-                    'team' => $team,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => 0,
+            'team' => $team,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'memberId' => 0,
         ]);
     }
 
@@ -341,7 +310,7 @@ class ReportController extends Controller
         }
 
         return $this->render('action_plan', [
-                    'team' => $team,
+            'team' => $team,
         ]);
     }
 
@@ -365,31 +334,24 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'performance-' . $individualReport->id]);
         }
 
-        $members = [];
-
-        $groupPerformanceMatrix = [];
-        $organizationalPerformanceMatrix = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_performance', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
@@ -419,12 +381,12 @@ class ReportController extends Controller
         $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($team->id, $individualReport->person_id);
 
         return $this->render('individual_perception', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'projectedGroupWheel' => $projectedGroupWheel,
-                    'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
-                    'reflectedGroupWheel' => $reflectedGroupWheel,
-                    'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
+            'report' => $individualReport,
+            'team' => $team,
+            'projectedGroupWheel' => $projectedGroupWheel,
+            'projectedOrganizationalWheel' => $projectedOrganizationalWheel,
+            'reflectedGroupWheel' => $reflectedGroupWheel,
+            'reflectedOrganizationalWheel' => $reflectedOrganizationalWheel,
         ]);
     }
 
@@ -449,9 +411,7 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'relations-' . $individualReport->id]);
         }
 
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -459,11 +419,11 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_relations', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'report' => $individualReport,
+            'team' => $team,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
         ]);
     }
 
@@ -487,25 +447,19 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-competences-' . $individualReport->id]);
         }
 
-        $members = [];
-        $groupGauges = [];
-        $organizationalGauges = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
-        $groupGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_competences', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
-                    'members' => $members,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'members' => $members,
         ]);
     }
 
@@ -529,13 +483,7 @@ class ReportController extends Controller
             return $this->redirect(['/report/view', 'id' => $team->id, '#' => 'individual-emergents-' . $individualReport->id]);
         }
 
-        $members = [];
-        $groupEmergents = [];
-        $organizationalEmergents = [];
-
-        foreach (TeamMember::find()->where(['team_id' => $team->id])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
@@ -546,14 +494,14 @@ class ReportController extends Controller
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('individual_emergents', [
-                    'report' => $individualReport,
-                    'team' => $team,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'memberId' => $individualReport->person_id,
+            'report' => $individualReport,
+            'team' => $team,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'memberId' => $individualReport->person_id,
         ]);
     }
 
@@ -564,41 +512,31 @@ class ReportController extends Controller
         $team = Team::findOne(['id' => $id]);
         $this->checkAllowed($team);
 
-        $members = [];
-
-        $groupRelationsMatrix = [];
-        $organizationalRelationsMatrix = [];
-
-        foreach (TeamMember::find()->where([
-            'team_id' => $team->id,
-            'active' => true,
-        ])->all() as $teamMember) {
-            $members[$teamMember->person_id] = $teamMember->member->fullname;
-        }
+        $members = $team->activeMemberList;
 
         $members[0] = Yii::t('app', 'All');
 
         $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_GROUP);
-        $organizationalPerformanceMatrix = Wheel::getPerformanceMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
-        $groupGauges = Wheel::getGauges($team->id, Wheel::TYPE_GROUP);
-        $organizationalGauges = Wheel::getGauges($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_GROUP);
+        $organizationalPerformanceMatrix = Wheel::getProdConsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
+        $groupCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_GROUP);
+        $organizationalCompetences = Wheel::getPerceptions($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         $groupEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_GROUP);
         $organizationalEmergents = Wheel::getEmergents($team->id, Wheel::TYPE_ORGANIZATIONAL);
 
         return $this->render('download', [
-                    'team' => $team,
-                    'groupRelationsMatrix' => $groupRelationsMatrix,
-                    'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
-                    'groupPerformanceMatrix' => $groupPerformanceMatrix,
-                    'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
-                    'groupEmergents' => $groupEmergents,
-                    'organizationalEmergents' => $organizationalEmergents,
-                    'members' => $members,
+            'team' => $team,
+            'groupRelationsMatrix' => $groupRelationsMatrix,
+            'organizationalRelationsMatrix' => $organizationalRelationsMatrix,
+            'groupPerformanceMatrix' => $groupPerformanceMatrix,
+            'organizationalPerformanceMatrix' => $organizationalPerformanceMatrix,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
+            'groupEmergents' => $groupEmergents,
+            'organizationalEmergents' => $organizationalEmergents,
+            'members' => $members,
         ]);
     }
 
@@ -614,6 +552,10 @@ class ReportController extends Controller
         $uuid = uniqid('', true);
         $oWriterPPTX->save("/tmp/$uuid.pptx");
 
+        foreach (\app\components\Presentation::$paths as $path) {
+            unlink($path);
+        }
+
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $team->fullname . '.' . date('Y-m-d') . '.pptx');
     }
 
@@ -627,6 +569,10 @@ class ReportController extends Controller
         $uuid = uniqid('', true);
         $phpWord->save("/tmp/$uuid.docx", 'Word2007');
 
+        foreach (\app\components\Word::$paths as $path) {
+            unlink($path);
+        }
+
         return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $team->fullname . '.' . date('Y-m-d') . '.docx');
     }
 
@@ -636,4 +582,5 @@ class ReportController extends Controller
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
         }
     }
+
 }

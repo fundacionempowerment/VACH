@@ -4,7 +4,7 @@ use yii\helpers\Html;
 ?>
 <div class="container">
     <p class="pull-left">
-        <?= Html::a('Fundación Empowerment', 'http://www.fundacionempowerment.org/') ?>
+        <?= Html::a('Coaching Por Competencias', 'http://http://coachingporcompetencias.com/') ?>
         &nbsp;
         <?= Html::a('Español', ['site/es']) ?>
         &nbsp;
@@ -12,7 +12,7 @@ use yii\helpers\Html;
         &nbsp;
         <?= Html::a(Yii::t('feedback', 'Feedbacks'), ['/feedback']) ?>
         &nbsp;
-        <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?>
+        <?= Html::a(Yii::t('app', 'Consults'), ['/site/contact']) ?>
     </p>
     <p class="pull-right">
         <?= Html::a(Yii::t('app', 'Source code'), 'https://github.com/fundacionempowerment/VACH', ['rel' => 'external', 'target' => '_blank']) ?>

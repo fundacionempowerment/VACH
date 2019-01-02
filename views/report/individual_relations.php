@@ -13,7 +13,7 @@ use app\controllers\ReportController;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('report', 'Relations Matrix');
+$this->title = Yii::t('report', 'Relation Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];
@@ -25,14 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <?php
     if (count($groupRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_relation', [
+        echo $this->render('../dashboard/_relation_graph', [
             'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_GROUP,
         ]);
     }
     if (count($organizationalRelationsMatrix) > 0) {
-        echo $this->render('../dashboard/_relation', [
+        echo $this->render('../dashboard/_relation_graph', [
             'teamId' => $team->id,
             'memberId' => $report->member->id,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,

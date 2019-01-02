@@ -7,8 +7,6 @@ $password = "password$random";
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that reset password works');
 
-$I->resetEmails();
-
 $I->amOnPage(Yii::$app->homeUrl);
 
 $I->click('Reiniciar contraseña');
@@ -20,9 +18,10 @@ $I->click('Solicitar');
 
 $I->waitForText('Revise su buzón de correo para más instrucciones');
 
-$I->seeInLastEmailSubject('Reinicio de contraseña para VACH');
+$message = $I->grabLastSentEmail();
+//$I->seeInLastEmailSubject('Reinicio de contraseña para VACH');
 
-$link = $I->grabFromLastEmail("");
+var_dump($message);
 
 $I->amOnUrl($link);
 

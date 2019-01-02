@@ -6,17 +6,25 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
+/**
+ * Class User
+ * @package app\models
+ * @property string notes
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
+    const PASSWORD = 'password';
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
     public $password;
     public $password_confirm;
-    public $deletable;
+    public $resetPassword;
 
     /**
      * @inheritdoc
@@ -42,9 +50,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['name', 'surname', 'email', 'username', 'password', 'password_confirm'], 'required'],
-            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator'], 'safe'],
-            [['name', 'surname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['name', 'surname', 'email', 'username'], 'required'],
+            [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
+            [['name', 'surname', 'email', 'phone', 'username', 'password', 'password_confirm', 'is_administrator', 'resetPassword', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['name', 'surname', 'email', 'phone', 'notes'], 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
             ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -64,10 +74,10 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByName($name)
     {
         return self::find()
-                        ->where(['like', 'name', $name])
-                        ->orWhere(['like', 'surname', $name])
-                        ->orWhere(['like', 'username', $name])
-                        ->andWhere(['status' => self::STATUS_ACTIVE]);
+            ->where(['like', 'name', $name])
+            ->orWhere(['like', 'surname', $name])
+            ->orWhere(['like', 'username', $name])
+            ->andWhere(['status' => self::STATUS_ACTIVE]);
     }
 
     public function attributeLabels()
@@ -82,6 +92,8 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => Yii::t('app', 'Email'),
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
+            'resetPassword' => Yii::t('user', 'Send reset password email'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 
@@ -117,8 +129,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return static::findOne([
-                    'password_reset_token' => $token,
-                    'status' => self::STATUS_ACTIVE,
+            'password_reset_token' => $token,
+            'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -159,7 +171,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
+        $timestamp = (int)end($parts);
         return $timestamp + $expire >= time();
     }
 
@@ -242,9 +254,53 @@ class User extends ActiveRecord implements IdentityInterface
         return \yii\helpers\ArrayHelper::map(static::find()->orderBy('name,surname')->all(), 'id', 'userfullname');
     }
 
-    public static function adminBrowse()
+    public static function getAdminEmails()
     {
-        return static::find()->orderBy('name, surname, username');
+        return \yii\helpers\ArrayHelper::map(static::find()->where(['is_administrator' => true])->all(), 'id', 'email');
+    }
+
+    public function getDeletable()
+    {
+        if (Company::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Person::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Team::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (TeamCoach::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+        if (Log::find()->where(['coach_id' => $this->id])->exists()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getStock($product_id = null) {
+
+        if (!$product_id) {
+            $product_id = Product::find()->all()[0]->id;
+        }
+
+        $query = new Query();
+
+        $balance = $query->select(new Expression('count(id) as balance'))
+            ->from('stock')
+            ->where([
+                'coach_id' => $this->id,
+                'product_id' => $product_id,
+                'status' => Stock::STATUS_VALID,
+            ])
+            ->one();
+
+        if ($balance && $balance['balance']) {
+            return $balance['balance'];
+        }
+        return 0;
     }
 
 }

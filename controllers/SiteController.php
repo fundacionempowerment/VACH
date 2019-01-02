@@ -2,15 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\LoginForm;
+use app\models\PasswordResetRequestForm;
+use app\models\RegisterModel;
+use app\models\ResetPasswordForm;
+use app\models\Wheel;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\RegisterModel;
-use app\models\Wheel;
-use app\models\PasswordResetRequestForm;
-use app\models\ResetPasswordForm;
 
 class SiteController extends BaseController
 {
@@ -55,13 +54,14 @@ class SiteController extends BaseController
         return true;
     }
 
-    public function actionIndex()
+    public function actionIndex($username = '')
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->redirect(['/team']);
         }
 
         $model = new LoginForm();
+        $model->username = $username;
         $wheel = new Wheel();
 
         $nowheel = Yii::$app->request->get('nowheel');
@@ -70,8 +70,8 @@ class SiteController extends BaseController
         }
 
         return $this->render('index', [
-                    'model' => $model,
-                    'wheel' => $wheel,
+            'model' => $model,
+            'wheel' => $wheel,
         ]);
     }
 
@@ -113,8 +113,8 @@ class SiteController extends BaseController
         } else {
             $wheel = new Wheel();
             return $this->render('index', [
-                        'model' => $model,
-                        'wheel' => $wheel,
+                'model' => $model,
+                'wheel' => $wheel,
             ]);
         }
     }
@@ -140,10 +140,10 @@ class SiteController extends BaseController
     public function actionLogout()
     {
         Yii::$app->db->createCommand()
-                ->delete('user_session', 'token = :token and stamp < :stamp', [
-                    ':token' => session_id(),
-                    ':stamp' => (new \DateTime('today -30 days'))->format('Y-m-d H:i:s')])
-                ->execute();
+            ->delete('user_session', 'token = :token and stamp < :stamp', [
+                ':token' => session_id(),
+                ':stamp' => (new \DateTime('today -30 days'))->format('Y-m-d H:i:s')])
+            ->execute();
 
         Yii::$app->user->logout();
 
@@ -153,6 +153,7 @@ class SiteController extends BaseController
     public function actionRegister()
     {
         $model = new \app\models\User();
+        $model->scenario = \app\models\User::PASSWORD;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->setPassword($model->password);
             if ($model->save()) {
@@ -172,7 +173,7 @@ class SiteController extends BaseController
         }
 
         return $this->render('register', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -193,7 +194,7 @@ class SiteController extends BaseController
             }
         }
         return $this->render('requestPasswordResetToken', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -206,17 +207,24 @@ class SiteController extends BaseController
      */
     public function actionResetPassword($token)
     {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+        if (empty($token) || !is_string($token)) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Password reset token cannot be blank.'));
+            return $this->redirect(['index']);
         }
+
+        $model = new ResetPasswordForm($token);
+
+        if (!$model->user) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Wrong password reset token.'));
+            return $this->redirect(['index']);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'New password was saved.'));
-            return $this->goHome();
+            return $this->redirect(['index', 'username' => $model->username]);
         }
         return $this->render('resetPassword', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -263,7 +271,7 @@ class SiteController extends BaseController
         }
 
         return $this->render('contact', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -281,9 +289,24 @@ class SiteController extends BaseController
 
         foreach ($record->getErrors() as $attribute => $messages) {
             foreach ($messages as $message) {
-                self::addFlash('error', \Yii::t('app', 'Problem: ') . $message);
+                self::addFlash('error', \Yii::t('app', 'Problem:') . ' ' . $message);
             }
         }
+    }
+
+    public static function Errors($record)
+    {
+        if (!isset($record)) {
+            return '';
+        }
+
+        $result = '';
+        foreach ($record->getErrors() as $attribute => $messages) {
+            foreach ($messages as $message) {
+                $result .= $message . ' ';
+            }
+        }
+        return $result;
     }
 
     public function actionMigrateUp()
@@ -301,6 +324,7 @@ class SiteController extends BaseController
             ],
         ]);
         \Yii::$app->runAction('migrate/up', ['migrationPath' => '@app/migrations/', 'interactive' => false]);
+        \Yii::$app->runAction('migrate/up', ['migrationPath' => '@vendor/onmotion/yii2-telegram/migrations', 'interactive' => false]);
         \Yii::$app = $oldApp;
     }
 

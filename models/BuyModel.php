@@ -9,7 +9,7 @@ use yii\base\Model;
  * This is the model class for table "article".
  *
  * @property double $amount
- * 
+ *
  */
 class BuyModel extends Model
 {
@@ -28,7 +28,8 @@ class BuyModel extends Model
     public $currency;
     public $test;
     public $buyerEmail;
-    
+    public $payerEmail;
+
     public $actionUrl;
     public $responseUrl;
     public $confirmationUrl;
@@ -50,9 +51,6 @@ class BuyModel extends Model
         $this->responseUrl = Yii::$app->params['payu_response_url'];
         $this->confirmationUrl = Yii::$app->params['payu_confirmation_url'];
 
-        $user = User::findOne(['id' => Yii::$app->user->id]);
-        $this->buyerEmail = $user->email;
-
         return parent::init();
     }
 
@@ -66,6 +64,7 @@ class BuyModel extends Model
             [['amount', 'uuid'], 'required'],
             [['product_id', 'quantity'], 'safe'],
             ['quantity', 'number', 'min' => 1, 'max' => 100],
+            ['payerEmail', 'email'],
         ];
     }
 
@@ -75,15 +74,48 @@ class BuyModel extends Model
     public function attributeLabels()
     {
         return [
-            'quantity' => Yii::t('stock', 'Quantity'),
+            'quantity' => Yii::t('stock', 'Quantity to buy'),
+            'payerEmail' => Yii::t('stock', 'Sent payment link to this email'),
         ];
     }
-    
-    public function getSignature(){
-        
-        $string  =  "$this->apiKey~$this->merchantId~$this->referenceCode~$this->amount~$this->currency";
-        
-        return md5($string);        
+
+    public function getSignature()
+    {
+        $string = "$this->apiKey~$this->merchantId~$this->referenceCode~$this->amount~$this->currency";
+
+        return md5($string);
+    }
+
+    public static function fromPayment(Payment $payment)
+    {
+        $model = new BuyModel([
+            'product_id' => $payment->stocks[0]->product_id,
+            'quantity' => count($payment->stocks),
+            'price' => $payment->stocks[0]->price,
+            'referenceCode' => $payment->uuid,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
+            'buyerEmail' => $payment->coach->email,
+        ]);
+
+        return $model;
+    }
+
+    public static function fromTransaction(Transaction $transaction)
+    {
+        $payment = $transaction->payment;
+
+        $model = new BuyModel([
+            'product_id' => $payment->stocks[0]->product_id,
+            'quantity' => count($payment->stocks),
+            'price' => $payment->stocks[0]->price,
+            'referenceCode' => $transaction->uuid,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
+            'buyerEmail' => $payment->coach->email,
+        ]);
+
+        return $model;
     }
 
 }

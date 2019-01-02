@@ -130,8 +130,8 @@ $this->title = Yii::t('report', 'Report');
         <?=
         $this->render('_competences', [
             'team' => $team,
-            'groupGauges' => $groupGauges,
-            'organizationalGauges' => $organizationalGauges,
+            'groupCompetences' => $groupCompetences,
+            'organizationalCompetences' => $organizationalCompetences,
             'members' => $members,
         ])
         ?>
@@ -162,8 +162,8 @@ $this->title = Yii::t('report', 'Report');
                 $reflectedOrganizationalWheel = Wheel::getReflectedOrganizationalWheel($team->id, $individualReport->person_id);
                 $groupRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_GROUP);
                 $organizationalRelationsMatrix = Wheel::getRelationsMatrix($team->id, Wheel::TYPE_ORGANIZATIONAL);
-                $groupGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
-                $organizationalGauges = Wheel::getMemberGauges($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
+                $groupCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
+                $organizationalCompetences = Wheel::getMemberCompetences($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
                 $groupEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_GROUP);
                 $organizationalEmergents = Wheel::getMemberEmergents($team->id, $individualReport->person_id, Wheel::TYPE_ORGANIZATIONAL);
                 $subtitle_number = 97; // letter 'a'
@@ -186,8 +186,8 @@ $this->title = Yii::t('report', 'Report');
                 $this->render('_individual_competences', [
                     'report' => $individualReport,
                     'team' => $team,
-                    'groupGauges' => $groupGauges,
-                    'organizationalGauges' => $organizationalGauges,
+                    'groupCompetences' => $groupCompetences,
+                    'organizationalCompetences' => $organizationalCompetences,
                     'members' => $members,
                 ]);
                 ?>

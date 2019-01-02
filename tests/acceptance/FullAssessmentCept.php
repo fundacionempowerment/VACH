@@ -103,6 +103,7 @@ $I->click('Nuevo equipo');
 $I->wait(1);
 
 $I->fillField('Team[name]', $team['name']);
+$I->selectOptionForSelect2('Team[team_type_id]', 'Empresa');
 $I->selectOptionForSelect2('Team[company_id]', $company['name']);
 $I->selectOptionForSelect2('Team[sponsor_id]', $sponsor['name']);
 
@@ -124,7 +125,7 @@ $I->wait(1);
 
 $I->see('Licencias requeridas: ' . count($persons));
 
-$I->click('Guardar');
+$I->click('Completar');
 $I->wait(1);
 
 // grab all tokens
@@ -158,7 +159,7 @@ for ($i = 0; $i < count($persons); $i++) {
         for ($q = 0; $q < 10; $q++) {
             $answer = 'answer' . (($d * 10) + $q);
             $random = rand(0, 4);
-            $I->selectOption("form input[name=$answer]", $random);
+            $I->click("//input[@value=$random and @name='$answer']/..");
         }
 
         if ($d < 7)
@@ -195,7 +196,7 @@ for ($i = 3; $i < count($persons) * 3; $i++) {
             for ($q = 0; $q < 8; $q++) {
                 $answer = 'answer' . (($d * 8) + $q);
                 $random = rand(0, 4);
-                $I->selectOption("form input[name=$answer]", $random);
+                $I->click("//input[@value=$random and @name='$answer']/..");
             }
 
             if ($d < 7)

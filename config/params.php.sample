@@ -9,6 +9,14 @@ return [
     'server_status' => 'online',
     'send_wheel_answers' => false,
     'user.passwordResetTokenExpire' => 3600,
+    // Email params
+    'email' => [
+        'host' => 'localhost',
+        'username' => '',
+        'password' => '',
+        'port' => '1025',
+        //'encryption' => 'tls',
+    ],
     //
     'monetize' => true,
     'manual_mode' => false,

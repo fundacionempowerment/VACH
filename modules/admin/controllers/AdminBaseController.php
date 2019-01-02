@@ -6,6 +6,7 @@ use Yii;
 
 class AdminBaseController extends \app\controllers\BaseController
 {
+    public $layout = '/admin';
 
     public function beforeAction($action)
     {

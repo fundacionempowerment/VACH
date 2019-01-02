@@ -7,7 +7,19 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * LoginForm is the model behind the login form.
+ * Class Person
+ * @package app\models
+ * @property integer id
+ * @property string name
+ * @property string shortname
+ * @property string surname
+ * @property string email
+ * @property string phone
+ * @property string photo
+ * @property integer gender
+ * @property integer created_at
+ * @property integer updated_at
+ * @property string notes
  */
 class Person extends ActiveRecord
 {
@@ -20,6 +32,13 @@ class Person extends ActiveRecord
     const GENDER_OTHER = 2;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function tableName() {
+        return 'person';
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -27,8 +46,9 @@ class Person extends ActiveRecord
         return [
             // username and password are both required
             [['name', 'surname', 'email', 'coach_id', 'gender'], 'required'],
-            [['shortname', 'phone'], 'safe'],
-            [['name', 'surname', 'shortname', 'email', 'phone'], 'filter', 'filter' => 'trim'],
+            [['shortname', 'phone', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 1000],
+            [['name', 'surname', 'shortname', 'email', 'phone', 'notes'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
             [['photo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
@@ -54,7 +74,8 @@ class Person extends ActiveRecord
             'fullname' => Yii::t('app', 'Name'),
             'phone' => Yii::t('app', 'Phone'),
             'gender' => Yii::t('app', 'Gender'),
-            'photo' => Yii::t('app', 'Foto'),
+            'photo' => Yii::t('app', 'Photo'),
+            'notes' => Yii::t('app', 'Notes'),
         ];
     }
 

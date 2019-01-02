@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-6 text-right">
         <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $team->id]), ['class' => 'btn btn-success']) ?>
         <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(\Yii::t('app', 'Printable version'), Url::to(['report/download', 'id' => $team->id]), ['class' => 'btn btn-info']) ?>
     </div>
     <div class="clearfix"></div>
     <h3>
@@ -45,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $team->report->introduction ?>
     </p>
     <h3>
-        <?= Yii::t('report', 'Relations Matrix'); ?>
+        <?= Yii::t('report', 'Relation Matrix'); ?>
         <?=
         Html::a(\Yii::t('app', 'Edit'), Url::to(['report/relations', 'id' => $team->id]), [
             'id' => 'relations', 'class' => 'btn ' . (empty($team->report->relations) ? 'btn-success' : 'btn-default')
@@ -144,7 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $individualReport->emergents ?>
                 </p>
                 <h3>
-                    <?= Yii::t('report', 'Relations Matrix'); ?>
+                    <?= Yii::t('report', 'Relation Matrix'); ?>
                     <?=
                     Html::a(\Yii::t('app', 'Edit'), Url::to(['report/individual-relations', 'id' => $individualReport->id]), [
                         'id' => 'relations-' . $individualReport->id,

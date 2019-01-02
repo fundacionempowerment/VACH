@@ -9,10 +9,9 @@ use yii\base\Model;
  * This is the model class for table "article".
  *
  * @property double $amount
- * 
+ *
  */
-class RemoveModel extends Model
-{
+class RemoveModel extends Model {
 
     public $product_id;
     public $quantity;
@@ -21,8 +20,7 @@ class RemoveModel extends Model
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             // username and password are both required
             [['product_id', 'quantity', 'coach_id'], 'required'],
@@ -33,12 +31,15 @@ class RemoveModel extends Model
     /**
      * @return array customized attribute labels
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'quantity' => Yii::t('stock', 'Quantity'),
             'coach_id' => Yii::t('app', 'Coach'),
         ];
+    }
+
+    public function getCoach() {
+        return User::find()->where(['id' => $this->coach_id])->one();
     }
 
 }

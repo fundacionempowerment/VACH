@@ -13,6 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::img('@web/images/logo.png', ['class' => 'image-responsive']) ?>
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?= \app\widgets\Alert::widget() ?>
+
     <p><?= Yii::t('app', 'Please fill out your email. A link to reset password will be sent there.') ?></p>
 
     <div class="row">

@@ -1,26 +1,36 @@
 <?php
 
+use app\components\SpinnerAnchor;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('company', 'Companies');
 
 $this->params['breadcrumbs'][] = $this->title;
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $companies,
+    'sort' => false,
+    'pagination' => [
+        'pageSize' => 20,
+    ],
+]);
 ?>
 <div class="coach-companies">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php
-    $dataProvider = new ActiveDataProvider([
-        'query' => $companies,
-        'pagination' => [
-            'pageSize' => 20,
-        ],
-    ]);
-    echo GridView::widget([
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('company', 'New company'),
+            'url' => Url::to(['company/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             [
                 'attribute' => 'name',
@@ -33,14 +43,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'app\components\grid\ActionColumn',
                 'template' => '{delete}',
                 'options' => ['width' => '60px'],
-                'urlCreator' => function( $action, $model, $key, $index ) {
+                'urlCreator' => function ($action, $model, $key, $index) {
                     switch ($action) {
-                        case 'delete' : return Url::to(['company/delete', 'id' => $model['id'], 'delete' => '1']);
+                        case 'delete' :
+                            return Url::to(['company/delete', 'id' => $model['id'], 'delete' => '1']);
                     };
                 }
             ]
         ],
     ]);
     ?>
-    <?= Html::a(Yii::t('company', 'New company'), Url::to(['company/new']), ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= SpinnerAnchor::widget([
+            'caption' => Yii::t('company', 'New company'),
+            'url' => Url::to(['company/new']),
+            'options' => ['class' => 'btn btn-success'],
+        ]) ?>
+    </p>
 </div>

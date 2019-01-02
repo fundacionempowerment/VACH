@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 $isAdministrator = Yii::$app->user->identity->is_administrator;
 ?>
@@ -10,8 +10,8 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
     <p>
         <?=
         Yii::$app->user->id == $user->id ?
-                Yii::t('user', 'Please fill out the following fields with your personal data:') :
-                Yii::t('user', 'Please fill out the following fields with user personal data:')
+            Yii::t('user', 'Please fill out the following fields with your personal data:') :
+            Yii::t('user', 'Please fill out the following fields with user personal data:')
         ?>
     </p>
 
@@ -19,7 +19,7 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
         <div class="col-lg-5">
             <?php
             $form = ActiveForm::begin([
-                        'id' => 'account-form',
+                'id' => 'account-form',
             ]);
             ?>
 
@@ -28,11 +28,11 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
             <?= $form->field($user, 'email') ?>
             <?= $form->field($user, 'phone') ?>
             <?= $form->field($user, 'username') ?>
-            <?= $form->field($user, 'password')->passwordInput() ?>
-            <?= $form->field($user, 'password_confirm')->passwordInput() ?>
+            <?= $user->password_hash ? '' : $form->field($user, 'resetPassword')->checkbox() ?>
             <?= $isAdministrator ? $form->field($user, 'is_administrator')->checkbox() : '' ?>
+            <?= $form->field($user, 'notes')->textarea() ?>
             <div class="form-group">
-                <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary', 'name' => 'save-button']) ?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>

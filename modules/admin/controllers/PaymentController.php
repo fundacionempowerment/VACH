@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\Transaction;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -73,7 +74,16 @@ class PaymentController extends AdminBaseController
         if (Yii::$app->request->isPost) {
             $ids = Yii::$app->request->post('selection');
 
-            Payment::updateAll(['status' => 'paid'], ['in', 'id', $ids]);
+            foreach ($ids as $id) {
+                $payment = Payment::findOne($id);
+
+                $payment->status = 'paid';
+                $payment->save();
+
+                $transaction = $payment->newTransaction();
+                $transaction->status = Payment::STATUS_PAID;
+                $transaction->save();
+            }
 
             SiteController::addFlash('success', Yii::t('app', '{name} has been successfully edited.', ['name' => Yii::t('payment', 'Payments')]));
             return $this->redirect(['index']);

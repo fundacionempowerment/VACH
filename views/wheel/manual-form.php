@@ -1,22 +1,19 @@
 <?php
 
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use yii\bootstrap\ButtonGroup;
-use app\models\WheelAnswer;
-use app\models\Wheel;
-use app\models\WheelQuestion;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $wheel app\models\ContactForm */
+/* @var $wheel app\models\Wheel */
 
-$dimensions = WheelQuestion::getDimensionNames($wheel->type);
-$questions = WheelQuestion::getQuestions($wheel);
+$dimensions = $wheel->getDimensions();
+$questions = $wheel->getQuestions();
 $setQuantity = count($questions) / 8;
 
-for ($i = 0; $i < count($questions); $i++)
+for ($i = 0; $i < count($questions); $i++) {
     $answers[$i] = null;
+}
 
 foreach ($wheel->answers as $answer) {
     $answers[$answer->answer_order] = [
@@ -32,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="wheel-manual">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br />
-    <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br />
+    <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
+    <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
     <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
     <?php
     for ($i = 0; $i < count($questions); $i++) {
@@ -44,26 +41,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo '<div class="clearfix"></div>';
             ?>
             <div class="row col-md-6">
-                <h3>
-                    <?= $dimensions[$i / $setQuantity] ?>
-                    <div class="btn-group" role="group" aria-label="...">
-                        <?php for ($n = 0; $n <= 4; $n++) { ?> 
-                            <button type="button" class="btn btn-default" onclick="setValues(<?= $i / $setQuantity ?>, <?= $n ?>);"><?= $n ?></button>
-                        <?php } ?>
-                    </div>
-                </h3>
-                <table class="table table-bordered">
-                <?php } ?>
-                <tr>
-                    <td style="text-align: right;"><?=
-                        empty($answers[$i]['value']) ?
-                                $questions[$i]->question->wheelText($wheel) :
-                                app\models\Question::getWheelText($answers[$i]['question'], $wheel)
-                        ?></td>
-                    <td><?= Html::textInput('answer' . $i, $answers[$i]['value'], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
-                </tr>
-                <?php if ($i % $setQuantity == $setQuantity - 1) { ?>
-                </table>
+            <h3>
+                <?= $dimensions[$i / $setQuantity]->name ?>
+                <div class="btn-group" role="group" aria-label="...">
+                    <?php for ($n = 0; $n <= 4; $n++) { ?>
+                        <button type="button" class="btn btn-default"
+                                onclick="setValues(<?= $i / $setQuantity ?>, <?= $n ?>);"><?= $n ?></button>
+                    <?php } ?>
+                </div>
+            </h3>
+            <table class="table table-bordered">
+        <?php } ?>
+        <tr>
+            <td style="text-align: right;"><?=
+                empty($answers[$i]['value']) ?
+                    $questions[$i]->text :
+                    app\models\Question::getWheelText($answers[$i]['question'], $wheel)
+                ?></td>
+            <td><?= Html::textInput('answer' . $i, $answers[$i]['value'], ['size' => '2', 'style' => in_array($i, $invalids) ? 'box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #CE8483' : '']) ?></td>
+        </tr>
+        <?php if ($i % $setQuantity == $setQuantity - 1) { ?>
+            </table>
             </div>
         <?php } ?>
     <?php } ?>
@@ -72,8 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php ActiveForm::end(); ?>
 </div>
 <script type="text/javascript">
-    function setValues(dimension, value)
-    {
+    function setValues(dimension, value) {
         var inputs = document.getElementsByTagName('input');
         for (i = dimension * <?= $setQuantity ?>; i < (dimension + 1) * <?= $setQuantity ?>; i++) {
             for (var j in inputs) {

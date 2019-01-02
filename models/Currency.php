@@ -6,9 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\httpclient\Client;
-use app\models\Log;
 use app\controllers\LogController;
-use app\models\Currency;
 
 class Currency extends ActiveRecord
 {

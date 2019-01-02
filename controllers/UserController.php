@@ -2,11 +2,10 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\web\Controller;
 use app\models\User;
+use Yii;
 use yii\filters\AccessControl;
-use app\controllers\SiteController;
+use yii\web\Controller;
 
 /**
  * User controller
@@ -39,10 +38,12 @@ class UserController extends Controller
     public function beforeAction($action)
     {
         if (!isset(Yii::$app->user->identity)) {
-            $this->redirect(['/site']);
-        } elseif ($action->id != 'my-account' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
+            $this->redirect(['/site'])->send();
+            return false;
+        } elseif ($action->id != 'my-account' && $action->id != 'my-password' && $action->id != 'find-by-name' && !Yii::$app->user->identity->is_administrator) {
             \Yii::$app->session->addFlash('error', \Yii::t('app', 'Access denied'));
-            $this->redirect(['/site']);
+            $this->redirect(['/site'])->send();
+            return false;
         }
         return parent::beforeAction($action);
     }
@@ -73,13 +74,6 @@ class UserController extends Controller
         $user = User::findOne(['id' => Yii::$app->user->id]);
 
         if ($user->load(Yii::$app->request->post())) {
-            $postUser = Yii::$app->request->post('User');
-            $password = $postUser['password'];
-            if (isset($password)) {
-                $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-                $user->password_hash = $encryptedPassword;
-            }
-
             if ($user->save()) {
                 SiteController::addFlash('success', Yii::t('user', 'Your personal data has been successfully saved.'));
                 return $this->redirect(['/site']);
@@ -89,8 +83,34 @@ class UserController extends Controller
         }
 
         return $this->render('myAccount', [
-                    'user' => $user,
-                    'return' => '/site',
+            'user' => $user,
+            'return' => '/site',
+        ]);
+    }
+
+
+    public function actionMyPassword()
+    {
+        $user = User::findOne(['id' => Yii::$app->user->id]);
+        $user->scenario = User::PASSWORD;
+
+        if ($user->load(Yii::$app->request->post())) {
+            $postUser = Yii::$app->request->post('User');
+            $password = $postUser['password'];
+            $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
+            $user->password_hash = $encryptedPassword;
+
+            if ($user->save()) {
+                SiteController::addFlash('success', Yii::t('user', 'Your password data has been successfully saved.'));
+                return $this->redirect(['/site']);
+            } else {
+                SiteController::FlashErrors($user);
+            }
+        }
+
+        return $this->render('myPassword', [
+            'user' => $user,
+            'return' => '/site',
         ]);
     }
 }

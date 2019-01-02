@@ -7,10 +7,22 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * LoginForm is the model behind the login form.
+ * @package app\models
+ * @property integer id
+ * @property integer dimension
+ * @property integer order
+ * @property integer type
+ * @property integer question_id
+ * @property integer team_type_id
+ * @property integer created_at
+ * @property integer updated_at
+ *
+ * @property Wheel wheel
+ * @property Question question
+ * @property TeamType teamType
+ * @property TeamTypeDimension teamTypeDimension
  */
-class WheelQuestion extends ActiveRecord
-{
+class WheelQuestion extends ActiveRecord {
 
     const DIMENSION_FREE_TIME = 0;
     const DIMENSION_FAMILY = 1;
@@ -24,23 +36,20 @@ class WheelQuestion extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%wheel_question}}';
     }
 
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['dimension', 'order', 'question'], 'required'],
         ];
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             TimestampBehavior::className(),
         ];
@@ -49,8 +58,7 @@ class WheelQuestion extends ActiveRecord
     /**
      * @return array customized attribute labels
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'dimension' => Yii::t('wheel', 'Dimension'),
             'order' => Yii::t('wheel', 'Order'),
@@ -58,19 +66,30 @@ class WheelQuestion extends ActiveRecord
         ];
     }
 
-    public function getQuestion()
-    {
+    public function getQuestion() {
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
 
-    public static function getDimentionName($dimensionOrder, $wheelType, $short = false)
-    {
+    public function getTeamType() {
+        return $this->hasOne(TeamType::className(), ['id' => 'team_type_id']);
+    }
+
+    public function getTeamTypeDimension() {
+        return TeamTypeDimension::find()
+            ->where([
+                'team_type_id' => $this->team_type_id,
+                'order' => $this->dimension,
+                'level' => $this->type,
+            ])
+            ->one();
+    }
+
+    public static function getDimentionName($dimensionOrder, $wheelType, $short = false) {
         $dimensions = self::getDimensionNames($wheelType, $short);
         return $dimensions[$dimensionOrder];
     }
 
-    public static function getDimensionNames($wheelType, $short = false)
-    {
+    public static function getDimensionNames($wheelType, $short = false) {
         if ($wheelType == Wheel::TYPE_INDIVIDUAL) {
             $dimensions = [
                 Yii::t('wheel', 'Free time'),
@@ -119,14 +138,16 @@ class WheelQuestion extends ActiveRecord
         return $dimensions;
     }
 
-    public static function getQuestions($wheel)
-    {
+    public static function getQuestions(Wheel $wheel) {
         return $wheel->team->teamType->getWheelQuestions()->where(['type' => $wheel->type])->all();
     }
 
-    public static function getQuestionCount($wheelType)
-    {
+    public static function getQuestionCount($wheelType) {
         return $wheelType == Wheel::TYPE_INDIVIDUAL ? 80 : 64;
+    }
+
+    public function getText() {
+        return $this->question->text;
     }
 
 }

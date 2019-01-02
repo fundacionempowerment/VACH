@@ -8,6 +8,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->render('_form', [
     'user' => $user,
-    'return' => $return,
 ])
 ?>

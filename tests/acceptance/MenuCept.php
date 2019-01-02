@@ -15,6 +15,7 @@ $I->checkMenuItem('Clientes', 'Tablero');
 $I->checkMenuItem('Ayuda', 'Historial de eventos');
 
 $I->checkMenuItem('(coach)', 'Mis datos');
+$I->checkMenuItem('(coach)', 'Mi contraseña');
 $I->checkMenuItem('(coach)', 'Mis licencias');
 $I->checkMenuItem('(coach)', 'Mis pagos');
 
@@ -31,6 +32,7 @@ $I->checkMenuItem('Clientes', 'Tablero');
 $I->checkMenuItem('Ayuda', 'Historial de eventos');
 
 $I->checkMenuItem('(assisstant)', 'Mis datos');
+$I->checkMenuItem('(assisstant)', 'Mi contraseña');
 $I->checkMenuItem('(assisstant)', 'Mis licencias');
 $I->checkMenuItem('(assisstant)', 'Mis pagos');
 
@@ -46,12 +48,18 @@ $I->checkMenuItem('Clientes', 'Tablero');
 
 $I->checkMenuItem('Ayuda', 'Historial de eventos');
 
+$I->checkMenuItem('Admin', 'Usuarios');
 $I->checkMenuItem('Admin', 'Licencias');
 $I->checkMenuItem('Admin', 'Pagos');
-$I->checkMenuItem('Admin', 'Usuario');
-$I->checkMenuItem('Admin', 'Preguntas de ruedas');
-$I->checkMenuItem('Admin', 'Comentarios');
+$I->checkMenuItem('Admin', 'Liquidaciones');
+//$I->checkMenuItem('Admin', 'Empresas');
+//$I->checkMenuItem('Admin', 'Personas');
+//$I->checkMenuItem('Admin', 'Equipos');
+$I->checkMenuItem('Admin', 'Tipos de equipos');
+$I->checkMenuItem('Admin', 'Tipos de licencias');
+$I->checkMenuItem('Admin', 'Valórenos');
 
 $I->checkMenuItem('(admin)', 'Mis datos');
+$I->checkMenuItem('(admin)', 'Mi contraseña');
 $I->checkMenuItem('(admin)', 'Mis licencias');
 $I->checkMenuItem('(admin)', 'Mis pagos');

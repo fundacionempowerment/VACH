@@ -2,6 +2,7 @@
 
 namespace app\components\graph;
 
+use app\models\Team;
 use Yii;
 use app\models\Person;
 use app\models\Wheel;
@@ -28,12 +29,9 @@ class Relations
 
         $member = Person::findOne(['id' => $memberId]);
 
-        if ($wheelType == Wheel::TYPE_GROUP)
-            $title = Yii::t('dashboard', 'Group Relations Matrix');
-        else if ($wheelType == Wheel::TYPE_ORGANIZATIONAL)
-            $title = Yii::t('dashboard', 'Organizational Relations Matrix');
-        else
-            $title = Yii::t('dashboard', 'Individual Relations Matrix');
+        $team = Team::findOne($teamId);
+        $title = Yii::t('dashboard', 'Relation Matrix') . ' ' .
+            ($wheelType == 1 ? $team->teamType->level_1_name : $team->teamType->level_2_name);
 
         if (!empty($member)) {
             $title .= ' ' . Yii::t('app', 'of') . ' ' . $member->fullname;
@@ -200,22 +198,26 @@ class Relations
         $x = self::RELATION_width * ($who == 'observer' ? 1 : 3) / 4;
         $y = self::RELATION_height / 2 + 6;
 
-        if ($data[0][$who . '_gender'] == 0) {
-            $maleIcon->SetPos($x, $y);
-            $maleIcon->Stroke($g->img);
-        } elseif ($data[0][$who . '_gender'] == 1) {
-            $femaleIcon->SetPos($x, $y);
-            $femaleIcon->Stroke($g->img);
-        } else {
-            $otherIcon->SetPos($x, $y);
-            $otherIcon->Stroke($g->img);
-        }
+        if (count($data) > 0) {
 
-        $t = new \Text($data[0][$who . '_name'] . ' ' . $data[0][$who . '_surname'], $x, $y + 4);
-        $t->SetFont(FF_COOL, FS_NORMAL, 20);
-        $t->Align('center', 'top');
-        $t->SetColor("black");
-        $t->Stroke($g->img);
+            if ($data[0][$who . '_gender'] == 0) {
+                $maleIcon->SetPos($x, $y);
+                $maleIcon->Stroke($g->img);
+            } elseif ($data[0][$who . '_gender'] == 1) {
+                $femaleIcon->SetPos($x, $y);
+                $femaleIcon->Stroke($g->img);
+            } else {
+                $otherIcon->SetPos($x, $y);
+                $otherIcon->Stroke($g->img);
+            }
+
+            $t = new \Text($data[0][$who . '_name'] . ' ' . $data[0][$who . '_surname'], $x, $y + 4);
+            $t->SetFont(FF_COOL, FS_NORMAL, 20);
+            $t->Align('center', 'top');
+            $t->SetColor("black");
+
+            $t->Stroke($g->img);
+        }
     }
 
 }

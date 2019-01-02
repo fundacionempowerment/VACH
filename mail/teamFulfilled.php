@@ -1,9 +1,5 @@
 <?php
 
-use Yii;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use app\models\Stock;
 use yii\widgets\DetailView;
 ?>
 <p>

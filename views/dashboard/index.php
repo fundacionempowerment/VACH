@@ -1,10 +1,8 @@
 <?php
 
+use app\models\Wheel;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\models\Wheel;
-use app\models\WheelQuestion;
-use yii\bootstrap\Progress;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -22,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filter' => $filter,
         'companies' => $companies,
         'teams' => $teams,
+        'team' => $team,
         'members' => $members,
     ]);
 
@@ -42,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedGroupWheel) > 0 && count($reflectedGroupWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_GROUP,
@@ -58,15 +57,15 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($projectedOrganizationalWheel) > 0 && count($reflectedOrganizationalWheel) > 0) {
-        echo $this->render('_lineal', [
+        echo $this->render('_perceptions', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => Wheel::TYPE_ORGANIZATIONAL,
         ]);
     }
 
-    if (count($gauges) > 0) {
-        echo $this->render('_gauges', [
+    if (count($competences) > 0) {
+        echo $this->render('_competences', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
@@ -74,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($relationsMatrix) > 0) {
-        echo $this->render('_number_matrix', [
+        echo $this->render('_effectiveness', [
             'data' => $relationsMatrix,
             'members' => $members,
             'type' => $filter->wheelType,
@@ -85,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if (count($performanceMatrix) > 0) {
-        echo $this->render('_matrix', [
+        echo $this->render('_performance', [
             'teamId' => $filter->teamId,
             'memberId' => $filter->memberId,
             'wheelType' => $filter->wheelType,
@@ -94,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     if (count($relationsMatrix) > 0) {
         if ($filter->memberId > 0) {
-            echo $this->render('_relation', [
+            echo $this->render('_relation_graph', [
                 'teamId' => $filter->teamId,
                 'memberId' => $filter->memberId,
                 'wheelType' => $filter->wheelType,
@@ -134,8 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="<?= Url::to('@web/js/html2canvas/html2canvas.js') ?>"></script>
 <script src="<?= Url::to('@web/js/FileSaver.js') ?>"></script>
 <script>
-    function printDiv(div)
-    {
+    function printDiv(div) {
         html2canvas(document.querySelector("#" + div)).then(function (canvas) {
             canvas.toBlob(function (blob) {
                 saveAs(blob, "image.png");
