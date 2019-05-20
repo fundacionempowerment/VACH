@@ -18,26 +18,19 @@ $mail_all_icon = '<span class="glyphicon glyphicon-duplicate" aria-hidden="true"
 $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>';
 
 $wheels_completed = true;
-if ($team->teamType->level_0_enabled) {
-    foreach ($team->individualWheels as $wheel)
-        if ($wheel->answerStatus != '100%') {
-            $wheels_completed = false;
-            break;
-        }
-}
-if ($team->teamType->level_1_enabled && $wheels_completed) {
-    foreach ($team->groupWheels as $wheel)
-        if ($wheel->answerStatus != '100%') {
-            $wheels_completed = false;
-            break;
-        }
-}
-if ($team->teamType->level_2_enabled && $wheels_completed) {
-    foreach ($team->organizationalWheels as $wheel)
-        if ($wheel->answerStatus != '100%') {
-            $wheels_completed = false;
-            break;
-        }
+foreach ($team->wheels as $wheel) {
+    if ($wheel->type == Wheel::TYPE_INDIVIDUAL && $team->teamType->level_0_enabled && $wheel->answerStatus != '100%') {
+        $wheels_completed = false;
+        break;
+    }
+    if ($wheel->type == Wheel::TYPE_GROUP && $team->teamType->level_1_enabled && $wheel->answerStatus != '100%') {
+        $wheels_completed = false;
+        break;
+    }
+    if ($wheel->type == Wheel::TYPE_ORGANIZATIONAL && $team->teamType->level_2_enabled && $wheel->answerStatus != '100%') {
+        $wheels_completed = false;
+        break;
+    }
 }
 ?>
 <?php if ($team->teamType->level_0_enabled) { ?>

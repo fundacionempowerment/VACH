@@ -168,11 +168,23 @@ class Team extends ActiveRecord {
     }
 
     public function getGroupWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP])->with('answers');
+        $result = [];
+        foreach ($this->wheels as $wheel) {
+            if ($wheel->type == Wheel::TYPE_GROUP) {
+                $result[] = $wheel;
+            }
+        }
+        return $result;
     }
 
     public function getOrganizationalWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL])->with('answers');
+        $result = [];
+        foreach ($this->wheels as $wheel) {
+            if ($wheel->type == Wheel::TYPE_ORGANIZATIONAL) {
+                $result[] = $wheel;
+            }
+        }
+        return $result;
     }
 
     public function getIndividualWheelStatus() {
