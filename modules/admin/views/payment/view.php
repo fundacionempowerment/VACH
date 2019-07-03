@@ -50,7 +50,7 @@ $transactionProvider = new ArrayDataProvider([
                 'attribute' => 'commision',
                 'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                 'value' => function ($data) {
-                    return $data['commision_currency'] . ' ' . $data['commision'];
+                    return $data ? $data['commision_currency'] . ' ' . $data['commision'] : '';
                 },
             ],
             [
