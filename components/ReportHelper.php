@@ -20,8 +20,10 @@ class ReportHelper {
             }
         }
 
-        //self::fillIntroduction($report);
-        //self::fillRelations($report);
+        if ($report->canAutoFill()) {
+            self::fillIntroduction($report);
+            self::fillRelations($report);
+        }
 
         $report->refresh();
         return $report;
