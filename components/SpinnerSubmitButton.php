@@ -39,7 +39,8 @@ class SpinnerSubmitButton extends Widget
 
         $js = '';
 
-        $js .= "jQuery('#$id').click(function() {";
+        $js .= "jQuery('#$id').click(function(e) {";
+        $js .= "e.preventDefault();";
         $js .= "$(this).html('" . $this->caption . ' ' . FontAwesome::icon('cog')->spin() . "');";
         $js .= "$(this).attr('disabled','disabled');";
         $js .= "$(this).parents('form:first').submit();";
