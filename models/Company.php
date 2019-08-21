@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 /**
  * Class Company
  * @package app\models
+ * @property integer id
  * @property string name
  * @property string email
  * @property string phone
@@ -37,7 +38,6 @@ class Company extends ActiveRecord
     public function rules()
     {
         return [
-            // username and password are both required
             [['name', 'email', 'coach_id'], 'required'],
             [['phone', 'notes'], 'safe'],
             [['notes'], 'string', 'max' => 1000],

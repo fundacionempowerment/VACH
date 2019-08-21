@@ -188,7 +188,7 @@ class Team extends ActiveRecord {
     }
 
     public function getIndividualWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
+        $answers = $this->answerCountByType(Wheel::TYPE_INDIVIDUAL);
         $members = count($this->members);
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
         if ($questions == 0)
@@ -198,7 +198,7 @@ class Team extends ActiveRecord {
     }
 
     public function getGroupWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
+        $answers = $this->answerCountByType(Wheel::TYPE_GROUP);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
         if ($questions == 0)
@@ -207,7 +207,7 @@ class Team extends ActiveRecord {
     }
 
     public function getOrganizationalWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
+        $answers = $this->answerCountByType(Wheel::TYPE_ORGANIZATIONAL);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
         if ($questions == 0)
@@ -215,12 +215,44 @@ class Team extends ActiveRecord {
         return round($answers / $questions * 100, 1) . '%';
     }
 
-    public function wheelStatus($type) {
+    public function getWheelsCompleted() {
+        $answers = $this->answerCount();
+        $members = count($this->members);
+        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function getMemberProgress($teamMember, $type) {
+        $answers = (new Query)->select('count(wheel_answer.id) as count')
+            ->from('wheel')
+            ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+            ->where(['team_id' => $this->id, 'type' => $type, 'observer_id' => $teamMember->person_id])
+            ->scalar();
+        $members = count($this->members);
+        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function answerCount() {
+        return (new Query)->select('count(wheel_answer.id) as count')
+            ->from('wheel')
+            ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+            ->where(['team_id' => $this->id])
+            ->scalar();
+    }
+
+    public function answerCountByType($type) {
         return (new Query)->select('count(wheel_answer.id) as count')
             ->from('wheel')
             ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
             ->where(['team_id' => $this->id, 'type' => $type])
-            ->scalar();;
+            ->scalar();
     }
 
     public function notifyIcon($type, $observer_id) {

@@ -391,7 +391,6 @@ class Wheel extends ActiveRecord {
         $result = [];
         foreach ($questions as $question) {
             $result[$question->order] = $question;
-
         }
 
         return $result;

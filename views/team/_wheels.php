@@ -17,21 +17,6 @@ $mail_icon = '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></sp
 $mail_all_icon = '<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>';
 $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>';
 
-$wheels_completed = true;
-foreach ($team->wheels as $wheel) {
-    if ($wheel->type == Wheel::TYPE_INDIVIDUAL && $team->teamType->level_0_enabled && $wheel->answerStatus != '100%') {
-        $wheels_completed = false;
-        break;
-    }
-    if ($wheel->type == Wheel::TYPE_GROUP && $team->teamType->level_1_enabled && $wheel->answerStatus != '100%') {
-        $wheels_completed = false;
-        break;
-    }
-    if ($wheel->type == Wheel::TYPE_ORGANIZATIONAL && $team->teamType->level_2_enabled && $wheel->answerStatus != '100%') {
-        $wheels_completed = false;
-        break;
-    }
-}
 ?>
 <?php if ($team->teamType->level_0_enabled) { ?>
     <div class="row col-md-6">
@@ -88,7 +73,7 @@ foreach ($team->wheels as $wheel) {
 <?php } ?>
 <?php if ($team->teamType->level_1_enabled) { ?>
     <div class="clearfix"></div>
-    <div class="row col-md-12">
+    <div class="row col-md-6">
         <h2>
             <?= $team->teamType->level_1_name ?>
             <?= SpinnerAnchor::widget([
@@ -101,17 +86,7 @@ foreach ($team->wheels as $wheel) {
                 ],
             ]) ?>
         </h2>
-        <table width="100%" class="table table-bordered table-hover">
-            <tr>
-                <th style="text-align: right;">
-                    <?= Yii::t('wheel', "Observer \\ Observed") ?>
-                </th>
-                <?php foreach ($team->members as $teamMember): ?>
-                    <th>
-                        <?= $teamMember->member->fullname ?>
-                    </th>
-                <?php endforeach; ?>
-            </tr>
+        <table class="table table-bordered table-hover">
             <?php foreach ($team->members as $observerMember) { ?>
                 <tr>
                     <th style="text-align: right;">
@@ -136,25 +111,16 @@ foreach ($team->wheels as $wheel) {
                             }
                         ?>
                     </th>
-                    <?php foreach ($team->members as $observedMember) { ?>
-                        <td>
-                            <?php
-                            foreach ($team->groupWheels as $wheel)
-                                if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
-                                    echo $wheel->answerStatus . '&nbsp;';
-                                    echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
-                                }
-                            ?>
-                        </td>
-                    <?php } ?>
+                    <td>
+                        <?= $team->getMemberProgress($observerMember, Wheel::TYPE_GROUP) ?>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
     </div>
 <?php } ?>
 <?php if ($team->teamType->level_2_enabled) { ?>
-    <div class="clearfix"></div>
-    <div class="row col-md-12">
+    <div class="row col-md-6">
         <h2>
             <?= $team->teamType->level_2_name ?>
             <?= SpinnerAnchor::widget([
@@ -167,17 +133,7 @@ foreach ($team->wheels as $wheel) {
                 ],
             ]) ?>
         </h2>
-        <table width="100%" class="table table-bordered table-hover">
-            <tr>
-                <th style="text-align: right;">
-                    <?= Yii::t('wheel', "Observer \\ Observed") ?>
-                </th>
-                <?php foreach ($team->members as $teamMember): ?>
-                    <th>
-                        <?= $teamMember->member->fullname ?>
-                    </th>
-                <?php endforeach; ?>
-            </tr>
+        <table class="table table-bordered table-hover">
             <?php foreach ($team->members as $observerMember) { ?>
                 <tr>
                     <th style="text-align: right;">
@@ -202,17 +158,9 @@ foreach ($team->wheels as $wheel) {
                             }
                         ?>
                     </th>
-                    <?php foreach ($team->members as $observedMember) { ?>
-                        <td>
-                            <?php
-                            foreach ($team->organizationalWheels as $wheel)
-                                if ($wheel->observer_id == $observerMember->person_id && $wheel->observed_id == $observedMember->person_id) {
-                                    echo $wheel->answerStatus . '&nbsp;';
-                                    echo Html::a($file_icon, Url::to(['wheel/manual-form', 'id' => $wheel->id]), ['class' => 'btn btn-default btn-xs']) . '&nbsp;';
-                                }
-                            ?>
-                        </td>
-                    <?php } ?>
+                    <td>
+                        <?= $team->getMemberProgress($observerMember, Wheel::TYPE_ORGANIZATIONAL) ?>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
@@ -222,10 +170,10 @@ foreach ($team->wheels as $wheel) {
 <div>
     <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['team/view', 'id' => $team->id,]), ['class' => 'btn btn-default']) ?>
     <?= Html::a(\Yii::t('team', 'Go to dashboard...'),
-        Url::to(['team/go-to-dashboard', 'id' => $team->id,]), ['class' => ($wheels_completed ? 'btn btn-success' : 'btn btn-default')])
+        Url::to(['team/go-to-dashboard', 'id' => $team->id,]), ['class' => ($team->wheelsCompleted ? 'btn btn-success' : 'btn btn-default')])
     ?>
     <?= Html::a(\Yii::t('team', 'Go to report...'),
-        Url::to(['report/view', 'id' => $team->id,]), ['class' => ($wheels_completed ? 'btn btn-success' : 'btn btn-default')])
+        Url::to(['report/view', 'id' => $team->id,]), ['class' => ($team->wheelsCompleted ? 'btn btn-success' : 'btn btn-default')])
     ?>
 </div>
 <?php
