@@ -10,10 +10,12 @@ $statistic = $team->relationsStatistics;
         proyecciones entre los integrantes del equipo.
     </p>
 <?php foreach ($levels as $level) { ?>
-    <p><strong><?= $level == Wheel::TYPE_GROUP ?
+    <p>
+        <strong><?= $level == Wheel::TYPE_GROUP ?
             Yii::t('dashboard', 'Group Relations Matrix') :
             Yii::t('dashboard', 'Organizational Relations Matrix')
-        ?></strong>
+            ?></strong>
+    </p>
     <p>
         <strong>1. Visión cromática (análoga con el semáforo: verde, amarillo y rojo)</strong>
     </p>
