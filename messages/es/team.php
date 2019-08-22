@@ -66,6 +66,7 @@ return [
     'Update Team' => 'Actualizar equipo',
     'Wheel already fullfilled. Email not sent.' => 'Rueda ya completada. Correo electrónico no enviado.',
     'Wheel forms has been successfully created.' => 'Formularios de ruedas han sido creados exitosamente.',
+    'Wheels' => 'Ruedas',
     '{wheel_type} not sent to {user}.' => '{wheel_type} no enviada a {user}',
     '{wheel_type} sent to {user}.' => '{wheel_type} enviada a {user}',
 ];

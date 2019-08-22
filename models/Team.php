@@ -215,6 +215,16 @@ class Team extends ActiveRecord {
         return round($answers / $questions * 100, 1) . '%';
     }
 
+    public function getWheelToken(TeamMember $teamMember, $wheelType) {
+        $wheel = Wheel::find()
+            ->where([
+                'observer_id' => $teamMember->person_id,
+                'type' => $wheelType
+            ])
+            ->one();
+        return $wheel->token;
+    }
+
     public function getWheelsCompleted() {
         $answers = $this->answerCount();
         $members = count($this->members);
