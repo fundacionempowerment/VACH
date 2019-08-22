@@ -25,18 +25,16 @@
         "kartik-v/yii2-export": "*",
         "kartik-v/yii2-password": "*",
         "2amigos/yii2-ckeditor-widget": "*",
-        "phpoffice/phppresentation": "dev-master",
-        "phpoffice/phpword": "dev-master",
+        "phpoffice/phppresentation": "*",
+        "phpoffice/phpword": "*",
         "onmotion/yii2-telegram": "*",
         "swiftmailer/swiftmailer": "*",
-        "rmrevin/yii2-fontawesome": "*",
-        "backup-manager/backup-manager": "^1.3",
-        "league/flysystem-sftp": "^1.0",
-        "yiisoft/yii2-faker": "^2.0"
+        "rmrevin/yii2-fontawesome": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
+        "yiisoft/yii2-faker": "*",
         "captbaritone/mailcatcher-codeception-module": "*"
     },
     "config": {
