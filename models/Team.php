@@ -236,14 +236,20 @@ class Team extends ActiveRecord {
         return round($answers / $questions * 100, 1) . '%';
     }
 
-    public function getMemberProgress($teamMember, $type) {
+    public function getMemberProgress($observerId, $type) {
         $answers = (new Query)->select('count(wheel_answer.id) as count')
             ->from('wheel')
             ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
-            ->where(['team_id' => $this->id, 'type' => $type, 'observer_id' => $teamMember->person_id])
+            ->where(['team_id' => $this->id, 'type' => $type, 'observer_id' => $observerId])
             ->scalar();
-        $members = count($this->members);
-        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+
+        if ($type == 0) {
+            $questions = WheelQuestion::getQuestionCount($type);
+        } else {
+            $members = count($this->members);
+            $questions = $members * WheelQuestion::getQuestionCount($type);
+        }
+
         if ($questions == 0)
             $questions = 1;
         return round($answers / $questions * 100, 1) . '%';
@@ -265,7 +271,7 @@ class Team extends ActiveRecord {
             ->scalar();
     }
 
-    public function notifyIcon($type, $observer_id) {
+    public function getMemberStatus($type, $observer_id) {
         $count = [
             'created' => 0,
             'sent' => 0,
@@ -284,19 +290,20 @@ class Team extends ActiveRecord {
             $count[$wheel->status] += 1;
         }
 
+        Yii::debug($count, "app");
+
         if ($count['created'] > 0 && ($count ['sent'] + $count['received'] + $count['in_progress'] == 0) && $count['done'] > 0) {
-            // retry
-            return \app\components\Icons::EXCLAMATION;
+            return Yii::t('app', 'error');
         } else if ($count['done'] == count($wheels)) {
-            return \app\components\Icons::OK . \app\components\Icons::OK;
-        } else if ($count['in_progress'] > 0) {
-            return \app\components\Icons::PLAY;
+            return "";
+        } else if ($count['in_progress'] > 0 || $count['done'] > 0) {
+            return Yii::t('app', 'in progress');
         } else if ($count['received'] > 0) {
-            return \app\components\Icons::OK;
+            return Yii::t('app', 'received');
         } else if ($count['sent'] > 0) {
-            return \app\components\Icons::SEND;
+            return Yii::t('app', 'sent');
         }
-        return '';
+        return Yii::t('app', 'to send');
     }
 
     public function isUserAllowed() {
