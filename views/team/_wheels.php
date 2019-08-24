@@ -9,6 +9,23 @@ use yii\helpers\Url;
 
 /* @var Team $team */
 
+function wheelStatus(int $status) {
+   switch($status) {
+      case Wheel::STATUS_CREATED: 
+         return Html::tag ('span', Html::tag( "strong", Yii::t('app','to send')), ['class' => 'text-danger']);
+      case Wheel::STATUS_SENT: 
+         return Html::tag ('span', Yii::t('app','sent'), ['class' => 'text-info']);
+      case Wheel::STATUS_RECEIVED:
+         return Html::tag ('span', Yii::t('app','received'), ['class' => 'text-success']);
+      case Wheel::STATUS_IN_PROGRESS:
+         return Html::tag ('span', Yii::t('app','in progress'));
+      case Wheel::STATUS_DONE:
+         return Html::tag ('span', Yii::t('app','done'));
+      default:
+         return Html::tag ('span', Yii::t('app','error'));
+   }
+}
+
 if (count($team->wheels) == 0) {
     return '';
 }
@@ -100,7 +117,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                                     title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon2 ?>
                             </button>
-                            <?= $progress = "0%" && $status != Yii::t('app', "in progress") ? $status : $progress ?>
+                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
                         <?php } else echo $progress ?>
                     </td class="text-center">
                 <?php } ?>
@@ -121,7 +138,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                                     title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon2 ?>
                             </button>
-                            <?= $progress = "0%" && $status != Yii::t('app', "in progress") ? $status : $progress ?>
+                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
                         <?php } else echo $progress ?>
                     </td>
                 <?php } ?>
@@ -142,7 +159,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                                     title="<?= Yii::t('wheel', 'Manual email') ?>">
                                 <?= $mail_icon2 ?>
                             </button>
-                            <?= $progress = "0%" && $status != Yii::t('app', "in progress") ? $status : $progress ?>
+                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
                         <?php } else echo $progress ?>
                     </td>
                 <?php } ?>

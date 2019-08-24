@@ -411,6 +411,7 @@ class TeamController extends BaseController {
         $team = Team::findOne(['id' => $id]);
 
         $sent = false;
+        $error = false;
         foreach ($team->members as $teamMember) {
             $wheels = [];
             switch ($type) {
@@ -427,7 +428,9 @@ class TeamController extends BaseController {
 
             foreach ($wheels as $wheel) {
                 if ($wheel->observer_id == $teamMember->person_id && $wheel->answerStatus != '100%') {
-                    $this->sendWheel($wheel);
+                    if (!$this->sendWheel($wheel)) {
+                        $error = true;
+                    };
                     $sent = true;
                     break;
                 }
@@ -436,6 +439,9 @@ class TeamController extends BaseController {
 
         if ($sent == false) {
             \Yii::$app->session->addFlash('info', \Yii::t('team', 'All wheels already fullfilled. Emails not sent.'));
+        }
+        if ($error) {
+            \Yii::$app->session->addFlash('error', \Yii::t('team', 'Some emails were not sent. Please, send them individually'));
         }
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
@@ -454,30 +460,34 @@ class TeamController extends BaseController {
 
     private function sendWheel($wheel) {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
-        $sent = Yii::$app->mailer->compose('wheel', [
-            'wheel' => $wheel,
-        ])
-            ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
-                'wheel_type' => $wheel_type,
-                'team' => $wheel->team->name,
-            ]))
-            ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo($wheel->observer->email)
-            ->setReplyTo($wheel->coach->email)
-            ->send();
+
+        try {
+            $sent = Yii::$app->mailer->compose('wheel', [
+                'wheel' => $wheel,
+            ])
+                ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
+                    'wheel_type' => $wheel_type,
+                    'team' => $wheel->team->name,
+                ]))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observer->email)
+                ->setReplyTo($wheel->coach->email)
+                ->send();
+        }catch (\Exception $ex) {
+            $sent = false;
+        }
 
         if ($sent) {
             SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
-            $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
-            foreach ($wheels as $wheel) {
-                if ($wheel->status == 'created') {
-                    $wheel->status = 'sent';
-                    $wheel->save();
-                }
-            }
+            Yii::$app->db->createCommand()
+                ->update('wheel',
+                    ['status' => 'sent'],
+                    ['token' => $wheel->token, 'status' => 'created'])
+                ->execute();
         } else {
-            SiteController::addFlash('error', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+            SiteController::addFlash('warning', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
         }
+        return $sent;
     }
 
 }

@@ -31,7 +31,7 @@ class UtilsController extends Controller
 
         $this->fulfillTeam($team);
 
-        $this->fulfillWheels($team);
+        //$this->fulfillWheels($team);
     }
 
     private function getTeam($coachId, $company, $persons)
@@ -137,6 +137,7 @@ class UtilsController extends Controller
             };
             echo "I";
 
+            $token = Wheel::getNewToken();
             foreach ($team->members as $observedMember) {
                 $newWheel = new Wheel();
                 $newWheel->observer_id = $observerMember->member->id;
@@ -151,6 +152,7 @@ class UtilsController extends Controller
                 echo "G";
             }
 
+            $token = Wheel::getNewToken();
             foreach ($team->members as $observedMember) {
                 $newWheel = new Wheel();
                 $newWheel->observer_id = $observerMember->member->id;

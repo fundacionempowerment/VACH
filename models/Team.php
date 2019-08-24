@@ -290,20 +290,18 @@ class Team extends ActiveRecord {
             $count[$wheel->status] += 1;
         }
 
-        Yii::debug($count, "app");
-
         if ($count['created'] > 0 && ($count ['sent'] + $count['received'] + $count['in_progress'] == 0) && $count['done'] > 0) {
-            return Yii::t('app', 'error');
+            return Wheel::STATUS_ERROR;
         } else if ($count['done'] == count($wheels)) {
-            return "";
+            return Wheel::STATUS_DONE;
         } else if ($count['in_progress'] > 0 || $count['done'] > 0) {
-            return Yii::t('app', 'in progress');
+            return Wheel::STATUS_IN_PROGRESS;
         } else if ($count['received'] > 0) {
-            return Yii::t('app', 'received');
+            return Wheel::STATUS_RECEIVED;
         } else if ($count['sent'] > 0) {
-            return Yii::t('app', 'sent');
+            return Wheel::STATUS_SENT;
         }
-        return Yii::t('app', 'to send');
+        return Wheel::STATUS_CREATED;
     }
 
     public function isUserAllowed() {
