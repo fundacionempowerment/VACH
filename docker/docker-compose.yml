@@ -47,7 +47,14 @@ services:
         ports:
             - "10182:80"
         networks:
-        - vach-net
+            - vach-net
+
+    vach-mailcatcher:
+        image: schickling/mailcatcher
+        ports:
+            - "10188:1080"
+        networks:
+            - vach-net
 
 networks:
     vach-net:
