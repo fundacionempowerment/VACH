@@ -164,7 +164,7 @@ class Presentation {
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
-        $textRun = $shape->createParagraph()->createTextRun('ajuste perceptual');
+        $textRun = $shape->createParagraph()->createTextRun('pensamiento funcional y disfuncional');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(30)
@@ -222,7 +222,7 @@ class Presentation {
         $shape->getActiveParagraph()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $shape->getActiveParagraph()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
 
-        $textRun = $shape->createParagraph()->createTextRun('pensamiento funcional y disfuncional');
+        $textRun = $shape->createParagraph()->createTextRun('ajuste perceptual');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(30)
@@ -596,7 +596,7 @@ class Presentation {
 
         $textRun = $shape->createParagraph()->createTextRun(
             Yii::t('dashboard', 'Consciousness and Responsability Matrix')
-            . ' ' . self::$team->teamType->level_2_name
+            . ' ' . self::$team->teamType->level_1_name
         );
         $textRun->getFont()->setName(self::FONT)
             ->setSize(20)
