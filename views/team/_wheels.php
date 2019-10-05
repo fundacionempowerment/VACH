@@ -3,17 +3,24 @@
 use app\components\SpinnerAnchor;
 use app\models\Team;
 use app\models\Wheel;
+use app\models\ManualWheelModel;
+use kartik\select2\Select2;
+use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\components\SpinnerSubmitButton;
 
 /* @var Team $team */
+/* @var ManualWheelModel $manualWheel */
+
+$manualWheel = new ManualWheelModel(['team_id' => $team->id]);
 
 function wheelStatus(int $status) {
    switch($status) {
-      case Wheel::STATUS_CREATED: 
+      case Wheel::STATUS_CREATED:
          return Html::tag ('span', Html::tag( "strong", Yii::t('app','to send')), ['class' => 'text-danger']);
-      case Wheel::STATUS_SENT: 
+      case Wheel::STATUS_SENT:
          return Html::tag ('span', Yii::t('app','sent'), ['class' => 'text-info']);
       case Wheel::STATUS_RECEIVED:
          return Html::tag ('span', Yii::t('app','received'), ['class' => 'text-success']);
@@ -127,7 +134,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     $token = $team->getWheelToken($observerMember, Wheel::TYPE_GROUP);
                     ?>
                     <td id="cell_<?= $buttonId++ ?>" class="text-center"
-                        data-token="<?= $team->getWheelToken($observerMember, Wheel::TYPE_GROUP) ?>">
+                        data-token="<?= $token ?>">
                         <?php if ($progress != "100%") { ?>
                             <?= SpinnerAnchor::widget(['caption' => $mail_icon,
                                 'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]),
@@ -148,7 +155,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     $token = $team->getWheelToken($observerMember, Wheel::TYPE_ORGANIZATIONAL);
                     ?>
                     <td id="cell_<?= $buttonId++ ?>" class="text-center"
-                        data-token="<?= $team->getWheelToken($observerMember, Wheel::TYPE_ORGANIZATIONAL) ?>">
+                        data-token="<?= $token ?>">
                         <?php if ($progress != "100%") { ?>
                             <?= SpinnerAnchor::widget(['caption' => $mail_icon,
                                 'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]),
@@ -177,6 +184,42 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         Url::to(['report/view', 'id' => $team->id,]), ['class' => ($team->wheelsCompleted ? 'btn btn-success' : 'btn btn-default')])
     ?>
 </div>
+<div class="clearfix"></div>
+<div class="row  col-md-12">
+    <h3><?= Yii::t('wheel', 'Wheel answers') ?></h3>
+    <?php
+    $form = ActiveForm::begin([
+        'id' => 'manual-wheel-form',
+        'action' => ['manual-wheel', 'teamId' => $team->id],
+        'options' => ['class' => 'form-horizontal'],
+        'fieldConfig' => [
+            'template' => "{label}\n<div class=\"col-lg-4\">{input}</div>\n<div class=\"col-lg-6\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-2 control-label'],
+        ],
+    ]);
+    ?>
+    <?= $form->field($manualWheel, 'observer_id')->widget(Select2::classname(), [
+        'data' => $team->getMemberList(),
+    ]) ?>
+    <?= $form->field($manualWheel, 'observed_id')->widget(Select2::classname(), [
+        'data' =>  $team->getMemberList(),
+    ]) ?>
+    <?= $form->field($manualWheel, 'wheel_type')->widget(Select2::classname(), [
+        'data' => Wheel::getWheelTypes(),
+    ]) ?>
+    <div class="form-group">
+        <div class="col-lg-push-2 col-lg-6">
+            <?= SpinnerSubmitButton::widget([
+                'caption' => \Yii::t('app', 'Edit'),
+                'options' => ['class' => 'btn btn-primary']
+            ]) ?>
+
+        </div>
+    </div>
+    <?= $form->field($manualWheel, 'team_id')->hiddenInput()->label("") ?>
+    <?php ActiveForm::end(); ?>
+</div>
+<div class="clearfix"></div>
 <?php
 Modal::begin(['id' => 'email_modal',
     'header' => '<h4>' . Yii::t('team', 'Email to send') . '</h4>',

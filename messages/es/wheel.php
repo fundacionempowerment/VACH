@@ -92,6 +92,7 @@ return [
     'View answers' => 'Ver respuestas',
     'Wheel' => 'Rueda',
     'Wheel Questions' => 'Preguntas de ruedas',
+    'Wheel answers' => 'Repuestas de rueda',
     'Wheel answers saved.' => 'Repuestas de rueda guardadas.',
     'Wheel deleted.' => 'Rueda eliminada.',
     'Wheel not found.' => 'Rueda no encontrada.',

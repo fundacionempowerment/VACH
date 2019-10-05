@@ -190,6 +190,8 @@ class WheelController extends BaseController {
                 }
             }
             if (count($invalids) == 0) {
+                $wheel->status = Wheel::STATUS_IN_PROGRESS;
+                $wheel->save();
                 SiteController::addFlash('success', Yii::t('wheel', 'Wheel answers saved.'));
                 return $this->redirect(['/team/view', 'id' => $wheel->team->id]);
             } else {
@@ -232,13 +234,19 @@ class WheelController extends BaseController {
             'memberId' => $wheel->observed->id,
             'wheelType' => Wheel::TYPE_INDIVIDUAL], true));
 
-        Yii::$app->mailer->compose('individualWheel', [
-            'wheel' => $wheel,
-            'radarPath' => $radarPath,
-        ])
-            ->setSubject(Yii::t('wheel', 'CPC: individual wheel'))
-            ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo($wheel->observed->email)
-            ->send();
+        try {
+            $sent =  Yii::$app->mailer->compose('individualWheel', [
+                'wheel' => $wheel,
+                'radarPath' => $radarPath,
+            ])
+                ->attach($radarPath)
+                ->setSubject(Yii::t('wheel', 'CPC: individual wheel'))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observed->email)
+                ->send();
+        } catch (\Exception $ex) {
+            $sent = false;
+        }
+        return $sent;
     }
 }

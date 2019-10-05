@@ -37,8 +37,7 @@ $reception_url = Url::toRoute(['wheel/received', 'token' => $wheel->token], true
 </p>
 <p>
     <?=
-    Yii::t('wheel', "Le enviamos su rueda individual.")
+    Yii::t('wheel', "Le enviamos en imagen adjunta su rueda individual.")
     ?>
 </p>
-<img src="<?= $message->embed($radarPath); ?>">
 <?= $this->render('_footer') ?>

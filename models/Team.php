@@ -124,12 +124,19 @@ class Team extends ActiveRecord {
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
+    public function getMemberList() {
+        $members = [];
+        foreach ($this->getMembers()->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
+        return $members;
+    }
+
     public function getActiveMemberList() {
         $activeMembers = [];
         foreach ($this->getMembers()->where(['active' => true])->all() as $teamMember) {
             $activeMembers[$teamMember->person_id] = $teamMember->member->fullname;
         }
-
         return $activeMembers;
     }
 

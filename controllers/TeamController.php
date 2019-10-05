@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Company;
 use app\models\DashboardFilter;
 use app\models\LoginModel;
+use app\models\ManualWheelModel;
 use app\models\Person;
 use app\models\RegisterModel;
 use app\models\search\TeamSearch;
@@ -473,7 +474,7 @@ class TeamController extends BaseController {
                 ->setTo($wheel->observer->email)
                 ->setReplyTo($wheel->coach->email)
                 ->send();
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             $sent = false;
         }
 
@@ -488,6 +489,26 @@ class TeamController extends BaseController {
             SiteController::addFlash('warning', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
         }
         return $sent;
+    }
+
+    public function actionManualWheel($teamId) {
+        $manualWheel = new ManualWheelModel();
+
+        if ($manualWheel->load(Yii::$app->request->post())) {
+            $wheel = Wheel::findOne([
+                'team_id' => $manualWheel->team_id,
+                'type' => $manualWheel->wheel_type,
+                'observer_id' => $manualWheel->observer_id,
+                'observed_id' => $manualWheel->wheel_type == 0 ? $manualWheel->observer_id : $manualWheel->observed_id,
+            ]);
+
+            if ($wheel) {
+                return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+            } else {
+                SiteController::addFlash('warning', \Yii::t('wheel', 'Wheel not found.'));
+            }
+        }
+        return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
 }

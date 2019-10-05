@@ -112,6 +112,6 @@ $pluginOptions = [
     </div>
     <?= $this->render('_members', ['team' => $team, 'persons' => $persons]) ?>
     <div class="clearfix"></div>
-    <?= $this->render('_wheels', ['team' => $team]) ?>
+    <?= $this->render('_wheels', ['team' => $team, 'persons' => $persons]) ?>
 </div>
 
