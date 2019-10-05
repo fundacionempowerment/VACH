@@ -31,9 +31,8 @@ $isAdministrator = Yii::$app->user->identity->is_administrator;
                 'overwriteInitial' => true,
             ]]);
         ?>
-        <?= $form->field($model, 'resetPassword')->checkbox() ?>
         <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success', 'name' => 'save-button']) ?>
+            <?= Html::submitButton(Yii::t('app', 'Preview'), ['class' => 'btn btn-info', 'name' => 'save-button']) ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>

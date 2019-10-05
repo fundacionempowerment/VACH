@@ -17,6 +17,7 @@ use app\modules\admin\models\UserImport;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Inflector;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
@@ -278,7 +279,6 @@ class UserController extends AdminBaseController {
                 return $this->redirect(['import-preview',
                     'tempFilename' => $model->tempFilename,
                     'extension' => $model->extension,
-                    'resetPassword' => $model->resetPassword,
                 ]);
             }
 
@@ -289,13 +289,16 @@ class UserController extends AdminBaseController {
         ]);
     }
 
-    public function actionImportPreview($tempFilename, $extension, $resetPassword) {
+    public function actionImportPreview($tempFilename, $extension) {
         $users = $this->readFile($tempFilename, $extension);
 
         if (Yii::$app->request->isPost) {
+
             foreach ($users as $user) {
                 if ($user->save()) {
-                    $this->sendResetPassword($user);
+                    SiteController::addFlash('success', Yii::t('user', 'User {user} has been saved', ['user' =>$user->username]));
+                } else {
+                    SiteController::addFlash('warning', Yii::t('user', 'User {user} has not been saved', ['user' =>$user->username]));
                 }
             }
 
@@ -305,16 +308,15 @@ class UserController extends AdminBaseController {
             return $this->redirect(['index']);
         }
 
-        return $this->render('import/preview', [
-            'users' => $users,
-        ]);
+        return $this->render('import/preview', ['users' => $users,]);
     }
 
-    private function readFile($tempFilename, $extension) {
+    private
+    function readFile($tempFilename, $extension) {
         $reader = IOFactory::createReader(ucfirst($extension));
         $filePath = Yii::getAlias("@runtime/temp/$tempFilename");
         $spreadsheet = $reader->load($filePath);
-        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, false, false, true);
 
         $models = [];
         for ($row = 2; $row <= count($sheetData); $row++) {
@@ -330,7 +332,7 @@ class UserController extends AdminBaseController {
                 $nameParts = explode(' ', $user->name);
                 $surnameParts = explode(' ', $user->surname);
 
-                $user->username = strtolower($nameParts[0] . '.' . $surnameParts[0]);
+                $user->username = Inflector::transliterate(strtolower($nameParts[0] . '.' . $surnameParts[0]));
 
                 $user->validate();
 
