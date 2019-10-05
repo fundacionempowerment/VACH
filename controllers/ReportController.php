@@ -544,8 +544,10 @@ class ReportController extends Controller
         $uuid = uniqid('', true);
         $oWriterPPTX->save("/tmp/$uuid.pptx");
 
-        foreach (\app\components\Presentation::$paths as $path) {
-            unlink($path);
+        if (isset(\app\components\Presentation::$paths)) {
+            foreach (\app\components\Presentation::$paths as $path) {
+                unlink($path);
+            }
         }
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $team->fullname . '.' . date('Y-m-d') . '.pptx');
