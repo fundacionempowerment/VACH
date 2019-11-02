@@ -225,6 +225,7 @@ class Team extends ActiveRecord {
     public function getWheelToken(TeamMember $teamMember, $wheelType) {
         $wheel = Wheel::find()
             ->where([
+                'team_id' => $teamMember->team_id,
                 'observer_id' => $teamMember->person_id,
                 'type' => $wheelType
             ])
