@@ -26,6 +26,7 @@ $show_instructions = $instructions_shown == true ? false : true;
             <?= Yii::t('company', 'Company') ?>: <?= Html::label($wheel->team->company->name) ?><br/>
             <?= Yii::t('team', 'Team') ?>: <?= Html::label($wheel->team->name) ?><br/>
             <?= Yii::t('user', 'Coach') ?>: <?= Html::label($wheel->coach->fullname) ?><br/>
+            <?= Yii::t('app', 'Progress') ?>: <?= Html::label($wheel->team->getMemberProgress($wheel->observer_id, $wheel->type)) ?><br/>
         </h3>
     </div>
     <?php if ($wheel->observed->photo) { ?>

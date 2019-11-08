@@ -43,7 +43,7 @@ $columns = [
         'attribute' => 'commision',
         'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
         'value' => function ($data) {
-            return $data['commision_currency'] . ' ' . Yii::$app->formatter->asDecimal($data['commision'], 2);
+            return $data['commision_currency'] ? $data['commision_currency'] . ' ' . Yii::$app->formatter->asDecimal($data['commision'], 2) : '';
         },
     ],
     [

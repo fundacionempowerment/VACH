@@ -15,12 +15,6 @@ class UserImport extends Model
     public $file;
     public $tempFilename;
     public $extension;
-    public $resetPassword;
-
-    public function init()
-    {
-        $this->resetPassword = true;
-    }
 
     public function rules()
     {
@@ -33,7 +27,6 @@ class UserImport extends Model
     {
         return [
             'file' => Yii::t('user', 'File (xlsx or ods allowed)'),
-            'resetPassword' => Yii::t('user', 'Send reset password email'),
         ];
     }
 

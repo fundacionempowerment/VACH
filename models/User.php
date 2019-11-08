@@ -13,6 +13,19 @@ use yii\web\IdentityInterface;
 /**
  * Class User
  * @package app\models
+ * @property integer id
+ * @property string username
+ * @property string email
+ * @property string phone
+ * @property string name
+ * @property string surname
+ * @property integer status
+ * @property string auth_key
+ * @property string password_hash
+ * @property string password_reset_token
+ * @property integer created_at
+ * @property integer updated_at
+ * @property boolean is_administrator
  * @property string notes
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -25,6 +38,11 @@ class User extends ActiveRecord implements IdentityInterface
     public $password;
     public $password_confirm;
     public $resetPassword;
+
+    public function init() {
+        parent::init();
+        $this->is_administrator = false;
+    }
 
     /**
      * @inheritdoc

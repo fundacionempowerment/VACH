@@ -32,6 +32,13 @@ class Wheel extends ActiveRecord {
     const TYPE_GROUP = 1;
     const TYPE_ORGANIZATIONAL = 2;
 
+    const STATUS_CREATED = 0;
+    const STATUS_SENT = 1;
+    const STATUS_RECEIVED = 3;
+    const STATUS_IN_PROGRESS = 4;
+    const STATUS_DONE = 5;
+    const STATUS_ERROR = 255;
+
     public $dimensionAnswers = [0, 0, 0, 0, 0, 0, 0, 0];
 
     public function __construct() {
@@ -391,7 +398,6 @@ class Wheel extends ActiveRecord {
         $result = [];
         foreach ($questions as $question) {
             $result[$question->order] = $question;
-
         }
 
         return $result;

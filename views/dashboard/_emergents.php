@@ -18,7 +18,7 @@ if (!empty($member)) {
     $title .= ' ' . Yii::t('app', 'of the team');
 }
 
-$dimensions = $team->teamType->getDimensionNames(1);
+$dimensions = $team->teamType->getDimensionNames($type);
 $questionCount = WheelQuestion::getQuestionCount($type) / 8;
 
 $max_emergents = [];

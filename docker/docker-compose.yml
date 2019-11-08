@@ -16,7 +16,7 @@ services:
 
     vach-data:
         container_name: vach-data
-        image: mysql:5.7
+        image: mysql:5.6
         tmpfs: /var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: 'secret'
@@ -47,7 +47,15 @@ services:
         ports:
             - "10182:80"
         networks:
-        - vach-net
+            - vach-net
+
+    vach-mailcatcher:
+        container_name: vach-mailcatcher
+        image: schickling/mailcatcher
+        ports:
+            - "10188:1080"
+        networks:
+            - vach-net
 
 networks:
     vach-net:

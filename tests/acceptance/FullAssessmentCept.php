@@ -1,5 +1,7 @@
 <?php
 
+$teamSize = 3;
+
 $random = rand(111, 999);
 $team['name'] = "name$random";
 
@@ -14,9 +16,9 @@ $sponsor['surname'] = "surname$random";
 $sponsor['email'] = $sponsor['name'] . "@example.com";
 $sponsor['phone'] = "($random)$random";
 
-for ($i = 0; $i < 3; $i++) {
+for ($i = 0; $i < $teamSize; $i++) {
     $random = rand(111, 999);
-    $person['name'] = "name$random";
+    $person['name'] = "name$i";
     $person['surname'] = "surname$random";
     $person['email'] = $person['name'] . $person['surname'] . "@example.com";
     $person['phone'] = "($random)$random$random";
@@ -113,7 +115,7 @@ $I->wait(1);
 // Agrego miembros
 
 foreach ($persons as $person) {
-    $I->selectOptionForSelect2('new_member', $person['name']);
+    $I->selectOptionForSelect2('new_member', $person['name'] . " " . $person['surname']);
     $I->click('Agregar');
     $I->wait(1);
 }
@@ -130,13 +132,13 @@ $I->wait(1);
 
 // grab all tokens
 
-for ($i = 0; $i < count($persons) * 3; $i++) {
-    $I->click('#cell_' . $i);
-    $I->wait(1);
-    $wheelToken[] = $I->grabTextFrom('#token');
-    $I->click(".//*[@id='email_modal']/div/div/div[1]/button");
-    $I->wait(1);
+for ($i = 0; $i < count($persons); $i++) {
+    $wheelToken[$i] = $I->grabAttributeFrom('#cell_' . ($i * 3), 'data-token');
+    $wheelToken[$i + 3] = $I->grabAttributeFrom('#cell_' . ($i * 3 + 1), 'data-token');
+    $wheelToken[$i + 6] = $I->grabAttributeFrom('#cell_' . ($i * 3 + 2), 'data-token');
 }
+
+$I->assertCount(count($persons) * 3, $wheelToken);
 
 // Prepare to fill wheels
 
@@ -178,15 +180,14 @@ for ($i = 0; $i < count($persons); $i++) {
 
 // Fill group and organizational wheels
 
-for ($i = 3; $i < count($persons) * 3; $i++) {
+for ($i = count($persons); $i < count($persons) * 3; $i++) {
     $I->fillField('Wheel[token]', $wheelToken[$i]);
     $I->wait(1);
     $I->click('Ejecutar');
     $I->wait(1);
 
-
     for ($o = 0; $o < count($persons); $o++) {
-        $I->see('Observador: ' . $persons[$i % 3]['name']);
+        $I->see('Observador: ' . $persons[$i % count($persons)]['name']);
         $I->see('Observado: ' . $persons[$o]['name']);
 
         $I->click('Comenzar');

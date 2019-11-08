@@ -13,7 +13,7 @@ use app\controllers\ReportController;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $wheel app\models\ContactForm */
 
-$this->title = Yii::t('report', 'Relation Matrix');
+$this->title = Yii::t('dashboard', 'Relation Matrix');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
 $this->params['breadcrumbs'][] = ['label' => $team->fullname, 'url' => ['/team/view', 'id' => $team->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('report', 'Report'), 'url' => ['/report/view', 'id' => $team->id]];

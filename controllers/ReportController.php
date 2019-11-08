@@ -3,20 +3,14 @@
 namespace app\controllers;
 
 use app\components\ReportHelper;
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
+use app\models\ClientModel;
+use app\models\IndividualReport;
 use app\models\LoginModel;
 use app\models\RegisterModel;
-use app\models\User;
-use app\models\CoachModel;
-use app\models\ClientModel;
 use app\models\Team;
-use app\models\Report;
-use app\models\IndividualReport;
 use app\models\Wheel;
-use app\models\TeamMember;
+use Yii;
+use yii\web\Controller;
 
 class ReportController extends Controller
 {
@@ -58,10 +52,8 @@ class ReportController extends Controller
         $team = Team::findOne(['id' => $id]);
         $this->checkAllowed($team);
 
-        if ($team->report == null) {
-            ReportHelper::populate($team);
-            $team->refresh();
-        }
+        ReportHelper::populate($team);
+        $team->refresh();
 
         foreach ($team->members as $teamMember) {
             $exists = false;
@@ -552,8 +544,10 @@ class ReportController extends Controller
         $uuid = uniqid('', true);
         $oWriterPPTX->save("/tmp/$uuid.pptx");
 
-        foreach (\app\components\Presentation::$paths as $path) {
-            unlink($path);
+        if (isset(\app\components\Presentation::$paths)) {
+            foreach (\app\components\Presentation::$paths as $path) {
+                unlink($path);
+            }
         }
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.pptx", $team->fullname . '.' . date('Y-m-d') . '.pptx');

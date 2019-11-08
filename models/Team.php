@@ -124,12 +124,19 @@ class Team extends ActiveRecord {
         return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
     }
 
+    public function getMemberList() {
+        $members = [];
+        foreach ($this->getMembers()->all() as $teamMember) {
+            $members[$teamMember->person_id] = $teamMember->member->fullname;
+        }
+        return $members;
+    }
+
     public function getActiveMemberList() {
         $activeMembers = [];
         foreach ($this->getMembers()->where(['active' => true])->all() as $teamMember) {
             $activeMembers[$teamMember->person_id] = $teamMember->member->fullname;
         }
-
         return $activeMembers;
     }
 
@@ -168,15 +175,27 @@ class Team extends ActiveRecord {
     }
 
     public function getGroupWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_GROUP])->with('answers');
+        $result = [];
+        foreach ($this->wheels as $wheel) {
+            if ($wheel->type == Wheel::TYPE_GROUP) {
+                $result[] = $wheel;
+            }
+        }
+        return $result;
     }
 
     public function getOrganizationalWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_ORGANIZATIONAL])->with('answers');
+        $result = [];
+        foreach ($this->wheels as $wheel) {
+            if ($wheel->type == Wheel::TYPE_ORGANIZATIONAL) {
+                $result[] = $wheel;
+            }
+        }
+        return $result;
     }
 
     public function getIndividualWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_INDIVIDUAL);
+        $answers = $this->answerCountByType(Wheel::TYPE_INDIVIDUAL);
         $members = count($this->members);
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
         if ($questions == 0)
@@ -186,7 +205,7 @@ class Team extends ActiveRecord {
     }
 
     public function getGroupWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_GROUP);
+        $answers = $this->answerCountByType(Wheel::TYPE_GROUP);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
         if ($questions == 0)
@@ -195,7 +214,7 @@ class Team extends ActiveRecord {
     }
 
     public function getOrganizationalWheelStatus() {
-        $answers = $this->wheelStatus(Wheel::TYPE_ORGANIZATIONAL);
+        $answers = $this->answerCountByType(Wheel::TYPE_ORGANIZATIONAL);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
         if ($questions == 0)
@@ -203,15 +222,64 @@ class Team extends ActiveRecord {
         return round($answers / $questions * 100, 1) . '%';
     }
 
-    public function wheelStatus($type) {
+    public function getWheelToken(TeamMember $teamMember, $wheelType) {
+        $wheel = Wheel::find()
+            ->where([
+                'team_id' => $teamMember->team_id,
+                'observer_id' => $teamMember->person_id,
+                'type' => $wheelType
+            ])
+            ->one();
+        return $wheel->token;
+    }
+
+    public function getWheelsCompleted() {
+        $answers = $this->answerCount();
+        $members = count($this->members);
+        $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
+        $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
+        $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function getMemberProgress($observerId, $type) {
+        $answers = (new Query)->select('count(wheel_answer.id) as count')
+            ->from('wheel')
+            ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+            ->where(['team_id' => $this->id, 'type' => $type, 'observer_id' => $observerId])
+            ->scalar();
+
+        if ($type == 0) {
+            $questions = WheelQuestion::getQuestionCount($type);
+        } else {
+            $members = count($this->members);
+            $questions = $members * WheelQuestion::getQuestionCount($type);
+        }
+
+        if ($questions == 0)
+            $questions = 1;
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function answerCount() {
+        return (new Query)->select('count(wheel_answer.id) as count')
+            ->from('wheel')
+            ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
+            ->where(['team_id' => $this->id])
+            ->scalar();
+    }
+
+    public function answerCountByType($type) {
         return (new Query)->select('count(wheel_answer.id) as count')
             ->from('wheel')
             ->leftJoin('wheel_answer', 'wheel_answer.wheel_id = wheel.id')
             ->where(['team_id' => $this->id, 'type' => $type])
-            ->scalar();;
+            ->scalar();
     }
 
-    public function notifyIcon($type, $observer_id) {
+    public function getMemberStatus($type, $observer_id) {
         $count = [
             'created' => 0,
             'sent' => 0,
@@ -231,18 +299,17 @@ class Team extends ActiveRecord {
         }
 
         if ($count['created'] > 0 && ($count ['sent'] + $count['received'] + $count['in_progress'] == 0) && $count['done'] > 0) {
-            // retry
-            return \app\components\Icons::EXCLAMATION;
+            return Wheel::STATUS_ERROR;
         } else if ($count['done'] == count($wheels)) {
-            return \app\components\Icons::OK . \app\components\Icons::OK;
-        } else if ($count['in_progress'] > 0) {
-            return \app\components\Icons::PLAY;
+            return Wheel::STATUS_DONE;
+        } else if ($count['in_progress'] > 0 || $count['done'] > 0) {
+            return Wheel::STATUS_IN_PROGRESS;
         } else if ($count['received'] > 0) {
-            return \app\components\Icons::OK;
+            return Wheel::STATUS_RECEIVED;
         } else if ($count['sent'] > 0) {
-            return \app\components\Icons::SEND;
+            return Wheel::STATUS_SENT;
         }
-        return '';
+        return Wheel::STATUS_CREATED;
     }
 
     public function isUserAllowed() {

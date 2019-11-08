@@ -23,5 +23,6 @@ class Icons
     const EXCLAMATION = '<span class="glyphicon glyphicon-exclamation-sign"></span>';
     const OK = '<span class="glyphicon glyphicon-ok"></span>';
     const PLAY = '<span class="glyphicon glyphicon-play"></span>';
+    const REDO = '<i class="fas fa-redo"></i>';
 
 }

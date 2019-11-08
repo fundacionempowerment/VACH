@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use app\components\Downloader;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 use Yii;
+use yii\helpers\Url;
 
 class WheelController extends BaseController {
     public $layout = 'inner';
@@ -99,6 +101,7 @@ class WheelController extends BaseController {
                 if (count($current_wheel->answers) == $questionCount) {
                     $current_wheel->status = 'done';
                     $current_wheel->save();
+                    $this->notifyPerson($current_wheel);
                     $type_text = Wheel::getWheelTypes()[$current_wheel->type];
 
                     $text = Yii::t('wheel', '{wheel_type} of {observer} observing {observed} completed.', ['wheel_type' => $type_text, 'observer' => $current_wheel->observer->fullname, 'observed' => $current_wheel->observed->fullname]);
@@ -187,6 +190,8 @@ class WheelController extends BaseController {
                 }
             }
             if (count($invalids) == 0) {
+                $wheel->status = Wheel::STATUS_IN_PROGRESS;
+                $wheel->save();
                 SiteController::addFlash('success', Yii::t('wheel', 'Wheel answers saved.'));
                 return $this->redirect(['/team/view', 'id' => $wheel->team->id]);
             } else {
@@ -216,5 +221,32 @@ class WheelController extends BaseController {
         return $this->render('received', [
             'wheels' => $wheels,
         ]);
+    }
+
+    private function notifyPerson(Wheel $wheel) {
+        if ($wheel->type != Wheel::TYPE_INDIVIDUAL) {
+            return;
+        }
+
+        $radarPath = Downloader::download(Url::toRoute([
+            '/graph/radar',
+            'teamId' => $wheel->team->id,
+            'memberId' => $wheel->observed->id,
+            'wheelType' => Wheel::TYPE_INDIVIDUAL], true));
+
+        try {
+            $sent =  Yii::$app->mailer->compose('individualWheel', [
+                'wheel' => $wheel,
+                'radarPath' => $radarPath,
+            ])
+                ->attach($radarPath)
+                ->setSubject(Yii::t('wheel', 'CPC: individual wheel'))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observed->email)
+                ->send();
+        } catch (\Exception $ex) {
+            $sent = false;
+        }
+        return $sent;
     }
 }

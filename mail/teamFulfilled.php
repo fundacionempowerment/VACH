@@ -16,6 +16,12 @@ DetailView::widget([
             },
         ],
         [
+            'attribute' => 'coach',
+            'value' => function ($data) {
+                return $data->coach->name . ' ' . $data->coach->surname;
+            },
+        ],
+        [
             'attribute' => 'members',
             'value' => function ($data) {
                 return count($data->members);

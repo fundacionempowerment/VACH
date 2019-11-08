@@ -284,10 +284,16 @@ class Stock extends ActiveRecord {
     public static function cancel($consumer_id, $quantity) {
         $consumed_stamp = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $quantity; $i++) {
-            $available_stock = Yii::$app->db->createCommand('SELECT `id`, `price`, `payment_id` FROM `stock` '
-                . 'WHERE `consumed_stamp` is null '
-                . 'AND `coach_id` = ' . $consumer_id
-                . ' ORDER BY `id` ASC LIMIT 1')->queryOne();
+            $available_stock = (new Query())
+                ->select(['id', 'price', 'payment_id'])
+                ->from('stock')
+                ->where([
+                    'status' => 'valid',
+                    'consumed_stamp' => null,
+                    'coach_id' => $consumer_id])
+                ->orderBy('id')
+                ->limit(1)
+                ->one();
 
             Yii::$app->db->createCommand()
                 ->update('stock', [
