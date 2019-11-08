@@ -32,7 +32,7 @@ AppAsset::register($this);
             <?php
             NavBar::begin([
                 'options' => [
-                    'class' => 'navbar-default navbar-fixed-top',
+                    'class' => 'navbar-default' . (YII_ENV == 'test' ? '': ' navbar-fixed-top'),
                 ],
             ]);
             $logo = Html::img('@web/images/logo.png', ['alt' => 'logo',

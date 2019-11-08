@@ -62,7 +62,8 @@ class Radar
         $graph->SetFrame(false);
         $graph->legend->SetFont(FF_COOL, FS_NORMAL, 20);
 
-        $graph->axis->SetFont(FF_COOL, FS_BOLD, 24);
+        $graph->axis->SetFont(FF_COOL, FS_BOLD, 12);
+        $graph->axis->title->SetFont(FF_COOL, FS_BOLD, 24);
         $graph->axis->SetWeight(1);
 
         // Uncomment the following lines to also show grid lines.

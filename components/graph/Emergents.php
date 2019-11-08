@@ -31,7 +31,7 @@ class Emergents
         self::$company = self::$team->company;
         self::$member = Person::findOne(['id' => $memberId]);
 
-        self::$dimensions  = self::$team->teamType->getDimensionNames(1);
+        self::$dimensions  = self::$team->teamType->getDimensionNames($wheelType);
 
         $title = Yii::t('dashboard', 'Emergent Matrix') . ' ' .
             ($wheelType == 1 ? self::$team->teamType->level_1_name : self::$team->teamType->level_2_name);

@@ -2,17 +2,13 @@
 
 namespace app\components;
 
-use PhpOffice\PhpWord\Style\Image;
+use app\models\Team;
+use PhpOffice\PhpWord\Element\Section;
+use PhpOffice\PhpWord\Shared\Html;
 use Yii;
-use app\models\Person;
 use app\models\Wheel;
-use app\models\WheelQuestion;
-use app\models\TeamMember;
-use app\components\Downloader;
-use app\components\Utils;
 use yii\helpers\ArrayHelper;
 use PhpOffice\PhpWord\PhpWord;
-use \PhpOffice\PhpWord\SimpleType\Jc;
 
 class Word
 {
@@ -244,7 +240,7 @@ class Word
     static private function addTeamRelations()
     {
         self::$section->addPageBreak();
-        self::$section->addTitle(Yii::t('report', 'Relation Matrix'), 1);
+        self::$section->addTitle(Yii::t('dashboard', 'Relation Matrix'), 1);
 
         $organizationalRelationsMatrix = Wheel::getRelationsMatrix(self::$team->id, Wheel::TYPE_ORGANIZATIONAL);
 
@@ -258,7 +254,7 @@ class Word
             self::addRelationTable($organizationalRelationsMatrix);
         }
 
-        \PhpOffice\PhpWord\Shared\Html::addHtml(self::$section, self::$team->report->relations);
+        Html::addHtml(self::$section, self::$team->report->relations);
     }
 
     private static function addRelationTable($data)
@@ -676,7 +672,7 @@ class Word
     static private function addIndividualRelations($individualReport)
     {
         self::$section->addPageBreak();
-        self::$section->addTitle(Yii::t('report', 'Relation Matrix'), 2);
+        self::$section->addTitle(Yii::t('dashboard', 'Relation Matrix'), 2);
 
         if (self::$team->teamType->level_1_enabled) {
             $path = Downloader::download(\yii\helpers\Url::toRoute([

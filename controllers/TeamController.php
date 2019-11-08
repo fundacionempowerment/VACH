@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Company;
 use app\models\DashboardFilter;
 use app\models\LoginModel;
+use app\models\ManualWheelModel;
 use app\models\Person;
 use app\models\RegisterModel;
 use app\models\search\TeamSearch;
@@ -411,6 +412,7 @@ class TeamController extends BaseController {
         $team = Team::findOne(['id' => $id]);
 
         $sent = false;
+        $error = false;
         foreach ($team->members as $teamMember) {
             $wheels = [];
             switch ($type) {
@@ -427,7 +429,9 @@ class TeamController extends BaseController {
 
             foreach ($wheels as $wheel) {
                 if ($wheel->observer_id == $teamMember->person_id && $wheel->answerStatus != '100%') {
-                    $this->sendWheel($wheel);
+                    if (!$this->sendWheel($wheel)) {
+                        $error = true;
+                    };
                     $sent = true;
                     break;
                 }
@@ -436,6 +440,9 @@ class TeamController extends BaseController {
 
         if ($sent == false) {
             \Yii::$app->session->addFlash('info', \Yii::t('team', 'All wheels already fullfilled. Emails not sent.'));
+        }
+        if ($error) {
+            \Yii::$app->session->addFlash('error', \Yii::t('team', 'Some emails were not sent. Please, send them individually'));
         }
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
@@ -454,30 +461,54 @@ class TeamController extends BaseController {
 
     private function sendWheel($wheel) {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
-        $sent = Yii::$app->mailer->compose('wheel', [
-            'wheel' => $wheel,
-        ])
-            ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
-                'wheel_type' => $wheel_type,
-                'team' => $wheel->team->name,
-            ]))
-            ->setFrom(Yii::$app->params['senderEmail'])
-            ->setTo($wheel->observer->email)
-            ->setReplyTo($wheel->coach->email)
-            ->send();
+
+        try {
+            $sent = Yii::$app->mailer->compose('wheel', [
+                'wheel' => $wheel,
+            ])
+                ->setSubject(Yii::t('team', 'CPC: access to {wheel_type} of team {team}', [
+                    'wheel_type' => $wheel_type,
+                    'team' => $wheel->team->name,
+                ]))
+                ->setFrom(Yii::$app->params['senderEmail'])
+                ->setTo($wheel->observer->email)
+                ->setReplyTo($wheel->coach->email)
+                ->send();
+        } catch (\Exception $ex) {
+            $sent = false;
+        }
 
         if ($sent) {
             SiteController::addFlash('success', \Yii::t('team', '{wheel_type} sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
-            $wheels = Wheel::find()->where(['token' => $wheel->token])->all();
-            foreach ($wheels as $wheel) {
-                if ($wheel->status == 'created') {
-                    $wheel->status = 'sent';
-                    $wheel->save();
-                }
-            }
+            Yii::$app->db->createCommand()
+                ->update('wheel',
+                    ['status' => 'sent'],
+                    ['token' => $wheel->token, 'status' => 'created'])
+                ->execute();
         } else {
-            SiteController::addFlash('error', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
+            SiteController::addFlash('warning', \Yii::t('team', '{wheel_type} not sent to {user}.', ['wheel_type' => $wheel_type, 'user' => $wheel->observer->fullname]));
         }
+        return $sent;
+    }
+
+    public function actionManualWheel($teamId) {
+        $manualWheel = new ManualWheelModel();
+
+        if ($manualWheel->load(Yii::$app->request->post())) {
+            $wheel = Wheel::findOne([
+                'team_id' => $manualWheel->team_id,
+                'type' => $manualWheel->wheel_type,
+                'observer_id' => $manualWheel->observer_id,
+                'observed_id' => $manualWheel->wheel_type == 0 ? $manualWheel->observer_id : $manualWheel->observed_id,
+            ]);
+
+            if ($wheel) {
+                return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+            } else {
+                SiteController::addFlash('warning', \Yii::t('wheel', 'Wheel not found.'));
+            }
+        }
+        return $this->redirect(['/team/view', 'id' => $teamId]);
     }
 
 }

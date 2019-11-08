@@ -32,9 +32,6 @@ CREATE TABLE `currency` (
   `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `currency` (`id`, `from_currency`, `to_currency`, `rate`, `stamp`) VALUES
-(1, 'USD', 'ARS', '15.5555', NOW());
-
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,

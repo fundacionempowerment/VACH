@@ -233,4 +233,8 @@ class Report extends ActiveRecord
         }
     }
 
+    public function canAutofill() {
+        return in_array(Yii::$app->user->id, Yii::$app->params['report_autofill_users']);
+    }
+
 }

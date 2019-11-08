@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property integer created_at
  * @property integer updated_at
  * @property string notes
+ * @property integer coach_id
  */
 class Person extends ActiveRecord
 {

@@ -27,6 +27,11 @@ $I->waitForText('exitosamente');
 $I->see('Coach');
 $I->see($add);
 
+$valueRaw = $I->grabTextFrom("//table/tbody/tr/td[6]");
+$number = str_replace(',', '.', $valueRaw);
+$value = floatval($number);
+$I->assertGreaterThan(0, $value);
+
 $I->click('Quitar licencias');
 $I->wait(1);
 

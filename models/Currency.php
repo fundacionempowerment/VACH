@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\httpclient\Client;
 use app\controllers\LogController;
@@ -62,12 +61,10 @@ class Currency extends ActiveRecord
         $lastRate = Currency::find()->orderBy('stamp desc')->one();
 
         if (!$lastRate) {
-            Currency::fetchLastValue();
-            $lastRate = Currency::find()->orderBy('stamp desc')->one();
+            $lastRate = Currency::fetchLastValue();
         }
         if ($lastRate->stamp < (new \DateTime('today -1 days'))->format('Y-m-d H:i:s')) {
-            Currency::fetchLastValue();
-            $lastRate = Currency::find()->orderBy('stamp desc')->one();
+            $lastRate = Currency::fetchLastValue();
         }
 
         if (!$lastRate) {
@@ -101,17 +98,17 @@ class Currency extends ActiveRecord
             return;
         }
 
-        LogController::log('Data obteined from BCRA');
+        LogController::log('Data obtained from BCRA');
 
         $content = $response->content;
 
-        $init = strpos($content, 'contenedordolar');
-        $end = strpos($content, 'lar Mayorista');
+        $init = strpos($content, 'Tipo de Cambio Mayorista');
+        $end = strpos($content, 'Unidad de Valor Adquisitivo (UVA)');
 
         $data = substr($content, $init, $end - $init);
 
-        $init = strpos($data, '<h3>$ ') + 6;
-        $end = strpos($data, '</h3>');
+        $init = strpos($data, '<div align="right">') + 19;
+        $end = strpos($data, '</div>');
 
         $number = substr($data, $init, $end - $init);
         $number = str_replace(',', '.', $number);
@@ -131,6 +128,7 @@ class Currency extends ActiveRecord
         }
 
         LogController::log('Currency saved');
+        return $newCurrency;
     }
 
 }

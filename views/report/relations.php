@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="report-technical">
     <h1>
-        <?= Yii::t('report', 'Relation Matrix') ?>
+        <?= Yii::t('dashboard', 'Relation Matrix') ?>
     </h1>
     <h3><?= Yii::t('dashboard', 'Group Relations Matrix') ?></h3>
     <?php

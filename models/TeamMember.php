@@ -8,6 +8,13 @@ use yii\db\Query;
 use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * Class TeamMember
+ * @package app\models
+ * @property integer person_id
+ * @property integer team_id
+ * @property bool active
+ */
 class TeamMember extends ActiveRecord
 {
 
