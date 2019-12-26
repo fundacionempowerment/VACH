@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Downloader;
+use app\models\UserSession;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
@@ -223,16 +224,19 @@ class WheelController extends BaseController {
         ]);
     }
 
-    private function notifyPerson(Wheel $wheel) {
+    static function notifyPerson(Wheel $wheel) {
         if ($wheel->type != Wheel::TYPE_INDIVIDUAL) {
             return;
         }
+
+        $userSession = UserSession::getLastSession($wheel->team->coach_id);
 
         $radarPath = Downloader::download(Url::toRoute([
             '/graph/radar',
             'teamId' => $wheel->team->id,
             'memberId' => $wheel->observed->id,
-            'wheelType' => Wheel::TYPE_INDIVIDUAL], true));
+            'wheelType' => Wheel::TYPE_INDIVIDUAL], true),
+            $userSession->token);
 
         try {
             $sent =  Yii::$app->mailer->compose('individualWheel', [
@@ -245,6 +249,7 @@ class WheelController extends BaseController {
                 ->setTo($wheel->observed->email)
                 ->send();
         } catch (\Exception $ex) {
+            echo $ex->getMessage();
             $sent = false;
         }
         return $sent;
