@@ -239,8 +239,9 @@ class Team extends ActiveRecord {
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
         $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
         $questions += $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
-        if ($questions == 0)
+        if ($questions == 0) {
             $questions = 1;
+        }
         return round($answers / $questions * 100, 1) . '%';
     }
 

@@ -9,7 +9,7 @@ use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * Class Rerpot
+ * Class Report
  * @package app\models
  * @property integer team_id
  * @property integer introduction_id
