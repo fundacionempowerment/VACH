@@ -178,11 +178,13 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
 <div>
     <?= Html::a(\Yii::t('app', 'Refresh'), Url::to(['team/view', 'id' => $team->id,]), ['class' => 'btn btn-default']) ?>
     <?= Html::a(\Yii::t('team', 'Go to dashboard...'),
-        Url::to(['team/go-to-dashboard', 'id' => $team->id,]), ['class' => ($team->wheelsCompleted ? 'btn btn-success' : 'btn btn-default')])
+        Url::to(['team/go-to-dashboard', 'id' => $team->id,]), ['class' => 'btn btn-success'])
     ?>
     <?= Html::a(\Yii::t('team', 'Go to report...'),
-        Url::to(['report/view', 'id' => $team->id,]), ['class' => ($team->wheelsCompleted ? 'btn btn-success' : 'btn btn-default')])
+        Url::to(['report/view', 'id' => $team->id,]), ['class' => 'btn btn-primary'])
     ?>
+    <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $team->id]), ['class' => 'btn btn-success']) ?>
+    <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
 </div>
 <div class="clearfix"></div>
 <div class="row  col-md-12">
