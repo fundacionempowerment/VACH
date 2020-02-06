@@ -63,7 +63,6 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                             'options' => [
                                 'class' => "btn btn-default",
                                 'title' => Yii::t('wheel', 'Send all by email'),
-                                'data-confirm' => Yii::t('wheel', 'Are you sure you want to send all wheels?'),
                             ],
                         ]) ?>
                     </h3>
@@ -79,7 +78,6 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                             'options' => [
                                 'class' => "btn btn-default",
                                 'title' => Yii::t('wheel', 'Send all by email'),
-                                'data-confirm' => Yii::t('wheel', 'Are you sure you want to send all wheels?'),
                             ],
                         ]) ?>
                     </h3>
@@ -95,7 +93,6 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                             'options' => [
                                 'class' => "btn btn-default",
                                 'title' => Yii::t('wheel', 'Send all by email'),
-                                'data-confirm' => Yii::t('wheel', 'Are you sure you want to send all wheels?'),
                             ],
                         ]) ?>
                     </h3>
