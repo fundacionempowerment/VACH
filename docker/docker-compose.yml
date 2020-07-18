@@ -51,7 +51,7 @@ services:
 
     vach-mailcatcher:
         container_name: vach-mailcatcher
-        image: schickling/mailcatcher
+        image: beardyjay/mailcatcher
         ports:
             - "10188:1080"
         networks:
