@@ -15,6 +15,7 @@ $persons = [
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that assessment crud works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 // Creo equipo
@@ -54,12 +55,7 @@ $I->wait(1);
 // grab all tokens
 
 for ($i = 0; $i < count($persons); $i++) {
-    $I->waitForElementVisible('#cell_' . $i, 5); // secs
-    $I->click('#cell_' . $i);
-    $I->wait(1);
-    $wheelToken[] = $I->grabTextFrom('#token');
-    $I->click(".//*[@id='email_modal']/div/div/div[1]/button");
-    $I->wait(1);
+    $wheelToken[$i] = $I->grabAttributeFrom('#cell_' . $i, 'data-token');
 }
 
 // Prepare to fill wheels

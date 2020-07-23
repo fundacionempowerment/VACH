@@ -6,6 +6,8 @@ $password = "password$random";
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that login works');
 
+$I->amOnPage(Yii::$app->homeUrl);
+
 $I->amGoingTo('try to login with empty credentials');
 $I->login('', '');
 $I->see('Nombre usuario no puede estar vacío.');

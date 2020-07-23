@@ -93,11 +93,12 @@ class StockController extends AdminBaseController {
             'product_id' => $product_id,
             'quantity' => $quantity,
             'price' => $product->price,
+            'payed' => false,
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $success = Stock::saveAddModel($model);
+            $success = Stock::applyAddModel($model);
 
             if ($success) {
                 Yii::$app->mailer->compose('stockAdded', [
@@ -138,11 +139,14 @@ class StockController extends AdminBaseController {
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->quantity <= $model->coach->getStock()) {
-                if (Stock::cancel($model->coach_id, $model->quantity)) {
+            if ($model->quantity <= $model->coach->getCancelableStock()) {
+                $canceledCount = Stock::cancel($model->coach_id, $model->quantity, $model->product_id);
+                if ($canceledCount == $model->quantity) {
                     SiteController::addFlash('success', Yii::t('app', '{name} has been successfully canceled.', ['name' => $model->quantity . ' ' . $product->name]));
-                    return $this->redirect(['/admin/stock']);
+                } else {
+                    SiteController::addFlash('error', Yii::t('app', '{name} has been canceled.', ['name' => $canceledCount . ' ' . $product->name]));
                 }
+                return $this->redirect(['/admin/stock']);
             } else {
                 SiteController::addFlash('error', Yii::t('stock', 'Stock quantity not available'));
             }

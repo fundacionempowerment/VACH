@@ -3,6 +3,7 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that wheel question works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsAdmin();
 
 $I->clickMainMenu('Admin','Tipos de equipos');

@@ -3,6 +3,7 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that main menu works in every item');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 $I->checkMenuItem('Inicio');

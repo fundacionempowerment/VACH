@@ -1,12 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use app\models\Product;
 use app\models\User;
 use yii\web\View;
 use kartik\widgets\Select2;
+use app\models\AddModel;
+
+/* @var $model AddModel */
 
 $this->title = Yii::t('stock', 'Add licences');
 
@@ -47,6 +49,7 @@ $distributions = [
     ])
     ?>
     <?= $form->field($model, 'part_distribution')->dropDownList($distributions) ?>
+    <?= $form->field($model, 'payed')->checkbox() ?>
     <div class="form-group">
         Total:  <b><span id="total"><?= Yii::$app->formatter->asCurrency($model->price * $model->quantity) ?></span></b><br/><br>
             <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success', 'name' => 'pay-button']) ?>         

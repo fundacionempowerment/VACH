@@ -17,20 +17,20 @@ use app\components\SpinnerSubmitButton;
 $manualWheel = new ManualWheelModel(['team_id' => $team->id]);
 
 function wheelStatus(int $status) {
-   switch($status) {
-      case Wheel::STATUS_CREATED:
-         return Html::tag ('span', Html::tag( "strong", Yii::t('app','to send')), ['class' => 'text-danger']);
-      case Wheel::STATUS_SENT:
-         return Html::tag ('span', Yii::t('app','sent'), ['class' => 'text-info']);
-      case Wheel::STATUS_RECEIVED:
-         return Html::tag ('span', Yii::t('app','received'), ['class' => 'text-success']);
-      case Wheel::STATUS_IN_PROGRESS:
-         return Html::tag ('span', Yii::t('app','in progress'));
-      case Wheel::STATUS_DONE:
-         return Html::tag ('span', Yii::t('app','done'));
-      default:
-         return Html::tag ('span', Yii::t('app','error'));
-   }
+    switch ($status) {
+        case Wheel::STATUS_CREATED:
+            return Html::tag('span', Html::tag("strong", Yii::t('app', 'to send')), ['class' => 'text-danger']);
+        case Wheel::STATUS_SENT:
+            return Html::tag('span', Yii::t('app', 'sent'), ['class' => 'text-info']);
+        case Wheel::STATUS_RECEIVED:
+            return Html::tag('span', Yii::t('app', 'received'), ['class' => 'text-success']);
+        case Wheel::STATUS_IN_PROGRESS:
+            return Html::tag('span', Yii::t('app', 'in progress'));
+        case Wheel::STATUS_DONE:
+            return Html::tag('span', Yii::t('app', 'done'));
+        default:
+            return Html::tag('span', Yii::t('app', 'error'));
+    }
 }
 
 if (count($team->wheels) == 0) {
@@ -108,65 +108,71 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
                     $status = $team->getMemberStatus(Wheel::TYPE_INDIVIDUAL, $observerMember->member->id);
                     $progress = $team->getMemberProgress($observerMember->person_id, Wheel::TYPE_INDIVIDUAL);
                     $token = $team->getWheelToken($observerMember, Wheel::TYPE_INDIVIDUAL);
-                    ?>
-                    <td id="cell_<?= $buttonId++ ?>" class="text-center"
-                        data-token="<?= $token ?>">
-                        <?php if ($progress != "100%") { ?>
-                            <?= SpinnerAnchor::widget(['caption' => $mail_icon,
-                                'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]),
-                                'options' => ['class' => "btn btn-default btn-xs ",
-                                    'title' => Yii::t('wheel', 'Send by email')],]) ?>
-                            <button type="button" class="btn btn-default btn-xs"
-                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
-                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
-                                <?= $mail_icon2 ?>
-                            </button>
-                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
-                        <?php } else echo $progress ?>
-                    </td class="text-center">
-                <?php } ?>
+                    if ($token) {
+                        ?>
+                        <td id="cell_<?= $buttonId++ ?>" class="text-center"
+                            data-token="<?= $token ?>">
+                            <?php if ($progress != "100%") { ?>
+                                <?= SpinnerAnchor::widget(['caption' => $mail_icon,
+                                    'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_INDIVIDUAL]),
+                                    'options' => ['class' => "btn btn-default btn-xs ",
+                                        'title' => Yii::t('wheel', 'Send by email')],]) ?>
+                                <button type="button" class="btn btn-default btn-xs"
+                                        onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
+                                        title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon2 ?>
+                                </button>
+                                <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
+                            <?php } else echo $progress ?>
+                        </td class="text-center">
+                    <?php }
+                } ?>
                 <?php if ($team->teamType->level_1_enabled) {
                     $status = $team->getMemberStatus(Wheel::TYPE_GROUP, $observerMember->member->id);
                     $progress = $team->getMemberProgress($observerMember->person_id, Wheel::TYPE_GROUP);
                     $token = $team->getWheelToken($observerMember, Wheel::TYPE_GROUP);
-                    ?>
-                    <td id="cell_<?= $buttonId++ ?>" class="text-center"
-                        data-token="<?= $token ?>">
-                        <?php if ($progress != "100%") { ?>
-                            <?= SpinnerAnchor::widget(['caption' => $mail_icon,
-                                'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]),
-                                'options' => ['class' => "btn btn-default btn-xs ",
-                                    'title' => Yii::t('wheel', 'Send by email')],]) ?>
-                            <button type="button" class="btn btn-default btn-xs"
-                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
-                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
-                                <?= $mail_icon2 ?>
-                            </button>
-                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
-                        <?php } else echo $progress ?>
-                    </td>
-                <?php } ?>
+                    if ($token) {
+                        ?>
+                        <td id="cell_<?= $buttonId++ ?>" class="text-center"
+                            data-token="<?= $token ?>">
+                            <?php if ($progress != "100%") { ?>
+                                <?= SpinnerAnchor::widget(['caption' => $mail_icon,
+                                    'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_GROUP]),
+                                    'options' => ['class' => "btn btn-default btn-xs ",
+                                        'title' => Yii::t('wheel', 'Send by email')],]) ?>
+                                <button type="button" class="btn btn-default btn-xs"
+                                        onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
+                                        title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon2 ?>
+                                </button>
+                                <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
+                            <?php } else echo $progress ?>
+                        </td>
+                    <?php }
+                } ?>
                 <?php if ($team->teamType->level_2_enabled) {
                     $status = $team->getMemberStatus(Wheel::TYPE_ORGANIZATIONAL, $observerMember->member->id);
                     $progress = $team->getMemberProgress($observerMember->person_id, Wheel::TYPE_ORGANIZATIONAL);
                     $token = $team->getWheelToken($observerMember, Wheel::TYPE_ORGANIZATIONAL);
-                    ?>
-                    <td id="cell_<?= $buttonId++ ?>" class="text-center"
-                        data-token="<?= $token ?>">
-                        <?php if ($progress != "100%") { ?>
-                            <?= SpinnerAnchor::widget(['caption' => $mail_icon,
-                                'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]),
-                                'options' => ['class' => "btn btn-default btn-xs ",
-                                    'title' => Yii::t('wheel', 'Send by email')],]) ?>
-                            <button type="button" class="btn btn-default btn-xs"
-                                    onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
-                                    title="<?= Yii::t('wheel', 'Manual email') ?>">
-                                <?= $mail_icon2 ?>
-                            </button>
-                            <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
-                        <?php } else echo $progress ?>
-                    </td>
-                <?php } ?>
+                    if ($token) {
+                        ?>
+                        <td id="cell_<?= $buttonId++ ?>" class="text-center"
+                            data-token="<?= $token ?>">
+                            <?php if ($progress != "100%") { ?>
+                                <?= SpinnerAnchor::widget(['caption' => $mail_icon,
+                                    'url' => Url::to(['team/send-wheel', 'id' => $team->id, 'memberId' => $observerMember->person_id, 'type' => Wheel::TYPE_ORGANIZATIONAL]),
+                                    'options' => ['class' => "btn btn-default btn-xs ",
+                                        'title' => Yii::t('wheel', 'Send by email')],]) ?>
+                                <button type="button" class="btn btn-default btn-xs"
+                                        onclick="showEmail('<?= $observerMember->member->fullname ?>', '<?= $observerMember->member->email ?>', '<?= Url::toRoute(['wheel/run', 'token' => $token], true) ?>', '<?= $token ?>');"
+                                        title="<?= Yii::t('wheel', 'Manual email') ?>">
+                                    <?= $mail_icon2 ?>
+                                </button>
+                                <?= $progress = "0%" && $status != Wheel::STATUS_IN_PROGRESS ? wheelStatus($status) : $progress ?>
+                            <?php } else echo $progress ?>
+                        </td>
+                    <?php }
+                } ?>
             </tr>
         <?php } ?>
     </table>
@@ -201,7 +207,7 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         'data' => $team->getMemberList(),
     ]) ?>
     <?= $form->field($manualWheel, 'observed_id')->widget(Select2::classname(), [
-        'data' =>  $team->getMemberList(),
+        'data' => $team->getMemberList(),
     ]) ?>
     <?= $form->field($manualWheel, 'wheel_type')->widget(Select2::classname(), [
         'data' => Wheel::getWheelTypes(),

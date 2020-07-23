@@ -26,11 +26,10 @@ class AcceptanceTester extends \Codeception\Actor {
     public function login($username, $password) {
         $I = $this;
 
-        $this->amOnPage(Yii::$app->homeUrl);
-        $this->fillField('LoginForm[username]', $username);
-        $this->fillField('LoginForm[password]', $password);
-        $this->click('login-button');
-        $this->wait(3);
+        $I->fillField('LoginForm[username]', $username);
+        $I->fillField('LoginForm[password]', $password);
+        $I->click('login-button');
+        $I->wait(3);
     }
 
     public function loginAsAdmin() {

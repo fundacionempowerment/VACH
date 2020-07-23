@@ -18,18 +18,19 @@ $I->click('Solicitar');
 
 $I->waitForText('Revise su buzón de correo para más instrucciones');
 
-$message = $I->grabLastSentEmail();
-//$I->seeInLastEmailSubject('Reinicio de contraseña para VACH');
+$I->seeInLastEmailSubject('Reinicio de contraseña para VACH');
 
-var_dump($message);
+$links = $I->grabUrlsFromLastEmail();
 
-$I->amOnUrl($link);
+$I->amOnUrl($links[0]);
 
-$I->waitForText('Reiniciar contraseña', 30, h1);
+$I->waitForText('Reiniciar contraseña', 30, "h1");
 
 $I->fillField('ResetPasswordForm[password]', $password);
+$I->fillField('ResetPasswordForm[password_confirm]', $password);
 $I->click('Guardar');
 
 $I->waitForText('Nueva contraseña guardada');
 
 $I->login('coach', $password);
+$I->see('(coach)');

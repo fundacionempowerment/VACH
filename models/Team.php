@@ -230,7 +230,7 @@ class Team extends ActiveRecord {
                 'type' => $wheelType
             ])
             ->one();
-        return $wheel->token;
+        return $wheel ? $wheel->token : '';
     }
 
     public function getWheelsCompleted() {

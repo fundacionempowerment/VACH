@@ -1,6 +1,6 @@
 <?php
 
-$initial_stock = 0;
+$initial_stock = 20;
 $price = rand(100, 300) / 10;
 $add = rand(10, 20);
 $remove = rand(1, 9);
@@ -8,6 +8,7 @@ $remove = rand(1, 9);
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that licence management works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsAdmin();
 
 $I->clickMainMenu('Admin', 'Licencias');
