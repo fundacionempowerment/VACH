@@ -35,7 +35,12 @@
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
-        "captbaritone/mailcatcher-codeception-module": "*"
+        "captbaritone/mailcatcher-codeception-module": "*",
+        "codeception/module-webdriver": "^1.1",
+        "codeception/module-db": "^1.0",
+        "codeception/module-yii2": "^1.1",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-asserts": "^1.2"
     },
     "config": {
         "process-timeout": 1800,

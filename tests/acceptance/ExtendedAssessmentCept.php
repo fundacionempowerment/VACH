@@ -28,6 +28,7 @@ $I->wantTo('ensure that extended assessment crud works');
 
 // Agrego licencias
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsAdmin();
 
 $I->clickMainMenu('Admin', 'Licencias');
@@ -117,7 +118,7 @@ for ($i = 0; $i < 3; $i++) {
     $I->wait(1);
 
     // Completo relevamiento
-    if ($i== 0)    {
+    if ($i == 0) {
         $I->click('Equipo completado');
     } else {
         $I->click('Actualizar equipo');
@@ -133,12 +134,10 @@ for ($i = 0; $i < 3; $i++) {
 
 // grab all tokens
 
-for ($i = 0; $i < count($persons) * 3; $i++) {
-    $I->click('#cell_' . $i);
-    $I->wait(1);
-    $wheelToken[] = $I->grabTextFrom('#token');
-    $I->click(".//*[@id='email_modal']/div/div/div[1]/button");
-    $I->wait(1);
+for ($i = 0; $i < count($persons); $i++) {
+    $wheelToken[$i][0] = $I->grabAttributeFrom('#cell_' . ($i * 3), 'data-token');
+    $wheelToken[$i][1] = $I->grabAttributeFrom('#cell_' . ($i * 3 + 1), 'data-token');
+    $wheelToken[$i][2] = $I->grabAttributeFrom('#cell_' . ($i * 3 + 2), 'data-token');
 }
 
 // Prepare to fill wheels
@@ -147,7 +146,7 @@ $I->logout();
 
 // Fill individual wheels
 for ($i = 0; $i < count($persons); $i++) {
-    $I->fillField('Wheel[token]', $wheelToken[$i]);
+    $I->fillField('Wheel[token]', $wheelToken[$i][0]);
     $I->wait(1);
     $I->click('Ejecutar');
     $I->wait(1);
@@ -181,42 +180,41 @@ for ($i = 0; $i < count($persons); $i++) {
 
 // Fill group and organizational wheels
 
-for ($i = 3; $i < count($persons) * 3; $i++) {
-    $I->fillField('Wheel[token]', $wheelToken[$i]);
-    $I->wait(1);
-    $I->click('Ejecutar');
-    $I->wait(1);
-
-
-    for ($o = 0; $o < count($persons); $o++) {
-        $I->see('Observador: ' . $persons[$i % 3]['name']);
-        $I->see('Observado: ' . $persons[$o]['name']);
-
-        $I->click('Comenzar');
+for ($w = 1; $w <= 2; $w++) {
+    for ($i = 0; $i < count($persons); $i++) {
+        $I->fillField('Wheel[token]', $wheelToken[$i][$w]);
+        $I->wait(1);
+        $I->click('Ejecutar');
         $I->wait(1);
 
-        for ($d = 0; $d < 8; $d++) {
-            for ($q = 0; $q < 8; $q++) {
-                $answer = 'answer' . (($d * 8) + $q);
-                $random = rand(0, 4);
-                $I->click("//input[@value=$random and @name='$answer']/..");
-            }
+        for ($o = 0; $o < count($persons); $o++) {
+            $I->see('Observador: ' . $persons[$i]['name']);
+            $I->see('Observado: ' . $persons[$o]['name']);
 
-            if ($d < 7)
-                $I->click('Guardar y próxima competencia');
-            else
-                $I->click('Guardar');
+            $I->click('Comenzar');
             $I->wait(1);
+
+            for ($d = 0; $d < 8; $d++) {
+                for ($q = 0; $q < 8; $q++) {
+                    $answer = 'answer' . (($d * 8) + $q);
+                    $random = rand(0, 4);
+                    $I->click("//input[@value=$random and @name='$answer']/..");
+                }
+
+                if ($d < 7)
+                    $I->click('Guardar y próxima competencia');
+                else
+                    $I->click('Guardar');
+                $I->wait(1);
+            }
         }
+
+        $I->see('exitosamente');
+
+        $I->click('Inicio');
+        $I->wait(1);
     }
-
-    $I->see('exitosamente');
-
-    $I->click('Inicio');
-    $I->wait(1);
 }
-
-// Delete this assessment
 
 $I->loginAsCoach();
 

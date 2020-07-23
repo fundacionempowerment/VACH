@@ -54,6 +54,8 @@ $pluginOptions = [
                     'options' => ['class' => 'btn btn-primary'],
                 ]) : ''
             ?>
+            <?= Html::a(\Yii::t('app', 'Download PPT'), Url::to(['report/presentation', 'id' => $team->id]), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(\Yii::t('app', 'Download DOC'), Url::to(['report/word', 'id' => $team->id]), ['class' => 'btn btn-primary']) ?>
         </p>
         <h3><?= $team->getAttributeLabel('coaches') ?></h3>
         <?=

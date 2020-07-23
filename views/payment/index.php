@@ -25,7 +25,7 @@ $columns = [
         'attribute' => 'amount',
         'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
         'value' => function ($data) {
-            return $data['currency'] . ' $' . $data['amount'];
+            return $data['currency'] . ' ' . Yii::$app->formatter->asDecimal($data['amount'], 2);
         },
     ],
     'statusName',

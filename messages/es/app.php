@@ -116,6 +116,7 @@ return [
     'Run' => 'Ejecutar',
     'Save' => 'Guardar',
     'Send' => 'Enviar',
+    'Send all' => 'Enviar todo',
     'Show' => 'Mostrar',
     'Sign in' => 'Ingresar',
     'Sign up' => 'Crear cuenta',

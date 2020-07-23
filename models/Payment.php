@@ -5,6 +5,24 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * Class Payment
+ * @package app\models
+ * @property integer id
+ * @property integer coach_id
+ * @property integer creator_id
+ * @property string concept
+ * @property string currency
+ * @property double amount
+ * @property double rate
+ * @property string commision_currency
+ * @property double commision
+ * @property double part_distribution
+ * @property string status
+ * @property boolean is_manual
+ *
+ * @property User $coach
+ */
 class Payment extends ActiveRecord {
 
     const STATUS_PENDING = 'pending';

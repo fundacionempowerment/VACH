@@ -4,6 +4,7 @@ namespace app\components;
 
 use app\models\Team;
 use PhpOffice\PhpWord\Element\Section;
+use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Shared\Html;
 use Yii;
 use app\models\Wheel;
@@ -28,6 +29,7 @@ class Word
         self::$team = $team;
 
         self::$phpWord = new PhpWord();
+        Settings::setOutputEscapingEnabled(true);
 
         self::setupStyles();
 

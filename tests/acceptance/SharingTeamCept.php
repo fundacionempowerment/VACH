@@ -14,6 +14,7 @@ $persons = [
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that assessment can be share safely');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 // Creo nuevo relevamiento

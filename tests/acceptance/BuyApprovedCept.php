@@ -11,6 +11,7 @@ $I = new AcceptanceTester($scenario);
 
 $I->wantTo('ensure that licence buying works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 $I->clickMainMenu('(coach)', 'Mis datos');

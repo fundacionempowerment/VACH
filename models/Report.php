@@ -9,7 +9,7 @@ use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * Class Rerpot
+ * Class Report
  * @package app\models
  * @property integer team_id
  * @property integer introduction_id
@@ -234,7 +234,7 @@ class Report extends ActiveRecord
     }
 
     public function canAutofill() {
-        return in_array(Yii::$app->user->id, Yii::$app->params['report_autofill_users']);
+        return in_array(Yii::$app->user->id, Yii::$app->params['report_autofill_users']) || YII_ENV_TEST;
     }
 
 }

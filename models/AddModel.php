@@ -19,6 +19,7 @@ class AddModel extends Model
     public $price;
     public $coach_id;
     public $part_distribution;
+    public $payed;
 
     /**
      * @return array the validation rules.
@@ -30,6 +31,7 @@ class AddModel extends Model
             [['product_id', 'quantity', 'price', 'coach_id', 'part_distribution'], 'required'],
             ['quantity', 'number', 'min' => 1, 'max' => 100],
             ['amount', 'number', 'min' => 0, 'max' => 100000],
+            ['payed', 'boolean'],
         ];
     }
 
@@ -45,6 +47,7 @@ class AddModel extends Model
             'coach' => Yii::t('app', 'Coach'),
             'product_id' => Yii::t('app', 'Product'),
             'product' => Yii::t('app', 'Product'),
+            'payed' => Yii::t('stock', 'Payed'),
         ];
     }
 

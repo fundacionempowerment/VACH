@@ -26,6 +26,7 @@ for ($i = 0; $i < 3; $i++) {
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that team crud works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 // Creo empresa
