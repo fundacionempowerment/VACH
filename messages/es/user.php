@@ -62,6 +62,8 @@ return [
     'Teams to transfer' => 'Equipos a transferir',
     'User' => 'Usuario',
     'User {origin} has been fused to {destination}.' => 'Usuario {origin} ha sido fundido con {destination} ',
+    'User {user} has been saved' => 'Usuario {user} ha sido salvado',
+    'User {user} has not been saved' => 'Usuario {user} no ha sido salvado',
     'Username' => 'Nombre usuario',
     'Users' => 'Usuarios',
     'Users has been successfully fused.' => 'Los usuarios han sido exitosamente fundidos',
