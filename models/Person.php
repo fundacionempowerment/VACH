@@ -115,6 +115,10 @@ class Person extends ActiveRecord
                         ->orderBy('name, surname');
     }
 
+    public static function getList() {
+        return \yii\helpers\ArrayHelper::map(static::browse()->all(), 'id', 'fullname');
+    }
+
     public function getCoach()
     {
         return $this->hasOne(User::class, ['id' => 'coach_id']);

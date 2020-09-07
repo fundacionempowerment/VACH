@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Downloader;
+use app\models\search\WheelSearch;
 use app\models\UserSession;
 use app\models\Wheel;
 use app\models\WheelAnswer;
@@ -18,6 +19,35 @@ class WheelController extends BaseController {
             return parent::beforeAction($action);
         }
         return true;
+    }
+
+    public function actionIndex() {
+        $searchModel = new WheelSearch();
+        $wheels = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'wheels' => $wheels,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionRedo($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+
+        if (!$wheel || !$wheel->team->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
+        if (Yii::$app->request->post('delete')) {
+            if ($wheel->redo()) {
+                SiteController::addFlash('success', Yii::t('wheel', 'Wheel has been successfully reset.'));
+                return $this->redirect(['/wheel']);
+            } else {
+                SiteController::FlashErrors($wheel);
+            }
+        }
+
+        return $this->render('redo', ['wheel' => $wheel]);
     }
 
     public function actionRun() {
@@ -239,7 +269,7 @@ class WheelController extends BaseController {
             $userSession->token);
 
         try {
-            $sent =  Yii::$app->mailer->compose('individualWheel', [
+            $sent = Yii::$app->mailer->compose('individualWheel', [
                 'wheel' => $wheel,
                 'radarPath' => $radarPath,
             ])

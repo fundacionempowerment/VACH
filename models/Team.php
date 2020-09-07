@@ -104,6 +104,10 @@ class Team extends ActiveRecord {
             ->orderBy('team.created_at desc');
     }
 
+    public static function getList() {
+        return \yii\helpers\ArrayHelper::map(static::browse()->all(), 'id', 'name');
+    }
+
     public function getTeamType() {
         return $this->hasOne(TeamType::class, ['id' => 'team_type_id']);
     }
@@ -198,8 +202,9 @@ class Team extends ActiveRecord {
         $answers = $this->answerCountByType(Wheel::TYPE_INDIVIDUAL);
         $members = count($this->members);
         $questions = $members * WheelQuestion::getQuestionCount(Wheel::TYPE_INDIVIDUAL);
-        if ($questions == 0)
+        if ($questions == 0) {
             $questions = 1;
+        }
 
         return round($answers / $questions * 100, 1) . '%';
     }
@@ -208,8 +213,9 @@ class Team extends ActiveRecord {
         $answers = $this->answerCountByType(Wheel::TYPE_GROUP);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_GROUP);
-        if ($questions == 0)
+        if ($questions == 0) {
             $questions = 1;
+        }
         return round($answers / $questions * 100, 1) . '%';
     }
 
@@ -217,8 +223,9 @@ class Team extends ActiveRecord {
         $answers = $this->answerCountByType(Wheel::TYPE_ORGANIZATIONAL);
         $members = count($this->members);
         $questions = $members * $members * WheelQuestion::getQuestionCount(Wheel::TYPE_ORGANIZATIONAL);
-        if ($questions == 0)
+        if ($questions == 0) {
             $questions = 1;
+        }
         return round($answers / $questions * 100, 1) . '%';
     }
 

@@ -46,6 +46,13 @@ class Wheel extends ActiveRecord {
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function tableName() {
+        return 'wheel';
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules() {
@@ -90,8 +97,7 @@ class Wheel extends ActiveRecord {
 
     public function getTeam() {
         return Team::find()
-            ->where(['id' => $this->team_id])//->cache(10)
-            ;
+            ->where(['id' => $this->team_id]);
     }
 
     public function getAnswers() {
@@ -131,12 +137,12 @@ class Wheel extends ActiveRecord {
         return true;
     }
 
-    public static function browse($personId) {
-        return (new Query())->select('id, date')
-            ->from('wheel')
-            ->where(['person_id' => $personId])
-            ->orderBy('id desc')
-            ->all();
+    public static function browse() {
+        return Wheel::find()
+            ->innerJoin('team', 'team.id = wheel.team_id')
+            ->leftJoin('team_coach', '`team_coach`.`team_id` = `wheel`.`team_id`')
+            ->where(['team.coach_id' => Yii::$app->user->id])
+            ->orderBy('id desc');
     }
 
     public static function getWheelTypes() {
@@ -407,5 +413,23 @@ class Wheel extends ActiveRecord {
         return $this->team->teamType->levelName($this->type);
     }
 
+    public function getProgress() {
+        $answers = (new Query)->select('count(wheel_answer.id) as count')
+            ->from('wheel_answer')
+            ->where(['wheel_id' => $this->id])
+            ->scalar();
 
+        $questions = WheelQuestion::getQuestionCount($this->type);
+
+        if ($questions == 0) {
+            $questions = 1;
+        }
+        return round($answers / $questions * 100, 1) . '%';
+    }
+
+    public function redo() {
+        WheelAnswer::deleteAll(['wheel_id' => $this->id]);
+
+        return true;
+    }
 }
