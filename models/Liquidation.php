@@ -65,7 +65,7 @@ class Liquidation extends ActiveRecord
 
     public function getPayments()
     {
-        return $this->hasMany(Payment::className(), ['liquidation_id' => 'id'])
+        return $this->hasMany(Payment::class, ['liquidation_id' => 'id'])
                 ->orderBy(['id' => SORT_DESC]);
     }
 

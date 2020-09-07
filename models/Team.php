@@ -70,7 +70,7 @@ class Team extends ActiveRecord {
      */
     public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -105,23 +105,23 @@ class Team extends ActiveRecord {
     }
 
     public function getTeamType() {
-        return $this->hasOne(TeamType::className(), ['id' => 'team_type_id']);
+        return $this->hasOne(TeamType::class, ['id' => 'team_type_id']);
     }
 
     public function getCoach() {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     public function getCompany() {
-        return $this->hasOne(Company::className(), ['id' => 'company_id']);
+        return $this->hasOne(Company::class, ['id' => 'company_id']);
     }
 
     public function getSponsor() {
-        return $this->hasOne(Person::className(), ['id' => 'sponsor_id']);
+        return $this->hasOne(Person::class, ['id' => 'sponsor_id']);
     }
 
     public function getMembers() {
-        return $this->hasMany(TeamMember::className(), ['team_id' => 'id']);
+        return $this->hasMany(TeamMember::class, ['team_id' => 'id']);
     }
 
     public function getMemberList() {
@@ -147,15 +147,15 @@ class Team extends ActiveRecord {
     }
 
     public function getWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id']);
+        return $this->hasMany(Wheel::class, ['team_id' => 'id']);
     }
 
     public function getTeamCoaches() {
-        return $this->hasMany(TeamCoach::className(), ['team_id' => 'id']);
+        return $this->hasMany(TeamCoach::class, ['team_id' => 'id']);
     }
 
     public function getReport() {
-        return $this->hasOne(Report::className(), ['team_id' => 'id']);
+        return $this->hasOne(Report::class, ['team_id' => 'id']);
     }
 
     static public function getDashboardList($companyId) {
@@ -171,7 +171,7 @@ class Team extends ActiveRecord {
     }
 
     public function getIndividualWheels() {
-        return $this->hasMany(Wheel::className(), ['team_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL])->with('answers');
+        return $this->hasMany(Wheel::class, ['team_id' => 'id'])->where(['type' => Wheel::TYPE_INDIVIDUAL])->with('answers');
     }
 
     public function getGroupWheels() {

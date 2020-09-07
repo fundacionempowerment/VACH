@@ -66,7 +66,7 @@ class Wheel extends ActiveRecord {
      */
     public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -77,11 +77,11 @@ class Wheel extends ActiveRecord {
     }
 
     public function getObserver() {
-        return $this->hasOne(Person::className(), ['id' => 'observer_id']);
+        return $this->hasOne(Person::class, ['id' => 'observer_id']);
     }
 
     public function getObserved() {
-        return $this->hasOne(Person::className(), ['id' => 'observed_id']);
+        return $this->hasOne(Person::class, ['id' => 'observed_id']);
     }
 
     public function getCoach() {
@@ -95,7 +95,7 @@ class Wheel extends ActiveRecord {
     }
 
     public function getAnswers() {
-        return $this->hasMany(WheelAnswer::className(), ['wheel_id' => 'id']);
+        return $this->hasMany(WheelAnswer::class, ['wheel_id' => 'id']);
     }
 
     public function customSave($answers) {

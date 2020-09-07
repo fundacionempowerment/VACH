@@ -49,7 +49,7 @@ class Company extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -69,7 +69,7 @@ class Company extends ActiveRecord
 
     public function afterFind()
     {
-        $teams = $this->hasMany(Team::className(), ['company_id' => 'id']);
+        $teams = $this->hasMany(Team::class, ['company_id' => 'id']);
         $this->deletable = $teams->count() == 0;
 
         parent::afterFind();
@@ -93,7 +93,7 @@ class Company extends ActiveRecord
 
     public function getCoach()
     {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     static public function getDashboardList()

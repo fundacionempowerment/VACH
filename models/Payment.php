@@ -151,19 +151,19 @@ class Payment extends ActiveRecord {
     }
 
     public function getCoach() {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     public function getCreator() {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     public function getLogs() {
-        return $this->hasMany(PaymentLog::className(), ['payment_id' => 'id']);
+        return $this->hasMany(PaymentLog::class, ['payment_id' => 'id']);
     }
 
     public function getStocks() {
-        return $this->hasMany(Stock::className(), ['payment_id' => 'id']);
+        return $this->hasMany(Stock::class, ['payment_id' => 'id']);
     }
 
     public function getPart1Amount() {
@@ -175,7 +175,7 @@ class Payment extends ActiveRecord {
     }
 
     public function getTransactions() {
-        return $this->hasMany(Transaction::className(), ['payment_id' => 'id']);
+        return $this->hasMany(Transaction::class, ['payment_id' => 'id']);
     }
 
     public function newTransaction() {

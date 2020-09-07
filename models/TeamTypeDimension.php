@@ -33,7 +33,7 @@ class TeamTypeDimension extends \yii\db\ActiveRecord {
             [['team_type_id', 'order', 'level'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
-            [['team_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeamType::className(), 'targetAttribute' => ['team_type_id' => 'id']],
+            [['team_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeamType::class, 'targetAttribute' => ['team_type_id' => 'id']],
         ];
     }
 
@@ -55,6 +55,6 @@ class TeamTypeDimension extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getTeamType() {
-        return $this->hasOne(TeamType::className(), ['id' => 'team_type_id']);
+        return $this->hasOne(TeamType::class, ['id' => 'team_type_id']);
     }
 }

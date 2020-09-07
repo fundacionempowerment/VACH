@@ -58,7 +58,7 @@ class Person extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -84,9 +84,9 @@ class Person extends ActiveRecord
     {
         $this->fullname = $this->name . ' ' . $this->surname;
 
-        $sponsored_teams = $this->hasMany(Team::className(), ['sponsor_id' => 'id'])->count();
-        $wheels_as_observed = $this->hasMany(Wheel::className(), ['observed_id' => 'id'])->count();
-        $wheels_as_observer = $this->hasMany(Wheel::className(), ['observer_id' => 'id'])->count();
+        $sponsored_teams = $this->hasMany(Team::class, ['sponsor_id' => 'id'])->count();
+        $wheels_as_observed = $this->hasMany(Wheel::class, ['observed_id' => 'id'])->count();
+        $wheels_as_observer = $this->hasMany(Wheel::class, ['observer_id' => 'id'])->count();
 
         $this->deletable = $sponsored_teams == 0 && $wheels_as_observed == 0 && $wheels_as_observer == 0;
 
@@ -117,12 +117,12 @@ class Person extends ActiveRecord
 
     public function getCoach()
     {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     public function getWheels()
     {
-        return $this->hasMany(Wheel::className(), ['observed_id' => 'id'])
+        return $this->hasMany(Wheel::class, ['observed_id' => 'id'])
                         ->where(['type' => '0']);
     }
 

@@ -33,7 +33,7 @@ class Product extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -56,7 +56,7 @@ class Product extends ActiveRecord
 
     public function afterFind()
     {
-        $stocks = $this->hasMany(Stock::className(), ['product_id' => 'id']);
+        $stocks = $this->hasMany(Stock::class, ['product_id' => 'id']);
         $this->deletable = $stocks->count() == 0;
 
         parent::afterFind();

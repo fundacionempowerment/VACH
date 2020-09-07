@@ -44,7 +44,7 @@ class TeamType extends \yii\db\ActiveRecord {
             [['level_0_name', 'level_0_enabled', 'level_1_name', 'level_1_enabled', 'level_2_name', 'level_2_enabled'], 'required'],
             [['product_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
 
@@ -82,21 +82,21 @@ class TeamType extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getTeams() {
-        return $this->hasMany(Team::className(), ['team_type_id' => 'id']);
+        return $this->hasMany(Team::class, ['team_type_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getProduct() {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getDimensions() {
-        return $this->hasMany(TeamTypeDimension::className(), ['team_type_id' => 'id']);
+        return $this->hasMany(TeamTypeDimension::class, ['team_type_id' => 'id']);
     }
 
     public function getWheelQuestions() {
