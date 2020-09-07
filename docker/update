@@ -3,4 +3,4 @@ docker pull ubuntu:xenial
 docker pull mysql:5.7
 docker pull phpmyadmin/phpmyadmin
 docker pull selenium/standalone-chrome-debug
-docker pull beardyjay/mailcatcher
+docker pull tophfr/mailcatcher
