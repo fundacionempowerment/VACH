@@ -21,4 +21,4 @@ modules:
             entryScript: index-test.php
         MailCatcher:
             url: 'http://vach-mailcatcher'
-            port: '1080'
+            port: '80'

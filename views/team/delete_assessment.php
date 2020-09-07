@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <div class='text-center'>
         <h3 class='alert alert-danger'><?= Yii::t('app', 'This action cannot be reverted.') ?></h3>
-        <h3><?= Yii::t('team', 'Are you sure that you want to delete this team?') ?></h3>
+        <h3><?= Yii::t('team', 'Are you sure you want to delete this team?') ?></h3>
         <div class="form-group">
             <?= Html::hiddenInput('delete', 1) ?>
             <?= Html::submitButton(\Yii::t('app', 'Delete'), ['class' => 'btn btn-danger', 'name' => 'delete-button']) ?>

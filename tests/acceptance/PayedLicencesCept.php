@@ -7,8 +7,6 @@ $add = rand(20, 40);
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that licence management works');
 
-return;
-
 $I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsAdmin();
 
@@ -48,13 +46,13 @@ $I->loginAsCoach();
 $I->clickMainMenu('(coach)', 'Mis licencias');
 $I->wait(1);
 
+$I->see($initial_stock);
 $I->see($add);
-$I->see($initial_stock + $add);
 
 $I->clickMainMenu('(coach)', 'Mis pagos');
 $I->wait(1);
 
-$I->see(Yii::$app->formatter->asCurrency($price * $add));
+$I->see(Yii::$app->formatter->asDecimal($price * $add));
 
 $coachPaymentStatus = $I->grabTextFrom("//table/tbody/tr[1]/td[5]");
 $I->assertEquals("pagado", $coachPaymentStatus);
