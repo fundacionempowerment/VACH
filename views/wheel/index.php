@@ -1,13 +1,22 @@
 <?php
 
+use app\models\Company;
+use app\models\Person;
+use app\models\search\WheelSearch;
+use app\models\Team;
 use app\models\Wheel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-use app\components\SpinnerAnchor;
 
 /* @var $this yii\web\View */
+/* @var $searchModel WheelSearch */
+/* @var $wheels Wheel[] */
+/* @var $companyList Company[] */
+/* @var $teamList Team[] */
+/* @var $personList Person[] */
+
 $this->title = Yii::t('team', 'Wheels');
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,19 +29,22 @@ $dataProvider = new ActiveDataProvider([
     ],
 ]);
 
-$teamList = \app\models\Team::getList();
-$personList = \app\models\Person::getList();
 ?>
 <div class="coach-persons">
     <h1><?= Html::encode($this->title) ?></h1>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'headerRowOptions' => ['style' => 'position: sticky !important;'],
         'columns' => [
             [
-                'attribute' => 'team.company.name',
+                'attribute' => 'company_id',
                 'label' => Yii::t('company', 'Company'),
-
+                'format' => 'html',
+                'value' => function ($data) {
+                    return $data->team->company->name;
+                },
+                'filter' => $companyList,
             ],
             [
                 'attribute' => 'team_id',

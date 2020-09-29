@@ -111,7 +111,7 @@ class Person extends ActiveRecord
     public static function browse()
     {
         return Person::find()
-                        ->where(['coach_id' => Yii::$app->user->id])
+                        ->where(['person.coach_id' => Yii::$app->user->id])
                         ->orderBy('name, surname');
     }
 

@@ -140,6 +140,7 @@ class Wheel extends ActiveRecord {
     public static function browse() {
         return Wheel::find()
             ->innerJoin('team', 'team.id = wheel.team_id')
+            ->innerJoin('company', 'company.id = team.company_id')
             ->leftJoin('team_coach', '`team_coach`.`team_id` = `wheel`.`team_id`')
             ->where(['team.coach_id' => Yii::$app->user->id])
             ->orderBy('id desc');

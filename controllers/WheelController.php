@@ -3,12 +3,16 @@
 namespace app\controllers;
 
 use app\components\Downloader;
+use app\models\Company;
+use app\models\Person;
 use app\models\search\WheelSearch;
+use app\models\Team;
 use app\models\UserSession;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 class WheelController extends BaseController {
@@ -23,11 +27,50 @@ class WheelController extends BaseController {
 
     public function actionIndex() {
         $searchModel = new WheelSearch();
-        $wheels = $searchModel->search(Yii::$app->request->queryParams);
+
+        $searchModel->load(Yii::$app->request->queryParams);
+
+        if ($searchModel->company_id) {
+            $teamList = ArrayHelper::map(
+                Team::browse()
+                    ->andWhere(['company_id' => $searchModel->company_id])
+                    ->all(),
+                'id', 'name');
+        } else {
+            $teamList = Team::getList();
+        }
+
+        if (!ArrayHelper::keyExists($searchModel->team_id, $teamList)) {
+            $searchModel->team_id = null;
+        }
+
+        if ($searchModel->team_id) {
+            $personList = ArrayHelper::map(
+                Person::browse()
+                    ->innerJoin('team_member', 'team_member.person_id = person.id')
+                    ->andWhere(['team_member.team_id' => $searchModel->team_id])
+                    ->all(),
+                'id', 'fullname');
+        } else if ($searchModel->company_id) {
+            $personList = ArrayHelper::map(
+                Person::browse()
+                    ->innerJoin('team_member', 'team_member.person_id = person.id')
+                    ->innerJoin('team', 'team.id = team_member.team_id')
+                    ->andWhere(['team.company_id' => $searchModel->company_id])
+                    ->all(),
+                'id', 'fullname');
+        } else {
+            $personList = Person::getList();
+        }
+
+        $wheels = $searchModel->search();
 
         return $this->render('index', [
             'wheels' => $wheels,
             'searchModel' => $searchModel,
+            'companyList' => Company::getList(),
+            'teamList' => $teamList,
+            'personList' => $personList,
         ]);
     }
 
@@ -172,6 +215,10 @@ class WheelController extends BaseController {
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
+            if (Yii::$app->request->post('redo')) {
+                return $this->redirect(['wheel/redo', 'id' => $id]);
+            }
+
             $questions = $wheel->getQuestions();
             $questionCount = count($questions);
             $setSize = $questionCount / 8;

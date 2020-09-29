@@ -6,6 +6,9 @@ use app\models\Wheel;
 use yii\db\Query;
 
 class WheelSearch extends Wheel {
+
+    public $company_id;
+
     public function init() {
         // Leave blank
     }
@@ -15,7 +18,7 @@ class WheelSearch extends Wheel {
      */
     public function rules() {
         return [
-            [['team_id', 'observer_id', 'observed_id', 'type'], 'safe'],
+            [['company_id','team_id', 'observer_id', 'observed_id', 'type'], 'safe'],
         ];
     }
 
@@ -26,12 +29,8 @@ class WheelSearch extends Wheel {
      *
      * @return Query
      */
-    public function search($params) {
+    public function search() {
         $query = Wheel::browse();
-
-        // add conditions that should always apply here
-
-        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -41,6 +40,7 @@ class WheelSearch extends Wheel {
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'team.company_id' => $this->company_id,
             'wheel.team_id' => $this->team_id,
             'wheel.observer_id' => $this->observer_id,
             'wheel.observed_id' => $this->observed_id,
