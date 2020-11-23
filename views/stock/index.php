@@ -123,7 +123,11 @@ $columns = [
     ]);
     ?>
     <p>
-        <?= Yii::$app->params['manual_mode'] ? '' : Html::a(Yii::t('stock', 'Buy Licences'), Url::to(['stock/new']), ['class' => 'btn btn-success']) ?>
+        <?= Yii::$app->params['manual_mode'] ?
+            '' :
+            Html::a(Yii::t('stock', 'Buy Licences'),
+            Url::to(['stock/new']), ['class' => 'btn btn-success', 'id'=>'buy-button']
+            ) ?>
     </p>
     <h2><?= Yii::t('stock', 'Not available licences') ?></h2>
     <?=

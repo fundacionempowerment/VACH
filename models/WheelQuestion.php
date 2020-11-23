@@ -51,7 +51,7 @@ class WheelQuestion extends ActiveRecord {
 
     public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -67,11 +67,11 @@ class WheelQuestion extends ActiveRecord {
     }
 
     public function getQuestion() {
-        return $this->hasOne(Question::className(), ['id' => 'question_id']);
+        return $this->hasOne(Question::class, ['id' => 'question_id']);
     }
 
     public function getTeamType() {
-        return $this->hasOne(TeamType::className(), ['id' => 'team_type_id']);
+        return $this->hasOne(TeamType::class, ['id' => 'team_type_id']);
     }
 
     public function getTeamTypeDimension() {

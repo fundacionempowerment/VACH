@@ -139,23 +139,23 @@ class Stock extends ActiveRecord {
     }
 
     public function getCoach() {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     public function getCreator() {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     public function getPayments() {
-        return $this->hasMany(Payment::className(), ['stock_id' => 'id']);
+        return $this->hasMany(Payment::class, ['stock_id' => 'id']);
     }
 
     public function getProduct() {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
     public function getTeam() {
-        return $this->hasOne(Team::className(), ['id' => 'team_id']);
+        return $this->hasOne(Team::class, ['id' => 'team_id']);
     }
 
     public static function getStatusList() {

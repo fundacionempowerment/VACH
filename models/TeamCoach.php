@@ -24,7 +24,7 @@ class TeamCoach extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -39,12 +39,12 @@ class TeamCoach extends ActiveRecord
 
     public function getTeam()
     {
-        return $this->hasOne(Team::className(), ['id' => 'team_id']);
+        return $this->hasOne(Team::class, ['id' => 'team_id']);
     }
 
     public function getCoach()
     {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     static public function notGranted($teamId, $coachId)

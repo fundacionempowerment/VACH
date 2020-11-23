@@ -43,18 +43,18 @@ class TeamMember extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
     public function getMember()
     {
-        return $this->hasOne(Person::className(), ['id' => 'person_id']);
+        return $this->hasOne(Person::class, ['id' => 'person_id']);
     }
 
     public function getTeam()
     {
-        return $this->hasOne(Team::className(), ['id' => 'team_id']);
+        return $this->hasOne(Team::class, ['id' => 'team_id']);
     }
 
     public function getDeletable()

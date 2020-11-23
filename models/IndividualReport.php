@@ -27,13 +27,13 @@ class IndividualReport extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
     public function getMember()
     {
-        return $this->hasOne(Person::className(), ['id' => 'person_id']);
+        return $this->hasOne(Person::class, ['id' => 'person_id']);
     }
 
     public function getTeamMember()
@@ -46,7 +46,7 @@ class IndividualReport extends ActiveRecord
 
     public function getReport()
     {
-        return $this->hasOne(Report::className(), ['id' => 'report_id']);
+        return $this->hasOne(Report::class, ['id' => 'report_id']);
     }
 
     public function getPerception()

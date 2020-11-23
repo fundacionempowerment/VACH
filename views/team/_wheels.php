@@ -216,9 +216,20 @@ $file_icon = '<span class="glyphicon glyphicon-file" aria-hidden="true"></span>'
         <div class="col-lg-push-2 col-lg-6">
             <?= SpinnerSubmitButton::widget([
                 'caption' => \Yii::t('app', 'Edit'),
-                'options' => ['class' => 'btn btn-primary']
+                'options' => [
+                    'name' => 'edit',
+                    'value'  =>'1',
+                    'class' => 'btn btn-primary'
+                ]
             ]) ?>
-
+            <?= SpinnerSubmitButton::widget([
+                'caption' => \Yii::t('app', 'Redo'),
+                'options' => [
+                    'name' => 'redo',
+                    'value'  =>'1',
+                    'class' => 'btn btn-danger'
+                ]
+            ]) ?>
         </div>
     </div>
     <?= $form->field($manualWheel, 'team_id')->hiddenInput()->label("") ?>

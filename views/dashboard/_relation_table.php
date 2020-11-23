@@ -124,7 +124,7 @@ $token = rand(100000, 999999);
                     if ($id == 0) {
                         continue;
                     }
-                    $sum = $observed_sum[$id];
+                    $sum = isset($observed_sum[$id]) ? $observed_sum[$id] : 0;
                     if ($sum / $observer_count > Yii::$app->params['good_consciousness']) {
                         $class = 'success';
                     } elseif ($sum / $observer_count < Yii::$app->params['minimal_consciousness']) {

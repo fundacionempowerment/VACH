@@ -469,8 +469,8 @@ class TeamController extends BaseController {
             foreach ($wheels as $wheel) {
                 if ($wheel->observer_id == $teamMember->person_id) {
                     $wheelsToSend[] = [
-                      'teamMember' => $teamMember,
-                      'wheel' => $wheel
+                        'teamMember' => $teamMember,
+                        'wheel' => $wheel
                     ];
                     break;
                 }
@@ -501,7 +501,7 @@ class TeamController extends BaseController {
         }
 
         return $this->render("send-all-wheels", [
-           'team' => $team,
+            'team' => $team,
             'wheelsToSend' => $wheelsToSend,
             'type' => $type
         ]);
@@ -520,7 +520,11 @@ class TeamController extends BaseController {
             ]);
 
             if ($wheel) {
-                return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+                if (Yii::$app->request->post('edit')) {
+                    return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+                } else if (Yii::$app->request->post('redo')) {
+                    return $this->redirect(['wheel/redo', 'id' => $wheel->id]);
+                }
             } else {
                 SiteController::addFlash('warning', \Yii::t('wheel', 'Wheel not found.'));
             }

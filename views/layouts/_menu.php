@@ -14,6 +14,7 @@ $items[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 $coachMenu[] = ['label' => Yii::t('company', 'Companies'), 'url' => ['/company']];
 $coachMenu[] = ['label' => Yii::t('user', 'Persons'), 'url' => ['/person']];
 $coachMenu[] = ['label' => Yii::t('team', 'Teams'), 'url' => ['/team']];
+$coachMenu[] = ['label' => Yii::t('team', 'Wheels'), 'url' => ['/wheel']];
 $coachMenu[] = ['label' => Yii::t('dashboard', 'Dashboard'), 'url' => ['/dashboard']];
 $items[] = ['label' => Yii::t('app', 'Clients'), 'items' => $coachMenu];
 

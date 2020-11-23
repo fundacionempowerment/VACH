@@ -37,7 +37,7 @@ class TransactionLog extends \yii\db\ActiveRecord
             [['transaction_id'], 'integer'],
             [['status', 'external_id', 'external_data'], 'string'],
             [['stamp'], 'safe'],
-            [['transaction_id'], 'exist', 'skipOnError' => true, 'targetClass' => Transaction::className(), 'targetAttribute' => ['transaction_id' => 'id']],
+            [['transaction_id'], 'exist', 'skipOnError' => true, 'targetClass' => Transaction::class, 'targetAttribute' => ['transaction_id' => 'id']],
         ];
     }
 
@@ -61,6 +61,6 @@ class TransactionLog extends \yii\db\ActiveRecord
      */
     public function getTransaction()
     {
-        return $this->hasOne(Transaction::className(), ['id' => 'transaction_id']);
+        return $this->hasOne(Transaction::class, ['id' => 'transaction_id']);
     }
 }
