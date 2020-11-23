@@ -29,7 +29,7 @@ class ReportCreatorCest {
         $team = Team::findOne(1);
         $report = ReportHelper::populate($team);
 
-        $I->assertContains($team->sponsor->name, $report->introduction);
+        $I->assertStringContainsString($team->sponsor->name, $report->introduction);
     }
 
     public function dontOverwriteIntro(UnitTester $I) {
@@ -43,7 +43,7 @@ class ReportCreatorCest {
 
         $report = ReportHelper::populate($team);
 
-        $I->assertContains($text, $report->introduction);
+        $I->assertStringContainsString($text, $report->introduction);
     }
 
     public function createRelationsContent(UnitTester $I) {
