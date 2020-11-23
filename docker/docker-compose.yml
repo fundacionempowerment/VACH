@@ -16,7 +16,7 @@ services:
 
     vach-data:
         container_name: vach-data
-        image: mysql:5.6
+        image: mysql:5.7
         tmpfs: /var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: 'secret'
@@ -37,7 +37,7 @@ services:
 
     vach-myadmin:
         container_name: vach-myadmin
-        image: phpmyadmin/phpmyadmin
+        image: phpmyadmin
         environment:
             PMA_HOST: 'vach-data'
             PMA_USER: 'root'
