@@ -27,7 +27,6 @@
         "2amigos/yii2-ckeditor-widget": "*",
         "phpoffice/phppresentation": "*",
         "phpoffice/phpword": "*",
-        "onmotion/yii2-telegram": "*",
         "swiftmailer/swiftmailer": "*",
         "rmrevin/yii2-fontawesome": "*"
     },
