@@ -2,16 +2,14 @@ FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get -y install \
+RUN apt-get update \
+    && apt-get -y install \
     curl wget inetutils-ping nano mysql-client git zip \
     apache2 libapache2-mod-php \
-    php php-curl php-mysql php-zip php-xml php-mbstring php-intl php-gd php-xdebug
+    php php-curl php-mysql php-zip php-xml php-mbstring php-intl php-gd php-xdebug \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN rm -rf /var/lib/apt/lists/*
-
-#COPY auth.json /root/.composer/auth.json
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-#RUN /usr/local/bin/composer global require "fxp/composer-asset-plugin:*"
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
