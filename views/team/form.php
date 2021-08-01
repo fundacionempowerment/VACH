@@ -24,17 +24,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($team, 'name') ?>
     <?=
     $form->field($team, 'team_type_id')->widget(Select2::classname(), [
+        'hideSearch' => true,
         'data' => app\models\TeamType::getList(),
+        'options' => [
+            'placeholder' => Yii::t('app', 'Select {type}...', [
+                'type' => Yii::t('team', 'Team Type')
+            ])
+        ],
     ]);
     ?>
     <?=
     $form->field($team, 'company_id')->widget(Select2::classname(), [
         'data' => $companies,
+        'options' => [
+            'placeholder' => Yii::t('app', 'Select {type}...', [
+                'type' => Yii::t('company', 'Company')
+            ])
+        ],
     ]);
     ?>
     <?=
     $form->field($team, 'sponsor_id')->widget(Select2::classname(), [
         'data' => $persons,
+        'options' => [
+            'placeholder' => Yii::t('app', 'Select {type}...', [
+                'type' => Yii::t('team', 'Sponsor')
+            ])
+        ],
     ]);
     ?>
     <?= $form->field($team, 'notes')->textarea() ?>

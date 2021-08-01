@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property integer $product_id
+ * @property boolean $enabled
  * @property string $level_0_name
  * @property string $level_1_name
  * @property string $level_2_name
@@ -41,7 +42,7 @@ class TeamType extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['name', 'product_id'], 'required'],
-            [['level_0_name', 'level_0_enabled', 'level_1_name', 'level_1_enabled', 'level_2_name', 'level_2_enabled'], 'required'],
+            [['enabled', 'level_0_name', 'level_0_enabled', 'level_1_name', 'level_1_enabled', 'level_2_name', 'level_2_enabled'], 'required'],
             [['product_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
@@ -56,6 +57,7 @@ class TeamType extends \yii\db\ActiveRecord {
             'id' => 'ID',
             'name' => Yii::t('app', 'Name'),
             'product_id' => Yii::t('team', 'Licence Type'),
+            'enabled' => Yii::t('app', 'Enabled'),
         ];
     }
 
@@ -63,7 +65,7 @@ class TeamType extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public static function browse() {
-        return TeamType::find()->orderBy('name');
+        return TeamType::find()->orderBy('id');
     }
 
     public function afterFind() {
@@ -121,7 +123,9 @@ class TeamType extends \yii\db\ActiveRecord {
     }
 
     public static function getList() {
-        return \yii\helpers\ArrayHelper::map(static::browse()->all(), 'id', 'name');
+        return \yii\helpers\ArrayHelper::map(static::browse()
+            ->where(['enabled' => true])
+            ->all(), 'id', 'name');
     }
 
     public function isLevelEnabled($type) {
@@ -165,7 +169,7 @@ class TeamType extends \yii\db\ActiveRecord {
 
     public function getDimensionNames($level, $short = false) {
         $dimensions = [];
-        foreach ($this->getDimensions()->where(['level' =>$level])->all() as $d ) {
+        foreach ($this->getDimensions()->where(['level' => $level])->all() as $d) {
             $dimensions[] = $d->name;
         };
 

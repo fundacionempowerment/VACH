@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
     <?= $form->field($teamType, 'name') ?>
     <?= $form->field($teamType, 'product_id')->dropDownList(\app\models\Product::getList()) ?>
+    <?= $form->field($teamType, 'enabled')->checkbox() ?>
     <?= $form->field($teamType, 'level_0_enabled')->checkbox() ?>
     <?= $form->field($teamType, 'level_0_name') ?>
     <?= $form->field($teamType, 'level_1_enabled')->checkbox() ?>
