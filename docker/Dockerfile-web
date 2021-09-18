@@ -3,10 +3,12 @@ FROM ubuntu:focal
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get -y dist-upgrade \
     && apt-get -y install \
-    curl wget inetutils-ping nano mysql-client git zip \
-    apache2 libapache2-mod-php \
-    php php-curl php-mysql php-zip php-xml php-mbstring php-intl php-gd php-xdebug \
+        curl wget inetutils-ping nano mysql-client git zip \
+        apache2 libapache2-mod-php \
+        php php-curl php-mysql php-zip php-xml php-mbstring php-intl php-gd php-xdebug \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
