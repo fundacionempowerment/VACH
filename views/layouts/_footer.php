@@ -19,6 +19,5 @@ use yii\helpers\Html;
         &nbsp;
         <?= Yii::t('app', 'Powered by') ?>
         <?= Html::a('Yii Framework', 'http://www.yiiframework.com/', ['rel' => 'external', 'target' => '_blank']) ?>
-        <?= Yii::$app->request->isSecureConnection && !\Yii::$app->user->isGuest ? \onmotion\telegram\Telegram::widget() : '' ?>
     </p>
 </div>

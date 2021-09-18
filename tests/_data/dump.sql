@@ -184,7 +184,8 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m181201_132648_populate_team_type_dimension', 1543889493),
 ('m181201_170004_add_team_type_dimension_sort', 1543889493),
 ('m181210_014533_add_team_type_dimension_description', 1544489549),
-('m181210_014838_populate_team_type_dimension_description', 1544489549);
+('m181210_014838_populate_team_type_dimension_description', 1544489549),
+('m210731_175938_team_type_enabled_field', 1627778059);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -581,12 +582,13 @@ CREATE TABLE `team_type` (
   `level_1_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `level_2_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'organizacional',
   `level_2_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `dimension_sort` int(11) NOT NULL DEFAULT '4'
+  `dimension_sort` int(11) NOT NULL DEFAULT '4',
+  `enabled` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `team_type` (`id`, `name`, `product_id`, `level_0_name`, `level_0_enabled`, `level_1_name`, `level_1_enabled`, `level_2_name`, `level_2_enabled`, `dimension_sort`) VALUES
-(1, 'Empresa', 1, 'individual', 1, 'grupal', 1, 'organizacional', 1, 4),
-(2, 'Áreas', 1, 'individual', 0, 'áreas', 1, 'organizacional', 0, 4);
+INSERT INTO `team_type` (`id`, `name`, `product_id`, `level_0_name`, `level_0_enabled`, `level_1_name`, `level_1_enabled`, `level_2_name`, `level_2_enabled`, `dimension_sort`, `enabled`) VALUES
+(1, 'Empresa', 1, 'individual', 1, 'grupal', 1, 'organizacional', 1, 4, 1),
+(2, 'Áreas', 1, 'individual', 0, 'áreas', 1, 'organizacional', 0, 4, 1);
 
 CREATE TABLE `team_type_dimension` (
   `id` int(11) NOT NULL,
