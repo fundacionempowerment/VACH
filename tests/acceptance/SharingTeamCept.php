@@ -2,6 +2,7 @@
 
 $random = rand(111, 999);
 $team['name'] = "name$random";
+$team['type'] = "Empresa";
 $company['name'] = 'ACME';
 $sponsor['name'] = 'Patricio';
 
@@ -26,6 +27,7 @@ $I->click('Nuevo equipo');
 $I->wait(1);
 
 $I->fillField('Team[name]', $team['name']);
+$I->selectOptionForSelect2('Team[team_type_id]', $team['type']);
 $I->selectOptionForSelect2('Team[company_id]', $company['name']);
 $I->selectOptionForSelect2('Team[sponsor_id]', $sponsor['name']);
 
