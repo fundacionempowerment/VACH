@@ -29,7 +29,7 @@ services:
 
     vach-selenium:
         container_name: vach-selenium
-        image: selenium/standalone-chrome-debug
+        image: selenium/standalone-chrome:4
         ports:
             - "10186:4444"
             - "10187:5900"
