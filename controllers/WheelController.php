@@ -3,10 +3,16 @@
 namespace app\controllers;
 
 use app\components\Downloader;
+use app\models\Company;
+use app\models\Person;
+use app\models\search\WheelSearch;
+use app\models\Team;
+use app\models\UserSession;
 use app\models\Wheel;
 use app\models\WheelAnswer;
 use app\models\WheelQuestion;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 class WheelController extends BaseController {
@@ -17,6 +23,74 @@ class WheelController extends BaseController {
             return parent::beforeAction($action);
         }
         return true;
+    }
+
+    public function actionIndex() {
+        $searchModel = new WheelSearch();
+
+        $searchModel->load(Yii::$app->request->queryParams);
+
+        if ($searchModel->company_id) {
+            $teamList = ArrayHelper::map(
+                Team::browse()
+                    ->andWhere(['company_id' => $searchModel->company_id])
+                    ->all(),
+                'id', 'name');
+        } else {
+            $teamList = Team::getList();
+        }
+
+        if (!ArrayHelper::keyExists($searchModel->team_id, $teamList)) {
+            $searchModel->team_id = null;
+        }
+
+        if ($searchModel->team_id) {
+            $personList = ArrayHelper::map(
+                Person::browse()
+                    ->innerJoin('team_member', 'team_member.person_id = person.id')
+                    ->andWhere(['team_member.team_id' => $searchModel->team_id])
+                    ->all(),
+                'id', 'fullname');
+        } else if ($searchModel->company_id) {
+            $personList = ArrayHelper::map(
+                Person::browse()
+                    ->innerJoin('team_member', 'team_member.person_id = person.id')
+                    ->innerJoin('team', 'team.id = team_member.team_id')
+                    ->andWhere(['team.company_id' => $searchModel->company_id])
+                    ->all(),
+                'id', 'fullname');
+        } else {
+            $personList = Person::getList();
+        }
+
+        $wheels = $searchModel->search();
+
+        return $this->render('index', [
+            'wheels' => $wheels,
+            'searchModel' => $searchModel,
+            'companyList' => Company::getList(),
+            'teamList' => $teamList,
+            'personList' => $personList,
+        ]);
+    }
+
+    public function actionRedo($id) {
+        $wheel = Wheel::findOne(['id' => $id]);
+
+        if (!$wheel || !$wheel->team->isUserAllowed()) {
+            throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
+        }
+
+        if (Yii::$app->request->post('delete')) {
+            if ($wheel->redo()) {
+                SiteController::addFlash('success', Yii::t('wheel', 'Wheel has been successfully reset.'));
+                return $this->redirect(['/wheel']);
+            } else {
+                SiteController::FlashErrors($wheel);
+            }
+        }
+
+        return $this->render('redo', ['wheel' => $wheel]);
     }
 
     public function actionRun() {
@@ -141,6 +215,10 @@ class WheelController extends BaseController {
         $invalids = [];
 
         if (Yii::$app->request->isPost) {
+            if (Yii::$app->request->post('redo')) {
+                return $this->redirect(['wheel/redo', 'id' => $id]);
+            }
+
             $questions = $wheel->getQuestions();
             $questionCount = count($questions);
             $setSize = $questionCount / 8;
@@ -223,19 +301,22 @@ class WheelController extends BaseController {
         ]);
     }
 
-    private function notifyPerson(Wheel $wheel) {
+    static function notifyPerson(Wheel $wheel) {
         if ($wheel->type != Wheel::TYPE_INDIVIDUAL) {
             return;
         }
+
+        $userSession = UserSession::getLastSession($wheel->team->coach_id);
 
         $radarPath = Downloader::download(Url::toRoute([
             '/graph/radar',
             'teamId' => $wheel->team->id,
             'memberId' => $wheel->observed->id,
-            'wheelType' => Wheel::TYPE_INDIVIDUAL], true));
+            'wheelType' => Wheel::TYPE_INDIVIDUAL], true),
+            $userSession->token);
 
         try {
-            $sent =  Yii::$app->mailer->compose('individualWheel', [
+            $sent = Yii::$app->mailer->compose('individualWheel', [
                 'wheel' => $wheel,
                 'radarPath' => $radarPath,
             ])
@@ -245,6 +326,7 @@ class WheelController extends BaseController {
                 ->setTo($wheel->observed->email)
                 ->send();
         } catch (\Exception $ex) {
+            echo $ex->getMessage();
             $sent = false;
         }
         return $sent;

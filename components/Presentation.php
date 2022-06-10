@@ -264,7 +264,7 @@ class Presentation {
 
         $shape->createBreak();
 
-        $textRun = $shape->createParagraph()->createTextRun('¿Quién creo que soy');
+        $textRun = $shape->createParagraph()->createTextRun('¿Quién creo que soy?');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(26)
@@ -365,28 +365,28 @@ class Presentation {
             ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
-        $textRun = $shape->createParagraph()->createTextRun('2. El más crítico: él que, en promedio, percibe con dación a todo el equipo');
+        $textRun = $shape->createParagraph()->createTextRun('2. El más crítico: el que, en promedio, percibe con menor dación a todo el equipo');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
-        $textRun = $shape->createParagraph()->createTextRun('3. El más benévolo: él que, en promedio, percibe con mayor dación a todo el equipo');
+        $textRun = $shape->createParagraph()->createTextRun('3. El más benévolo: el que, en promedio, percibe con mayor dación a todo el equipo');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
-        $textRun = $shape->createParagraph()->createTextRun('4. Bajamos en diagonal de izquierda a derecha, uno a uno,  para comparar la mirada  de cada uno hacia sí mismo respecto de la que tiene  hacia el resto del equipo, y determinamos:');
+        $textRun = $shape->createParagraph()->createTextRun('4. Bajamos en diagonal de izquierda a derecha, uno a uno, para comparar la mirada de cada uno hacia sí mismo respecto de la que tiene hacia el resto del equipo, y determinamos:');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(20)
             ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
-        $textRun = $shape->createParagraph()->createTextRun('a. El menos autocrítico: es el que se ve por encima de cómo él/ella percibe  a todos los demás');
+        $textRun = $shape->createParagraph()->createTextRun('a. El menos autocrítico: es el que se ve por encima de cómo él/ella percibe a todos los demás');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(20)
@@ -400,7 +400,7 @@ class Presentation {
             ->setColor(new Color('FF000000'));
 
         $shape->createBreak();
-        $textRun = $shape->createParagraph()->createTextRun('c. Cruces interrelacionales: lo hacemos ida y vuelta para identificar pedidos  – en un solo sentido – o conflictos – ida y vuelta');
+        $textRun = $shape->createParagraph()->createTextRun('c. Cruces interrelacionales: lo hacemos ida y vuelta para identificar pedidos (en un solo sentido) o conflictos (ida y vuelta)');
         $textRun->getFont()
             ->setName(self::FONT)
             ->setSize(20)

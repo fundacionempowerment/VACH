@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\controllers\SiteController;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -18,6 +19,8 @@ use yii\db\Query;
  * @property integer consumer_id
  * @property float price
  * @property string status
+ * @property integer creator_id
+ * @property integer created_stamp
  *
  * @property User $coach
  * @property Product $product
@@ -123,10 +126,10 @@ class Stock extends ActiveRecord {
             ->from('stock')
             ->innerJoin('user as coach', 'coach.id = stock.coach_id')
             ->innerJoin('user as creator', 'creator.id = stock.creator_id')
+            ->innerJoin('product', 'product.id = stock.product_id')
+            ->innerJoin('payment', 'payment.id = stock.payment_id')
             ->leftJoin('team', 'team.id = stock.team_id')
             ->leftJoin('company', 'company.id = team.company_id')
-            ->innerJoin('payment', 'payment.id = stock.payment_id')
-            ->innerJoin('product', 'product.id = stock.product_id')
             ->groupBy(['coach_id', 'product_id', 'price', 'stock.status', 'created_stamp', 'creator_id', 'payment_id', 'consumed_stamp', 'consumer_id', 'team_id'])
             ->orderBy('created_stamp DESC, consumed_stamp DESC');
 
@@ -136,23 +139,23 @@ class Stock extends ActiveRecord {
     }
 
     public function getCoach() {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
     public function getCreator() {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     public function getPayments() {
-        return $this->hasMany(Payment::className(), ['stock_id' => 'id']);
+        return $this->hasMany(Payment::class, ['stock_id' => 'id']);
     }
 
     public function getProduct() {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
     public function getTeam() {
-        return $this->hasOne(Team::className(), ['id' => 'team_id']);
+        return $this->hasOne(Team::class, ['id' => 'team_id']);
     }
 
     public static function getStatusList() {
@@ -185,7 +188,7 @@ class Stock extends ActiveRecord {
         $payment->is_manual = false;
         $payment->part_distribution = 50;
         if (!$payment->save()) {
-            \app\controllers\SiteController::FlashErrors($payment);
+            SiteController::FlashErrors($payment);
             $success = false;
         }
 
@@ -211,7 +214,7 @@ class Stock extends ActiveRecord {
         return $success ? $payment : null;
     }
 
-    public static function saveAddModel($model) {
+    public static function applyAddModel($model) {
         $success = true;
         $product = Product::findOne(['id' => $model->product_id]);
         $created_stamp = date('Y-m-d H:i:s');
@@ -222,10 +225,10 @@ class Stock extends ActiveRecord {
         $payment->concept = $model->quantity . ' ' . $product->name;
         $payment->currency = 'USD';
         $payment->amount = $model->quantity * $model->price;
-        $payment->rate = \app\models\Currency::lastValue();
+        $payment->rate = Currency::lastValue();
         $payment->commision_currency = 'ARS';
         $payment->commision = 0;
-        $payment->status = Payment::STATUS_PENDING;
+        $payment->status = $model->payed ? Payment::STATUS_PAID : Payment::STATUS_PENDING;
         $payment->is_manual = true;
         if ($model->part_distribution == 1) {
             $payment->part_distribution = 50;
@@ -236,7 +239,13 @@ class Stock extends ActiveRecord {
         }
         if (!$payment->save()) {
             $success = false;
-            \app\controllers\SiteController::FlashErrors($payment);
+            SiteController::FlashErrors($payment);
+        }
+
+        if ($model->payed) {
+            $transaction = $payment->newTransaction();
+            $transaction->status = Payment::STATUS_PAID;
+            $transaction->save();
         }
 
         for ($i = 1; $i <= $model->quantity; $i++) {
@@ -250,7 +259,7 @@ class Stock extends ActiveRecord {
             $stock->created_stamp = $created_stamp;
             if (!$stock->save()) {
                 $success = false;
-                \app\controllers\SiteController::FlashErrors($stock);
+                SiteController::FlashErrors($stock);
             }
         }
 
@@ -269,7 +278,7 @@ class Stock extends ActiveRecord {
 
             Yii::$app->db->createCommand()
                 ->update('stock', [
-                    'status' => 'consumed',
+                    'status' => Stock::STATUS_CONSUMED,
                     'consumed_stamp' => $consumed_stamp,
                     'consumer_id' => $consumer_id,
                     'team_id' => $team_id,
@@ -281,23 +290,30 @@ class Stock extends ActiveRecord {
         return true;
     }
 
-    public static function cancel($consumer_id, $quantity) {
+    public static function cancel($consumer_id, $quantity, $product_id) {
+        $cancelledCount = 0;
         $consumed_stamp = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $quantity; $i++) {
             $available_stock = (new Query())
                 ->select(['id', 'price', 'payment_id'])
                 ->from('stock')
                 ->where([
-                    'status' => 'valid',
+                    'status' => Stock::STATUS_VALID,
                     'consumed_stamp' => null,
-                    'coach_id' => $consumer_id])
-                ->orderBy('id')
+                    'coach_id' => $consumer_id,
+                    'product_id' => $product_id
+                ])
+                ->orderBy('id desc')
                 ->limit(1)
                 ->one();
 
+            if (!$available_stock) {
+                break;
+            }
+
             Yii::$app->db->createCommand()
                 ->update('stock', [
-                    'status' => 'error',
+                    'status' => Stock::STATUS_INVALID,
                     'consumed_stamp' => $consumed_stamp,
                     'consumer_id' => Yii::$app->user->identity->id,
                 ], [
@@ -308,12 +324,13 @@ class Stock extends ActiveRecord {
                 ->update('payment', [
                     'amount' => new Expression('amount - ' . $available_stock['price'])
                 ], [
-                    'id' => $available_stock['payment_id'],
-                    'status' => 'pending',
+                    'id' => $available_stock['payment_id']
                 ])->execute();
+
+            $cancelledCount++;
         }
 
-        return true;
+        return $cancelledCount;
     }
 
 }

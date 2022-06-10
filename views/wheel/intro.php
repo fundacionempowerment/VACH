@@ -58,7 +58,7 @@ $show_instructions = $instructions_shown == true ? false : true;
                 </li>
                 <li>
                     En cada respuesta, los valores usados son<br/>
-                    0 = nunca, 1 = casi nunca, 2 = regularmente, 3 = casi siempre, 4 = siempre<br/>
+                    0 = nunca, 1 = rara vez, 2 = de vez en cuando, 3 = a menudo, 4 = siempre<br/>
                     0 = totalmente en desacuerdo, 1 = algo de acuerdo, 2 = de acuerdo, 3 = muy de acuerdo, 4 =
                     totalmente de acuerdo.
                     <br/><br/>

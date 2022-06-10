@@ -118,6 +118,7 @@ class TeamTypeController extends AdminBaseController {
         $new_teamType = new TeamType();
 
         $new_teamType->name = $new_name;
+        $new_teamType->enabled = true;
         $new_teamType->product_id = $teamType->product_id;
         $new_teamType->level_0_name = $teamType->level_0_name;
         $new_teamType->level_0_enabled = $teamType->level_0_enabled;
@@ -126,7 +127,10 @@ class TeamTypeController extends AdminBaseController {
         $new_teamType->level_2_name = $teamType->level_2_name;
         $new_teamType->level_2_enabled = $teamType->level_2_enabled;
 
-        $new_teamType->save();
+        if(!$new_teamType->save()) {
+            SiteController::FlashErrors($new_teamType);
+            return $this->redirect(['index']);
+        };
 
         foreach ($teamType->rawWheelQuestions as $wheelQuestion) {
             $new_question = new WheelQuestion();

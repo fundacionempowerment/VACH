@@ -2,6 +2,7 @@ version: '3.6'
 services:
     vach:
         container_name: vach-web
+        image: vach-web
         build:
             context: .
             dockerfile: Dockerfile-web
@@ -16,7 +17,7 @@ services:
 
     vach-data:
         container_name: vach-data
-        image: mysql:5.6
+        image: mysql:5.7
         tmpfs: /var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: 'secret'
@@ -28,7 +29,7 @@ services:
 
     vach-selenium:
         container_name: vach-selenium
-        image: selenium/standalone-chrome-debug
+        image: selenium/standalone-chrome:4
         ports:
             - "10186:4444"
             - "10187:5900"
@@ -37,7 +38,7 @@ services:
 
     vach-myadmin:
         container_name: vach-myadmin
-        image: phpmyadmin/phpmyadmin
+        image: phpmyadmin
         environment:
             PMA_HOST: 'vach-data'
             PMA_USER: 'root'
@@ -51,9 +52,9 @@ services:
 
     vach-mailcatcher:
         container_name: vach-mailcatcher
-        image: schickling/mailcatcher
+        image: tophfr/mailcatcher
         ports:
-            - "10188:1080"
+            - "10188:80"
         networks:
             - vach-net
 

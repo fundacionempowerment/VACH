@@ -2,14 +2,13 @@
 
 namespace app\models;
 
-use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\httpclient\Client;
-use app\models\Log;
-use app\controllers\LogController;
-use app\models\UserSession;
 
+/**
+ * @property integer $user_id
+ * @property string $token
+ * @property integer $stamp
+ */
 class UserSession extends ActiveRecord
 {
 
@@ -36,4 +35,10 @@ class UserSession extends ActiveRecord
         ];
     }
 
+    public static function getLastSession(int $coach_id) {
+        return UserSession::find()
+            ->where(['user_id' => $coach_id])
+            ->orderBy(['stamp'=> SORT_DESC])
+            ->one();
+    }
 }

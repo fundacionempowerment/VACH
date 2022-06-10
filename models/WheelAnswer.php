@@ -44,7 +44,7 @@ class WheelAnswer extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -61,7 +61,7 @@ class WheelAnswer extends ActiveRecord
 
     public function getQuestion()
     {
-        return $this->hasOne(Question::className(), ['id' => 'question_id']);
+        return $this->hasOne(Question::class, ['id' => 'question_id']);
     }
 
 }

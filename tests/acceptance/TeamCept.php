@@ -2,6 +2,7 @@
 
 $random = rand(111, 999);
 $team['name'] = "name$random";
+$team['type'] = "Empresa";
 
 $random = rand(111, 999);
 $company['name'] = "name$random";
@@ -26,6 +27,7 @@ for ($i = 0; $i < 3; $i++) {
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that team crud works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 // Creo empresa
@@ -85,6 +87,7 @@ $I->click('Nuevo equipo');
 $I->wait(1);
 
 $I->fillField('Team[name]', $team['name']);
+$I->selectOptionForSelect2('Team[team_type_id]', $team['type']);
 $I->selectOptionForSelect2('Team[company_id]', $company['name']);
 $I->selectOptionForSelect2('Team[sponsor_id]', $sponsor['name']);
 

@@ -4,10 +4,8 @@ namespace app\controllers;
 
 use app\models\Company;
 use app\models\DashboardFilter;
-use app\models\LoginModel;
 use app\models\ManualWheelModel;
 use app\models\Person;
-use app\models\RegisterModel;
 use app\models\search\TeamSearch;
 use app\models\Stock;
 use app\models\Team;
@@ -68,6 +66,14 @@ class TeamController extends BaseController {
         ]);
     }
 
+    private function getPersons() {
+        $persons = [];
+        foreach (Person::browse()->all() as $person) {
+            $persons[$person->id] = $person->fullname;
+        }
+        return $persons;
+    }
+
     public function actionNew() {
         $team = new Team();
 
@@ -83,6 +89,10 @@ class TeamController extends BaseController {
             'companies' => $this->getCompanies(),
             'persons' => $this->getPersons(),
         ]);
+    }
+
+    private function getCompanies() {
+        return $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
     }
 
     public function actionEdit($id) {
@@ -288,7 +298,6 @@ class TeamController extends BaseController {
 
     public function actionDeleteTeam($id) {
         $team = Team::findOne($id);
-        $team = $team;
 
         if ($team->coach_id != Yii::$app->user->id) {
             throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'Your not allowed to access this page.'));
@@ -304,7 +313,6 @@ class TeamController extends BaseController {
         }
 
         return $this->render('delete_team', [
-            'team' => $team,
             'team' => $team,
         ]);
     }
@@ -408,57 +416,6 @@ class TeamController extends BaseController {
         return $this->redirect(['/team/view', 'id' => $team->id]);
     }
 
-    public function actionSendAllWheel($id, $type) {
-        $team = Team::findOne(['id' => $id]);
-
-        $sent = false;
-        $error = false;
-        foreach ($team->members as $teamMember) {
-            $wheels = [];
-            switch ($type) {
-                case Wheel::TYPE_INDIVIDUAL:
-                    $wheels = $team->individualWheels;
-                    break;
-                case Wheel::TYPE_GROUP:
-                    $wheels = $team->groupWheels;
-                    break;
-                default:
-                    $wheels = $team->organizationalWheels;
-                    break;
-            }
-
-            foreach ($wheels as $wheel) {
-                if ($wheel->observer_id == $teamMember->person_id && $wheel->answerStatus != '100%') {
-                    if (!$this->sendWheel($wheel)) {
-                        $error = true;
-                    };
-                    $sent = true;
-                    break;
-                }
-            }
-        }
-
-        if ($sent == false) {
-            \Yii::$app->session->addFlash('info', \Yii::t('team', 'All wheels already fullfilled. Emails not sent.'));
-        }
-        if ($error) {
-            \Yii::$app->session->addFlash('error', \Yii::t('team', 'Some emails were not sent. Please, send them individually'));
-        }
-        return $this->redirect(['/team/view', 'id' => $team->id]);
-    }
-
-    private function getCompanies() {
-        return $companies = ArrayHelper::map(Company::browse()->asArray()->all(), 'id', 'name');
-    }
-
-    private function getPersons() {
-        $persons = [];
-        foreach (Person::browse()->all() as $person) {
-            $persons[$person->id] = $person->fullname;
-        }
-        return $persons;
-    }
-
     private function sendWheel($wheel) {
         $wheel_type = Wheel::getWheelTypes()[$wheel->type];
 
@@ -491,6 +448,66 @@ class TeamController extends BaseController {
         return $sent;
     }
 
+    public function actionSendAllWheel($id, $type) {
+        $team = Team::findOne(['id' => $id]);
+
+        $wheelsToSend = [];
+
+        foreach ($team->members as $teamMember) {
+            switch ($type) {
+                case Wheel::TYPE_INDIVIDUAL:
+                    $wheels = $team->individualWheels;
+                    break;
+                case Wheel::TYPE_GROUP:
+                    $wheels = $team->groupWheels;
+                    break;
+                default:
+                    $wheels = $team->organizationalWheels;
+                    break;
+            }
+
+            foreach ($wheels as $wheel) {
+                if ($wheel->observer_id == $teamMember->person_id) {
+                    $wheelsToSend[] = [
+                        'teamMember' => $teamMember,
+                        'wheel' => $wheel
+                    ];
+                    break;
+                }
+            }
+        }
+
+        if (Yii::$app->request->isPost) {
+
+            $sent = false;
+
+            foreach ($wheelsToSend as $wheelToSend) {
+                $wheel = $wheelToSend['wheel'];
+                $teamMember = $wheelToSend['teamMember'];
+
+                $send = Yii::$app->request->post('c' . $wheel->id);
+                if ($send == '1') {
+                    $this->sendWheel($wheel);
+                    $sent = true;
+                }
+            }
+
+            if ($sent == false) {
+                \Yii::$app->session->addFlash('info', \Yii::t('team', 'All wheels already fullfilled. Emails not sent.'));
+                $error = true;
+            }
+
+            return $this->redirect(['/team/view', 'id' => $team->id]);
+        }
+
+        return $this->render("send-all-wheels", [
+            'team' => $team,
+            'wheelsToSend' => $wheelsToSend,
+            'type' => $type
+        ]);
+
+    }
+
     public function actionManualWheel($teamId) {
         $manualWheel = new ManualWheelModel();
 
@@ -503,7 +520,11 @@ class TeamController extends BaseController {
             ]);
 
             if ($wheel) {
-                return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+                if (Yii::$app->request->post('edit')) {
+                    return $this->redirect(['wheel/manual-form', 'id' => $wheel->id]);
+                } else if (Yii::$app->request->post('redo')) {
+                    return $this->redirect(['wheel/redo', 'id' => $wheel->id]);
+                }
             } else {
                 SiteController::addFlash('warning', \Yii::t('wheel', 'Wheel not found.'));
             }

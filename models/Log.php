@@ -30,7 +30,7 @@ class Log extends ActiveRecord {
 
     public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -52,7 +52,7 @@ class Log extends ActiveRecord {
     }
 
     public function getCoach() {
-        return $this->hasOne(User::className(), ['id' => 'coach_id']);
+        return $this->hasOne(User::class, ['id' => 'coach_id']);
     }
 
 }

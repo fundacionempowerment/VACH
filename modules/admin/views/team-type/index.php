@@ -35,22 +35,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'options' => ['width' => '110px'],
                 'value' => function ($data) {
-                    $a  = Html::a(Yii::t('app', 'Duplicate'), Url::to(['team-type/duplicate', 'id' => $data['id']]), [
-                                'class' => 'btn btn-warning',
-                                'data-confirm' => Yii::t('team', 'Are you sure you want to duplicate this team type?'),
+                    return Html::a(Yii::t('app', 'Duplicate'), Url::to(['team-type/duplicate', 'id' => $data['id']]), [
+                        'class' => 'btn btn-warning',
+                        'data-confirm' => Yii::t('team', 'Are you sure you want to duplicate this team type?'),
                     ]);
-                    
-                    return $a;
                 },
             ],
             [
                 'class' => 'app\components\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{duplicate} {update} {delete}',
                 'options' => ['width' => '110px'],
-                'urlCreator' => function( $action, $model, $key, $index ) {
+                'urlCreator' => function ($action, $model, $key, $index) {
                     switch ($action) {
-                        case 'update' : return Url::to(['team-type/edit', 'id' => $model['id']]);
-                        case 'delete' : return Url::to(['team-type/delete', 'id' => $model['id'], 'delete' => '1',]);
+                        case 'update' :
+                            return Url::to(['team-type/edit', 'id' => $model['id']]);
+                        case 'delete' :
+                            return Url::to(['team-type/delete', 'id' => $model['id'], 'delete' => '1',]);
                     };
                 }
             ]

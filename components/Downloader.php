@@ -7,9 +7,9 @@ use yii;
 class Downloader
 {
 
-    public static function download($url)
+    public static function download($url, $sesionId = null)
     {
-        $url .= '&t=' . session_id();
+        $url .= '&t=' . ($sesionId ?: session_id());
 
         $headers[] = 'Accept: image/gif, image/x-bitmap, image/jpeg, image/pjpeg';
         $headers[] = 'Connection: Keep-Alive';

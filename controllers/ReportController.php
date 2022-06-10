@@ -3,10 +3,8 @@
 namespace app\controllers;
 
 use app\components\ReportHelper;
-use app\models\ClientModel;
+use app\components\Word;
 use app\models\IndividualReport;
-use app\models\LoginModel;
-use app\models\RegisterModel;
 use app\models\Team;
 use app\models\Wheel;
 use Yii;
@@ -558,13 +556,15 @@ class ReportController extends Controller
         $team = Team::findOne(['id' => $id]);
         $this->checkAllowed($team);
 
-        $phpWord = \app\components\Word::create($team);
+        $phpWord = Word::create($team);
 
         $uuid = uniqid('', true);
         $phpWord->save("/tmp/$uuid.docx", 'Word2007');
 
-        foreach (\app\components\Word::$paths as $path) {
-            unlink($path);
+        if (Word::$paths && count(Word::$paths)){
+            foreach (Word::$paths as $path) {
+                unlink($path);
+            }
         }
 
         return \Yii::$app->response->sendFile("/tmp/$uuid.docx", $team->fullname . '.' . date('Y-m-d') . '.docx');

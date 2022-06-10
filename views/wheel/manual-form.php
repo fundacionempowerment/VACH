@@ -32,6 +32,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Yii::t('wheel', 'Observer') ?>: <?= Html::label($wheel->observer->fullname) ?><br/>
     <?= Yii::t('wheel', 'Observed') ?>: <?= Html::label($wheel->observed->fullname) ?><br/>
     <?php $form = ActiveForm::begin(['id' => 'wheel-form']); ?>
+    <div class="clearfix"></div>
+    <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <?= \app\components\SpinnerSubmitButton::widget([
+        'caption' => \Yii::t('app', 'Redo'),
+        'options' => [
+            'name' => 'redo',
+            'value'  =>'1',
+            'class' => 'btn btn-danger'
+        ]
+    ]) ?>
     <?php
     for ($i = 0; $i < count($questions); $i++) {
         ?>
@@ -67,6 +77,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
     <div class="clearfix"></div>
     <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <?= \app\components\SpinnerSubmitButton::widget([
+        'caption' => \Yii::t('app', 'Redo'),
+        'options' => [
+            'name' => 'redo',
+            'value'  =>'1',
+            'class' => 'btn btn-danger'
+        ]
+    ]) ?>
     <?php ActiveForm::end(); ?>
 </div>
 <script type="text/javascript">

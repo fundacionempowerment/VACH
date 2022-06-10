@@ -12,6 +12,7 @@ $phone = "($random)$random";
 $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure that person crud works');
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsCoach();
 
 $I->clickMainMenu('Clientes', 'Personas');

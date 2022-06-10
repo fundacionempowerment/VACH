@@ -12,5 +12,5 @@
 <p>
     <b>VACH</b><br/>
     Team Integration Tool<br/><br/>
-    <b><?= Yii::t('app', 'Empowerment Foundation') ?></b>
+    <?= Yii::t('app', 'Empowerment Foundation') ?>
 </p>

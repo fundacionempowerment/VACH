@@ -30,6 +30,7 @@ $I->wantTo('ensure that assessment crud works');
 
 // Agrego licencias
 
+$I->amOnPage(Yii::$app->homeUrl);
 $I->loginAsAdmin();
 
 $I->clickMainMenu('Admin', 'Licencias');

@@ -25,70 +25,13 @@ $othersDataProvider = new ActiveDataProvider([
     ],
 ]);
 
-$availableColumns = [
+$columns = [
     [
-        'attribute' => 'product_name',
-        'label' => Yii::t('app', 'Type'),
-        'value' => function ($data) {
-            return Html::tag('strong', $data['product_name']);
-        },
-        'format' => 'html',
+        'attribute' => 'coach_name',
+        'label' => Yii::t('app', 'Coach')
     ],
     [
-        'attribute' => 'quantity',
-        'label' => Yii::t('stock', 'Quantity'),
-        'value' => function ($data) {
-            return Html::tag('strong', $data['quantity']);
-        },
-        'format' => 'html',
-    ],
-    [
-        'attribute' => 'price',
-        'label' => Yii::t('stock', 'Price'),
-        'value' => function ($data) {
-            return 'USD ' . Yii::$app->formatter->asDecimal($data['price'], 2);
-        },
-    ],
-    [
-        'attribute' => 'amount',
-        'label' => Yii::t('payment', 'Amount'),
-        'value' => function ($data) {
-            return 'USD ' . Yii::$app->formatter->asDecimal($data['amount'], 2);
-        },
-    ],
-    [
-        'attribute' => 'rate',
-        'label' => Yii::t('payment', 'Rate'),
-        'value' => function ($data) {
-            return Yii::$app->formatter->asDecimal($data['rate'], 2);
-        },
-    ],
-    [
-        'attribute' => 'created_stamp',
-        'label' => Yii::t('stock', 'Created'),
-        'format' => 'date',
-    ],
-    [
-        'label' => Yii::t('stock', 'Payed'),
-        'value' => function ($data) {
-            if ($data['payment_status'] == \app\models\Payment::STATUS_PENDING && $data['price'] > 0) {
-                return Html::a(Yii::t('payment', 'Pay'), ['payment/select', 'referenceCode' => $data['payment_uuid']], ['class' => 'btn btn-success']);
-            } else if ($data['payment_status'] == \app\models\Payment::STATUS_PAID) {
-                return Yii::$app->formatter->asDate($data['payment_date']);
-            }
-            return '';
-        },
-        'format' => 'html',
-    ],
-];
-
-$consumedColumns = [
-    [
-        'attribute' => 'product_name',
-        'label' => Yii::t('app', 'Type'),
-    ],
-    [
-        'attribute' => 'stock_status',
+        'attribute' => 'status',
         'label' => Yii::t('app', 'Status'),
         'value' => function ($data) {
             return Stock::getStatusList()[$data['stock_status']];
@@ -107,7 +50,7 @@ $consumedColumns = [
     ],
     [
         'attribute' => 'amount',
-        'label' => Yii::t('payment', 'Amount'),
+        'label' => Yii::t('stock', 'Amount'),
         'value' => function ($data) {
             return 'USD ' . Yii::$app->formatter->asDecimal($data['amount'], 2);
         },
@@ -120,16 +63,34 @@ $consumedColumns = [
         },
     ],
     [
+        'attribute' => 'localAmount',
+        'label' => Yii::t('stock', 'Local Amount'),
+        'value' => function ($data) {
+            return 'ARS ' . Yii::$app->formatter->asDecimal($data['localAmount'], 2);
+        },
+    ],
+    [
+        'attribute' => 'company_name',
+        'label' => Yii::t('company', 'Company')
+    ],
+    [
+        'attribute' => 'team_name',
+        'label' => Yii::t('team', 'Team')
+    ],
+    [
         'attribute' => 'created_stamp',
         'label' => Yii::t('stock', 'Created'),
         'format' => 'date',
     ],
     [
+        'attribute' => 'consumed_stamp',
+        'label' => Yii::t('stock', 'Consumed'),
+        'format' => 'date',
+    ],
+    [
         'label' => Yii::t('stock', 'Payed'),
         'value' => function ($data) {
-            if ($data['payment_status'] == \app\models\Payment::STATUS_PENDING && $data['price'] > 0) {
-                return Html::a(Yii::t('payment', 'Pay'), ['payment/select', 'referenceCode' => $data['payment_uuid']], ['class' => 'btn btn-success']);
-            } else if ($data['payment_status'] == \app\models\Payment::STATUS_PAID) {
+            if ($data['payment_status'] == \app\models\Payment::STATUS_PAID) {
                 return Yii::$app->formatter->asDate($data['payment_date']);
             }
             return '';
@@ -144,7 +105,7 @@ $consumedColumns = [
     <?=
     ExportMenu::widget([
         'dataProvider' => $availableDataProvider,
-        'columns' => $availableColumns,
+        'columns' => $columns,
         'exportConfig' => [
             ExportMenu::FORMAT_PDF => false,
         ],
@@ -158,17 +119,21 @@ $consumedColumns = [
     <?=
     GridView::widget([
         'dataProvider' => $availableDataProvider,
-        'columns' => $availableColumns,
+        'columns' => $columns,
     ]);
     ?>
     <p>
-        <?= Yii::$app->params['manual_mode'] ? '' : Html::a(Yii::t('stock', 'Buy Licences'), Url::to(['stock/new']), ['class' => 'btn btn-success']) ?>
+        <?= Yii::$app->params['manual_mode'] ?
+            '' :
+            Html::a(Yii::t('stock', 'Buy Licences'),
+            Url::to(['stock/new']), ['class' => 'btn btn-success', 'id'=>'buy-button']
+            ) ?>
     </p>
     <h2><?= Yii::t('stock', 'Not available licences') ?></h2>
     <?=
     ExportMenu::widget([
         'dataProvider' => $othersDataProvider,
-        'columns' => $consumedColumns,
+        'columns' => $columns,
         'exportConfig' => [
             ExportMenu::FORMAT_PDF => false,
         ],
@@ -182,7 +147,7 @@ $consumedColumns = [
     <?=
     GridView::widget([
         'dataProvider' => $othersDataProvider,
-        'columns' => $consumedColumns,
+        'columns' => $columns,
     ]);
     ?>
 </div>

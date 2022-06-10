@@ -57,7 +57,7 @@ class Transaction extends ActiveRecord {
             [['uuid'], 'string', 'max' => 255],
             [['external_id'], 'string', 'max' => 50],
             [['currency', 'commision_currency'], 'string', 'max' => 3],
-            [['payment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payment::className(), 'targetAttribute' => ['payment_id' => 'id']],
+            [['payment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payment::class, 'targetAttribute' => ['payment_id' => 'id']],
         ];
     }
 
@@ -106,14 +106,14 @@ class Transaction extends ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getPayment() {
-        return $this->hasOne(Payment::className(), ['id' => 'payment_id']);
+        return $this->hasOne(Payment::class, ['id' => 'payment_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getTransactionLogs() {
-        return $this->hasMany(TransactionLog::className(), ['transaction_id' => 'id']);
+        return $this->hasMany(TransactionLog::class, ['transaction_id' => 'id']);
     }
 
     public function getStatusName() {

@@ -17,7 +17,7 @@ class Relations
     const RELATION_margin = 100;
     const RELATION_arrow_x_ring = 90;
     const RELATION_text_height = 12;
-    // This code asume square proto human image
+    // This code assumes square proto human image
     const RELATION_arrow_y_ring = self::RELATION_arrow_x_ring;
     const RELATION_xradio = self::RELATION_width / 4 - self::RELATION_imageSize / 2 - self::RELATION_margin;
     const RELATION_yradio = self::RELATION_xradio;

@@ -32,6 +32,9 @@ CREATE TABLE `currency` (
   `stamp` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `currency` (`id`, `from_currency`, `to_currency`, `rate`, `stamp`) VALUES
+(1, 'ARS', 'USD', '71.7800', '2020-07-22 22:31:39');
+
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -80,6 +83,12 @@ CREATE TABLE `log` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `log` (`id`, `coach_id`, `text`, `datetime`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Data obtained from BCRA', '2020-07-22 22:31:39', 1595457099, 1595457099),
+(2, 1, 'USD/ARS rate: 71.78', '2020-07-22 22:31:39', 1595457099, 1595457099),
+(3, 1, 'Currency saved', '2020-07-22 22:31:39', 1595457099, 1595457099),
+(4, 1, '20 Team Assessment Licence ha sido exitosamente creado.', '2020-07-22 22:31:39', 1595457099, 1595457099);
 
 CREATE TABLE `migration` (
   `version` varchar(180) COLLATE utf8_unicode_ci NOT NULL,
@@ -175,7 +184,8 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m181201_132648_populate_team_type_dimension', 1543889493),
 ('m181201_170004_add_team_type_dimension_sort', 1543889493),
 ('m181210_014533_add_team_type_dimension_description', 1544489549),
-('m181210_014838_populate_team_type_dimension_description', 1544489549);
+('m181210_014838_populate_team_type_dimension_description', 1544489549),
+('m210731_175938_team_type_enabled_field', 1627778059);
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
@@ -195,6 +205,9 @@ CREATE TABLE `payment` (
   `liquidation_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `payment` (`id`, `uuid`, `coach_id`, `concept`, `amount`, `status`, `stamp`, `creator_id`, `currency`, `rate`, `commision`, `commision_currency`, `is_manual`, `part_distribution`, `liquidation_id`) VALUES
+(1, '5f18be4b42dd70.81849135', 2, '20 Team Assessment Licence', '360.00', 'paid', '2020-07-22 22:31:39', 1, 'USD', '71.78', '0.00', 'ARS', 1, 50, NULL);
+
 CREATE TABLE `payment_log` (
   `id` int(11) NOT NULL,
   `payment_id` int(11) NOT NULL,
@@ -204,6 +217,9 @@ CREATE TABLE `payment_log` (
   `stamp` datetime NOT NULL,
   `creator_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `payment_log` (`id`, `payment_id`, `status`, `external_id`, `external_data`, `stamp`, `creator_id`) VALUES
+(1, 1, 'paid', NULL, NULL, '2020-07-22 22:31:39', 1);
 
 CREATE TABLE `person` (
   `id` int(11) NOT NULL,
@@ -489,26 +505,26 @@ CREATE TABLE `stock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `stock` (`id`, `coach_id`, `product_id`, `price`, `status`, `created_stamp`, `creator_id`, `payment_id`, `consumed_stamp`, `consumer_id`, `team_id`) VALUES
-(1, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(2, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(3, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(4, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(5, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(6, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(7, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(8, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(9, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(10, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(11, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(12, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(13, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(14, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(15, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(16, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(17, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(18, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(19, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL),
-(20, 2, 1, '18.00', 'valid', '2017-04-14 19:03:27', 1, NULL, NULL, NULL, NULL);
+(1, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(2, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(3, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(4, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(5, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(6, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(7, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(8, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(9, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(10, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(11, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(12, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(13, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(14, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(15, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(16, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(17, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(18, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(19, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL),
+(20, 2, 1, '18.00', 'valid', '2020-07-22 22:31:39', 1, 1, NULL, NULL, NULL);
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
@@ -566,12 +582,13 @@ CREATE TABLE `team_type` (
   `level_1_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `level_2_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'organizacional',
   `level_2_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `dimension_sort` int(11) NOT NULL DEFAULT '4'
+  `dimension_sort` int(11) NOT NULL DEFAULT '4',
+  `enabled` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `team_type` (`id`, `name`, `product_id`, `level_0_name`, `level_0_enabled`, `level_1_name`, `level_1_enabled`, `level_2_name`, `level_2_enabled`, `dimension_sort`) VALUES
-(1, 'Empresa', 1, 'individual', 1, 'grupal', 1, 'organizacional', 1, 4),
-(2, 'Áreas', 1, 'individual', 0, 'áreas', 1, 'organizacional', 0, 4);
+INSERT INTO `team_type` (`id`, `name`, `product_id`, `level_0_name`, `level_0_enabled`, `level_1_name`, `level_1_enabled`, `level_2_name`, `level_2_enabled`, `dimension_sort`, `enabled`) VALUES
+(1, 'Empresa', 1, 'individual', 1, 'grupal', 1, 'organizacional', 1, 4, 1),
+(2, 'Áreas', 1, 'individual', 0, 'áreas', 1, 'organizacional', 0, 4, 1);
 
 CREATE TABLE `team_type_dimension` (
   `id` int(11) NOT NULL,
@@ -647,6 +664,9 @@ CREATE TABLE `transaction` (
   `creator_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `transaction` (`id`, `uuid`, `payment_id`, `status`, `external_id`, `stamp`, `amount`, `currency`, `rate`, `commision`, `commision_currency`, `creator_id`) VALUES
+(1, '5f18be4b6e8575.54518703', 1, 'paid', NULL, '2020-07-22 22:31:39', '360.00', 'USD', NULL, NULL, NULL, 1);
+
 CREATE TABLE `transaction_log` (
   `id` int(11) NOT NULL,
   `transaction_id` int(11) NOT NULL,
@@ -656,6 +676,10 @@ CREATE TABLE `transaction_log` (
   `stamp` datetime NOT NULL,
   `creator_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `transaction_log` (`id`, `transaction_id`, `status`, `external_id`, `external_data`, `stamp`, `creator_id`) VALUES
+(1, 1, 'pending', NULL, NULL, '2020-07-22 22:31:39', 1),
+(2, 1, 'paid', NULL, NULL, '2020-07-22 22:31:39', 1);
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,

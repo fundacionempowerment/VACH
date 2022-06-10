@@ -164,11 +164,7 @@ class UserController extends AdminBaseController {
 
     public function actionGeneratePassword($id) {
         $user = User::findOne(['id' => $id]);
-        //$user->scenario = User::PASSWORD;
-
-        $password = Yii::$app->security->generateRandomString(6);
-        $encryptedPassword = Yii::$app->getSecurity()->generatePasswordHash($password);
-        $user->password_hash = $encryptedPassword;
+        $password = $this->setRandomPassword($user);
 
         $emailSent = \Yii::$app->mailer->compose('passwordGenerate', ['user' => $user, 'password' => $password])
             ->setFrom(\Yii::$app->params['senderEmail'])
@@ -177,11 +173,15 @@ class UserController extends AdminBaseController {
             ->send();
 
         if (!$emailSent) {
-            SiteController::addFlash('error', Yii::t('user', 'Fail to send generate password email.'));
-        } else if ($user->save()) {
-            SiteController::addFlash('success', Yii::t('user', 'Password has been successfully saved.'));
+            SiteController::addFlash('error', Yii::t('user', 'Fail to send generated password email.'));
         } else {
-            SiteController::FlashErrors($user);
+            SiteController::addFlash('success', Yii::t('user', 'Generated password email successfully sent.'));
+
+            if ($user->save()) {
+                SiteController::addFlash('success', Yii::t('user', 'Password has been successfully saved.'));
+            } else {
+                SiteController::FlashErrors($user);
+            }
         }
 
         return $this->redirect(['view', 'id' => $id]);
@@ -295,6 +295,7 @@ class UserController extends AdminBaseController {
         if (Yii::$app->request->isPost) {
 
             foreach ($users as $user) {
+                $this->setRandomPassword($user);
                 if ($user->save()) {
                     SiteController::addFlash('success', Yii::t('user', 'User {user} has been saved', ['user' =>$user->username]));
                 } else {
@@ -311,8 +312,7 @@ class UserController extends AdminBaseController {
         return $this->render('import/preview', ['users' => $users,]);
     }
 
-    private
-    function readFile($tempFilename, $extension) {
+    private function readFile($tempFilename, $extension) {
         $reader = IOFactory::createReader(ucfirst($extension));
         $filePath = Yii::getAlias("@runtime/temp/$tempFilename");
         $spreadsheet = $reader->load($filePath);
@@ -343,5 +343,10 @@ class UserController extends AdminBaseController {
         return $models;
     }
 
+    private function setRandomPassword($user) {
+        $password = Yii::$app->security->generateRandomString(6);
+        $user->setPassword($password);
+        return $password;
+    }
 
 }

@@ -28,8 +28,7 @@ use yii\web\IdentityInterface;
  * @property boolean is_administrator
  * @property string notes
  */
-class User extends ActiveRecord implements IdentityInterface
-{
+class User extends ActiveRecord implements IdentityInterface {
     const PASSWORD = 'password';
 
     const STATUS_DELETED = 0;
@@ -47,26 +46,23 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%user}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'surname', 'email', 'username'], 'required'],
             [['password', 'password_confirm'], 'required', 'on' => self::PASSWORD],
@@ -84,13 +80,11 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id)
-    {
+    public static function findIdentity($id) {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public static function findByName($name)
-    {
+    public static function findByName($name) {
         return self::find()
             ->where(['like', 'name', $name])
             ->orWhere(['like', 'surname', $name])
@@ -98,8 +92,7 @@ class User extends ActiveRecord implements IdentityInterface
             ->andWhere(['status' => self::STATUS_ACTIVE]);
     }
 
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
@@ -118,8 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
+    public static function findIdentityByAccessToken($token, $type = null) {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
@@ -129,8 +121,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
-    {
+    public static function findByUsername($username) {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
@@ -140,8 +131,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $token password reset token
      * @return static|null
      */
-    public static function findByPasswordResetToken($token)
-    {
+    public static function findByPasswordResetToken($token) {
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
@@ -152,26 +142,22 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
-    public function getFullname()
-    {
+    public function getFullname() {
         return $this->name . ' ' . $this->surname;
     }
 
-    public function getUserFullname()
-    {
+    public function getUserFullname() {
         return $this->name . ' ' . $this->surname . ' (' . $this->username . ')';
     }
 
-    public function beforeSave($insert)
-    {
+    public function beforeSave($insert) {
         if (!$this->authKey) {
             $this->generateAuthKey();
         }
         return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
+    public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
         $this->afterFind();
     }
@@ -182,8 +168,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $token password reset token
      * @return boolean
      */
-    public static function isPasswordResetTokenValid($token)
-    {
+    public static function isPasswordResetTokenValid($token) {
         if (empty($token)) {
             return false;
         }
@@ -196,24 +181,21 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->getPrimaryKey();
     }
 
     /**
      * @inheritdoc
      */
-    public function getAuthKey()
-    {
+    public function getAuthKey() {
         return $this->auth_key;
     }
 
     /**
      * @inheritdoc
      */
-    public function validateAuthKey($authKey)
-    {
+    public function validateAuthKey($authKey) {
         return $this->getAuthKey() === $authKey;
     }
 
@@ -223,8 +205,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    public function validatePassword($password)
-    {
+    public function validatePassword($password) {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
@@ -233,52 +214,44 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
-    public function setPassword($password)
-    {
+    public function setPassword($password) {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
      * Generates "remember me" authentication key
      */
-    public function generateAuthKey()
-    {
+    public function generateAuthKey() {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
     /**
      * Generates new password reset token
      */
-    public function generatePasswordResetToken()
-    {
+    public function generatePasswordResetToken() {
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
      * Removes password reset token
      */
-    public function removePasswordResetToken()
-    {
+    public function removePasswordResetToken() {
         $this->password_reset_token = null;
     }
 
-    public static function getList()
-    {
+    public static function getList() {
         return \yii\helpers\ArrayHelper::map(static::find()->orderBy('name,surname')->all(), 'id', 'fullname');
     }
 
-    public static function getUserList()
-    {
+    public static function getUserList() {
         return \yii\helpers\ArrayHelper::map(static::find()->orderBy('name,surname')->all(), 'id', 'userfullname');
     }
 
-    public static function getAdminEmails()
-    {
+    public static function getAdminEmails() {
         return \yii\helpers\ArrayHelper::map(static::find()->where(['is_administrator' => true])->all(), 'id', 'email');
     }
 
-    public function getDeletable()
-    {
+    public function getDeletable() {
         if (Company::find()->where(['coach_id' => $this->id])->exists()) {
             return false;
         }
@@ -312,6 +285,30 @@ class User extends ActiveRecord implements IdentityInterface
                 'coach_id' => $this->id,
                 'product_id' => $product_id,
                 'status' => Stock::STATUS_VALID,
+            ])
+            ->one();
+
+        if ($balance && $balance['balance']) {
+            return $balance['balance'];
+        }
+        return 0;
+    }
+
+    public function getCancelableStock($product_id = null) {
+
+        if (!$product_id) {
+            $product_id = Product::find()->all()[0]->id;
+        }
+
+        $query = new Query();
+
+        $balance = $query->select(new Expression('count(id) as balance'))
+            ->from('stock')
+            ->where([
+                'coach_id' => $this->id,
+                'product_id' => $product_id,
+                'status' => Stock::STATUS_VALID,
+                'consumed_stamp' => null,
             ])
             ->one();
 
